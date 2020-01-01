@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "sustainability-landscape",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "An open source project mapping the sustainability landscape",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Brendan Loudermilk <brendan@bloudermilk.com>",
   "dependencies": {
     "gatsby": "^2.18.12",
     "gatsby-image": "^2.2.34",
@@ -40,9 +40,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/bloudermilk/sustainability-landscape"
   },
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/bloudermilk/sustainability-landscape/issues"
   }
 }
