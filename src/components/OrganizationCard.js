@@ -2,17 +2,17 @@ import React from "react"
 import { Link } from "gatsby"
 import Img from "gatsby-image"
 
-const OrganizationCard = ({ title, img, path, description }) => (
-  <div className="sm:w-1/2 lg:w-1/3 xl:w-1/4 p-3">
-    <Link to={path}  className="block rounded overflow-hidden shadow-md bg-white">
-      <div className="m-3 h-20">
-        { img && <Img fluid={img.fluid} className="object-contain" /> }
-      </div>
-      <div className="m-3 text-gray-900">
-        <div className="text-xl font-bold truncate">{title}</div>
-        <p className="overflow-hidden h-16 leading-tight">{description}</p>
-      </div>
-    </Link>
+const OrganizationCard = ({ title, description, tags, homepage }) => (
+  <div className="border-b border-gray-400 p-3 text-gray-900">
+    <a className="font-bold text-lg hover:text-teal-500" href={homepage} target="_blank">{title}</a>
+    <p className="max-h-12 overflow-hidden">{description}</p>
+    <div className="flex-grow mt-1">
+      {
+        tags.map(tag =>
+          <span class="inline-block bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-2">{tag}</span>
+        )
+      }
+    </div>
   </div>
 )
 

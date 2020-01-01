@@ -28,8 +28,10 @@ const Layout = ({ children, contentClassName }) => {
     <div className="flex flex-col min-h-screen antialiased">
       <Navbar siteTitle={data.site.siteMetadata.title} />
       <main className={`flex-grow ${contentClassName}`}>{children}</main>
-      <footer className="text-white p-6 bg-teal-500">
-        <a href="https://creativecommons.org/licenses/by-sa/4.0/">© CC BY-SA 4.0</a>
+      <footer className="text-gray-800 p-6 bg-gray-200">
+        <span>© EnviWiki</span>
+        <span>&nbsp;•&nbsp;</span>
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/" className="underline hover:no-underline">CC BY-SA 4.0</a>
       </footer>
     </div>
   )

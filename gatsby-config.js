@@ -1,10 +1,17 @@
 module.exports = {
   siteMetadata: {
-    title: `Greenscape`,
-    description: `Greenscape is an open source project mapping the sustainability landscape`,
+    title: `EnviWiki`,
+    description: `Envi.Wiki is an open source project mapping the sustainability landscape`,
     author: `@bloudermilk`,
   },
   plugins: [
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `images`,
+        path: `${__dirname}/src/images`,
+      },
+    },
     {
       resolve: `gatsby-source-airtable`,
       options: {
@@ -28,13 +35,6 @@ module.exports = {
       }
     },
     `gatsby-plugin-react-helmet`,
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `images`,
-        path: `${__dirname}/src/images`,
-      },
-    },
     {
       resolve: `gatsby-transformer-sharp`,
       options: {

@@ -1,7 +1,3 @@
-h2.header {
-  @apply text-4xl font-bold;
-}
-
 .img-title-overlay {
   background: linear-gradient(transparent 0%, rgba(0,0,0,0.65) 100%);
   text-shadow: 0 2px 1em #000000;

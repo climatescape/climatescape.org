@@ -6,21 +6,24 @@ import OrganizationCard from "../components/OrganizationCard"
 const SectorTemplate = ({ data }) => {
 
   const name = data.airtable.data.Name
-  const organizations = data.airtable.data.Organizations.map(o => o.data)
+  const organizations = (data.airtable.data.Organizations || []).map(o => o.data)
 
-  console.log(organizations)
+  return <Layout contentClassName="bg-gray-200">
+    <div className="max-w-4xl mx-auto">
+      <h2 className="text-3xl tracking-wide font-thin p-3 mt-4">{name} Organizations</h2>
 
-  return <Layout>
-    <div className="flex flex-wrap bg-gray-200">
-      {
-        organizations.map(({ Logo, Name, About }) =>
-          <OrganizationCard
-            title={Name}
-            description={About}
-            img={Logo && Logo.localFiles[0].childImageSharp}
-          />
-        )
-      }
+      <div className="bg-white">
+        {
+          organizations.map(({ Name, About, Tags, Homepage }) =>
+            <OrganizationCard
+              title={Name}
+              description={About}
+              tags={Tags}
+              homepage={Homepage}
+            />
+          )
+        }
+      </div>
     </div>
   </Layout>
 }
@@ -36,15 +39,7 @@ export const query = graphql`
             Homepage
             About
             Slug
-            Logo {
-              localFiles {
-                childImageSharp {
-                  fluid {
-                    ...GatsbyImageSharpFluid
-                  }
-                }
-              }
-            }
+            Tags
           }
         }
       }
