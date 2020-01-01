@@ -1,10 +1,10 @@
 import React from "react"
-import { Link } from "gatsby"
-import Img from "gatsby-image"
 
 const OrganizationCard = ({ title, description, tags, homepage }) => (
   <div className="border-b border-gray-400 p-3 text-gray-900">
-    <a className="font-bold text-lg hover:text-teal-500" href={homepage} target="_blank">{title}</a>
+    <a className="font-bold text-lg hover:text-teal-500" href={homepage} target="_blank" rel="noopener noreferrer">
+      {title}
+    </a>
     <p className="max-h-12 overflow-hidden">{description}</p>
     <div className="flex-grow mt-1">
       {

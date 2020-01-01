@@ -6,7 +6,7 @@ import SiteLogo from "../images/site-logo-2.svg"
 const Navbar = ({ siteTitle }) => (
   <nav className="flex items-center justify-between flex-wrap bg-teal-500 p-6">
     <Link className="flex items-center flex-shrink-0 text-white mr-6" to="/">
-      <img src={SiteLogo} className="h-8 w-8 fill-current mr-3" />
+      <img src={SiteLogo} alt="Logo: Earth Network" className="h-8 w-8 fill-current mr-3" />
       <span className="font-semibold text-xl">{siteTitle}</span>
     </Link>
 
