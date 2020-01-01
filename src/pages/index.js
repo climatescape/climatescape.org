@@ -47,37 +47,43 @@ const IndexPage = () => {
     <SEO title="Home" />
 
     <div className="bg-teal-500">
-      <div className="max-w-6xl mx-auto px-6 pt-16 pb-24 font-light tracking-wide text-gray-100">
-        <h2 className="text-5xl">Mapping the global landscape</h2>
-        <h3 className="text-4xl">of climate-saving organizations and resources</h3>
+      <div className="max-w-6xl mx-auto px-6 pt-8 pb-16 md:pt-16 md:pb-24 font-light tracking-wide text-gray-100">
+        <h2 className="text-3xl md:text-5xl">Mapping the global landscape</h2>
+        <h3 className="text-2xl md:text-4xl">of climate-saving organizations and resources</h3>
       </div>
     </div>
 
-    <div id="sectors" className="bg-gray-200 py-12">
-      <h3 className="text-gray-900 text-3xl font-light px-6 pt-3 pb-1 max-w-6xl mx-auto">
+    <div id="organizations" className="bg-gray-200 py-6 md:py-12">
+      <h3 className="text-gray-900 text-2xl md:text-3xl font-light px-6 pt-3 pb-1 max-w-6xl mx-auto">
         Explore Organizations by Sector
       </h3>
       <div className="p-3 flex flex-wrap max-w-6xl mx-auto">
         {
-          data.allAirtable.nodes.map(node =>
-            <TopicCard title={node.data.Name} count={node.data.Organizations_Count} img={node.data.Cover.localFiles[0].childImageSharp.fluid} path={`/sectors/${node.data.Slug}`} />
+          data.allAirtable.nodes.map((node, index) =>
+            <TopicCard
+              title={node.data.Name}
+              count={node.data.Organizations_Count}
+              img={node.data.Cover.localFiles[0].childImageSharp.fluid}
+              path={`/sectors/${node.data.Slug}`}
+              key={index}
+            />
           )
         }
       </div>
     </div>
 
-    <div className="max-w-6xl mx-auto flex items-center py-4">
+    <div className="max-w-6xl mx-auto lg:flex items-center py-4">
       <div id="about" className="text-lg px-6 pt-6 pb-8 text-gray-900 flex-1">
-        <h2 className="text-4xl font-semibold">What is {data.site.siteMetadata.title}?</h2>
+        <h2 className="text-2xl md:text-3xl font-light">What is {data.site.siteMetadata.title}?</h2>
         <p className="mt-4">
           Our mission is to map the global landscape of organizations helping to create a more sustainable society, along with resources for learning about and implementing solutions to save the climate.
         </p>
         <p className="mt-4">
-          Our content is offered for free thanks to a team of volunteer contributors and editors. All data on this site is released under the <a href="http://creativecommons.org/licenses/by-sa/4.0/" className="underline hover:no-underline">Creative Commons BY-SA 4.0 License</a>, a permissive "Free Culture" license.
+          Our content is offered for free by a team of volunteer contributors and editors. All data on this site is released under the <a href="http://creativecommons.org/licenses/by-sa/4.0/" className="underline hover:no-underline">Creative Commons BY-SA 4.0 License</a>, a permissive "Free Culture" license.
           The website source code is open source (MIT software license) and is available <a href="https://github.com/bloudermilk/sustainability-landscape/" className="underline hover:no-underline">on GitHub</a>.
         </p>
       </div>
-      <div className="flex-1 text-center">
+      <div className="flex-1 text-center py-10">
         <Link to="/contribute/" className="inline-block text-2xl px-4 py-2 border-2 rounded text-white bg-blue-500 border-blue-500 hover:text-blue-500 hover:border-blue-500 hover:bg-transparent">Become a Contributor</Link>
       </div>
     </div>

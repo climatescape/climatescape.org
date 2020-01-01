@@ -6,10 +6,10 @@ const OrganizationCard = ({ title, description, tags, homepage }) => (
       {title}
     </a>
     <p className="max-h-12 overflow-hidden">{description}</p>
-    <div className="flex-grow mt-1">
+    <div>
       {
         tags.map(tag =>
-          <span class="inline-block bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-2">{tag}</span>
+          <span class="inline-block mt-1 bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-2">{tag}</span>
         )
       }
     </div>
