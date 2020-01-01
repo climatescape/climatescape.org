@@ -1,7 +1,7 @@
 import React from "react"
 import { Link } from "gatsby"
 
-import SiteLogo from "../images/site-logo-2.svg"
+import SiteLogo from "../images/site-logo.svg"
 
 const Navbar = ({ siteTitle }) => (
   <nav className="flex items-center justify-between flex-wrap bg-teal-500 p-6">
