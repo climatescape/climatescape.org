@@ -18,14 +18,14 @@ module.exports = {
         apiKey: process.env.AIRTABLE_API_KEY,
         tables: [
           {
-            baseId: `appgvF8aMalzzIyYx`,
+            baseId: `appXCd5jCvXVSxDcZ`,
             tableName: `Organizations`,
             tableView: `Published`,
             mapping: { "Published": `boolean` },
             tableLinks: [`Sector`]
           },
           {
-            baseId: `appgvF8aMalzzIyYx`,
+            baseId: `appXCd5jCvXVSxDcZ`,
             tableName: `Sectors`,
             tableView: `Published`,
             mapping: { "Cover": `fileNode` },
