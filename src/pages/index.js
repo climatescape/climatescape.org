@@ -80,7 +80,7 @@ const IndexPage = () => {
         </p>
         <p className="mt-4">
           Our content is offered for free by a team of volunteer contributors and editors. All data on this site is released under the <a href="http://creativecommons.org/licenses/by-sa/4.0/" className="underline hover:no-underline">Creative Commons BY-SA 4.0 License</a>, a permissive "Free Culture" license.
-          The website source code is open source (MIT software license) and is available <a href="https://github.com/bloudermilk/sustainability-landscape/" className="underline hover:no-underline">on GitHub</a>.
+          The website source code is open source (MIT software license) and is available <a href="https://github.com/bloudermilk/climatescape" className="underline hover:no-underline">on GitHub</a>.
         </p>
       </div>
       <div className="flex-1 text-center py-10">
