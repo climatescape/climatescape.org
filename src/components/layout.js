@@ -32,6 +32,8 @@ const Layout = ({ children, contentClassName }) => {
         <span>© Climatescape</span>
         <span>&nbsp;•&nbsp;</span>
         <a href="https://creativecommons.org/licenses/by-sa/4.0/" className="underline hover:no-underline">CC BY-SA 4.0</a>
+        <span>&nbsp;•&nbsp;</span>
+        <a href="mailto:brendan@sinceresoftware.co" className="underline hover:no-underline">Contact</a>
       </footer>
     </div>
   )
