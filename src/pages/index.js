@@ -23,7 +23,7 @@ const IndexPage = () => {
             Cover {
               localFiles {
                 childImageSharp {
-                  fluid {
+                  fluid(maxWidth: 500) {
                     ...GatsbyImageSharpFluid
                   }
                 }
@@ -44,7 +44,7 @@ const IndexPage = () => {
   `)
 
   return <Layout>
-    <SEO title="Home" />
+    <SEO title="Climatescape is mapping the global landscape of climate-saving organizations and resources" />
 
     <div className="bg-teal-500">
       <div className="max-w-6xl mx-auto px-6 pt-8 pb-16 md:pt-16 md:pb-24 font-light tracking-wide text-gray-100">

@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: `EnviWiki`,
-    description: `Envi.Wiki is an open source project mapping the sustainability landscape`,
+    title: `Climatescape`,
+    description: `Climatescape is a free database of organizations and resources to combat climate change`,
     author: `@bloudermilk`,
   },
   plugins: [

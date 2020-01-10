@@ -29,7 +29,7 @@ const Layout = ({ children, contentClassName }) => {
       <Navbar siteTitle={data.site.siteMetadata.title} />
       <main className={`flex-grow ${contentClassName}`}>{children}</main>
       <footer className="text-gray-800 p-6 bg-gray-200">
-        <span>© EnviWiki</span>
+        <span>© Climatescape</span>
         <span>&nbsp;•&nbsp;</span>
         <a href="https://creativecommons.org/licenses/by-sa/4.0/" className="underline hover:no-underline">CC BY-SA 4.0</a>
       </footer>

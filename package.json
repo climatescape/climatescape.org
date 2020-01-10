@@ -1,9 +1,9 @@
 {
-  "name": "sustainability-landscape",
+  "name": "climatescape",
   "private": true,
   "description": "An open source project mapping the sustainability landscape",
   "version": "0.1.0",
-  "author": "Brendan Loudermilk <brendan@bloudermilk.com>",
+  "author": "Brendan Loudermilk <brendan@sinceresoftware.co>",
   "dependencies": {
     "gatsby": "^2.18.12",
     "gatsby-image": "^2.2.34",

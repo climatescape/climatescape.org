@@ -8,7 +8,7 @@ const OrganizationCard = ({ title, description, tags, homepage }) => (
     <p className="max-h-12 overflow-hidden">{description}</p>
     <div>
       {
-        tags.map(tag =>
+        tags && tags.map(tag =>
           <span class="inline-block mt-1 bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-2">{tag}</span>
         )
       }
