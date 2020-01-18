@@ -54,9 +54,9 @@ const IndexPage = () => {
     </div>
 
     <div id="organizations" className="bg-gray-200 py-6 md:py-12">
-      <h3 className="text-gray-900 text-2xl md:text-3xl font-light px-6 pt-3 pb-1 max-w-6xl mx-auto">
+      <h2 className="text-gray-900 text-2xl md:text-3xl font-light px-6 pt-3 pb-1 max-w-6xl mx-auto">
         Explore Organizations by Sector
-      </h3>
+      </h2>
       <div className="p-3 flex flex-wrap max-w-6xl mx-auto">
         {
           data.allAirtable.nodes.map((node, index) =>
@@ -79,7 +79,7 @@ const IndexPage = () => {
           Our mission is to map the global landscape of organizations helping to create a more sustainable society, along with resources for learning about and implementing solutions to save the climate.
         </p>
         <p className="mt-4">
-          Our content is offered for free by a team of volunteer contributors and editors. All data on this site is released under the <a href="http://creativecommons.org/licenses/by-sa/4.0/" className="underline hover:no-underline">Creative Commons BY-SA 4.0 License</a>, a permissive "Free Culture" license.
+          Our content is offered for free by a team of volunteer contributors and editors. All data on this site is released under the <a href="http://creativecommons.org/licenses/by-sa/4.0/" className="underline hover:no-underline">Creative Commons BY-SA License</a>, a permissive "Free Culture" license.
           The website source code is open source (MIT software license) and is available <a href="https://github.com/bloudermilk/climatescape" className="underline hover:no-underline">on GitHub</a>.
         </p>
       </div>
