@@ -1,6 +1,8 @@
 import React from "react"
 import { Link, useStaticQuery, graphql } from "gatsby"
 
+import { stringCompare } from "../utils/string"
+
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import TopicCard from "../components/TopicCard"
@@ -14,7 +16,7 @@ const IndexPage = () => {
         }
       }
 
-      allAirtable(filter: {table: {eq: "Sectors"}}) {
+      sectors: allAirtable(filter: {table: {eq: "Sectors"}}) {
         nodes {
           data {
             Name
@@ -43,6 +45,10 @@ const IndexPage = () => {
     }
   `)
 
+
+
+  const sectors = data.sectors.nodes.sort((a, b) => stringCompare(a.data.Name, b.data.Name))
+
   return <Layout>
     <SEO title="Climatescape is mapping the global landscape of climate-saving organizations and resources" />
 
@@ -59,7 +65,7 @@ const IndexPage = () => {
       </h2>
       <div className="p-3 flex flex-wrap max-w-6xl mx-auto">
         {
-          data.allAirtable.nodes.map((node, index) =>
+          sectors.map((node, index) =>
             <TopicCard
               title={node.data.Name}
               count={node.data.Organizations_Count}

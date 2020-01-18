@@ -1,5 +1,7 @@
 import React, { useState } from "react"
 
+import { stringCompare } from "../utils/string"
+
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
 import Tag from "../components/Tag"
@@ -16,6 +18,9 @@ const SectorTemplate = ({ data }) => {
   if (tag) organizations = organizations.filter(organization =>
     organization.Tags && organization.Tags.indexOf(tag) >= 0
   )
+
+  // Sort by name (ascending)
+  organizations = organizations.sort((a, b) => stringCompare(a.Name, b.Name))
 
   return <Layout contentClassName="bg-gray-200">
     <div className="max-w-4xl mx-auto pb-4">
