@@ -1,9 +1,12 @@
 import React from "react"
 
 import Layout from "../components/layout"
+import SEO from "../components/seo"
 
 const ContributePage = () => (
   <Layout>
+    <SEO title="Contribute to Climatescape" />
+
     <div className="lg:flex mx-auto container">
       <div className="p-3 pb-6 bg-blue-100 lg:w-2/5 lg:p-6">
         <h1 className="text-gray-900 text-2xl md:text-3xl font-light my-3">How to Contribute</h1>

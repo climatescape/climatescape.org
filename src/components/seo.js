@@ -25,6 +25,7 @@ function SEO({ description, lang, meta, title }) {
     `
   )
 
+  const metaTitle = title || site.siteMetadata.title
   const metaDescription = description || site.siteMetadata.description
 
   return (
@@ -32,8 +33,7 @@ function SEO({ description, lang, meta, title }) {
       htmlAttributes={{
         lang,
       }}
-      title={title}
-      titleTemplate={`%s | ${site.siteMetadata.title}`}
+      title={metaTitle}
       meta={[
         {
           name: `description`,
@@ -41,7 +41,7 @@ function SEO({ description, lang, meta, title }) {
         },
         {
           property: `og:title`,
-          content: title,
+          content: metaTitle,
         },
         {
           property: `og:description`,
@@ -52,22 +52,47 @@ function SEO({ description, lang, meta, title }) {
           content: `website`,
         },
         {
+          property: `og:image`,
+          content: `https://climatescape.org/logo-large.png`,
+        },
+        {
+          property: `og:image:type`,
+          content: `image/png`,
+        },
+        {
+          property: `og:image:width`,
+          content: `512`,
+        },
+        {
+          property: `og:image:height`,
+          content: `512`,
+        },
+        {
+          property: `og:image:alt`,
+          content: `Climatescape logo (network overlayed on globe)`,
+        },
+        {
           name: `twitter:card`,
           content: `summary`,
         },
         {
-          name: `twitter:creator`,
-          content: site.siteMetadata.author,
+          name: `twitter:site`,
+          content: `@climatescape`,
         },
         {
           name: `twitter:title`,
-          content: title,
+          content: metaTitle,
         },
         {
           name: `twitter:description`,
           content: metaDescription,
         },
       ].concat(meta)}
+      link={[
+        { rel: `apple-touch-icon`, sizes: `180x180`, href: `/apple-touch-icon.png` },
+        { rel: `icon`, type: `image/png`, sizes: `32x32`, href: `/favicon-32x32.png` },
+        { rel: `icon`, type: `image/png`, sizes: `16x16`, href: `/favicon-16x16.png` },
+      ]}
     />
   )
 }
@@ -82,7 +107,7 @@ SEO.propTypes = {
   description: PropTypes.string,
   lang: PropTypes.string,
   meta: PropTypes.arrayOf(PropTypes.object),
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
 }
 
 export default SEO

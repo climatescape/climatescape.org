@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: `Climatescape`,
-    description: `Climatescape is a free database of organizations and resources to combat climate change`,
+    description: `Discover the organizations solving climate change`,
     author: `@bloudermilk`,
   },
   plugins: [

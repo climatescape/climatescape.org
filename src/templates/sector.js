@@ -6,6 +6,7 @@ import { stringCompare } from "../utils/string"
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
 import OrganizationFilter, {useOrganizationFilterState} from "../components/OrganizationFilter"
+import SEO from "../components/seo"
 
 const SectorTemplate = ({ data }) => {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState();
@@ -34,9 +35,11 @@ const SectorTemplate = ({ data }) => {
   organizations = applyFilter(organizations).sort((a, b) => stringCompare(a.title, b.title))
 
   return <Layout contentClassName="bg-gray-200">
+    <SEO title={`${name} organizations on Climatescape`} />
+
     <div className="max-w-4xl mx-auto pb-4">
       <h2 className="text-3xl tracking-wide font-light p-3 md:mt-4">
-        {name} Organizations
+        {name} organizations
       </h2>
 
       <OrganizationFilter

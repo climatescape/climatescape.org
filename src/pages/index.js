@@ -50,7 +50,7 @@ const IndexPage = () => {
   const sectors = data.sectors.nodes.sort((a, b) => stringCompare(a.data.Name, b.data.Name))
 
   return <Layout>
-    <SEO title="Climatescape is mapping the global landscape of climate-saving organizations and resources" />
+    <SEO />
 
     <div className="bg-teal-500">
       <div className="max-w-6xl mx-auto px-6 pt-8 pb-16 md:pt-16 md:pb-24 font-light tracking-wide text-gray-100">
