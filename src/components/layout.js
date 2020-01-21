@@ -31,7 +31,7 @@ const Layout = ({ children, contentClassName }) => {
       <footer className="text-gray-800 p-3 bg-gray-200 text-center sm:text-left">
         <span>© Climatescape <a href="https://creativecommons.org/licenses/by-sa/4.0/" className="underline hover:no-underline">CC BY-SA</a></span>
         <span> • </span>
-        <a href="mainto:brendan@sinceresoftware.co" className="underline hover:no-underline">Contact</a>
+        <a href="mailto:brendan@sinceresoftware.co" className="underline hover:no-underline">Contact</a>
       </footer>
     </div>
   )
