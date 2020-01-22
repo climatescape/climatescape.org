@@ -27,7 +27,7 @@ const OrganizationCard = ({ title, description, tags, homepage, location, logo, 
               onClick={e => onPickTag(tag)}
               key={i}
               active={tag === activeTag}
-            >{tag}</Tag>
+            ><FontAwesomeIcon icon={faTag} className="mr-1" />{tag}</Tag>
           )
         }
       </div>
