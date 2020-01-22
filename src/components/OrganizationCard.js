@@ -1,6 +1,8 @@
 import React from "react"
 import Img from "gatsby-image"
 import Tag from "./Tag"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUsers, faLocationArrow, faBuilding } from '@fortawesome/free-solid-svg-icons'
 
 function filterDuplicateAndEmptyItems(...items) {
   return [...new Set(items)].filter(m=>m);
@@ -31,14 +33,14 @@ const OrganizationCard = ({ title, description, tags, homepage, location, logo, 
       </div>
       <div>
         <span className="inline-block mt-1 bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-2">
-         {filterDuplicateAndEmptyItems(location.city, location.state, location.country).join(', ')}
+        <FontAwesomeIcon icon={faLocationArrow} className="mr-1" />{filterDuplicateAndEmptyItems(location.city, location.state, location.country).join(', ')}
         </span>
         {headcount && 
         <span className="inline-block mt-1 bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-2">
-         {filterDuplicateAndEmptyItems(location.city, location.state, location.country).join(', ')}
+         <FontAwesomeIcon icon={faUsers} className="mr-1" />{headcount}
         </span>}
         {orgType && <span className="inline-block mt-1 bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-2">
-         {orgType}
+         <FontAwesomeIcon icon={faBuilding} className="mr-1" />{orgType}
         </span>}
       </div>
     </div>
