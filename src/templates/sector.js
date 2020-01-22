@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { graphql } from 'gatsby'
 
 import { stringCompare } from "../utils/string"
 
