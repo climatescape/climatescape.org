@@ -8,7 +8,7 @@ import OrganizationCard from "../components/OrganizationCard"
 import Tag from "../components/Tag"
 
 const SectorTemplate = ({ data }) => {
-  const [tag, setTag] = useState(null)
+  const [tagFilter, setTagFilter] = useState(null)
 
   const name = data.airtable.data.Name
 
@@ -16,8 +16,8 @@ const SectorTemplate = ({ data }) => {
   let organizations = (data.airtable.data.Organizations || []).map(o => o.data)
 
   // Filter all organizations by tag if one is selected
-  if (tag) organizations = organizations.filter(organization =>
-    organization.Tags && organization.Tags.indexOf(tag) >= 0
+  if (tagFilter) organizations = organizations.filter(organization =>
+    organization.Tags && organization.Tags.indexOf(tagFilter) >= 0
   )
 
   // Sort by name (ascending)
@@ -29,11 +29,11 @@ const SectorTemplate = ({ data }) => {
         {name} Organizations
       </h2>
 
-      { tag && <p className="p-3 text-gray-700 bg-gray-100 border-b border-gray-400 text-sm">
+      { tagFilter && <p className="p-3 text-gray-700 bg-gray-100 border-b border-gray-400 text-sm">
           <span className="mr-2">Filtered by</span>
-          <Tag active={true}>{tag}</Tag>
+          <Tag active={true}>{tagFilter}</Tag>
           <button
-            onClick={e => setTag(null)}
+            onClick={e => setTagFilter(null)}
             className="underline hover:no-underline ml-1"
           >clear</button>
         </p>
@@ -52,8 +52,10 @@ const SectorTemplate = ({ data }) => {
               orgType={Organization_Type}
               homepage={Homepage}
               logo={Logo && Logo.localFiles[0] && Logo.localFiles[0].childImageSharp && Logo.localFiles[0].childImageSharp.fluid}
+              activeTag={tagFilter}
               key={index}
               onPickTag={tag => setTag(tag)}
+              onPickTag={tag => setTagFilter(tag)}
             />
           )
         }
