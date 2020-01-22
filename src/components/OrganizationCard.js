@@ -32,9 +32,9 @@ const OrganizationCard = ({ title, description, tags, homepage, location, logo, 
         }
       </div>
       <div className="mt-1">
-        <span className="inline-block mt-1 bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-2">
-        <FontAwesomeIcon icon={faLocationArrow} className="mr-1" />{filterDuplicateAndEmptyItems(location.city, location.state, location.country).join(', ')}
-        </span>
+        {location.country && <span className="inline-block mt-1 bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-2">
+          <FontAwesomeIcon icon={faLocationArrow} className="mr-1" />{filterDuplicateAndEmptyItems(location.city, location.state, location.country).join(', ')}
+        </span>}
         {headcount && 
         <span className="inline-block mt-1 bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-2">
          <FontAwesomeIcon icon={faUsers} className="mr-1" />{headcount}
