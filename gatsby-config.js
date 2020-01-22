@@ -21,7 +21,7 @@ module.exports = {
             baseId: `appXCd5jCvXVSxDcZ`,
             tableName: `Organizations`,
             tableView: `Published`,
-            mapping: { "Published": `boolean` },
+            mapping: { "Published": `boolean`, "Logo": `fileNode` },
             tableLinks: [`Sector`]
           },
           {

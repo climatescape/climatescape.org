@@ -40,13 +40,14 @@ const SectorTemplate = ({ data }) => {
 
       <div className="bg-white">
         {
-          organizations.map(({ Name, About, Tags, Homepage, Tagline }, index) =>
+          organizations.map(({ Name, About, Tags, Homepage, Tagline, Logo }, index) =>
             <OrganizationCard
               title={Name}
               description={Tagline || About}
               tags={Tags}
               activeTag={tag}
               homepage={Homepage}
+              logo={Logo && Logo.localFiles[0].childImageSharp.fluid}
               key={index}
               onPickTag={tag => setTag(tag)}
             />
@@ -69,7 +70,16 @@ export const query = graphql`
             About
             Slug
             Tags,
-            Tagline
+            Tagline,
+            Logo {
+              localFiles {
+                childImageSharp {
+                  fluid(maxWidth: 500, grayscale: true) {
+                    ...GatsbyImageSharpFluid
+                  }
+                }
+              }
+            }
           }
         }
       }
