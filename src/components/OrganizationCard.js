@@ -2,7 +2,7 @@ import React from "react"
 import Img from "gatsby-image"
 import Tag from "./Tag"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUsers, faLocationArrow, faBuilding } from '@fortawesome/free-solid-svg-icons'
+import { faUsers, faLocationArrow, faBuilding, faTag } from '@fortawesome/free-solid-svg-icons'
 
 function filterDuplicateAndEmptyItems(...items) {
   return [...new Set(items)].filter(m=>m);
@@ -20,7 +20,7 @@ const OrganizationCard = ({ title, description, tags, homepage, location, logo, 
         {title}
       </a>
       <p className="max-h-12 overflow-hidden">{description}</p>
-      <div>
+      <div className="mt-3">
         {
           tags && tags.map((tag, i) =>
             <Tag
@@ -31,7 +31,7 @@ const OrganizationCard = ({ title, description, tags, homepage, location, logo, 
           )
         }
       </div>
-      <div>
+      <div className="mt-1">
         <span className="inline-block mt-1 bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-2">
         <FontAwesomeIcon icon={faLocationArrow} className="mr-1" />{filterDuplicateAndEmptyItems(location.city, location.state, location.country).join(', ')}
         </span>
