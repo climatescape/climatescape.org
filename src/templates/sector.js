@@ -40,10 +40,10 @@ const SectorTemplate = ({ data }) => {
 
       <div className="bg-white">
         {
-          organizations.map(({ Name, About, Tags, Homepage }, index) =>
+          organizations.map(({ Name, About, Tags, Homepage, Tagline }, index) =>
             <OrganizationCard
               title={Name}
-              description={About}
+              description={Tagline || About}
               tags={Tags}
               activeTag={tag}
               homepage={Homepage}
@@ -68,7 +68,8 @@ export const query = graphql`
             Homepage
             About
             Slug
-            Tags
+            Tags,
+            Tagline
           }
         }
       }
