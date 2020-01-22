@@ -51,7 +51,7 @@ const SectorTemplate = ({ data }) => {
               headcount={Headcount}
               orgType={Organization_Type}
               homepage={Homepage}
-              logo={Logo && Logo.localFiles[0].childImageSharp.fluid}
+              logo={Logo && Logo.localFiles[0] && Logo.localFiles[0].childImageSharp && Logo.localFiles[0].childImageSharp.fluid}
               key={index}
               onPickTag={tag => setTag(tag)}
             />
