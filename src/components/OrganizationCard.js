@@ -1,10 +1,8 @@
 import React from "react"
 import Img from "gatsby-image"
-import Tag from "./Tag"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUsers, faLocationArrow, faBuilding, faTag } from '@fortawesome/free-solid-svg-icons'
+import { OrganizationTag, OrganizationLocation, OrganizationHeadcount, OrganizationOrgType } from "../components/OrganizationAttributes"
 
-const OrganizationCard = ({ title, description, tags, homepage, location, logo, headcount, orgType, onPickTag, activeTag }) => (
+const OrganizationCard = ({ title, description, tags, homepage, location, logo, headcount, orgType, currentFilter, onApplyFilter }) => (
   <div className="flex border-b border-gray-400 p-3 text-gray-900">
     <div className="m-1 mr-5 w-24 flex-shrink-0">
     {logo &&
@@ -19,25 +17,34 @@ const OrganizationCard = ({ title, description, tags, homepage, location, logo, 
       <div className="mt-3">
         {
           tags && tags.map((tag, i) =>
-            <Tag
-              onClick={e => onPickTag(tag)}
+            <OrganizationTag
+              onClick={e => onApplyFilter.byTag(tag)}
               key={i}
-              active={tag === activeTag}
-            ><FontAwesomeIcon icon={faTag} className="mr-1" />{tag}</Tag>
+              active={tag === currentFilter.byTag}
+              text={tag} />
           )
         }
       </div>
       <div className="mt-1">
-        {location && <span className="inline-block mt-1 bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-2">
-          <FontAwesomeIcon icon={faLocationArrow} className="mr-1" />{location}
-        </span>}
+        {location && 
+          <OrganizationLocation 
+            onClick={e => onApplyFilter.byLocation(location)} 
+            active={location === currentFilter.byLocation}
+            text={location} />}
         {headcount && 
-        <span className="inline-block mt-1 bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-2">
-         <FontAwesomeIcon icon={faUsers} className="mr-1" />{headcount}
-        </span>}
-        {orgType && <span className="inline-block mt-1 bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-2">
-         <FontAwesomeIcon icon={faBuilding} className="mr-1" />{orgType}
-        </span>}
+          <OrganizationHeadcount 
+            onClick={e => onApplyFilter.byHeadcount(headcount)} 
+            active={headcount === currentFilter.byHeadcount}
+            text={headcount}
+            />
+        }
+        {orgType && 
+          <OrganizationOrgType 
+            onClick={e => onApplyFilter.byOrgType(orgType)} 
+            active={orgType === currentFilter.byOrgType}
+            text={orgType}
+          />
+        }
       </div>
     </div>
   </div>

@@ -1,14 +1,14 @@
-import React, { useState } from "react"
+import React from "react"
 import { graphql } from 'gatsby'
 
 import { stringCompare } from "../utils/string"
 
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
-import OrganizationFilter from "../components/OrganizationFilter"
+import OrganizationFilter, {useOrganizationFilterState} from "../components/OrganizationFilter"
 
 const SectorTemplate = ({ data }) => {
-  const [tagFilter, setTagFilter] = useState(null)
+  const [filter, setFilter, applyFilter] = useOrganizationFilterState();
 
   const name = data.airtable.data.Name
 
@@ -30,13 +30,8 @@ const SectorTemplate = ({ data }) => {
       logo: Logo && Logo.localFiles[0] && Logo.localFiles[0].childImageSharp && Logo.localFiles[0].childImageSharp.fluid,
     }));
 
-  // Filter all organizations by tag if one is selected
-  if (tagFilter) organizations = organizations.filter(organization =>
-    organization.tags && organization.tags.indexOf(tagFilter) >= 0
-  )
-
   // Sort by name (ascending)
-  organizations = organizations.sort((a, b) => stringCompare(a.title, b.title))
+  organizations = applyFilter(organizations).sort((a, b) => stringCompare(a.title, b.title))
 
   return <Layout contentClassName="bg-gray-200">
     <div className="max-w-4xl mx-auto pb-4">
@@ -44,23 +39,25 @@ const SectorTemplate = ({ data }) => {
         {name} Organizations
       </h2>
 
-      <OrganizationFilter currentFilter={{tagFilter}} onClearFilter={() => setTagFilter(null)} />
-
+      <OrganizationFilter 
+        currentFilter={filter}
+        onClearFilter={() => setFilter.none()} />
+      
       <div className="bg-white">
         {
-          organizations.map(({ title, description, tags, homepage, location, logo, headcount, orgType }, index) =>
+          organizations.map((org, index) =>
             <OrganizationCard
-              title={title}
-              description={description}
-              tags={tags}
-              activeTag={tagFilter}
-              location={location}
-              headcount={headcount}
-              orgType={orgType}
-              homepage={homepage}
-              logo={logo}
+              title={org.title}
+              description={org.description}
+              tags={org.tags}
+              location={org.location}
+              headcount={org.headcount}
+              orgType={org.orgType}
+              homepage={org.homepage}
+              logo={org.logo}
               key={index}
-              onPickTag={tag => setTagFilter(tag)}
+              currentFilter={filter}
+              onApplyFilter={setFilter}
             />
           )
         }
