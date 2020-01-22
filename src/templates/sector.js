@@ -5,7 +5,7 @@ import { stringCompare } from "../utils/string"
 
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
-import Tag from "../components/Tag"
+import OrganizationFilter from "../components/OrganizationFilter"
 
 const SectorTemplate = ({ data }) => {
   const [tagFilter, setTagFilter] = useState(null)
@@ -44,15 +44,7 @@ const SectorTemplate = ({ data }) => {
         {name} Organizations
       </h2>
 
-      { tagFilter && <p className="p-3 text-gray-700 bg-gray-100 border-b border-gray-400 text-sm">
-          <span className="mr-2">Filtered by</span>
-          <Tag active={true}>{tagFilter}</Tag>
-          <button
-            onClick={e => setTagFilter(null)}
-            className="underline hover:no-underline ml-1"
-          >clear</button>
-        </p>
-      }
+      <OrganizationFilter currentFilter={{tagFilter}} onClearFilter={() => setTagFilter(null)} />
 
       <div className="bg-white">
         {
