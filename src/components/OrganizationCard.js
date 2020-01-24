@@ -6,7 +6,7 @@ const OrganizationCard = ({ title, description, tags, homepage, location, logo, 
   <div className="flex items-center border-b border-gray-400 p-3 text-gray-900">
     <div className="mr-5 w-16 flex-shrink-0 hidden sm:block">
     {logo &&
-      <Img fluid={logo} className="h-16 w-16" />
+      <Img fixed={logo} className="w-16 h-16" imgStyle={{ filter: "grayscale(100%)" }} />
     }
     </div>
     <div>

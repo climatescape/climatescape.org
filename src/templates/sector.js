@@ -27,7 +27,7 @@ const SectorTemplate = ({ data }) => {
       headcount: Headcount,
       orgType: Organization_Type,
       homepage: Homepage,
-      logo: Logo && Logo.localFiles[0] && Logo.localFiles[0].childImageSharp && Logo.localFiles[0].childImageSharp.fluid,
+      logo: Logo && Logo.localFiles[0] && Logo.localFiles[0].childImageSharp && Logo.localFiles[0].childImageSharp.fixed,
     }));
 
   // Sort by name (ascending)
@@ -39,10 +39,10 @@ const SectorTemplate = ({ data }) => {
         {name} Organizations
       </h2>
 
-      <OrganizationFilter 
+      <OrganizationFilter
         currentFilter={filter}
         onClearFilter={() => setFilter.none()} />
-      
+
       <div className="bg-white">
         {
           organizations.map((org, index) =>
@@ -87,8 +87,8 @@ export const query = graphql`
             Logo {
               localFiles {
                 childImageSharp {
-                  fluid(maxWidth: 500, grayscale: true) {
-                    ...GatsbyImageSharpFluid
+                  fixed(width: 64, height: 64, fit: CONTAIN, background: "white") {
+                    ...GatsbyImageSharpFixed
                   }
                 }
               }
