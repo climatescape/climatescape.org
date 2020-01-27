@@ -74,8 +74,8 @@ const IndexPage = () => {
           Climatescape is an open database of organizations leading the fight against climate change.
         </p>
         <p className="mt-4">
-          Our content is community-moderated and published under the permissive <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" without rel="noopener noreferrer" className="underline hover:no-underline">Creative Commons BY-SA</a> license.
-          This website is open source and available <a href="https://github.com/climatescape/climatescape.org" target="_blank" without rel="noopener noreferrer" className="underline hover:no-underline">on GitHub</a>.
+          Our content is community-moderated and published under the permissive <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">Creative Commons BY-SA</a> license.
+          This website is open source and available <a href="https://github.com/climatescape/climatescape.org" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">on GitHub</a>.
         </p>
         <p className="mt-8 text-center">
           <Link to="/contribute/" className="inline-block text-2xl px-4 py-2 border-2 rounded text-white bg-blue-500 border-blue-500 hover:text-blue-500 hover:border-blue-500 hover:bg-transparent">Become a Contributor</Link>
@@ -89,13 +89,13 @@ const IndexPage = () => {
         </p>
         <p className="mt-4">
           Follow us on Twitter
-          (<a href="https://twitter.com/climatescape" target="_blank" without rel="noopener noreferrer" className="underline hover:no-underline">@climatescape</a>)
+          (<a href="https://twitter.com/climatescape" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">@climatescape</a>)
           and subscribe to our newsletter to help shape our future.
         </p>
         <p className="mt-8 text-center">
           <a
             href={data.site.siteMetadata.newsletterUrl}
-            target="_blank" without rel="noopener noreferrer"
+            target="_blank" rel="noopener noreferrer"
             className="inline-block text-2xl px-4 py-2 border-2 rounded text-white bg-blue-500 border-blue-500 hover:text-blue-500 hover:border-blue-500 hover:bg-transparent"
           >
             Subscribe Here

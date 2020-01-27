@@ -48,7 +48,7 @@ const Navbar = () => {
           <a
             href={data.site.siteMetadata.newsletterUrl}
             className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 sm:mt-0"
-            activeClassName="border-transparent text-teal-500 bg-white"
+            target="_blank" rel="noopener noreferrer"
           >Subscribe</a>
         </div>
       </div>
