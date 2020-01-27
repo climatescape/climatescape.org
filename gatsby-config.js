@@ -2,7 +2,8 @@ module.exports = {
   siteMetadata: {
     title: `Climatescape`,
     description: `Discover the organizations solving climate change`,
-    author: `@bloudermilk`,
+    author: `@climatescape`,
+    newsletterUrl: `https://climatescape.substack.com/subscribe`
   },
   plugins: [
     {
