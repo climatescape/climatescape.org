@@ -24,7 +24,7 @@ const ContributePage = () => (
         </p>
       </div>
       <div className="lg:w-3/5 border-gray-300 lg:border-r">
-        <script src="https://static.airtable.com/js/embed/embed_snippet_v1.js"></script><iframe className="airtable-embed airtable-dynamic-height" src="https://airtable.com/embed/shrVmZ8nPOrVuCPEh?backgroundColor=purple" frameBorder="0" onmousewheel="" width="100%" height="922" style={{ background: "transparent" }}></iframe>
+        <script src="https://static.airtable.com/js/embed/embed_snippet_v1.js"></script><iframe title="Public Submission Form" className="airtable-embed airtable-dynamic-height" src="https://airtable.com/embed/shrVmZ8nPOrVuCPEh?backgroundColor=purple" frameBorder="0" onmousewheel="" width="100%" height="922" style={{ background: "transparent" }}></iframe>
       </div>
     </div>
   </Layout>
