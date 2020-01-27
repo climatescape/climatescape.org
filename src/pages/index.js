@@ -13,6 +13,7 @@ const IndexPage = () => {
       site {
         siteMetadata {
           title
+          newsletterUrl
         }
       }
 
@@ -34,14 +35,6 @@ const IndexPage = () => {
           }
         }
       }
-
-      windTurbine: file(relativePath: { eq: "images/jason-blackeye-nyL-rzwP-Mk-unsplash.jpg" }) {
-        childImageSharp {
-          fluid {
-            ...GatsbyImageSharpFluid
-          }
-        }
-      }
     }
   `)
 
@@ -49,19 +42,16 @@ const IndexPage = () => {
 
   const sectors = data.sectors.nodes.sort((a, b) => stringCompare(a.data.Name, b.data.Name))
 
-  return <Layout>
+  return <Layout contentClassName="bg-teal-100 text-gray-900">
     <SEO />
 
-    <div className="bg-teal-500">
-      <div className="max-w-6xl mx-auto px-6 pt-8 pb-16 md:pt-16 md:pb-24 font-light tracking-wide text-gray-100">
-        <h2 className="text-3xl md:text-5xl">Mapping the global landscape</h2>
-        <h3 className="text-2xl md:text-4xl">of climate-saving organizations and resources</h3>
-      </div>
-    </div>
+    <h2 className="bg-teal-500 text-2xl md:text-4xl text-center font-light tracking-wide text-white px-2 sm:px-6 pt-8 pb-16 md:pt-12 md:pb-24">
+      Discover&nbsp;the&nbsp;organizations solving&nbsp;climate&nbsp;change
+    </h2>
 
-    <div id="organizations" className="bg-gray-200 py-6 md:py-12">
-      <h2 className="text-gray-900 text-2xl md:text-3xl font-light px-6 pt-3 pb-1 max-w-6xl mx-auto">
-        Explore Organizations by Sector
+    <div id="organizations" className="py-6 md:py-12 bg-teal-100">
+      <h2 className="text-2xl md:text-3xl font-light px-6 pt-3 pb-1 max-w-6xl mx-auto">
+        Browse by Sector
       </h2>
       <div className="p-3 flex flex-wrap max-w-6xl mx-auto">
         {
