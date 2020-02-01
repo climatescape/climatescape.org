@@ -1,8 +1,11 @@
 import React from "react"
+import { Link } from "gatsby"
 import Img from "gatsby-image"
+import PropTypes from "prop-types"
+
 import { OrganizationTag, OrganizationLocation, OrganizationHeadcount, OrganizationOrgType } from "../components/OrganizationAttributes"
 
-const OrganizationCard = ({ title, description, tags, homepage, location, logo, headcount, orgType, currentFilter, onApplyFilter }) => (
+const OrganizationCard = ({ title, description, tags, slug, homepage, location, logo, headcount, orgType, currentFilter, onApplyFilter }) => (
   <div className="flex items-center border-b border-gray-400 p-3 text-gray-900">
     <div className="mr-5 w-16 flex-shrink-0 hidden sm:block">
     {logo &&
@@ -11,9 +14,12 @@ const OrganizationCard = ({ title, description, tags, homepage, location, logo, 
     </div>
     <div>
       <p>
-        <a className="font-bold hover:text-teal-500 mr-2" href={homepage} target="_blank" rel="noopener noreferrer">
-          {title}
-        </a>
+        { slug
+          ? <Link to={`/organizations/${slug}`} className="font-bold hover:text-teal-500 mr-2">{title}</Link>
+          : <a className="font-bold hover:text-teal-500 mr-2" href={homepage} target="_blank" rel="noopener noreferrer">
+              {title}
+            </a>
+        }
 
         {description}
       </p>
@@ -21,7 +27,7 @@ const OrganizationCard = ({ title, description, tags, homepage, location, logo, 
         {
           tags && tags.map((tag, i) =>
             <OrganizationTag
-              onClick={e => onApplyFilter.byTag(tag)}
+              onClick={e => onApplyFilter.byTag && onApplyFilter.byTag(tag)}
               key={i}
               active={tag === currentFilter.byTag}
               text={tag} />
@@ -29,13 +35,13 @@ const OrganizationCard = ({ title, description, tags, homepage, location, logo, 
         }
         {location &&
           <OrganizationLocation
-            onClick={e => onApplyFilter.byLocation(location)}
+            onClick={e => onApplyFilter.byLocation && onApplyFilter.byLocation(location)}
             key='location'
             active={location === currentFilter.byLocation}
             text={location} />}
         {headcount &&
           <OrganizationHeadcount
-            onClick={e => onApplyFilter.byHeadcount(headcount)}
+            onClick={e => onApplyFilter.byHeadcount && onApplyFilter.byHeadcount(headcount)}
             key='headcount'
             active={headcount === currentFilter.byHeadcount}
             text={headcount}
@@ -43,7 +49,7 @@ const OrganizationCard = ({ title, description, tags, homepage, location, logo, 
         }
         {orgType &&
           <OrganizationOrgType
-            onClick={e => onApplyFilter.byOrgType(orgType)}
+            onClick={e => onApplyFilter.byOrgType && onApplyFilter.byOrgType(orgType)}
             key='orgtype'
             active={orgType === currentFilter.byOrgType}
             text={orgType}
@@ -53,4 +59,24 @@ const OrganizationCard = ({ title, description, tags, homepage, location, logo, 
     </div>
   </div>
 )
+
+OrganizationCard.defaultProps = {
+  currentFilter: {},
+  onApplyFilter: {},
+}
+
+OrganizationCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  tags: PropTypes.arrayOf(PropTypes.string),
+  slug: PropTypes.string,
+  homepage: PropTypes.string,
+  location: PropTypes.string,
+  logo: PropTypes.object,
+  headcount: PropTypes.string,
+  orgType: PropTypes.string,
+  currentFilter: PropTypes.object,
+  onApplyFilter: PropTypes.object,
+}
+
 export default OrganizationCard
