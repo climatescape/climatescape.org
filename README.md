@@ -13,7 +13,7 @@ helping out. Simply fill out the [Climatescape Contributor Application][contribu
 
 1. Follow these steps to get the project installed on your local dev machine.
     ```bash
-    $ git pull https://github.com/climatescape/climatescape.org.git
+    $ git clone https://github.com/climatescape/climatescape.org.git
     $ cd climatescape.org
     $ npm install
     ```
