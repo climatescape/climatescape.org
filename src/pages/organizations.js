@@ -10,15 +10,14 @@ import OrganizationFilter, {useOrganizationFilterState} from "../components/Orga
 import AddOrganizationCTA from "../components/AddOrganizationCTA"
 import SEO from "../components/seo"
 
-const SectorTemplate = ({ data }) => {
-  const [filter, setFilter, applyFilter] = useOrganizationFilterState();
-
-  const name = data.airtable.data.Name
+const OrganizationsTemplate = ({ data, pageContext }) => {
+  const sectors = data.sectors.nodes.map(sector => sector.data)
+  const [filter, setFilter, applyFilter] = useOrganizationFilterState()
 
   // Avoid breaking if the sector has no orgs + map out nested data object
-  let organizations = (data.airtable.data.Organizations || [])
+  let organizations = (data.organizations.nodes || [])
     .map(o => o.data)
-    .map(({ Name, About, Tags, Slug, Homepage, City, State_Province, Country, Tagline, Logo, Headcount, Organization_Type }) => ({
+    .map(({ Name, About, Tags, Slug, Homepage, City, State_Province, Country, Tagline, Logo, Headcount, Organization_Type, Sector }) => ({
       title: Name,
       description: Tagline || About,
       tags: Tags,
@@ -27,18 +26,21 @@ const SectorTemplate = ({ data }) => {
       orgType: Organization_Type,
       slug: Slug,
       homepage: Homepage,
-      logo: Logo && Logo.localFiles[0] && Logo.localFiles[0].childImageSharp && Logo.localFiles[0].childImageSharp.fixed,
+      logo: Logo?.localFiles?.[0]?.childImageSharp?.fixed,
+      sector: sectors.find(sector => sector.slug === Sector?.[0]?.data?.Slug),
     }));
 
   // Sort by name (ascending)
   organizations = applyFilter(organizations).sort((a, b) => stringCompare(a.title, b.title))
 
+  const organizationsTitle = (filter.bySector || pageContext.sectorName) ? (filter.bySector?.name || pageContext.sectorName) : "All"
+
   return <Layout contentClassName="bg-gray-200">
-    <SEO title={`${name} organizations on Climatescape`} />
+    <SEO title={`${organizationsTitle} organizations on Climatescape`} />
 
     <div className="max-w-4xl mx-auto pb-4">
       <h2 className="text-3xl tracking-wide font-light p-3 md:mt-4">
-        {name} organizations <AddOrganizationCTA variant="simple"/>
+        {organizationsTitle} organizations <AddOrganizationCTA variant="simple"/>
       </h2>
 
       <OrganizationFilter
@@ -58,6 +60,8 @@ const SectorTemplate = ({ data }) => {
               slug={org.slug}
               homepage={org.homepage}
               logo={org.logo}
+              sector={org.sector}
+              showSector={!pageContext.sectorName}
               key={index}
               currentFilter={filter}
               onApplyFilter={setFilter}
@@ -73,37 +77,47 @@ const SectorTemplate = ({ data }) => {
 }
 
 export const query = graphql`
-  query SectorPageQuery($slug: String) {
-    airtable(table: { eq: "Sectors" }, data: { Slug: { eq: $slug } }) {
-      data {
-        Name
-        Organizations {
-          data {
-            Name
-            Homepage
-            About
-            Slug
-            Tags,
-            Tagline,
-            City,
-            State_Province,
-            Country,
-            Organization_Type,
-            Headcount,
-            Logo {
-              localFiles {
-                childImageSharp {
-                  fixed(width: 64, height: 64, fit: CONTAIN, background: "white") {
-                    ...GatsbyImageSharpFixed
-                  }
+  query OrganizationsPageQuery($slugRegex: String) {
+    organizations: allAirtable(filter: {table: {eq: "Organizations"}, data: { Sector: { elemMatch: { data: { Slug: { regex: $slugRegex} } } } } }) {
+      nodes {
+        data {
+          Name
+          Homepage
+          About
+          Slug
+          Tags,
+          Tagline,
+          City,
+          State_Province,
+          Country,
+          Organization_Type,
+          Headcount,
+          Logo {
+            localFiles {
+              childImageSharp {
+                fixed(width: 64, height: 64, fit: CONTAIN, background: "white") {
+                  ...GatsbyImageSharpFixed
                 }
               }
             }
           }
+          Sector {
+            data {
+              Slug
+            }
+          }
+        }
+      }
+    }
+    sectors: allAirtable(filter: {table: {eq: "Sectors"}}) {
+      nodes {
+        data {
+          name: Name
+          slug: Slug
         }
       }
     }
   }
 `
 
-export default SectorTemplate
+export default OrganizationsTemplate

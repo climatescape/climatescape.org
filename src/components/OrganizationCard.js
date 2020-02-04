@@ -3,11 +3,11 @@ import { Link } from "gatsby"
 import Img from "gatsby-image"
 import PropTypes from "prop-types"
 
-import { OrganizationTag, OrganizationLocation, OrganizationHeadcount, OrganizationOrgType } from "../components/OrganizationAttributes"
+import { OrganizationSector, OrganizationTag, OrganizationLocation, OrganizationHeadcount, OrganizationOrgType } from "../components/OrganizationAttributes"
 
 import "./OrganizationCard.css"
 
-const OrganizationCard = ({ title, description, tags, slug, homepage, location, logo, headcount, orgType, currentFilter, onApplyFilter }) => (
+const OrganizationCard = ({ title, description, tags, slug, homepage, location, logo, sector, showSector, headcount, orgType, currentFilter, onApplyFilter }) => (
   <div className="OrganizationCard flex items-center border-b border-gray-400 p-3 text-gray-900">
     <div className="mr-5 w-16 flex-shrink-0 hidden sm:block">
     {logo &&
@@ -17,10 +17,14 @@ const OrganizationCard = ({ title, description, tags, slug, homepage, location, 
     <div>
       <p>
         <Link to={`/organizations/${slug}`} className="font-bold hover:text-teal-500 mr-2">{title}</Link>
-
         {description}
       </p>
       <div className="mt-1">
+        {sector && showSector &&
+          <OrganizationSector
+            onClick={e => onApplyFilter.bySector(sector)}
+            active={currentFilter.bySector && sector.slug === currentFilter.bySector.slug}
+            text={sector.name} />}
         {
           tags && tags.map((tag, i) =>
             <OrganizationTag
@@ -70,6 +74,10 @@ OrganizationCard.propTypes = {
   homepage: PropTypes.string,
   location: PropTypes.string,
   logo: PropTypes.object,
+  sector: PropTypes.shape({
+    name: PropTypes.string,
+    slug: PropTypes.string,
+  }),
   headcount: PropTypes.string,
   orgType: PropTypes.string,
   currentFilter: PropTypes.object,
