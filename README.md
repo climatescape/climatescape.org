@@ -24,6 +24,21 @@ helping out. Simply fill out the [Climatescape Contributor Application][contribu
     $ AIRTABLE_API_KEY=YOUR_KEY_HERE npm run develop
     ```
 
+----
+
+**Bonus**: <details><summary>Want to preview changes on other devices?</summary>
+<p>
+Use the <a href="https://www.gatsbyjs.org/docs/gatsby-cli/#preview-changes-on-other-devices">host option</a>
+
+```bash
+$ npm run develop -- -H 0.0.0.0
+```
+Then, at the end of the command Gatsby will show you:  
+`On Your Network:  http://192.168.0.XX:8000/`  
+You can now use this IP address / port to access your local environment from your phone. 👌
+</p>
+</details>
+
 ## Architecture
 
 Our site is built with [Gatsby][gatsby], a static site generator that uses
