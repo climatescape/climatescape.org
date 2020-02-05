@@ -2,7 +2,8 @@ import React from "react"
 import { graphql, Link } from "gatsby"
 import Img from "gatsby-image"
 
-import { OrganizationTag, OrganizationLocation, OrganizationHeadcount, OrganizationOrgType } from "../components/OrganizationAttributes"
+
+import { OrganizationTag } from "../components/OrganizationAttributes"
 import OrganizationSocial from "../components/OrganizationSocial"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -40,21 +41,30 @@ const OrganizationTemplate = ({ data }) => {
     />
 
     <div className="max-w-4xl mx-auto pb-4">
-      {org.logo &&
-        <div className="p-3 mt-3 lg:my-6 text-center">
-          <Img fixed={org.logo}/>
-        </div>
-      }
       <Section>
-        <h2 className="text-3xl tracking-wide font-light">{org.title}</h2>
-        {org.sector && <Link to={`/sectors/${org.sector.slug}`} className="block text-teal-700 hover:text-teal-900">{org.sector.name}</Link> }
-        <h3 className="font-bold my-3 pl-3 lg:my-6 border-l-8 border-teal-500 border-solid">{org.tagline}</h3>
+        <div className="flex">
+          {
+            org.logo && <div className="pr-3">
+              <Img fixed={org.logo}/>
+            </div>
+          }
+          <div className="flex-grow">
+            <h2 className="text-lg font-semibold">{org.title}</h2>
+            {org.sector && <Link to={`/sectors/${org.sector.slug}`} className="block text-teal-700 hover:text-teal-900">{org.sector.name}</Link> }
+          </div>
+        </div>
+
+        <h3 className="my-3 pl-3 lg:my-6 border-l-4 border-teal-500 border-solid">{org.tagline}</h3>
         {org.about && org.about !== org.tagline && <div className="py-3">{org.about}</div>}
-        {org.location && <OrganizationLocation key="location" text={org.location}/>}
-        {org.headcount && <OrganizationHeadcount key="headcount" text={org.headcount}/>}
-        {org.orgType && <OrganizationOrgType key="orgtype" text={org.orgType}/>}
+
+        <dl className="attributes-dictionary">
+          { org.location && <><dt>HQ</dt><dd>{org.location}</dd></> }
+          { org.headcount && <><dt>Employees</dt><dd>{org.headcount}</dd></> }
+          { org.orgType && <><dt>Type</dt><dd>{org.orgType}</dd></> }
+        </dl>
       </Section>
-      <Section title="Social">
+
+      <Section>
         <OrganizationSocial homepage={org.homepage} linkedIn={org.linkedIn} twitter={org.twitter}/>
       </Section>
 
@@ -80,7 +90,7 @@ export const query = graphql`
         Logo {
           localFiles {
             childImageSharp {
-              fixed(width: 200, height: 200, fit: CONTAIN, background: "transparent") {
+              fixed(width: 64, height: 64, fit: CONTAIN, background: "white") {
                 ...GatsbyImageSharpFixed
               }
             }

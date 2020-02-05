@@ -14,12 +14,7 @@ const OrganizationCard = ({ title, description, tags, slug, homepage, location, 
     </div>
     <div>
       <p>
-        { slug
-          ? <Link to={`/organizations/${slug}`} className="font-bold hover:text-teal-500 mr-2">{title}</Link>
-          : <a className="font-bold hover:text-teal-500 mr-2" href={homepage} target="_blank" rel="noopener noreferrer">
-              {title}
-            </a>
-        }
+        <Link to={`/organizations/${slug}`} className="font-bold hover:text-teal-500 mr-2">{title}</Link>
 
         {description}
       </p>
@@ -27,7 +22,7 @@ const OrganizationCard = ({ title, description, tags, slug, homepage, location, 
         {
           tags && tags.map((tag, i) =>
             <OrganizationTag
-              onClick={e => onApplyFilter.byTag && onApplyFilter.byTag(tag)}
+              onClick={e => onApplyFilter.byTag(tag)}
               key={i}
               active={tag === currentFilter.byTag}
               text={tag} />
@@ -35,13 +30,13 @@ const OrganizationCard = ({ title, description, tags, slug, homepage, location, 
         }
         {location &&
           <OrganizationLocation
-            onClick={e => onApplyFilter.byLocation && onApplyFilter.byLocation(location)}
+            onClick={e => onApplyFilter.byLocation(location)}
             key='location'
             active={location === currentFilter.byLocation}
             text={location} />}
         {headcount &&
           <OrganizationHeadcount
-            onClick={e => onApplyFilter.byHeadcount && onApplyFilter.byHeadcount(headcount)}
+            onClick={e => onApplyFilter.byHeadcount(headcount)}
             key='headcount'
             active={headcount === currentFilter.byHeadcount}
             text={headcount}
@@ -49,7 +44,7 @@ const OrganizationCard = ({ title, description, tags, slug, homepage, location, 
         }
         {orgType &&
           <OrganizationOrgType
-            onClick={e => onApplyFilter.byOrgType && onApplyFilter.byOrgType(orgType)}
+            onClick={e => onApplyFilter.byOrgType(orgType)}
             key='orgtype'
             active={orgType === currentFilter.byOrgType}
             text={orgType}

@@ -3,3 +3,17 @@
   text-shadow: 0 2px 1em #000000;
   padding-top: 8px !important;
 }
+
+.attributes-dictionary {
+  @apply flex flex-wrap;
+}
+
+.attributes-dictionary dt {
+  @apply font-semibold;
+  @apply w-4/12;
+}
+
+.attributes-dictionary dd {
+  @apply flex-grow;
+  @apply w-8/12;
+}
