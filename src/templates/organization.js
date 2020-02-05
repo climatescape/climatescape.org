@@ -63,7 +63,6 @@ const OrganizationTemplate = ({ data }) => {
           {org.tags.map(tag => <OrganizationTag key={tag} text={tag} />)}
         </Section>
       }
-      {/*TODO: implement suggest edit button // <button>Suggest an edit</button>*/}
     </div>
   </Layout>
 }
