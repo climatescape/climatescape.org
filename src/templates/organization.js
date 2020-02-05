@@ -35,8 +35,8 @@ const OrganizationTemplate = ({ data }) => {
 
   return <Layout contentClassName="bg-gray-200">
     <SEO
-      title={`${org.title} is solving climate change - ${siteTitle}`}
-      description={`${org.title} is on ${siteTitle}. ${org.tagline}`}
+      title={`${org.title} on ${siteTitle}`}
+      description={org.tagline}
     />
 
     <div className="max-w-4xl mx-auto pb-4">
