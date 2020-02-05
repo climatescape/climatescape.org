@@ -1,9 +1,9 @@
 import React from "react"
 import { graphql, Link } from "gatsby"
 import Img from "gatsby-image"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUsers, faBuilding, faLocationArrow, faTag } from '@fortawesome/free-solid-svg-icons'
 
-
-import { OrganizationTag } from "../components/OrganizationAttributes"
 import OrganizationSocial from "../components/OrganizationSocial"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -41,38 +41,33 @@ const OrganizationTemplate = ({ data }) => {
     />
 
     <div className="max-w-4xl mx-auto pb-4">
+
+      { org.sector && <Link to={`/sectors/${org.sector.slug}`} className="inline-block text-lg pt-3 px-2 text-gray-700 hover:text-teal-900">&laquo; {org.sector.name}</Link> }
+
       <Section>
-        <div className="flex">
+        <div className="flex items-center text-gray-900">
           {
-            org.logo && <div className="pr-3">
-              <Img fixed={org.logo}/>
-            </div>
+            org.logo && <Img fixed={org.logo} className="mr-3 w-16 h-16" />
           }
-          <div className="flex-grow">
-            <h2 className="text-lg font-semibold">{org.title}</h2>
-            {org.sector && <Link to={`/sectors/${org.sector.slug}`} className="block text-teal-700 hover:text-teal-900">{org.sector.name}</Link> }
-          </div>
+
+          <h1 className="flex-grow text-xl font-semibold">{org.title}</h1>
         </div>
 
-        <h3 className="my-3 pl-3 lg:my-6 border-l-4 border-teal-500 border-solid">{org.tagline}</h3>
-        {org.about && org.about !== org.tagline && <div className="py-3">{org.about}</div>}
+        <h2 className="my-5 pl-3 lg:my-6 border-l-4 border-teal-500 border-solid font-semibold">{org.tagline}</h2>
 
-        <dl className="attributes-dictionary">
-          { org.location && <><dt>HQ</dt><dd>{org.location}</dd></> }
-          { org.headcount && <><dt>Employees</dt><dd>{org.headcount}</dd></> }
-          { org.orgType && <><dt>Type</dt><dd>{org.orgType}</dd></> }
-        </dl>
+        {org.about && org.about !== org.tagline && <div className="my-3">{org.about}</div>}
+
+        <ul>
+          { org.location && <li><span className="w-8 inline-block"><FontAwesomeIcon icon={faLocationArrow} className="mx-1 text-gray-700" /></span>{org.location}</li> }
+          { org.headcount && <li><span className="w-8 inline-block"><FontAwesomeIcon icon={faUsers} className="mx-1 text-gray-700" /></span>{org.headcount} employees</li> }
+          { org.orgType && <li><span className="w-8 inline-block"><FontAwesomeIcon icon={faBuilding} className="mx-1 text-gray-700" /></span>{org.orgType}</li> }
+          { org.tags && org.tags.length && <li><span className="w-8 inline-block"><FontAwesomeIcon icon={faTag} className="mx-1 text-gray-700" /></span>{org.tags.join(", ")}</li> }
+        </ul>
       </Section>
 
       <Section>
         <OrganizationSocial homepage={org.homepage} linkedIn={org.linkedIn} twitter={org.twitter}/>
       </Section>
-
-      {org.tags &&
-        <Section title="Tags">
-          {org.tags.map(tag => <OrganizationTag key={tag} text={tag} />)}
-        </Section>
-      }
     </div>
   </Layout>
 }
