@@ -5,11 +5,13 @@ import PropTypes from "prop-types"
 
 import { OrganizationTag, OrganizationLocation, OrganizationHeadcount, OrganizationOrgType } from "../components/OrganizationAttributes"
 
+import "./OrganizationCard.css"
+
 const OrganizationCard = ({ title, description, tags, slug, homepage, location, logo, headcount, orgType, currentFilter, onApplyFilter }) => (
-  <div className="flex items-center border-b border-gray-400 p-3 text-gray-900">
+  <div className="OrganizationCard flex items-center border-b border-gray-400 p-3 text-gray-900">
     <div className="mr-5 w-16 flex-shrink-0 hidden sm:block">
     {logo &&
-      <Img fixed={logo} className="w-16 h-16" imgStyle={{ filter: "grayscale(100%)" }} />
+      <Link to={`/organizations/${slug}`}><Img fixed={logo} className="OrganizationCard-logo w-16 h-16" /></Link>
     }
     </div>
     <div>
