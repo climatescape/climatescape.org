@@ -18,10 +18,10 @@ helping out. Simply fill out the [Climatescape Contributor Application][contribu
     $ npm install
     ```
 2. Copy your Airtable API key from this page: [Airtable account][airtable-account]
-3. Create a `.env.development` and a `.env.production` file at the root of the project
+3. Create a `.env.development` file at the root of the project
    replacing `YOUR_KEY_HERE` by the key you copied in the previous step:
     ```bash
-    $ echo "AIRTABLE_API_KEY=YOUR_KEY_HERE" > .env.development && echo "AIRTABLE_API_KEY=YOUR_KEY_HERE" > .env.production
+    $ echo "AIRTABLE_API_KEY=YOUR_KEY_HERE" > .env.development
     ```
 4. Run the project like so:
     ```bash
