@@ -1,7 +1,13 @@
 import React from "react"
 import Tag from "./Tag"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUsers, faBuilding, faLocationArrow, faTag } from '@fortawesome/free-solid-svg-icons'
+import { faBox, faUsers, faBuilding, faLocationArrow, faTag } from '@fortawesome/free-solid-svg-icons'
+
+export const OrganizationSector = ({ text, ...props }) => (
+  <Tag
+      { ...props }
+    ><FontAwesomeIcon icon={faBox} className="mr-1" />{text}</Tag>
+)
 
 export const OrganizationTag = ({ text, ...props }) => (
   <Tag
@@ -20,10 +26,9 @@ export const OrganizationHeadcount = ({ text, ...props }) => (
         { ...props }
       ><FontAwesomeIcon icon={faUsers} className="mr-1" />{text}</Tag>
   )
-  
+
 export const OrganizationOrgType = ({ text, ...props }) => (
     <Tag
         { ...props }
       ><FontAwesomeIcon icon={faBuilding} className="mr-1" />{text}</Tag>
   )
-  
