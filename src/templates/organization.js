@@ -13,7 +13,7 @@ const OrganizationTemplate = ({ data }) => {
   const siteTitle = data.site.siteMetadata.title
   const orgData = data.airtable.data
 
-  const sector = orgData.Sector[0]?.data || {}
+  const sector = (orgData.Sector && orgData.Sector[0]?.data) || {}
   const org = {
     logo: orgData.Logo?.localFiles?.[0]?.childImageSharp?.fixed,
     title: orgData.Name,
