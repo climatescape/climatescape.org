@@ -2,7 +2,7 @@ import React from "react"
 import { Link } from "gatsby"
 import Img from "gatsby-image"
 
-const TopicCard = ({ title, count, img, path }) => (
+const TopicCard = ({ title, img, path }) => (
   <div className="w-full sm:w-1/2 md:w-1/4 p-3">
     <Link to={path}  className="block rounded overflow-hidden shadow-md relative">
       <Img fluid={img} className="w-full h-40 object-cover" />

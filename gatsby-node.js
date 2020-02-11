@@ -6,6 +6,8 @@
 
 const path = require(`path`)
 
+const makeSlug = require(`./src/utils/slug`).makeSlug
+
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
 
@@ -22,7 +24,8 @@ exports.createPages = async ({ graphql, actions }) => {
       organizations: allAirtable(filter: {table: {eq: "Organizations"}}) {
         nodes {
           data {
-            Slug
+            ID
+            Name
           }
         }
       }
@@ -44,9 +47,9 @@ exports.createPages = async ({ graphql, actions }) => {
   // Create the organizations pages
   data.organizations.nodes.forEach(({ data }) => {
     createPage({
-      path: `/organizations/${data.Slug}`,
+      path: `/organizations/${makeSlug(data.Name)}`,
       component: path.resolve(`./src/templates/organization.js`),
-      context: { slug: data.Slug },
+      context: { id: data.ID },
     })
   })
 }
