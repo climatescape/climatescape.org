@@ -2,7 +2,7 @@ import React from "react"
 import { graphql } from 'gatsby'
 
 import { stringCompare } from "../utils/string"
-import { filterDuplicateAndEmptyItems } from "../utils/array"
+import { makeSlug } from "../utils/slug"
 
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
@@ -17,14 +17,14 @@ const OrganizationsTemplate = ({ data, pageContext }) => {
   // Avoid breaking if the sector has no orgs + map out nested data object
   let organizations = (data.organizations.nodes || [])
     .map(o => o.data)
-    .map(({ Name, About, Tags, Slug, Homepage, City, State_Province, Country, Tagline, Logo, Headcount, Organization_Type, Sector }) => ({
+    .map(({ Name, About, Tags, Homepage, HQ_Location, Tagline, Logo, Headcount, Organization_Type, Sector }) => ({
       title: Name,
       description: Tagline || About,
       tags: Tags,
-      location: filterDuplicateAndEmptyItems(City, State_Province, Country).join(', '),
+      location: HQ_Location,
       headcount: Headcount,
       orgType: Organization_Type,
-      slug: Slug,
+      slug: makeSlug(Name),
       homepage: Homepage,
       logo: Logo?.localFiles?.[0]?.childImageSharp?.fixed,
       sector: sectors.find(sector => sector.slug === Sector?.[0]?.data?.Slug),
@@ -84,12 +84,9 @@ export const query = graphql`
           Name
           Homepage
           About
-          Slug
           Tags,
           Tagline,
-          City,
-          State_Province,
-          Country,
+          HQ_Location,
           Organization_Type,
           Headcount,
           Logo {

@@ -20,7 +20,6 @@ const IndexPage = () => {
         nodes {
           data {
             Name
-            Organizations_Count
             Slug
             Cover {
               localFiles {
@@ -57,7 +56,6 @@ const IndexPage = () => {
           sectors.map((node, index) =>
             <TopicCard
               title={node.data.Name}
-              count={node.data.Organizations_Count}
               img={node.data.Cover.localFiles[0].childImageSharp.fluid}
               path={`/sectors/${node.data.Slug}`}
               key={index}

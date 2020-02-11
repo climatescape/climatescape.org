@@ -9,8 +9,6 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import Section from "../components/Section"
 
-import { filterDuplicateAndEmptyItems } from "../utils/array"
-
 const OrganizationTemplate = ({ data }) => {
   const siteTitle = data.site.siteMetadata.title
   const orgData = data.airtable.data
@@ -25,7 +23,7 @@ const OrganizationTemplate = ({ data }) => {
     },
     tagline: orgData.Tagline,
     about: orgData.About && orgData.About.replace(orgData.Tagline, ""),
-    location: filterDuplicateAndEmptyItems(orgData.City, orgData.State_Province, orgData.Country).join(", "),
+    location: orgData.HQ_Location,
     headcount: orgData.Headcount,
     orgType: orgData.Organization_Type,
     homepage: orgData.Homepage,
@@ -73,14 +71,14 @@ const OrganizationTemplate = ({ data }) => {
 }
 
 export const query = graphql`
-  query OrganizationPageQuery($slug: String) {
+  query OrganizationPageQuery($id: Int) {
     site {
       siteMetadata {
         title
       }
     }
 
-    airtable(table: { eq: "Organizations" }, data: { Slug: { eq: $slug } }) {
+    airtable(table: { eq: "Organizations" }, data: { ID: { eq: $id } }) {
       data {
         Logo {
           localFiles {
@@ -100,9 +98,7 @@ export const query = graphql`
         }
         Tagline
         About
-        City
-        State_Province
-        Country
+        HQ_Location
         Headcount
         Organization_Type
         Homepage
