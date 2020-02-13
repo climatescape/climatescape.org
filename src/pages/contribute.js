@@ -64,14 +64,14 @@ const ContributePage = () => {
         </div>
         <div className="p-3 pb-6 bg-blue-100 lg:p-6">
           <div className="flex justify-between">
-            <div className="text-gray-900 text-2xl md:text-3xl font-light mb-3" >Contributors</div>
-            <button onClick={() => setOpen(!open)} style={{ transform: open ? "none" : "rotateX( 180deg )" }}>
+            <div className="text-gray-900 text-2xl md:text-3xl font-light mb-3">Contributors</div>
+            <button className="lg:hidden" onClick={() => setOpen(!open)} style={{ transform: open ? "none" : "rotateX( 180deg )" }}>
               <svg className="fill-current w-10 h-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                 <path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z" />
               </svg>
             </button>
           </div>
-          <div className={`${open ? "block" : "hidden"}`}>
+          <div className={`${open ? "block" : "hidden"} lg:block`}>
             {
               contributors.map((contributor) => {
                 return <ContributorCard
