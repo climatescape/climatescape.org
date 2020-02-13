@@ -35,6 +35,12 @@ module.exports = {
             tableView: `Published`,
             mapping: { "Cover": `fileNode` },
             tableLinks: [`Organizations`]
+          },
+          {
+            baseId: `appNYMWxGF1jMaf5V`,
+            tableName: "Contributors",
+            tableView: "Published",
+            mapping: { "Avatar": `fileNode` },
           }
         ]
       }
