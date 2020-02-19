@@ -4,6 +4,7 @@ import {
   Index,
   Hits,
   Highlight,
+  Configure,
   connectStateResults,
 } from "react-instantsearch-dom"
 import algoliasearch from "algoliasearch/lite"
@@ -87,7 +88,7 @@ export default function Search({ collapse }) {
   )
 
   return (
-    <div className="search-root pb-4 w-64" ref={ref}>
+    <div className="search-root" ref={ref}>
       <InstantSearch
         searchClient={searchClient}
         indexName={indices[0].name}
@@ -95,6 +96,7 @@ export default function Search({ collapse }) {
         root={{ Root, props: { ref } }}
         styles={{ position: "relative" }}
       >
+        <Configure hitsPerPage={8} />
         <Input onFocus={() => setFocus(true)} {...{ collapse, focus }} />
         <HitsWrapper show={query.length > 0 && focus}>
           {indices.map(({ name, title, hitComp }) => (

@@ -3,7 +3,6 @@ import { Link, useStaticQuery, graphql } from "gatsby"
 
 import { stringCompare } from "../utils/string"
 
-import Search from "../components/search/index"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import TopicCard from "../components/TopicCard"
@@ -44,13 +43,9 @@ const IndexPage = () => {
   return <Layout contentClassName="text-gray-900">
     <SEO />
 
-    <div className="bg-teal-500">
-      <h2 className="text-2xl md:text-4xl text-center font-light tracking-wide text-white px-2 sm:px-6 pt-8 pb-6 md:pt-12 md:pb-4">
-        Discover&nbsp;the&nbsp;organizations solving&nbsp;climate&nbsp;change
-      </h2>
-      <Search />
-    </div>
-
+    <h2 className="bg-teal-500 text-2xl md:text-4xl text-center font-light tracking-wide text-white px-2 sm:px-6 pt-8 pb-16 md:pt-12 md:pb-24">
+      Discover&nbsp;the&nbsp;organizations solving&nbsp;climate&nbsp;change
+    </h2>
 
     <div id="organizations" className="py-6 md:py-12 bg-teal-100">
       <h2 className="text-2xl md:text-3xl font-light px-6 pt-3 pb-1 max-w-6xl mx-auto">

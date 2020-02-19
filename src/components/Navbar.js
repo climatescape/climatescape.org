@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { useStaticQuery, graphql, Link } from "gatsby"
 
+import Search from "../components/search/index"
 import SiteLogo from "../images/site-logo.svg"
 
 const Navbar = () => {
@@ -24,13 +25,17 @@ const Navbar = () => {
         <span className="font-semibold text-xl">{data.site.siteMetadata.title}</span>
       </Link>
 
-      <div className="block sm:hidden">
+      <div className="sm:hidden">
         <button onClick={() => setOpen(!open)} className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
           <svg className="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
         </button>
       </div>
 
-      <div className={`${open ? "block" : "hidden"} w-full flex-grow sm:flex sm:items-center sm:w-auto`}>
+      <div className={`${open ? "block" : "hidden"} flex-grow sm:flex sm:items-center sm:w-auto pt-6 sm:pt-0`}>
+        <div className="w-full sm:w-64">
+          <Search />
+        </div>
+
         <div className="text-sm sm:text-right sm:flex-grow">
           <Link to="/#about" className="block mt-4 sm:inline-block sm:mt-0 text-teal-200 hover:text-white mr-4">
             About
@@ -44,6 +49,7 @@ const Navbar = () => {
             Contribute
           </Link>
         </div>
+
         <div>
           <a
             href={data.site.siteMetadata.newsletterUrl}

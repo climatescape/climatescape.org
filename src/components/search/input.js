@@ -8,7 +8,6 @@ export default connectSearchBox(({ refine, ...rest }) => (
       type="text"
       placeholder="Search"
       aria-label="Search"
-      className="w-64"
       onChange={e => refine(e.target.value)}
       {...rest}
     />
