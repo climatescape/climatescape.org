@@ -36,71 +36,85 @@ function SEO({ description, lang, meta, title }) {
       title={metaTitle}
       meta={[
         {
-          name: `description`,
+          name: "description",
           content: metaDescription,
         },
         {
-          property: `og:title`,
+          property: "og:title",
           content: metaTitle,
         },
         {
-          property: `og:description`,
+          property: "og:description",
           content: metaDescription,
         },
         {
-          property: `og:type`,
-          content: `website`,
+          property: "og:type",
+          content: "website",
         },
         {
-          property: `og:image`,
-          content: `https://climatescape.org/logo-large.png`,
+          property: "og:image",
+          content: "https://climatescape.org/logo-large.png",
         },
         {
-          property: `og:image:type`,
-          content: `image/png`,
+          property: "og:image:type",
+          content: "image/png",
         },
         {
-          property: `og:image:width`,
-          content: `512`,
+          property: "og:image:width",
+          content: "512",
         },
         {
-          property: `og:image:height`,
-          content: `512`,
+          property: "og:image:height",
+          content: "512",
         },
         {
-          property: `og:image:alt`,
-          content: `Climatescape logo (network overlayed on globe)`,
+          property: "og:image:alt",
+          content: "Climatescape logo (network overlayed on globe)",
         },
         {
-          name: `twitter:card`,
-          content: `summary`,
+          name: "twitter:card",
+          content: "summary",
         },
         {
-          name: `twitter:site`,
-          content: `@climatescape`,
+          name: "twitter:site",
+          content: "@climatescape",
         },
         {
-          name: `twitter:title`,
+          name: "twitter:title",
           content: metaTitle,
         },
         {
-          name: `twitter:description`,
+          name: "twitter:description",
           content: metaDescription,
         },
       ].concat(meta)}
       link={[
-        { rel: `apple-touch-icon`, sizes: `180x180`, href: `/apple-touch-icon.png` },
-        { rel: `icon`, type: `image/png`, sizes: `32x32`, href: `/favicon-32x32.png` },
-        { rel: `icon`, type: `image/png`, sizes: `16x16`, href: `/favicon-16x16.png` },
+        {
+          rel: "apple-touch-icon",
+          sizes: "180x180",
+          href: "/apple-touch-icon.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "32x32",
+          href: "/favicon-32x32.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "16x16",
+          href: "/favicon-16x16.png",
+        },
       ]}
     />
   )
 }
 
 SEO.defaultProps = {
-  lang: `en`,
+  lang: "en",
   meta: [],
-  description: ``,
+  description: "",
 }
 
 SEO.propTypes = {

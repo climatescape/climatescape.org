@@ -3,59 +3,92 @@ import { Link } from "gatsby"
 import Img from "gatsby-image"
 import PropTypes from "prop-types"
 
-import { OrganizationSector, OrganizationTag, OrganizationLocation, OrganizationHeadcount, OrganizationOrgType } from "../components/OrganizationAttributes"
+import {
+  OrganizationSector,
+  OrganizationTag,
+  OrganizationLocation,
+  OrganizationHeadcount,
+  OrganizationOrgType,
+} from "./OrganizationAttributes"
 
 import "./OrganizationCard.css"
 
-const OrganizationCard = ({ title, description, tags, slug, homepage, location, logo, sector, showSector, headcount, orgType, currentFilter, onApplyFilter }) => (
+const OrganizationCard = ({
+  title,
+  description,
+  tags,
+  slug,
+  location,
+  logo,
+  sector,
+  showSector,
+  headcount,
+  orgType,
+  currentFilter,
+  onApplyFilter,
+}) => (
   <div className="OrganizationCard flex items-center border-b border-gray-400 p-3 text-gray-900">
     <div className="mr-5 w-16 flex-shrink-0 hidden sm:block">
-    {logo &&
-      <Link to={`/organizations/${slug}`}><Img fixed={logo} className="OrganizationCard-logo w-16 h-16" /></Link>
-    }
+      {logo && (
+        <Link to={`/organizations/${slug}`}>
+          <Img fixed={logo} className="OrganizationCard-logo w-16 h-16" />
+        </Link>
+      )}
     </div>
     <div>
       <p>
-        <Link to={`/organizations/${slug}`} className="font-bold hover:text-teal-500 mr-2">{title}</Link>
+        <Link
+          to={`/organizations/${slug}`}
+          className="font-bold hover:text-teal-500 mr-2"
+        >
+          {title}
+        </Link>
         {description}
       </p>
       <div className="mt-1">
-        {sector && showSector &&
+        {sector && showSector && (
           <OrganizationSector
-            onClick={e => onApplyFilter.bySector(sector)}
-            active={currentFilter.bySector && sector.slug === currentFilter.bySector.slug}
-            text={sector.name} />}
-        {
-          tags && tags.map((tag, i) =>
+            onClick={() => onApplyFilter.bySector(sector)}
+            active={
+              currentFilter.bySector &&
+              sector.slug === currentFilter.bySector.slug
+            }
+            text={sector.name}
+          />
+        )}
+        {tags &&
+          tags.map(tag => (
             <OrganizationTag
-              onClick={e => onApplyFilter.byTag(tag)}
-              key={i}
+              onClick={() => onApplyFilter.byTag(tag)}
+              key={tag}
               active={tag === currentFilter.byTag}
-              text={tag} />
-          )
-        }
-        {location &&
+              text={tag}
+            />
+          ))}
+        {location && (
           <OrganizationLocation
-            onClick={e => onApplyFilter.byLocation(location)}
-            key='location'
+            onClick={() => onApplyFilter.byLocation(location)}
+            key="location"
             active={location === currentFilter.byLocation}
-            text={location} />}
-        {headcount &&
+            text={location}
+          />
+        )}
+        {headcount && (
           <OrganizationHeadcount
-            onClick={e => onApplyFilter.byHeadcount(headcount)}
-            key='headcount'
+            onClick={() => onApplyFilter.byHeadcount(headcount)}
+            key="headcount"
             active={headcount === currentFilter.byHeadcount}
             text={headcount}
-            />
-        }
-        {orgType &&
+          />
+        )}
+        {orgType && (
           <OrganizationOrgType
-            onClick={e => onApplyFilter.byOrgType(orgType)}
-            key='orgtype'
+            onClick={() => onApplyFilter.byOrgType(orgType)}
+            key="orgtype"
             active={orgType === currentFilter.byOrgType}
             text={orgType}
           />
-        }
+        )}
       </div>
     </div>
   </div>
@@ -71,7 +104,6 @@ OrganizationCard.propTypes = {
   description: PropTypes.string,
   tags: PropTypes.arrayOf(PropTypes.string),
   slug: PropTypes.string,
-  homepage: PropTypes.string,
   location: PropTypes.string,
   logo: PropTypes.object,
   sector: PropTypes.shape({

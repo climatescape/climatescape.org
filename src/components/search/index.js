@@ -8,16 +8,16 @@ import {
   connectStateResults,
 } from "react-instantsearch-dom"
 import algoliasearch from "algoliasearch/lite"
-import { Root, HitsWrapper } from "./styles"
-import Input from "./input"
 import { Link } from "gatsby"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBuilding } from "@fortawesome/free-solid-svg-icons"
 import { faAlgolia } from "@fortawesome/free-brands-svg-icons"
+import Input from "./input"
+import { Root, HitsWrapper } from "./styles"
 
 import "./styles.css"
 
-const PageHit = clickHandler => ({ hit }) => (
+const PageHit = () => ({ hit }) => (
   <div className="text-gray-700 hit">
     {hit.logo ? (
       <img alt="Search" src={hit.logo} />
@@ -78,7 +78,7 @@ const indices = [{ name: `Pages`, title: `Pages`, hitComp: `PageHit` }]
 
 export default function Search({ collapse }) {
   const ref = createRef()
-  const [query, setQuery] = useState(``)
+  const [searchQuery, setQuery] = useState(``)
   const [focus, setFocus] = useState(false)
   useClickOutside(ref, () => setFocus(false))
 
@@ -98,8 +98,8 @@ export default function Search({ collapse }) {
       >
         <Configure hitsPerPage={8} />
         <Input onFocus={() => setFocus(true)} {...{ collapse, focus }} />
-        <HitsWrapper show={query.length > 0 && focus}>
-          {indices.map(({ name, title, hitComp }) => (
+        <HitsWrapper show={searchQuery.length > 0 && focus}>
+          {indices.map(({ name, hitComp }) => (
             <Index key={name} indexName={name}>
               <Results>
                 <Hits hitComponent={hitComps[hitComp](() => setFocus(false))} />
