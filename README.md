@@ -12,34 +12,37 @@ locally. The process is really simple and we accept anyone who's interested in
 helping out. Simply fill out the [Climatescape Contributor Application][contributor-app].
 
 1. Follow these steps to get the project installed on your local dev machine.
-    ```bash
-    $ git clone https://github.com/climatescape/climatescape.org.git
-    $ cd climatescape.org
-    $ npm install
-    ```
+   ```bash
+   $ git clone https://github.com/climatescape/climatescape.org.git
+   $ cd climatescape.org
+   $ npm install
+   ```
 2. Copy your Airtable API key from this page: [Airtable account][airtable-account]
 3. Create a `.env.development` file at the root of the project
    replacing `YOUR_KEY_HERE` by the key you copied in the previous step:
-    ```bash
-    $ echo "AIRTABLE_API_KEY=YOUR_KEY_HERE" > .env.development
-    ```
+   ```bash
+   $ cp .env.sample .env.development
+   ```
 4. Run the project like so:
-    ```bash
-    $ npm run develop
-    ```
+   ```bash
+   $ npm run develop
+   ```
 
-----
+---
 
 **Bonus**: <details><summary>Want to preview changes on other devices?</summary>
+
 <p>
 Use the <a href="https://www.gatsbyjs.org/docs/gatsby-cli/#preview-changes-on-other-devices">host option</a>
 
 ```bash
 $ npm run develop -- -H 0.0.0.0
 ```
+
 Then, at the end of the command Gatsby will show you:  
-`On Your Network:  http://192.168.0.XX:8000/`  
+`On Your Network: http://192.168.0.XX:8000/`
 You can now use this IP address / port to access your local environment from your phone. 👌
+
 </p>
 </details>
 
