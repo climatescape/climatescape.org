@@ -1,0 +1,52 @@
+.search-root {
+  position: relative;
+  margin: 0 auto;
+  color: white;
+}
+
+.search-root form {
+  display: flex;
+}
+
+.search-root input {
+  color: white;
+  border: 1px solid white;
+  border-radius: 2em;
+  margin-right: 4px;
+  line-height: 30px;
+  flex-grow: 1;
+}
+
+.search-root input::placeholder {
+  color: white;
+}
+
+.algolia-bar {
+  border-top: 1px solid #efefef;
+  line-height: 2em;
+  text-align: left;
+  display: inline-block;
+  padding-left: 1em;
+  background-color: #edf2f7;
+  border-radius: 0 0 4px 4px;
+}
+
+.algolia-bar span {
+  display: inline-block;
+  padding-left: 1em;
+}
+
+.search-root .hit {
+  display: flex;
+  align-items: center;
+}
+
+.search-root .hit a {
+  flex-grow: 1;
+}
+
+.hit img {
+  height: 1em;
+  width: 1em;
+  margin-right: 10px;
+}
