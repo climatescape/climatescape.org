@@ -21,10 +21,6 @@
   color: white;
 }
 
-.search-root form svg {
-  color: white;
-}
-
 .algolia-bar {
   border-top: 1px solid #efefef;
   line-height: 2em;

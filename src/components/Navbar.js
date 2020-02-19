@@ -6,6 +6,7 @@ import SiteLogo from "../images/site-logo.svg"
 
 const Navbar = () => {
   const [open, setOpen] = useState(false)
+  const isSSR = typeof window === "undefined"
 
   const data = useStaticQuery(graphql`
     query NavbarQuery {
@@ -33,7 +34,7 @@ const Navbar = () => {
 
       <div className={`${open ? "block" : "hidden"} flex-grow sm:flex sm:items-center sm:w-auto pt-6 sm:pt-0`}>
         <div className="w-full sm:w-64">
-          <Search />
+          { isSSR || <Search /> }
         </div>
 
         <div className="text-sm sm:text-right sm:flex-grow">

@@ -9,6 +9,7 @@ export const Root = styled.div`
 export const SearchIcon = styled(Search)`
   width: 1em;
   pointer-events: none;
+  color: white;
 `
 const focus = css`
   background: white;
