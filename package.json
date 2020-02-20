@@ -61,7 +61,7 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
-    "lint": "eslint --fix src"
+    "lint": "eslint src"
   },
   "repository": {
     "type": "git",
