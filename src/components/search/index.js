@@ -66,9 +66,9 @@ const PoweredBy = () => (
         <FontAwesomeIcon
           icon={faAlgolia}
           className="mr-2"
-          style={{ color: "#6d7571" }}
+          style={{ color: "#5468ff" }}
         />
-        Algolia search results
+        powered by Aloglia
       </a>
     </span>
   </div>
