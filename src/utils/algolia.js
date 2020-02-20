@@ -21,21 +21,24 @@ const pageQuery = `query PagesQuery {
 }
 `
 
-const settings = { attributesToSnippet: [`excerpt:20`] }
+const settings = { attributesToSnippet: ["excerpt:20"] }
 
 module.exports.queries = [
   {
     query: pageQuery,
-    transformer: ({ data }) => {
-      return data.organizations.nodes.map(({ data }) => ({
-        objectID: makeSlug(data.Name),
-        name: data.Name,
-        path: makeSlug(data.Name),
-        logo: !data.Logo ? "" : data.Logo.raw[0].url,
-        sector: !data.Sector ? "" : data.Sector.map(sector => sector.data.Slug),
-      }))
-    },
-    indexName: `Pages`,
+    transformer: ({ data: transformedData }) =>
+      (transformedData ? transformedData.organizations.nodes : []).map(
+        ({ data }) => ({
+          objectID: makeSlug(data.Name),
+          name: data.Name,
+          path: makeSlug(data.Name),
+          logo: !data.Logo ? "" : data.Logo.raw[0].url,
+          sector: !data.Sector
+            ? ""
+            : data.Sector.map(sector => sector.data.Slug),
+        })
+      ),
+    indexName: "Pages",
     settings,
   },
 ]
