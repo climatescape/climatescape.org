@@ -29,9 +29,26 @@ const Layout = ({ children, contentClassName }) => {
       <Navbar />
       <main className={`flex-grow ${contentClassName}`}>{children}</main>
       <footer className="text-gray-800 p-3 bg-gray-200 text-center sm:text-left">
-        <span>© {data.site.siteMetadata.title} <a href="https://creativecommons.org/licenses/by-sa/4.0/" className="underline hover:no-underline" target="_blank" rel="noopener noreferrer">CC BY-SA</a></span>
+        <span>
+          ©{data.site.siteMetadata.title}
+          <a
+            href="https://creativecommons.org/licenses/by-sa/4.0/"
+            className="underline hover:no-underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            CC BY-SA
+          </a>
+        </span>
         <span> • </span>
-        <a href="https://twitter.com/climatescape" className="underline hover:no-underline" target="_blank" rel="noopener noreferrer">Twitter</a>
+        <a
+          href="https://twitter.com/climatescape"
+          className="underline hover:no-underline"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Twitter
+        </a>
       </footer>
     </div>
   )
@@ -39,7 +56,7 @@ const Layout = ({ children, contentClassName }) => {
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
-  contentClassName: PropTypes.string
+  contentClassName: PropTypes.string,
 }
 
 export default Layout
