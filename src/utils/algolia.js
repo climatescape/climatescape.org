@@ -5,6 +5,10 @@ const pageQuery = `query PagesQuery {
     nodes {
       data {
         Name
+        HQ_Location
+        Headcount
+        About
+        Tagline
         Logo {
           raw {
             url
@@ -12,7 +16,22 @@ const pageQuery = `query PagesQuery {
         }
         Sector {
           data {
-            Slug
+            Name
+          }
+        }
+        Categories {
+          data {
+            Name
+          }
+        }
+        LinkedIn_Profiles {
+          id
+          data {
+            Logo {
+              raw {
+                url
+              }
+            }
           }
         }
       }
@@ -21,23 +40,44 @@ const pageQuery = `query PagesQuery {
 }
 `
 
+function getLogo({ Logo, LinkedIn }) {
+  const rawLogo = Logo || (LinkedIn && LinkedIn.Logo)
+  if (!rawLogo) {
+    return ""
+  }
+  return rawLogo.raw[0].url || ""
+}
+
+function transformData(data) {
+  const sectors = data.Sector ? data.Sector.map(sector => sector.data.Name) : []
+  const categories = data.Categories
+    ? data.Categories.map(category => category.data.Name)
+    : []
+
+  return {
+    objectID: makeSlug(data.Name),
+    name: data.Name,
+    path: makeSlug(data.Name),
+    location: data.HQ_Location,
+    headCount: data.Headcount,
+    about: data.About,
+    tagLine: data.Tagline,
+    logo: getLogo(data),
+    sectors,
+    categories,
+  }
+}
+
 const settings = { attributesToSnippet: ["excerpt:20"] }
 
 module.exports.queries = [
   {
     query: pageQuery,
     transformer: ({ data: transformedData }) =>
-      (transformedData ? transformedData.organizations.nodes : []).map(
-        ({ data }) => ({
-          objectID: makeSlug(data.Name),
-          name: data.Name,
-          path: makeSlug(data.Name),
-          logo: !data.Logo ? "" : data.Logo.raw[0].url,
-          sector: !data.Sector
-            ? ""
-            : data.Sector.map(sector => sector.data.Slug),
-        })
-      ),
+      (transformedData
+        ? transformedData.organizations.nodes
+        : []
+      ).map(({ data }) => transformData(data)),
     indexName: "Pages",
     settings,
   },
