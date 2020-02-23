@@ -1,0 +1,45 @@
+version: '3.7'
+services:
+  web:
+    build: .
+    depends_on:
+      - db
+    volumes:
+      - ./src:/opt/src
+    working_dir: /opt/src
+    command: pm2-dev web.js
+    ports:
+      - '3000:3000'
+    environment:
+      WITHIN_CONTAINER: 'true'
+  worker:
+    build: .
+    depends_on:
+      - db
+    volumes:
+      - ./src:/opt/src
+    working_dir: /opt/src
+    command: pm2-dev worker.js
+    environment:
+      WITHIN_CONTAINER: 'true'
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - published: 5432
+        target: 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  dbdata:
