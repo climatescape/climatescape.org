@@ -4,6 +4,8 @@ require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 })
 
+const gatsby = "key5WsfVVzX20b9r4"
+
 const config = {
   siteMetadata: {
     title: `Climatescape`,
@@ -22,36 +24,36 @@ const config = {
     {
       resolve: `gatsby-source-airtable`,
       options: {
-        apiKey: process.env.AIRTABLE_API_KEY,
+        apiKey: gatsby,
         tables: [
           {
-            baseId: `appNYMWxGF1jMaf5V`,
+            baseId: `app222HJxdrS6WwaY`,
             tableName: `Organizations`,
             tableView: `Published`,
             mapping: { Published: `boolean`, Logo: `fileNode` },
             tableLinks: [`Sector`, `LinkedIn_Profiles`, `Categories`],
           },
           {
-            baseId: `appNYMWxGF1jMaf5V`,
+            baseId: `app222HJxdrS6WwaY`,
             tableName: `Sectors`,
             tableView: `Published`,
             mapping: { Cover: `fileNode` },
             tableLinks: [`Organizations`],
           },
           {
-            baseId: `appNYMWxGF1jMaf5V`,
+            baseId: `app222HJxdrS6WwaY`,
             tableName: "Contributors",
             tableView: "Published",
             mapping: { Avatar: `fileNode` },
           },
           {
-            baseId: `appNYMWxGF1jMaf5V`,
+            baseId: `app222HJxdrS6WwaY`,
             tableName: "LinkedIn Profiles",
             tableView: "Grid view",
             mapping: { Logo: `fileNode` },
           },
           {
-            baseId: `appNYMWxGF1jMaf5V`,
+            baseId: `app222HJxdrS6WwaY`,
             tableName: "Categories",
             tableView: "All Categories",
             tableLinks: [`Categories`, `Parent`],

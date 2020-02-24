@@ -1,0 +1,84 @@
+.my-masonry-grid {
+  display: -webkit-box; /* Not needed if autoprefixing */
+  display: -ms-flexbox; /* Not needed if autoprefixing */
+  display: flex;
+  /* margin-left: -20px;  gutter size offset */
+  width: auto;
+  padding: 2rem 0;
+  padding-right: 2rem;
+}
+
+.organizations-container {
+  background: #ededed;
+  margin: 0 1rem;
+  border-radius: 6px;
+  border: 1px solid hsla(177, 47%, 38%, 1);
+}
+
+.my-masonry-grid_column {
+  padding-left: 2rem; /* gutter size */
+  background-clip: padding-box;
+}
+
+.header-bar {
+  height: 3rem;
+  background: white;
+  border-radius: 6px 6px 0 0;
+  top: 0;
+  position: sticky;
+  border-bottom: 1px solid #a2a2a2;
+  z-index: 10;
+}
+
+.organizations {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.OrganizationCard {
+  border-radius: 4px;
+  flex-direction: column;
+  background: white;
+  margin-bottom: 20px;
+  border: 1px solid #d8d8d8;
+  background: #f7f7f7;
+}
+
+.summary {
+  border-radius: 0 0 4px 4px;
+  padding: 1rem;
+}
+
+.OrganizationCard:hover {
+  transform: scale(1.02);
+  animation-duration: 3s;
+  animation-timing-function: ease-in-out;
+  background: #f9f9f9;
+}
+
+.description {
+  flex-grow: 1;
+  padding-bottom: 1rem;
+}
+
+.title {
+  height: 4rem;
+  display: flex;
+  align-items: center;
+}
+
+.photo img {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  opacity: 0.9;
+}
+
+.OrganizationCard:hover .photo img {
+  opacity: 1;
+  animation-duration: 0.5s;
+}
+
+.org-title {
+  display: block;
+}

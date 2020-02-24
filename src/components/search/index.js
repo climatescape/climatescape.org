@@ -98,7 +98,7 @@ export default function Search({ collapse }) {
       >
         <Configure hitsPerPage={8} />
         <Input onFocus={() => setFocus(true)} {...{ collapse, focus }} />
-        <HitsWrapper show={searchQuery.length > 0 && focus}>
+        <HitsWrapper show={searchQuery && searchQuery.length > 0 && focus}>
           {indices.map(({ name, hitComp }) => (
             <Index key={name} indexName={name}>
               <Results>

@@ -6,7 +6,6 @@ const Tag = ({ children, active, onClick, ...otherProps }) => {
 
   if (active) {
     className += " bg-teal-200"
-    onClick = null
   }
 
   const props = { ...otherProps, className, onClick }
