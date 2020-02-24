@@ -1,0 +1,4 @@
+# 12.1 is the current version in Heroku, it should be periodically checked and synced (see https://data.heroku.com/)
+FROM postgres:12.1-alpine
+
+COPY postgres-init.sql /docker-entrypoint-initdb.d
