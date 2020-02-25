@@ -10,4 +10,5 @@ This decision is driven by the [Heroku documentation](https://devcenter.heroku.c
 which justifies this approach as scalable and reliable.
 
 See [this message](https://github.com/climatescape/climatescape.org/issues/40#issuecomment-584658556) and a few
-preceding messages in the thread.
+preceding messages in the thread. See also [this discussion](
+https://github.com/climatescape/climatescape.org/pull/87#discussion_r383368702).
