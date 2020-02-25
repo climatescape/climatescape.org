@@ -8,8 +8,9 @@ const host = isRunningWithinLocalContainer ? 'db' : 'localhost';
 // user, password, and the database name correspond to those set in docker-compose.yml
 const pgLocalConnectionString = `postgres://postgres:postgres@${host}:5432/postgres`;
 
-// See https://stackoverflow.com/a/28489160
-const isProduction = !!(process.env._ && (process.env._.indexOf('heroku') >= 0));
+// Unlike NODE_ENV, this solution doesn't require any local setup moves from devs, nor setting any configs in Heroku.
+const isProduction =
+    !!(process.env._ && (process.env._.indexOf('heroku') >= 0)); // See https://stackoverflow.com/a/28489160
 console.log('isProduction: ' + isProduction);
 const pgConnectionString = isProduction ? process.env.DATABASE_URL : pgLocalConnectionString;
 
