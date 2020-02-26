@@ -10,7 +10,7 @@ doc/decisions/4-use-pg-boss-queue.md) queue backed up with Postgres.
 ## Local setup
 
  1. Install Node 12.15.0 using [`nvm`](https://github.com/nvm-sh/nvm#install--update-script)
- 2. [Install yarn 1.x](https://classic.yarnpkg.com/en/docs/install)
+ 2. [Install yarn 1.x](https://classic.yarnpkg.com/en/docs/install), run `yarn --ignore-engines install`
  3. Install and start [Docker Desktop](https://www.docker.com/products/docker-desktop) 
 
 If you have problems installing dependencies (running `yarn` command) on Mac OS, try the following:

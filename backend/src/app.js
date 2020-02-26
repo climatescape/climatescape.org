@@ -28,5 +28,4 @@ async function buildFastify() {
     return fastify;
 }
 
-
 module.exports = buildFastify;

@@ -4,6 +4,8 @@
     "yarn": "1.x"
   },
   "dependencies": {
+    "airtable": "^0.8.1",
+    "dotenv": "^8.2.0",
     "fastify": "^2.12.0",
     "global": "^4.4.0",
     "node-gyp": "^6.1.0",
