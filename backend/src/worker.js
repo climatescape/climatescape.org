@@ -7,23 +7,18 @@ async function twitterFollowers(data) {
 
 async function startWorker() {
   await pgBossQueue.start()
-  const scrapingPool = await setupScraping()
+  const ScrapingResult = await setupScraping()
   await pgBossQueue.subscribe("twitterFollowers", async job => {
     const { data } = job
     console.log(`Scraping Twitter followers: ${JSON.stringify(data)}`)
     const numTwitterFollowers = await twitterFollowers(data)
     console.log(`Twitter followers of ${data.orgId}: ${numTwitterFollowers}`)
-    const client = await scrapingPool.connect()
     try {
-      const result = await client.query(
-        "INSERT INTO scraping_results (org_id, request_type, result) VALUES ($1, $2, $3) " +
-          "ON CONFLICT (org_id, request_type, scraping_time) DO UPDATE " +
-          "SET result = $3;",
-        [data.orgId, "twitterFollowers", numTwitterFollowers]
-      )
-      if (result.rowCount !== 1) {
-        console.error(`ERROR! Expected one updated row, got ${result.rowCount}`)
-      }
+      await ScrapingResult.upsert({
+        orgId: data.orgId,
+        requestType: "twitterFollowers",
+        result: numTwitterFollowers,
+      })
       console.log(
         `Twitter followers for ${data.orgId} were successfully stored in the database`
       )
@@ -32,8 +27,6 @@ async function startWorker() {
         `Error while storing twitter followers for ${data.orgId} in the database`,
         e
       )
-    } finally {
-      client.release()
     }
   })
 }

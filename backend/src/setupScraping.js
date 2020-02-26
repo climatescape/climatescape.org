@@ -1,16 +1,37 @@
-const { pgPool } = require("./pg")
+const Sequelize = require("sequelize")
+const { sequelize } = require("./pg")
 
+class ScrapingResult extends Sequelize.Model {}
+ScrapingResult.init(
+  {
+    orgId: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+      primaryKey: true,
+    },
+    requestType: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+      primaryKey: true,
+    },
+    createdAt: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      primaryKey: true,
+    },
+    result: {
+      type: Sequelize.JSONB,
+      allowNull: false,
+    },
+  },
+  {
+    sequelize,
+    modelName: "scraping_result",
+  }
+)
 async function setupScraping() {
-  await pgPool.query(
-    "CREATE TABLE IF NOT EXISTS scraping_results (" +
-      "  org_id text not null," +
-      "  request_type text not null," +
-      "  scraping_time timestamp DEFAULT current_timestamp," +
-      "  result jsonb not null," +
-      "  PRIMARY KEY(org_id, request_type, scraping_time)" +
-      ");"
-  )
-  return pgPool
+  await ScrapingResult.sync()
+  return ScrapingResult
 }
 
 module.exports = setupScraping

@@ -1,5 +1,6 @@
 const Url = require("url")
 const Pool = require("pg-pool")
+const Sequelize = require("sequelize")
 
 // WITHIN_CONTAINER is set in docker-compose.yml
 // We are *not* running within a local container when we run jest tests, e. g. via `yarn test`
@@ -84,4 +85,13 @@ const pgBossQueue = new PgBoss({ db: { executeSql: pgPoolWrapper.query } })
 
 pgBossQueue.on("error", err => console.error(err))
 
-module.exports = { pgConfig, pgBossQueue, pgPool: pgPoolWrapper }
+const sequelize = new Sequelize(pgConnectionString, {
+  dialectOptions: {
+    ssl: isProduction,
+  },
+  define: {
+    underscored: true,
+  },
+})
+
+module.exports = { pgConfig, pgBossQueue, pgPool: pgPoolWrapper, sequelize }
