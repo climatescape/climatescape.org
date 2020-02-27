@@ -10,7 +10,7 @@ const host = isRunningWithinLocalContainer ? "db" : "localhost"
 const pgLocalConnectionString = `postgres://postgres:postgres@${host}:5432/postgres`
 
 const PgBoss = require("pg-boss")
-const isProduction = require("./isProduction")
+const { isProduction } = require("./utils")
 
 const pgConnectionString = isProduction
   ? process.env.DATABASE_URL
@@ -94,4 +94,10 @@ const sequelize = new Sequelize(pgConnectionString, {
   },
 })
 
-module.exports = { pgConfig, pgBossQueue, pgPool: pgPoolWrapper, sequelize }
+module.exports = {
+  pgConfig,
+  pgBossQueue,
+  pgPool: pgPoolWrapper,
+  sequelize,
+  Sequelize,
+}

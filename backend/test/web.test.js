@@ -1,8 +1,5 @@
 const supertest = require('supertest');
-
-async function sleep(timeMs) {
-    await new Promise(resolve => setTimeout(resolve, timeMs));
-}
+const { sleep } = require("../src/utils")
 
 describe('web server', () => {
     const buildFastify = require('../src/app');

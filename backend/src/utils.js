@@ -3,4 +3,8 @@
 const isProduction = !!(process.env._ && process.env._.indexOf("heroku") >= 0)
 console.log(`isProduction: ${isProduction}`)
 
-module.exports = isProduction
+async function sleep(timeMs) {
+  await new Promise(resolve => setTimeout(resolve, timeMs))
+}
+
+module.exports = { isProduction, sleep }
