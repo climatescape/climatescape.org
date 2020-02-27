@@ -5,7 +5,7 @@ const setupAirtableBackup = require("./setupAirtableBackup")
 class ScrapingResult extends Sequelize.Model {}
 
 async function initScrapingResult() {
-  const AirtableOrganization = await setupAirtableBackup()
+  const Organization = await setupAirtableBackup()
   ScrapingResult.init(
     {
       orgId: {
@@ -13,7 +13,7 @@ async function initScrapingResult() {
         allowNull: false,
         primaryKey: true,
         references: {
-          model: AirtableOrganization,
+          model: Organization,
           key: "id",
         },
       },
@@ -38,8 +38,8 @@ async function initScrapingResult() {
       modelName: "scraping_result",
     }
   )
-  AirtableOrganization.hasMany(ScrapingResult)
-  ScrapingResult.belongsTo(AirtableOrganization, {
+  Organization.hasMany(ScrapingResult)
+  ScrapingResult.belongsTo(Organization, {
     foreignKey: "org_id",
     onDelete: "RESTRICT",
   })

@@ -1,7 +1,7 @@
 const { sequelize, Sequelize } = require("./pg")
 
-class AirtableOrganization extends Sequelize.Model {}
-AirtableOrganization.init(
+class Organization extends Sequelize.Model {}
+Organization.init(
   {
     id: {
       type: Sequelize.STRING,
@@ -15,13 +15,13 @@ AirtableOrganization.init(
   },
   {
     sequelize,
-    modelName: "airtable_organization",
+    modelName: "organization",
     paranoid: true, // Never delete records, only mark as deleted.
   }
 )
 async function setupAirtableBackup() {
-  await AirtableOrganization.sync()
-  return AirtableOrganization
+  await Organization.sync()
+  return Organization
 }
 
 module.exports = setupAirtableBackup
