@@ -10,18 +10,19 @@ doc/decisions/4-use-pg-boss-queue.md) queue backed up with Postgres.
 ## Local setup
 
  1. Install Node 12.15.0 using [`nvm`](https://github.com/nvm-sh/nvm#install--update-script)
- 2. [Install yarn 1.x](https://classic.yarnpkg.com/en/docs/install), run `yarn --ignore-engines install`
- 3. Install and start [Docker Desktop](https://www.docker.com/products/docker-desktop) 
+ 2. [Install yarn 1.x](https://classic.yarnpkg.com/en/docs/install)
+ 3. run `yarn config set ignore-engines true && yarn install`
+ 4. Install and start [Docker Desktop](https://www.docker.com/products/docker-desktop)
 
 If you have problems installing dependencies (running `yarn` command) on Mac OS, try the following:
  1. Follow instructions on [this page](https://github.com/nodejs/node-gyp/blob/master/macOS_Catalina.md)
  2. `brew install libpq` and follow instructions about modifying `PATH`, `LDFLAGS`, `CPPFLAGS`, and `PKG_CONFIG_PATH`
  variables printed by Homebrew in the end of the installation.
 
-Run tests via `yarn --ignore-engines test`.
+Run tests via `yarn test`.
 
 For faster testing or debug loop, first start `db` and `worker` containers separately: `docker-compose up -d db worker`,
-and then run `yarn --ignore-engines jest`.
+and then run `yarn jest`.
 
 For full formation testing, use `docker-compose up -d` and ping the web via
 ```
