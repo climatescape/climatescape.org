@@ -28,3 +28,4 @@ For full formation testing, use `docker-compose up -d` and ping the web via
 ```
 curl -X POST https://127.0.0.1:3000/twitterFollowers --header 'Content-type: application/json' --data '{"orgId":"climatescape", "twitterUrl":"twitter.com/climatescape"}'
 ```
+To enter Postgres container for debugging, use `docker exec -it backend_db_1 psql -U postgres`
