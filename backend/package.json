@@ -8,6 +8,8 @@
     "dotenv": "^8.2.0",
     "fastify": "^2.12.0",
     "global": "^4.4.0",
+    "knex": "^0.20.10",
+    "log-timestamp": "^0.3.0",
     "node-gyp": "^6.1.0",
     "pg": "^7.18.1",
     "pg-boss": "^4.0.0-beta5",
@@ -17,8 +19,12 @@
     "swagger": "^0.7.5",
     "url": "^0.11.0"
   },
+  "devDependenciesComment": "Have to use eslint 5.x until https://youtrack.jetbrains.com/issue/WEB-43692 is fixed",
   "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-plugin-jest": "^23.8.0",
     "jest": "^25.1.0",
+    "jest-expect-message": "^1.0.2",
     "supertest": "^4.0.2"
   },
   "optionalDependenciesComment": "explicitly making fsevents optional to skip trying to install fsevents on Linux in Docker image",
@@ -27,8 +33,14 @@
   },
   "scripts": {
     "about:test": "echo '--forceExit is needed because of https://github.com/facebook/jest/issues/9473'",
-    "test": "docker-compose up -d db worker && docker-compose rm -fsv web && jest --detectOpenHandles --runInBand --verbose --forceExit",
+    "test": "docker-compose up -d db worker && docker-compose rm -fsv web && jest --detectOpenHandles --runInBand --forceExit",
     "about:jest": "echo '--forceExit is needed because of https://github.com/facebook/jest/issues/9473'",
-    "jest": "jest --detectOpenHandles --runInBand --verbose --forceExit"
+    "jest": "jest --detectOpenHandles --runInBand --forceExit"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "jest-expect-message"
+    ],
+    "verbose": true
   }
 }

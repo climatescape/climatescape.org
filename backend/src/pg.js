@@ -1,6 +1,6 @@
 const Url = require("url")
 const Pool = require("pg-pool")
-const Sequelize = require("sequelize")
+const Knex = require("knex")
 
 // WITHIN_CONTAINER is set in docker-compose.yml
 // We are *not* running within a local container when we run jest tests, e. g. via `yarn test`
@@ -85,19 +85,111 @@ const pgBossQueue = new PgBoss({ db: { executeSql: pgPoolWrapper.query } })
 
 pgBossQueue.on("error", err => console.error(err))
 
-const sequelize = new Sequelize(pgConnectionString, {
-  dialectOptions: {
-    ssl: isProduction,
-  },
-  define: {
-    underscored: true,
-  },
+/**
+ * Don't provide connection to make knex(...) builders "cold" and only start
+ * execution of the query in {@link executeKnex}.
+ * @type {*|Knex<any, unknown[]>}
+ */
+const knex = Knex({
+  client: "pg",
+  debug: true,
+  asyncStackTraces: !isProduction,
 })
+
+/**
+ * @param {Knex.QueryBuilder|Knex.SchemaBuilder} knexQueryOrSchemaBuilder
+ * @returns {Promise<*>}
+ */
+async function executeKnex(knexQueryOrSchemaBuilder) {
+  const client = await connectWrapper()
+  try {
+    return await knexQueryOrSchemaBuilder.connection(client)
+  } finally {
+    client.release()
+  }
+}
+
+/**
+ * Knex Postgres INSERT or UPDATE
+ * Adapted from https://github.com/knex/knex/issues/701#issuecomment-488075856
+ * @param {string} table - table name
+ * @param {Object} keys - constraint key/value object (insert)
+ * @param {Object} payload - row data values (insert and/or update)
+ * @returns {Promise<void>}
+ */
+async function executeInsertOrUpdate(table, keys, payload) {
+  const update = Object.keys(payload)
+    .map(key => knex.raw("?? = EXCLUDED.??", [key, key]))
+    .join(", ")
+
+  const constraint = Object.keys(keys)
+    .map(key => knex.ref(key))
+    .join(", ")
+
+  const sql = `? ON CONFLICT (${constraint}) 
+               DO ${(update && `UPDATE SET ${update}`) || "NOTHING"};`
+  const query = knex.raw(sql, [
+    knex
+      .insert({
+        ...keys,
+        ...payload,
+      })
+      .into(table),
+  ])
+  const result = await executeKnex(query)
+  if ((update && result.rowCount === 0) || result.rowCount > 1) {
+    throw new Error(
+      `${result.rowCount} rows updated by the query, integrity constraint violation?`
+    )
+  }
+}
+
+/**
+ * @param {string} table
+ * @param {Array<Object>} data
+ * @param {Array<string>} keyColumns
+ * @param {Array<string>} valueColumns
+ * @returns {Promise<number>} the number of rows updated
+ */
+async function executeBulkInsertOrUpdate(
+  table,
+  data,
+  keyColumns,
+  valueColumns
+) {
+  const update = valueColumns
+    .map(key => knex.raw("?? = EXCLUDED.??", [key, key]))
+    .join(", ")
+
+  const constraint = keyColumns.map(key => knex.ref(key)).join(", ")
+
+  const sql = `? ON CONFLICT (${constraint}) 
+               DO ${(update && `UPDATE SET ${update}`) || "NOTHING"};`
+  const query = knex.raw(sql, [knex.insert(data).into(table)]).debug(false)
+  const result = await executeKnex(query)
+  return result.rowCount
+}
+
+/**
+ * @param {string} table
+ * @returns {Promise<number>} the number of rows in the table
+ */
+async function executeCount(table) {
+  const result = await executeKnex(
+    knex(table)
+      .count()
+      .first()
+  )
+  return parseInt(result.count, 10)
+}
 
 module.exports = {
   pgConfig,
   pgBossQueue,
   pgPool: pgPoolWrapper,
-  sequelize,
-  Sequelize,
+  knex,
+  executeKnex,
+  executeCount,
+  executeInsertOrUpdate,
+  executeBulkInsertOrUpdate,
 }

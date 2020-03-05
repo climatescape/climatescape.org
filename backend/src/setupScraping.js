@@ -1,54 +1,27 @@
-const { sequelize, Sequelize } = require("./pg")
-
-const setupAirtableBackup = require("./setupAirtableBackup")
-
-class ScrapingResult extends Sequelize.Model {}
-
-async function initScrapingResult() {
-  const Organization = await setupAirtableBackup()
-  ScrapingResult.init(
-    {
-      orgId: {
-        type: Sequelize.TEXT,
-        allowNull: false,
-        primaryKey: true,
-        references: {
-          model: Organization,
-          key: "id",
-        },
-      },
-      requestType: {
-        type: Sequelize.TEXT,
-        allowNull: false,
-        primaryKey: true,
-      },
-      // This column is created by sequelize automatically. Declaring it explicitly to include in the primary key.
-      createdAt: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        primaryKey: true,
-      },
-      result: {
-        type: Sequelize.JSONB,
-        allowNull: false,
-      },
-    },
-    {
-      sequelize,
-      modelName: "scraping_result",
-    }
-  )
-  Organization.hasMany(ScrapingResult)
-  ScrapingResult.belongsTo(Organization, {
-    foreignKey: "org_id",
-    onDelete: "RESTRICT",
-  })
-}
+const { knex, executeKnex } = require("./pg")
+const { setupAirtableBackup } = require("./setupAirtableBackup")
 
 async function setupScraping() {
-  await initScrapingResult()
-  await sequelize.sync()
-  return ScrapingResult
+  const tableExists = await executeKnex(
+    knex.schema.hasTable("scraping_results")
+  )
+  if (!tableExists) {
+    await setupAirtableBackup()
+    const createTable = knex.schema.createTable("scraping_results", table => {
+      table.text("org_id").notNullable()
+      table.text("request_type").notNullable()
+      table.timestamps(false, true) // Adds created_at, updated_at columns
+      table.jsonb("result").notNullable()
+      table.primary(["org_id", "request_type", "created_at"])
+      table
+        .foreign("org_id")
+        .references("id")
+        .inTable("organizations")
+        .onDelete("RESTRICT")
+        .onUpdate("CASCADE")
+    })
+    await executeKnex(createTable)
+  }
 }
 
-module.exports = setupScraping
+module.exports = { setupScraping }
