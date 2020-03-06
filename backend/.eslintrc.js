@@ -12,6 +12,7 @@ module.exports = {
   ],
   rules: {
     "no-console": "off",
+    "no-return-await": "off", // See https://youtrack.jetbrains.com/issue/WEB-39569
     "func-names": ["error", "as-needed"],
     "no-unused-vars": ["error", { "args": "none"}],
     "jest/valid-expect": "off", // jest-expect-message adds a parameter to expect()

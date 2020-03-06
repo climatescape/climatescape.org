@@ -8,8 +8,8 @@ const { backupOrganizations } = require("../src/backupAirtable")
 async function truncateAllTables() {
   await setupAirtableBackup()
   await setupScraping()
-  // Cannot use truncate() because of foreign key constraints
-  await executeKnex(knex("scraping_results").delete())
+  await executeKnex(knex("scraping_results").truncate())
+  // Cannot use truncate() because of a foreign key constraint
   await executeKnex(knex("organizations").delete())
 }
 
