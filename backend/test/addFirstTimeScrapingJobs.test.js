@@ -1,5 +1,7 @@
+const waitForExpect = require("wait-for-expect")
 const {
   determineOrgsToScrapeFirstTime,
+  addFirstTimeScrapingJobs,
 } = require("../src/addFirstTimeScrapingJobs")
 const { fillSampleOrgData } = require("./prepareDb")
 const { knex, executeKnex, executeCount } = require("../src/pg")
@@ -21,3 +23,17 @@ describe("determineOrgsToScrapeFirstTime", () => {
     expect(orgsToScrapeFirstTime.length).toBe(54)
   })
 })
+
+test("addFirstTimeScrapingJobs", async () => {
+  await fillSampleOrgData()
+  await addFirstTimeScrapingJobs()
+  await waitForExpect(
+    async () => {
+      const numScrapingResults = await executeCount("scraping_results")
+      console.log(numScrapingResults)
+      expect(numScrapingResults).toBe(39)
+    },
+    9500, // timeout
+    500 // interval
+  )
+}, 10000)

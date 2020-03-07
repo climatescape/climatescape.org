@@ -1,43 +1,51 @@
 const { pgBossQueue, executeInsertOrUpdate } = require("./pg")
 const { setupScraping } = require("./setupScraping")
+const { scrapeTwitterFollowers } = require("./twitter")
+const { isProduction } = require("./utils")
 
-async function twitterFollowers(data) {
-  return 100
+async function scrapeAndStoreTwitterFollowers(job) {
+  const { data } = job
+  const numTwitterFollowers = await scrapeTwitterFollowers(data)
+  try {
+    const now = new Date()
+    await executeInsertOrUpdate(
+      "scraping_results",
+      {
+        org_id: data.orgId,
+        request_type: "twitterFollowers",
+        created_at: now,
+      },
+      {
+        updated_at: now,
+        result: numTwitterFollowers,
+      }
+    )
+    console.log(
+      `Twitter followers for ${data.orgId} were successfully stored in the database`
+    )
+  } catch (e) {
+    console.error(
+      `Error while storing twitter followers for ${data.orgId} in the database`,
+      e
+    )
+    throw e
+  }
 }
 
 async function startWorker() {
   await pgBossQueue.start()
   await setupScraping()
-  await pgBossQueue.subscribe("twitterFollowers", async job => {
-    const { data } = job
-    console.log(`Scraping Twitter followers: ${JSON.stringify(data)}`)
-    const numTwitterFollowers = await twitterFollowers(data)
-    console.log(`Twitter followers of ${data.orgId}: ${numTwitterFollowers}`)
-    try {
-      const now = new Date()
-      await executeInsertOrUpdate(
-        "scraping_results",
-        {
-          org_id: data.orgId,
-          request_type: "twitterFollowers",
-          created_at: now,
-        },
-        {
-          updated_at: now,
-          result: numTwitterFollowers,
-        }
-      )
-      console.log(
-        `Twitter followers for ${data.orgId} were successfully stored in the database`
-      )
-    } catch (e) {
-      console.error(
-        `Error while storing twitter followers for ${data.orgId} in the database`,
-        e
-      )
-      throw e
-    }
-  })
+  // Don't throttle jobs during integration testing to arrive at the expected
+  // results faster
+  const options = {
+    teamSize: isProduction ? 1 : 100,
+    newJobCheckInterval: isProduction ? 1000 : 100,
+  }
+  await pgBossQueue.subscribe(
+    "twitterFollowers",
+    options,
+    scrapeAndStoreTwitterFollowers
+  )
 }
 
 ;(async () => {

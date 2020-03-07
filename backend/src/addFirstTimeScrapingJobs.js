@@ -1,5 +1,6 @@
-const { knex, executeKnex } = require("./pg")
+const { pgBossQueue, knex, executeKnex } = require("./pg")
 const { setupScraping } = require("./setupScraping")
+const { getTwitter, createTwitterFollowersJobData } = require("./twitter")
 
 /**
  * @param {string} requestType request type, e. g. "twitterFollowers"
@@ -14,7 +15,7 @@ async function determineOrgsToScrapeFirstTime(requestType) {
     .orderBy(["org_id", { column: "updated_at", order: "desc" }])
     .as("last_results")
   const orgsToScrapeQuery = knex("organizations")
-    .select("id")
+    .select("id", "fields")
     .leftOuterJoin(
       lastResultsByRequestTypeQuery,
       "organizations.id",
@@ -24,4 +25,44 @@ async function determineOrgsToScrapeFirstTime(requestType) {
   return await executeKnex(orgsToScrapeQuery)
 }
 
-module.exports = { determineOrgsToScrapeFirstTime }
+/**
+ * @param {Object} org from Airtable
+ */
+function orgToString(org) {
+  return `${org.fields.Name} [${org.id}]`
+}
+
+/**
+ * @param {Object} org from Airtable
+ */
+async function publishTwitterFollowersScrapingJob(org) {
+  return await pgBossQueue.publish(
+    "twitterFollowers",
+    createTwitterFollowersJobData(org)
+  )
+}
+
+async function addFirstTimeScrapingJobs() {
+  await pgBossQueue.start()
+  const orgsToScrape = await determineOrgsToScrapeFirstTime("twitterFollowers")
+  const orgsWithTwitter = orgsToScrape.filter(org => {
+    const twitterUrl = getTwitter(org)
+    if (!twitterUrl) {
+      console.log(`No Twitter URL known for org ${orgToString(org)}`)
+    }
+    return twitterUrl
+  })
+  await Promise.all(orgsWithTwitter.map(publishTwitterFollowersScrapingJob))
+}
+
+if (require.main === module) {
+  ;(async () => {
+    try {
+      await addFirstTimeScrapingJobs()
+    } catch (e) {
+      console.error("Error adding first-time scraping jobs", e)
+    }
+  })()
+}
+
+module.exports = { determineOrgsToScrapeFirstTime, addFirstTimeScrapingJobs }

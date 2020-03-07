@@ -25,7 +25,8 @@
     "eslint-plugin-jest": "^23.8.0",
     "jest": "^25.1.0",
     "jest-expect-message": "^1.0.2",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "wait-for-expect": "^3.0.2"
   },
   "optionalDependenciesComment": "explicitly making fsevents optional to skip trying to install fsevents on Linux in Docker image",
   "optionalDependencies": {
