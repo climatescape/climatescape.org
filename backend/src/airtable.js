@@ -1,13 +1,7 @@
 const Airtable = require("airtable")
-const dotenv = require("dotenv")
-const { isProduction, sleep } = require("./utils")
+const { configureEnvironment, sleep } = require("./utils")
 
-if (!isProduction) {
-  dotenv.config({
-    path: `../.env.development`,
-  })
-}
-
+configureEnvironment()
 Airtable.configure({
   endpointUrl: "https://api.airtable.com",
   apiKey: process.env.AIRTABLE_API_KEY,

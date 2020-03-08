@@ -1,6 +1,6 @@
 const { pgBossQueue, knex, executeKnex } = require("./pg")
 const { setupScraping } = require("./setupScraping")
-const { getTwitter, createTwitterFollowersJobData } = require("./twitter")
+const { getTwitterUrl, createTwitterFollowersJobData } = require("./twitter")
 
 /**
  * @param {string} requestType request type, e. g. "twitterFollowers"
@@ -46,7 +46,7 @@ async function addFirstTimeScrapingJobs() {
   await pgBossQueue.start()
   const orgsToScrape = await determineOrgsToScrapeFirstTime("twitterFollowers")
   const orgsWithTwitter = orgsToScrape.filter(org => {
-    const twitterUrl = getTwitter(org)
+    const twitterUrl = getTwitterUrl(org)
     if (!twitterUrl) {
       console.log(`No Twitter URL known for org ${orgToString(org)}`)
     }

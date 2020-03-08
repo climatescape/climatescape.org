@@ -1,4 +1,36 @@
-const { isProduction } = require("./utils")
+const Twitter = require("twitter-lite")
+const pMemoize = require("p-memoize")
+const { isProduction, configureEnvironment } = require("./utils")
+
+/**
+ * @returns {Promise<Twitter>}
+ */
+async function createTwitterApp() {
+  configureEnvironment()
+  const user = new Twitter({
+    consumer_key: process.env.TWITTER_API_KEY,
+    consumer_secret: process.env.TWITTER_API_SECRET,
+  })
+
+  const response = await user.getBearerToken()
+  const app = new Twitter({
+    bearer_token: response.access_token,
+  })
+  return app
+}
+
+/**
+ * @param {boolean} useRealTwitterApi
+ * @returns {((...arguments: unknown[]) => Promise<unknown>)|*|(function(): *)}
+ */
+function createTwitterAppFactory(useRealTwitterApi = isProduction) {
+  if (useRealTwitterApi) {
+    return pMemoize(createTwitterApp)
+  }
+  return async () => {
+    throw new Error("Don't real Twitter API in development")
+  }
+}
 
 /**
  * @param {Object} data
@@ -45,7 +77,8 @@ async function scrapeTwitterFollowers(data) {
 }
 
 module.exports = {
-  getTwitter: getTwitterUrl,
+  getTwitterUrl,
   createTwitterFollowersJobData,
   scrapeTwitterFollowers,
+  createTwitterAppFactory,
 }
