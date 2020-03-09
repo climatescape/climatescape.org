@@ -12,6 +12,7 @@ const airtableBase = Airtable.base("appNYMWxGF1jMaf5V")
  * This function is adapted from airtable.js: https://github.com/Airtable/airtable.js/blob/
  * 31fd0a089fee87832760f35c7270eae283972e35/lib/query.js#L116-L135 to include waits to avoid hitting Airtable's rate
  * limits accidentally (see https://github.com/Airtable/airtable.js/issues/30), and add more logging.
+ * @returns {Promise<Array<Object>>}
  */
 function fetchAllRecords(airtableQuery) {
   return new Promise((resolve, reject) => {

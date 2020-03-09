@@ -13,17 +13,16 @@ async function createTwitterApp() {
   })
 
   const response = await user.getBearerToken()
-  const app = new Twitter({
+  return new Twitter({
     bearer_token: response.access_token,
   })
-  return app
 }
 
 /**
  * @param {boolean} useRealTwitterApi
- * @returns {((...arguments: unknown[]) => Promise<unknown>)|*|(function(): *)}
+ * @returns {function(): Promise<Twitter>}
  */
-function createTwitterAppFactory(useRealTwitterApi = isProduction) {
+function acquireTwitterAppFactory(useRealTwitterApi = isProduction) {
   if (useRealTwitterApi) {
     return pMemoize(createTwitterApp)
   }
@@ -48,8 +47,39 @@ async function twitterFollowers(data) {
  * @param {Object} org from Airtable
  * @returns {string}
  */
-function getTwitterUrl(org) {
+function getTwitterUrlString(org) {
   return org.fields["Twitter Override"] || org.fields.Twitter
+}
+
+/**
+ * @param {Object} org from Airtable
+ */
+function orgToString(org) {
+  return `${org.fields.Name} [${org.id}]`
+}
+
+/**
+ * @param {Object} org from Airtable
+ * @returns {string|null}
+ */
+function getTwitterScreenName(org) {
+  const twitterUrlString = getTwitterUrlString(org)
+  if (!twitterUrlString) {
+    console.log(`No Twitter URL known for org ${orgToString(org)}`)
+    return null
+  }
+  try {
+    const url = new URL(twitterUrlString)
+    return url.pathname
+  } catch (err) {
+    console.log(
+      `Twitter URL for org ${orgToString(
+        org
+      )} is not valid: ${twitterUrlString}`,
+      err
+    )
+    return null
+  }
 }
 
 /**
@@ -60,7 +90,7 @@ function createTwitterFollowersJobData(org) {
   return {
     orgId: org.id,
     orgName: org.fields.Name,
-    twitterUrl: getTwitterUrl(org),
+    twitterUrl: getTwitterScreenName(org),
   }
 }
 
@@ -77,8 +107,8 @@ async function scrapeTwitterFollowers(data) {
 }
 
 module.exports = {
-  getTwitterUrl,
+  getTwitterScreenName,
   createTwitterFollowersJobData,
   scrapeTwitterFollowers,
-  createTwitterAppFactory,
+  acquireTwitterAppFactory,
 }

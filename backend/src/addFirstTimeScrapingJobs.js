@@ -1,6 +1,6 @@
 const { pgBossQueue, knex, executeKnex } = require("./pg")
 const { setupScraping } = require("./setupScraping")
-const { getTwitterUrl, createTwitterFollowersJobData } = require("./twitter")
+const { getTwitterScreenName, createTwitterFollowersJobData } = require("./twitter")
 
 /**
  * @param {string} requestType request type, e. g. "twitterFollowers"
@@ -28,13 +28,6 @@ async function determineOrgsToScrapeFirstTime(requestType) {
 /**
  * @param {Object} org from Airtable
  */
-function orgToString(org) {
-  return `${org.fields.Name} [${org.id}]`
-}
-
-/**
- * @param {Object} org from Airtable
- */
 async function publishTwitterFollowersScrapingJob(org) {
   return await pgBossQueue.publish(
     "twitterFollowers",
@@ -45,13 +38,7 @@ async function publishTwitterFollowersScrapingJob(org) {
 async function addFirstTimeScrapingJobs() {
   await pgBossQueue.start()
   const orgsToScrape = await determineOrgsToScrapeFirstTime("twitterFollowers")
-  const orgsWithTwitter = orgsToScrape.filter(org => {
-    const twitterUrl = getTwitterUrl(org)
-    if (!twitterUrl) {
-      console.log(`No Twitter URL known for org ${orgToString(org)}`)
-    }
-    return twitterUrl
-  })
+  const orgsWithTwitter = orgsToScrape.filter(getTwitterScreenName)
   await Promise.all(orgsWithTwitter.map(publishTwitterFollowersScrapingJob))
 }
 
