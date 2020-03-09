@@ -1,3 +1,4 @@
+const _ = require("lodash")
 const Twitter = require("twitter-lite")
 const pMemoize = require("p-memoize")
 const { isProduction, configureEnvironment } = require("./utils")
@@ -22,7 +23,7 @@ async function createTwitterApp() {
  * @param {boolean} useRealTwitterApi
  * @returns {function(): Promise<Twitter>}
  */
-function acquireTwitterAppFactory(useRealTwitterApi = isProduction) {
+function acquireTwitterAppFactory(useRealTwitterApi) {
   if (useRealTwitterApi) {
     return pMemoize(createTwitterApp)
   }
@@ -32,15 +33,31 @@ function acquireTwitterAppFactory(useRealTwitterApi = isProduction) {
 }
 
 /**
- * @param {Object} data
- * @returns {Promise<number>}
+ * @type {function(): Promise<Twitter>}
  */
-async function twitterFollowers(data) {
-  if (isProduction) {
-    throw new Error("not implemented yet")
-  } else {
-    return 100
+const acquireTwitterApp = acquireTwitterAppFactory(isProduction)
+
+/**
+ * @param {Array<{data: {orgId: string, orgName: string, twitterScreenName: string}}>} jobs
+ *        with data as returned from {@link createTwitterFollowersJobData}
+ * @returns {Promise<Array<{orgId: string, orgName: string, twitterFollowers: number}>>}
+ */
+async function scrapeTwitterFollowers(jobs) {
+  console.log(`Scraping Twitter followers: ${JSON.stringify(jobs)}`)
+  if (!isProduction) {
+    return jobs.map(job => ({ ...job.data, twitterFollowers: 100 }))
   }
+  const screenNames = jobs.map(job => job.data.twitterScreenName).join(",")
+  const app = await acquireTwitterApp()
+  const response = await app.post("users/lookup", {
+    screen_name: screenNames,
+  })
+  const result = _.zipWith(jobs, response, (job, userObject) => ({
+    ...job.data,
+    twitterFollowers: userObject.followers_count,
+  }))
+  console.log(`Scraped Twitter followers: ${JSON.stringify(result)}`)
+  return result
 }
 
 /**
@@ -90,20 +107,8 @@ function createTwitterFollowersJobData(org) {
   return {
     orgId: org.id,
     orgName: org.fields.Name,
-    twitterUrl: getTwitterScreenName(org),
+    twitterScreenName: getTwitterScreenName(org),
   }
-}
-
-/**
- * @param {{twitterUrl: string, orgId: string}} data job data as returned from
- *        {@link createTwitterFollowersJobData}
- * @returns {Promise<number>}
- */
-async function scrapeTwitterFollowers(data) {
-  console.log(`Scraping Twitter followers: ${JSON.stringify(data)}`)
-  const numTwitterFollowers = await twitterFollowers(data)
-  console.log(`Twitter followers of ${data.orgId}: ${numTwitterFollowers}`)
-  return numTwitterFollowers
 }
 
 module.exports = {
