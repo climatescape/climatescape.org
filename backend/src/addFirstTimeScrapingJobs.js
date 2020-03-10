@@ -1,9 +1,10 @@
 const { pgBossQueue, knex, executeKnex } = require("./pg")
 const { setupScraping } = require("./setupScraping")
+const { getTwitterScreenName } = require("./twitter")
 const {
-  getTwitterScreenName,
+  TWITTER_USER_OBJECT,
   createTwitterUserObjectScrapingJobData,
-} = require("./twitter")
+} = require("./twitterUserObjectScraping")
 
 /**
  * @param {string} requestType request type, e. g. "twitterUserObject"
@@ -33,14 +34,14 @@ async function determineOrgsToScrapeFirstTime(requestType) {
  */
 async function publishTwitterUserObjectScrapingJob(org) {
   return await pgBossQueue.publish(
-    "twitterUserObject",
+    TWITTER_USER_OBJECT,
     createTwitterUserObjectScrapingJobData(org)
   )
 }
 
 async function addFirstTimeScrapingJobs() {
   await pgBossQueue.start()
-  const orgsToScrape = await determineOrgsToScrapeFirstTime("twitterUserObject")
+  const orgsToScrape = await determineOrgsToScrapeFirstTime(TWITTER_USER_OBJECT)
   const orgsWithTwitter = orgsToScrape.filter(getTwitterScreenName)
   await Promise.all(orgsWithTwitter.map(publishTwitterUserObjectScrapingJob))
 }

@@ -1,4 +1,3 @@
-const _ = require("lodash")
 const Twitter = require("twitter-lite")
 const pMemoize = require("p-memoize")
 const { isProduction, configureEnvironment } = require("./utils")
@@ -36,32 +35,6 @@ function acquireTwitterAppFactory(useRealTwitterApi) {
  * @type {function(): Promise<Twitter>}
  */
 const acquireTwitterApp = acquireTwitterAppFactory(isProduction)
-
-/**
- * @param {Array<{data: {orgId: string, orgName: string, twitterScreenName: string}}>} jobs
- *        with data as returned from {@link createTwitterUserObjectScrapingJobData}
- * @returns {Promise<Array<{orgId: string, orgName: string, twitterUserObject: number}>>}
- */
-async function scrapeTwitterUserObjects(jobs) {
-  console.log(`Scraping Twitter user objects for: ${JSON.stringify(jobs)}`)
-  if (!isProduction) {
-    return jobs.map(job => ({
-      ...job.data,
-      twitterUserObject: { followers_count: 100 },
-    }))
-  }
-  const screenNames = jobs.map(job => job.data.twitterScreenName).join(",")
-  const app = await acquireTwitterApp()
-  const response = await app.post("users/lookup", {
-    screen_name: screenNames,
-  })
-  const result = _.zipWith(jobs, response, (job, userObject) => ({
-    ...job.data,
-    twitterUserObject: userObject,
-  }))
-  console.log(`Scraped Twitter user objects: ${JSON.stringify(result)}`)
-  return result
-}
 
 /**
  * @param {Object} org from Airtable
@@ -102,21 +75,8 @@ function getTwitterScreenName(org) {
   }
 }
 
-/**
- * @param {Object} org from Airtable
- * @returns {{orgName: string, twitterUrl: string, orgId: string}}
- */
-function createTwitterUserObjectScrapingJobData(org) {
-  return {
-    orgId: org.id,
-    orgName: org.fields.Name,
-    twitterScreenName: getTwitterScreenName(org),
-  }
-}
-
 module.exports = {
-  getTwitterScreenName,
-  createTwitterUserObjectScrapingJobData,
-  scrapeTwitterUserObjects,
+  acquireTwitterApp,
   acquireTwitterAppFactory,
+  getTwitterScreenName,
 }

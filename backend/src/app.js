@@ -1,6 +1,7 @@
-const fastify = require('fastify')({ logger: true });
+const fastify = require("fastify")({ logger: true });
 
-const { pgBossQueue } = require('./pg');
+const { pgBossQueue } = require("./pg");
+const { TWITTER_USER_OBJECT } = require("./twitterUserObjectScraping")
 
 fastify.route({
     method: 'POST',
@@ -17,7 +18,7 @@ fastify.route({
     },
     handler: function (req, res) {
         fastify.log.info('Received request to scrape Twitter user object: ', req.body);
-        return pgBossQueue.publish('twitterUserObject', req.body);
+        return pgBossQueue.publish(TWITTER_USER_OBJECT, req.body);
     }
 });
 
