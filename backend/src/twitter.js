@@ -39,13 +39,16 @@ const acquireTwitterApp = acquireTwitterAppFactory(isProduction)
 
 /**
  * @param {Array<{data: {orgId: string, orgName: string, twitterScreenName: string}}>} jobs
- *        with data as returned from {@link createTwitterFollowersJobData}
- * @returns {Promise<Array<{orgId: string, orgName: string, twitterFollowers: number}>>}
+ *        with data as returned from {@link createTwitterUserObjectScrapingJobData}
+ * @returns {Promise<Array<{orgId: string, orgName: string, twitterUserObject: number}>>}
  */
-async function scrapeTwitterFollowers(jobs) {
-  console.log(`Scraping Twitter followers: ${JSON.stringify(jobs)}`)
+async function scrapeTwitterUserObjects(jobs) {
+  console.log(`Scraping Twitter user objects for: ${JSON.stringify(jobs)}`)
   if (!isProduction) {
-    return jobs.map(job => ({ ...job.data, twitterFollowers: 100 }))
+    return jobs.map(job => ({
+      ...job.data,
+      twitterUserObject: { followers_count: 100 },
+    }))
   }
   const screenNames = jobs.map(job => job.data.twitterScreenName).join(",")
   const app = await acquireTwitterApp()
@@ -54,9 +57,9 @@ async function scrapeTwitterFollowers(jobs) {
   })
   const result = _.zipWith(jobs, response, (job, userObject) => ({
     ...job.data,
-    twitterFollowers: userObject.followers_count,
+    twitterUserObject: userObject,
   }))
-  console.log(`Scraped Twitter followers: ${JSON.stringify(result)}`)
+  console.log(`Scraped Twitter user objects: ${JSON.stringify(result)}`)
   return result
 }
 
@@ -103,7 +106,7 @@ function getTwitterScreenName(org) {
  * @param {Object} org from Airtable
  * @returns {{orgName: string, twitterUrl: string, orgId: string}}
  */
-function createTwitterFollowersJobData(org) {
+function createTwitterUserObjectScrapingJobData(org) {
   return {
     orgId: org.id,
     orgName: org.fields.Name,
@@ -113,7 +116,7 @@ function createTwitterFollowersJobData(org) {
 
 module.exports = {
   getTwitterScreenName,
-  createTwitterFollowersJobData,
-  scrapeTwitterFollowers,
+  createTwitterUserObjectScrapingJobData,
+  scrapeTwitterUserObjects,
   acquireTwitterAppFactory,
 }

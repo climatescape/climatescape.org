@@ -1,9 +1,12 @@
 const { pgBossQueue, knex, executeKnex } = require("./pg")
 const { setupScraping } = require("./setupScraping")
-const { getTwitterScreenName, createTwitterFollowersJobData } = require("./twitter")
+const {
+  getTwitterScreenName,
+  createTwitterUserObjectScrapingJobData,
+} = require("./twitter")
 
 /**
- * @param {string} requestType request type, e. g. "twitterFollowers"
+ * @param {string} requestType request type, e. g. "twitterUserObject"
  * @returns {Promise<void>}
  */
 async function determineOrgsToScrapeFirstTime(requestType) {
@@ -28,18 +31,18 @@ async function determineOrgsToScrapeFirstTime(requestType) {
 /**
  * @param {Object} org from Airtable
  */
-async function publishTwitterFollowersScrapingJob(org) {
+async function publishTwitterUserObjectScrapingJob(org) {
   return await pgBossQueue.publish(
-    "twitterFollowers",
-    createTwitterFollowersJobData(org)
+    "twitterUserObject",
+    createTwitterUserObjectScrapingJobData(org)
   )
 }
 
 async function addFirstTimeScrapingJobs() {
   await pgBossQueue.start()
-  const orgsToScrape = await determineOrgsToScrapeFirstTime("twitterFollowers")
+  const orgsToScrape = await determineOrgsToScrapeFirstTime("twitterUserObject")
   const orgsWithTwitter = orgsToScrape.filter(getTwitterScreenName)
-  await Promise.all(orgsWithTwitter.map(publishTwitterFollowersScrapingJob))
+  await Promise.all(orgsWithTwitter.map(publishTwitterUserObjectScrapingJob))
 }
 
 if (require.main === module) {

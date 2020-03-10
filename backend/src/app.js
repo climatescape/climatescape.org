@@ -4,20 +4,20 @@ const { pgBossQueue } = require('./pg');
 
 fastify.route({
     method: 'POST',
-    url: '/twitterFollowers',
+    url: '/twitterUserObject',
     schema: {
         body: {
             type: 'object',
-            required: ['orgId', 'twitterUrl'],
+            required: ['orgId', 'twitterScreenName'],
             properties: {
                 orgId: { type: 'string' },
-                twitterUrl: { type: 'string' }
+                twitterScreenName: { type: 'string' }
             }
         }
     },
     handler: function (req, res) {
-        fastify.log.info('Received request to scrape Twitter followers: ', req.body);
-        return pgBossQueue.publish('twitterFollowers', req.body);
+        fastify.log.info('Received request to scrape Twitter user object: ', req.body);
+        return pgBossQueue.publish('twitterUserObject', req.body);
     }
 });
 

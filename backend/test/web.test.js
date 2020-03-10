@@ -17,23 +17,23 @@ describe("web server", () => {
   afterAll(async () => pgPool.end())
 
   test("should reject request request without body", async () => {
-    await request.post("/twitterFollowers").expect(400) // BAD REQUEST
+    await request.post("/twitterUserObject").expect(400) // BAD REQUEST
   })
 
   test("happy path", async () => {
     await fillSampleOrgData()
 
     await request
-      .post("/twitterFollowers")
+      .post("/twitterUserObject")
       .send({
         orgId: "rec01lt5ZeLGlwpg2",
-        twitterUrl: "https://twitter.com/altarock",
+        twitterScreenName: "altarock",
       })
       .expect(200)
     // The job should be picked up by the worker and an entry written into the database
     await sleep(2000)
     const results = await pgPool.query("SELECT * FROM scraping_results;")
     expect(results.rows.length).toBe(1)
-    expect(results.rows[0].result).toBe(100)
+    expect(results.rows[0].result.followers_count).toBe(100)
   })
 })

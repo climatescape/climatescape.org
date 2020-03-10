@@ -13,12 +13,12 @@ describe("determineOrgsToScrapeFirstTime", () => {
     await executeKnex(
       knex("scraping_results").insert({
         org_id: "rec01lt5ZeLGlwpg2",
-        request_type: "twitterFollowers",
-        result: 100,
+        request_type: "twitterUserObject",
+        result: { followers_count: 100 },
       })
     )
     const orgsToScrapeFirstTime = await determineOrgsToScrapeFirstTime(
-      "twitterFollowers"
+      "twitterUserObject"
     )
     expect(orgsToScrapeFirstTime.length).toBe(54)
   })
