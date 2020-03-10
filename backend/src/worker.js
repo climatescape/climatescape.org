@@ -1,4 +1,4 @@
-const { pgBossQueue } = require("./pg")
+const { setupPgBossQueue } = require("./pg")
 const { setupScraping } = require("./setupScraping")
 const {
   twitterUserObjectScrapingLoop,
@@ -7,7 +7,7 @@ const {
 const { isProduction } = require("./utils")
 
 async function startWorker() {
-  await pgBossQueue.start()
+  const pgBossQueue = await setupPgBossQueue()
   await setupScraping()
   // Don't throttle jobs during integration testing to arrive at the expected
   // results faster
@@ -16,7 +16,7 @@ async function startWorker() {
     : 100
   setTimeout(async function doWork() {
     try {
-      await twitterUserObjectScrapingLoop()
+      await twitterUserObjectScrapingLoop(pgBossQueue)
     } catch (err) {
       console.log("Error in Twitter user object scraping loop", err)
     }

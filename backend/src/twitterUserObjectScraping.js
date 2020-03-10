@@ -1,7 +1,8 @@
 const _ = require("lodash")
 const { acquireTwitterApp, getTwitterScreenName } = require("./twitter")
 const { isProduction } = require("./utils")
-const { pgBossQueue, executeInsertOrUpdate } = require("./pg")
+const { executeInsertOrUpdate } = require("./pg")
+const { determineOrgsToScrapeFirstTime } = require("./firstTimeScraping")
 
 /**
  * @type {string}
@@ -11,7 +12,7 @@ const TWITTER_USER_OBJECT = "twitterUserObject"
 /**
  * @param {Array<{data: {orgId: string, orgName: string, twitterScreenName: string}}>} jobs
  *        with data as returned from {@link createTwitterUserObjectScrapingJobData}
- * @returns {Promise<Array<{orgId: string, orgName: string, twitterUserObject: number}>>}
+ * @returns {Promise<Array<{orgId: string, orgName: string, twitterUserObject: Object}>>}
  */
 async function scrapeTwitterUserObjects(jobs) {
   console.log(`Scraping Twitter user objects for: ${JSON.stringify(jobs)}`)
@@ -35,8 +36,8 @@ async function scrapeTwitterUserObjects(jobs) {
 }
 
 /**
- * @param {Object} org from Airtable
- * @returns {{orgName: string, twitterUrl: string, orgId: string}}
+ * @param {{id: string, fields: Object}} org from Airtable
+ * @returns {{orgId: string, orgName: string, twitterScreenName: string, orgId}}
  */
 function createTwitterUserObjectScrapingJobData(org) {
   return {
@@ -47,11 +48,37 @@ function createTwitterUserObjectScrapingJobData(org) {
 }
 
 /**
+ * @param {PgBoss} pgBossQueue
+ * @param {{id: string, fields: Object}} org from Airtable
+ */
+async function publishTwitterUserObjectScrapingJob(pgBossQueue, org) {
+  return await pgBossQueue.publish(
+    TWITTER_USER_OBJECT,
+    createTwitterUserObjectScrapingJobData(org)
+  )
+}
+
+/**
+ * @param {PgBoss} pgBossQueue
+ * @returns {Promise<void>}
+ */
+async function addFirstTimeTwitterUserObjectScrapingJobs(pgBossQueue) {
+  const orgsToScrape = await determineOrgsToScrapeFirstTime(TWITTER_USER_OBJECT)
+  const orgsWithTwitter = orgsToScrape.filter(getTwitterScreenName)
+  await Promise.all(
+    orgsWithTwitter.map(org =>
+      publishTwitterUserObjectScrapingJob(pgBossQueue, org)
+    )
+  )
+}
+
+/**
+ * @param {PgBoss} pgBossQueue
  * @param {string} jobId
  * @param {{orgId: string, orgName: string, twitterUserObject: Object}} orgData
  * @returns {Promise<void>}
  */
-async function storeTwitterUserObject(jobId, orgData) {
+async function storeTwitterUserObject(pgBossQueue, jobId, orgData) {
   try {
     const now = new Date()
     await executeInsertOrUpdate(
@@ -99,7 +126,11 @@ const MAX_ACCOUNTS_PER_TWITTER_USERS_LOOKUP_API_CALL = 100
  */
 const DELAY_BETWEEN_TWITTER_USERS_LOOKUP_API_CALLS_MS = 10000
 
-async function twitterUserObjectScrapingLoop() {
+/**
+ * @param {PgBoss} pgBossQueue
+ * @returns {Promise<void>}
+ */
+async function twitterUserObjectScrapingLoop(pgBossQueue) {
   const jobs = await pgBossQueue.fetch(
     TWITTER_USER_OBJECT,
     MAX_ACCOUNTS_PER_TWITTER_USERS_LOOKUP_API_CALL
@@ -120,14 +151,14 @@ async function twitterUserObjectScrapingLoop() {
   }
   await Promise.all(
     orgsWithTwitterUserObjects.map((orgData, i) =>
-      storeTwitterUserObject(jobs[i].id, orgData)
+      storeTwitterUserObject(pgBossQueue, jobs[i].id, orgData)
     )
   )
 }
 
 module.exports = {
   TWITTER_USER_OBJECT,
-  createTwitterUserObjectScrapingJobData,
+  addFirstTimeTwitterUserObjectScrapingJobs,
   twitterUserObjectScrapingLoop,
   DELAY_BETWEEN_TWITTER_USERS_LOOKUP_API_CALLS_MS,
 }

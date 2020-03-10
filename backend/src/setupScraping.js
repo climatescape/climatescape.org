@@ -1,6 +1,10 @@
+const pMemoize = require("p-memoize")
 const { knex, executeKnex } = require("./pg")
 const { setupAirtableBackup } = require("./setupAirtableBackup")
 
+/**
+ * @returns {Promise<void>}
+ */
 async function setupScraping() {
   const tableExists = await executeKnex(
     knex.schema.hasTable("scraping_results")
@@ -24,4 +28,4 @@ async function setupScraping() {
   }
 }
 
-module.exports = { setupScraping }
+module.exports = { setupScraping: pMemoize(setupScraping) }
