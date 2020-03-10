@@ -55,6 +55,18 @@ function orgToString(org) {
 }
 
 /**
+ * @param {string} urlString
+ * @returns {string}
+ */
+function getCleanPath(urlString) {
+  const url = new URL(urlString)
+  let path = url.pathname.substring(1) // Remove leading "/"
+  if (path.charAt(path.length - 1) === "/") {
+    path = path.substring(0, path.length - 1)
+  }
+  return path
+}
+/**
  * @param {{id: string, fields: Object}} org from Airtable
  * @returns {string|null}
  */
@@ -65,8 +77,7 @@ function getTwitterScreenName(org) {
     return null
   }
   try {
-    const url = new URL(twitterUrlString)
-    return url.pathname
+    return getCleanPath(twitterUrlString)
   } catch (err) {
     console.log(
       `Twitter URL for org ${orgToString(
@@ -81,5 +92,6 @@ function getTwitterScreenName(org) {
 module.exports = {
   acquireTwitterApp,
   acquireTwitterAppFactory,
+  getCleanPath, // for testing
   getTwitterScreenName,
 }
