@@ -2,7 +2,7 @@ const { setupPgBossQueue } = require("./db/pg")
 const {
   addFirstTimeTwitterUserObjectScrapingJobs,
 } = require("./twitterUserObjectScraping")
-const { fetchAndBackupAllAirtableOrganizations } = require("./backupAirtable")
+const { fetchAndBackupAllAirtableOrganizations } = require("./airtableBackup")
 
 async function addFirstTimeScrapingJobs() {
   const pgBossQueue = await setupPgBossQueue()

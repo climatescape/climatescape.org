@@ -1,7 +1,7 @@
 const path = require("path")
 const fs = require("fs").promises
 const { knex, executeKnex, executeCount } = require("../src/db/pg")
-const { backupOrganizations } = require("../src/backupAirtable")
+const { backupOrganizations } = require("../src/airtableBackup")
 const { truncateAllTables } = require("./prepareDb")
 
 describe("backupOrganizations", () => {

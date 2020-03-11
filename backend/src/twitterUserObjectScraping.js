@@ -74,11 +74,11 @@ async function addFirstTimeTwitterUserObjectScrapingJobs(pgBossQueue) {
 
 /**
  * @param {PgBoss} pgBossQueue
- * @param {string} jobId
+ * @param {string} pgBossJobId
  * @param {{orgId: string, orgName: string, twitterUserObject: Object}} orgData
  * @returns {Promise<void>}
  */
-async function storeTwitterUserObject(pgBossQueue, jobId, orgData) {
+async function storeTwitterUserObject(pgBossQueue, pgBossJobId, orgData) {
   try {
     const now = new Date()
     await executeInsertOrUpdate(
@@ -98,7 +98,7 @@ async function storeTwitterUserObject(pgBossQueue, jobId, orgData) {
         orgData
       )} was successfully stored in the database`
     )
-    await pgBossQueue.complete(jobId)
+    await pgBossQueue.complete(pgBossJobId)
   } catch (err) {
     console.error(
       `Error while storing twitter user object for ${JSON.stringify(
@@ -106,7 +106,7 @@ async function storeTwitterUserObject(pgBossQueue, jobId, orgData) {
       )} in the database`,
       err
     )
-    await pgBossQueue.fail(jobId, err)
+    await pgBossQueue.fail(pgBossJobId, err)
   }
 }
 
@@ -131,27 +131,27 @@ const DELAY_BETWEEN_TWITTER_USERS_LOOKUP_API_CALLS_MS = 10000
  * @returns {Promise<void>}
  */
 async function twitterUserObjectScrapingLoop(pgBossQueue) {
-  const jobs = await pgBossQueue.fetch(
+  const pgBossJobs = await pgBossQueue.fetch(
     TWITTER_USER_OBJECT,
     MAX_ACCOUNTS_PER_TWITTER_USERS_LOOKUP_API_CALL
   )
-  if (!jobs) {
+  if (!pgBossJobs) {
     return
   }
   let orgsWithTwitterUserObjects
   try {
-    orgsWithTwitterUserObjects = await scrapeTwitterUserObjects(jobs)
+    orgsWithTwitterUserObjects = await scrapeTwitterUserObjects(pgBossJobs)
   } catch (err) {
     console.error(
-      `Error scraping Twitter user objects for ${JSON.stringify(jobs)}`,
+      `Error scraping Twitter user objects for ${JSON.stringify(pgBossJobs)}`,
       err
     )
-    await pgBossQueue.fail(jobs.map(job => job.id))
+    await pgBossQueue.fail(pgBossJobs.map(job => job.id))
     return
   }
   await Promise.all(
     orgsWithTwitterUserObjects.map((orgData, i) =>
-      storeTwitterUserObject(pgBossQueue, jobs[i].id, orgData)
+      storeTwitterUserObject(pgBossQueue, pgBossJobs[i].id, orgData)
     )
   )
 }

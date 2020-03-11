@@ -3,7 +3,7 @@ const fs = require("fs").promises
 const { knex, executeKnex } = require("../src/db/pg")
 const { setupAirtableBackup } = require("../src/db/setupAirtableBackup")
 const { setupScraping } = require("../src/db/setupScraping")
-const { backupOrganizations } = require("../src/backupAirtable")
+const { backupOrganizations } = require("../src/airtableBackup")
 
 async function truncateAllTables() {
   await setupAirtableBackup()
