@@ -6,7 +6,9 @@ import {
   Highlight,
   Configure,
   connectStateResults,
+  RefinementList,
 } from "react-instantsearch-dom"
+
 import algoliasearch from "algoliasearch/lite"
 import { Link } from "gatsby"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -16,6 +18,8 @@ import Input from "./input"
 import { Root, HitsWrapper } from "./styles"
 
 import "./styles.css"
+
+// const ConnectedRefinementList = connectRefinementList(RefinementList)
 
 const PageHit = () => ({ hit }) => (
   <div className="text-gray-700 hit">
@@ -76,39 +80,45 @@ const PoweredBy = () => (
 
 const indices = [{ name: `Pages`, title: `Pages`, hitComp: `PageHit` }]
 
-export default function Search({ collapse }) {
+export function SearchInput({ collapse, searchQuery }) {
   const ref = createRef()
-  const [searchQuery, setQuery] = useState(``)
   const [focus, setFocus] = useState(false)
+
   useClickOutside(ref, () => setFocus(false))
 
+  return (
+    <div className="search-root" ref={ref}>
+      <Input onFocus={() => setFocus(true)} {...{ collapse, focus }} />
+      <HitsWrapper show={searchQuery && searchQuery.length > 0 && focus}>
+        {indices.map(({ name, hitComp }) => (
+          <Index key={name} indexName={name}>
+            <Results>
+              <Hits hitComponent={hitComps[hitComp](() => setFocus(false))} />
+            </Results>
+          </Index>
+        ))}
+        <PoweredBy />
+      </HitsWrapper>
+    </div>
+  )
+}
+
+export default function Search({ children, setQuery }) {
   const searchClient = algoliasearch(
     process.env.GATSBY_ALGOLIA_APP_ID,
     process.env.GATSBY_ALGOLIA_SEARCH_KEY
   )
 
   return (
-    <div className="search-root" ref={ref}>
-      <InstantSearch
-        searchClient={searchClient}
-        indexName={indices[0].name}
-        onSearchStateChange={({ query }) => setQuery(query)}
-        root={{ Root, props: { ref } }}
-        styles={{ position: "relative" }}
-      >
-        <Configure hitsPerPage={8} />
-        <Input onFocus={() => setFocus(true)} {...{ collapse, focus }} />
-        <HitsWrapper show={searchQuery.length > 0 && focus}>
-          {indices.map(({ name, hitComp }) => (
-            <Index key={name} indexName={name}>
-              <Results>
-                <Hits hitComponent={hitComps[hitComp](() => setFocus(false))} />
-              </Results>
-            </Index>
-          ))}
-          <PoweredBy />
-        </HitsWrapper>
-      </InstantSearch>
-    </div>
+    <InstantSearch
+      searchClient={searchClient}
+      indexName={indices[0].name}
+      onSearchStateChange={({ query }) => setQuery(query)}
+      // root={{ Root, props: { ref } }}
+      styles={{ position: "relative" }}
+    >
+      <Configure hitsPerPage={8} />
+      {children}
+    </InstantSearch>
   )
 }
