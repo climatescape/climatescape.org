@@ -59,12 +59,8 @@ async function backupOrganizations(allOrgRecords) {
  * @returns {Promise<void>}
  */
 async function fetchAndBackupAllAirtableOrganizations() {
-  try {
-    const allOrgRecords = await fetchAllOrgRecordsFromAirtable()
-    await backupOrganizations(allOrgRecords)
-  } catch (e) {
-    console.error("Error backing up organizations", e)
-  }
+  const allOrgRecords = await fetchAllOrgRecordsFromAirtable()
+  await backupOrganizations(allOrgRecords)
 }
 
 module.exports = { backupOrganizations, fetchAndBackupAllAirtableOrganizations }

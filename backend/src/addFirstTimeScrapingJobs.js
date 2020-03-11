@@ -2,6 +2,7 @@ const { setupPgBossQueue } = require("./db/pg")
 const {
   addFirstTimeTwitterUserObjectScrapingJobs,
 } = require("./twitterUserObjectScraping")
+const { fetchAndBackupAllAirtableOrganizations } = require("./backupAirtable")
 
 async function addFirstTimeScrapingJobs() {
   const pgBossQueue = await setupPgBossQueue()
@@ -11,9 +12,14 @@ async function addFirstTimeScrapingJobs() {
 if (require.main === module) {
   ;(async () => {
     try {
+      await fetchAndBackupAllAirtableOrganizations()
+    } catch (err) {
+      console.error("Error backing up Airtable organizations", err)
+    }
+    try {
       await addFirstTimeScrapingJobs()
-    } catch (e) {
-      console.error("Error adding first-time scraping jobs", e)
+    } catch (err) {
+      console.error("Error adding first-time scraping jobs", err)
     }
   })()
 }
