@@ -1,4 +1,4 @@
-const { setupPgBossQueue } = require("./pg")
+const { setupPgBossQueue } = require("./db/pg")
 const {
   addFirstTimeTwitterUserObjectScrapingJobs,
 } = require("./twitterUserObjectScraping")

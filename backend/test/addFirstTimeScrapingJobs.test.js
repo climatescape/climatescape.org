@@ -1,7 +1,7 @@
 const waitForExpect = require("wait-for-expect")
 const { addFirstTimeScrapingJobs } = require("../src/addFirstTimeScrapingJobs")
 const { fillSampleOrgData } = require("./prepareDb")
-const { executeCount } = require("../src/pg")
+const { executeCount } = require("../src/db/pg")
 
 test("addFirstTimeScrapingJobs", async () => {
   await fillSampleOrgData()

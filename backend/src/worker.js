@@ -1,5 +1,5 @@
-const { setupPgBossQueue } = require("./pg")
-const { setupScraping } = require("./setupScraping")
+const { setupPgBossQueue } = require("./db/pg")
+const { setupScraping } = require("./db/setupScraping")
 const {
   twitterUserObjectScrapingLoop,
   DELAY_BETWEEN_TWITTER_USERS_LOOKUP_API_CALLS_MS,

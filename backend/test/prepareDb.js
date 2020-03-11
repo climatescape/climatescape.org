@@ -1,8 +1,8 @@
 const path = require("path")
 const fs = require("fs").promises
-const { knex, executeKnex } = require("../src/pg")
-const { setupAirtableBackup } = require("../src/setupAirtableBackup")
-const { setupScraping } = require("../src/setupScraping")
+const { knex, executeKnex } = require("../src/db/pg")
+const { setupAirtableBackup } = require("../src/db/setupAirtableBackup")
+const { setupScraping } = require("../src/db/setupScraping")
 const { backupOrganizations } = require("../src/backupAirtable")
 
 async function truncateAllTables() {

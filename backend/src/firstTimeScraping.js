@@ -1,5 +1,5 @@
-const { knex, executeKnex } = require("./pg")
-const { setupScraping } = require("./setupScraping")
+const { knex, executeKnex } = require("./db/pg")
+const { setupScraping } = require("./db/setupScraping")
 
 /**
  * @param {string} requestType request type, e. g. "twitterUserObject"

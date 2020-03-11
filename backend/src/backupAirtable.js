@@ -1,6 +1,6 @@
 const { airtableBase, fetchAllRecords } = require("./airtable")
-const { setupAirtableBackup } = require("./setupAirtableBackup")
-const { executeCount, executeBulkInsertOrUpdate } = require("./pg")
+const { setupAirtableBackup } = require("./db/setupAirtableBackup")
+const { executeCount, executeBulkInsertOrUpdate } = require("./db/pg")
 
 /**
  * @returns {Promise<Array<Object>>}

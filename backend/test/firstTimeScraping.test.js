@@ -1,6 +1,6 @@
 const { determineOrgsToScrapeFirstTime } = require("../src/firstTimeScraping")
 const { fillSampleOrgData } = require("./prepareDb")
-const { knex, executeKnex, executeCount } = require("../src/pg")
+const { knex, executeKnex, executeCount } = require("../src/db/pg")
 
 describe("determineOrgsToScrapeFirstTime", () => {
   test("basically works", async () => {

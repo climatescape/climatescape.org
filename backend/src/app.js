@@ -1,6 +1,6 @@
 const fastify = require("fastify")({ logger: true })
 
-const { setupPgBossQueue } = require("./pg")
+const { setupPgBossQueue } = require("./db/pg")
 const { TWITTER_USER_OBJECT } = require("./twitterUserObjectScraping")
 
 async function buildFastify() {

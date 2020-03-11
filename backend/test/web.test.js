@@ -1,7 +1,7 @@
 const supertest = require("supertest")
 
 const buildFastify = require("../src/app")
-const { pgPool } = require("../src/pg")
+const { pgPool } = require("../src/db/pg")
 const { sleep } = require("../src/utils")
 const { fillSampleOrgData } = require("./prepareDb")
 

@@ -1,6 +1,6 @@
 const path = require("path")
 const fs = require("fs").promises
-const { knex, executeKnex, executeCount } = require("../src/pg")
+const { knex, executeKnex, executeCount } = require("../src/db/pg")
 const { backupOrganizations } = require("../src/backupAirtable")
 const { truncateAllTables } = require("./prepareDb")
 

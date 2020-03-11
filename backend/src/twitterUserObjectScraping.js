@@ -1,7 +1,7 @@
 const _ = require("lodash")
 const { acquireTwitterApp, getTwitterScreenName } = require("./twitter")
 const { isProduction } = require("./utils")
-const { executeInsertOrUpdate } = require("./pg")
+const { executeInsertOrUpdate } = require("./db/pg")
 const { determineOrgsToScrapeFirstTime } = require("./firstTimeScraping")
 
 /**

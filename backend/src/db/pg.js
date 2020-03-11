@@ -11,7 +11,7 @@ const host = isRunningWithinLocalContainer ? "db" : "localhost"
 const pgLocalConnectionString = `postgres://postgres:postgres@${host}:5432/postgres`
 
 const PgBoss = require("pg-boss")
-const { isProduction } = require("./utils")
+const { isProduction } = require("../utils")
 
 const pgConnectionString = isProduction
   ? process.env.DATABASE_URL
