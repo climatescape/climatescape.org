@@ -6,9 +6,7 @@ const {
 } = require("./twitterUserObjectScraping")
 const { isProduction } = require("./utils")
 
-async function startWorker() {
-  const pgBossQueue = await setupPgBossQueue()
-  await setupScraping()
+function setupTwitterUserObjectScraping(pgBossQueue) {
   // Don't throttle jobs during integration testing to arrive at the expected
   // results faster
   const twitterUserObjectsScrapingPeriodDelayMs = isProduction
@@ -22,6 +20,12 @@ async function startWorker() {
     }
     setTimeout(doWork, twitterUserObjectsScrapingPeriodDelayMs)
   }, twitterUserObjectsScrapingPeriodDelayMs)
+}
+
+async function startWorker() {
+  const pgBossQueue = await setupPgBossQueue()
+  await setupScraping()
+  setupTwitterUserObjectScraping(pgBossQueue)
 }
 
 ;(async () => {
