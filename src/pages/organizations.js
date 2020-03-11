@@ -11,6 +11,7 @@ import OrganizationFilter, {
 } from "../components/OrganizationFilter"
 import AddOrganizationCTA from "../components/AddOrganizationCTA"
 import SEO from "../components/seo"
+import { RefinementList } from "react-instantsearch-dom"
 
 function getLogo(Logo, LinkedinProfile) {
   const rawLogo = Logo || LinkedinProfile?.[0]?.data
@@ -66,39 +67,44 @@ const OrganizationsTemplate = ({ data, pageContext }) => {
     <Layout contentClassName="bg-gray-200">
       <SEO title={`${organizationsTitle} organizations on Climatescape`} />
 
-      <div className="max-w-4xl mx-auto pb-4">
-        <h2 className="text-3xl tracking-wide font-light p-3 md:mt-4">
-          {organizationsTitle} organizations{" "}
-          <AddOrganizationCTA variant="simple" />
-        </h2>
-
-        <OrganizationFilter
-          currentFilter={filter}
-          onClearFilter={() => setFilter.none()}
-        />
-
-        <div className="bg-white">
-          {organizations.map(org => (
-            <OrganizationCard
-              title={org.title}
-              description={org.description}
-              tags={org.tags}
-              location={org.location}
-              headcount={org.headcount}
-              orgType={org.orgType}
-              slug={org.slug}
-              homepage={org.homepage}
-              logo={org.logo}
-              sector={org.sector}
-              showSector={!pageContext.sectorName}
-              key={org.title}
-              currentFilter={filter}
-              onApplyFilter={setFilter}
-            />
-          ))}
+      <div className="flex flex-col mx-auto container lg:flex-row">
+        <div className="lg:w-2/5 bg-blue-100">
+          <RefinementList attribute="categories" />
         </div>
-        <div className="bg-white mt-8 p-3 text-center border-b border-gray-400">
-          <AddOrganizationCTA />
+        <div className="lg:w-3/5 border-gray-300 lg:border-r">
+          <h2 className="text-3xl tracking-wide font-light p-3 md:mt-4">
+            {organizationsTitle} organizations{" "}
+            <AddOrganizationCTA variant="simple" />
+          </h2>
+
+          <OrganizationFilter
+            currentFilter={filter}
+            onClearFilter={() => setFilter.none()}
+          />
+
+          <div className="bg-white">
+            {organizations.map(org => (
+              <OrganizationCard
+                title={org.title}
+                description={org.description}
+                tags={org.tags}
+                location={org.location}
+                headcount={org.headcount}
+                orgType={org.orgType}
+                slug={org.slug}
+                homepage={org.homepage}
+                logo={org.logo}
+                sector={org.sector}
+                showSector={!pageContext.sectorName}
+                key={org.title}
+                currentFilter={filter}
+                onApplyFilter={setFilter}
+              />
+            ))}
+          </div>
+          <div className="bg-white mt-8 p-3 text-center border-b border-gray-400">
+            <AddOrganizationCTA />
+          </div>
         </div>
       </div>
     </Layout>
