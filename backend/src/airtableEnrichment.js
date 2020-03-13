@@ -1,4 +1,5 @@
 const util = require("util")
+const { isProduction } = require("./utils")
 const { knex, executeKnex } = require("./db/pg")
 const { airtableBase } = require("./airtable")
 const { TWITTER_USER_OBJECT } = require("./twitterUserObjectScraping")
@@ -59,38 +60,26 @@ async function prepareEnrichmentFields(org) {
 const MAX_ORGS_PER_AIRTABLE_TABLE_UPDATE = 10
 
 /**
- *
- * @param {PgBoss} pgBossQueue
  * @param {Array<{id: string, data: {orgId: string, orgName: string},
- *                Rank: number, "Enrichment Data": Object}>} jobsWithEnrichmentFields
+ *                Rank: number, "Enrichment Data": Object}>} jobsWithEnrichmentData
  */
-async function updateAirtableOrganizations(
-  pgBossQueue,
-  jobsWithEnrichmentFields
-) {
-  const jobIds = jobsWithEnrichmentFields.map(job => job.id)
-  const orgs = jobsWithEnrichmentFields.map(job => job.data)
-  try {
-    await airtableBase("organizations").update(
-      jobsWithEnrichmentFields.map(job => ({
-        id: job.data.orgId,
-        fields: {
-          Rank: job.Rank,
-          "Enrichment Data": JSON.stringify(job["Enrichment Data"]),
-        },
-      }))
-    )
-    console.log(
-      `Successfully enriched Airtable records for orgs: ${util.inspect(orgs)}`
-    )
-    await pgBossQueue.complete(jobIds)
-  } catch (err) {
-    console.error(
-      `Error trying to update Airtable organizations ${util.inspect(orgs)}`,
-      err
-    )
-    await pgBossQueue.fail(jobIds)
-  }
+async function updateAirtableOrgs(jobsWithEnrichmentData) {
+  const airtableTable = isProduction
+    ? "organizations"
+    : "Organizations - Integration Testing Clone"
+  await airtableBase(airtableTable).update(
+    jobsWithEnrichmentData.map(job => ({
+      id: job.data.orgId,
+      fields: {
+        Rank: job.Rank,
+        "Enrichment Data": JSON.stringify(job["Enrichment Data"]),
+      },
+    }))
+  )
+  const orgs = jobsWithEnrichmentData.map(job => job.data)
+  console.log(
+    `Successfully enriched Airtable records for orgs: ${util.inspect(orgs)}`
+  )
 }
 
 /**
@@ -105,6 +94,9 @@ async function airtableEnrichmentLoop(pgBossQueue) {
   if (!pgBossJobs) {
     return
   }
+  /**
+   * @type {Array<{id: string, data: {orgId: string, orgName: string}, Rank: number, "Enrichment Data": Object}>}
+   */
   const jobsWithEnrichmentData = []
   await Promise.all(
     pgBossJobs.map(async job => {
@@ -122,7 +114,18 @@ async function airtableEnrichmentLoop(pgBossQueue) {
     })
   )
   if (jobsWithEnrichmentData.length) {
-    await updateAirtableOrganizations(pgBossQueue, jobsWithEnrichmentData)
+    const jobIds = jobsWithEnrichmentData.map(job => job.id)
+    try {
+      await updateAirtableOrgs(jobsWithEnrichmentData)
+      await pgBossQueue.complete(jobIds)
+    } catch (err) {
+      const orgs = jobsWithEnrichmentData.map(job => job.data)
+      console.error(
+        `Error trying to update Airtable organizations ${util.inspect(orgs)}`,
+        err
+      )
+      await pgBossQueue.fail(jobIds)
+    }
   }
 }
 

@@ -101,41 +101,28 @@ async function addFirstTimeTwitterUserObjectScrapingJobs(pgBossQueue) {
 }
 
 /**
- * @param {PgBoss} pgBossQueue
- * @param {string} pgBossJobId
  * @param {{orgId: string, orgName: string, twitterUserObject: Object}} orgData
  * @returns {Promise<void>}
  */
-async function storeTwitterUserObject(pgBossQueue, pgBossJobId, orgData) {
-  try {
-    const now = new Date()
-    await executeInsertOrUpdate(
-      "scraping_results",
-      {
-        org_id: orgData.orgId,
-        request_type: TWITTER_USER_OBJECT,
-        created_at: now,
-      },
-      {
-        updated_at: now,
-        result: orgData.twitterUserObject,
-      }
-    )
-    console.log(
-      `Twitter user object for ${JSON.stringify(
-        orgData
-      )} was successfully stored in the database`
-    )
-    await pgBossQueue.complete(pgBossJobId)
-  } catch (err) {
-    console.error(
-      `Error while storing twitter user object for ${JSON.stringify(
-        orgData
-      )} in the database`,
-      err
-    )
-    await pgBossQueue.fail(pgBossJobId, err)
-  }
+async function storeTwitterUserObject(orgData) {
+  const now = new Date()
+  await executeInsertOrUpdate(
+    "scraping_results",
+    {
+      org_id: orgData.orgId,
+      request_type: TWITTER_USER_OBJECT,
+      created_at: now,
+    },
+    {
+      updated_at: now,
+      result: orgData.twitterUserObject,
+    }
+  )
+  console.log(
+    `Twitter user object for ${JSON.stringify(
+      orgData
+    )} was successfully stored in the database`
+  )
 }
 
 /**
@@ -178,9 +165,20 @@ async function twitterUserObjectScrapingLoop(pgBossQueue) {
     return
   }
   await Promise.all(
-    orgsWithTwitterUserObjects.map((orgData, i) =>
-      storeTwitterUserObject(pgBossQueue, pgBossJobs[i].id, orgData)
-    )
+    orgsWithTwitterUserObjects.map(async (orgData, i) => {
+      try {
+        await storeTwitterUserObject(orgData)
+        await pgBossQueue.complete(pgBossJobs[i].id)
+      } catch (err) {
+        console.error(
+          `Error while storing Twitter user object for ${JSON.stringify(
+            orgData
+          )} in the database`,
+          err
+        )
+        await pgBossQueue.fail(pgBossJobs[i].id, err)
+      }
+    })
   )
 }
 
