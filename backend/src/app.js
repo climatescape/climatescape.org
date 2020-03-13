@@ -1,10 +1,12 @@
 const fastify = require("fastify")({ logger: true })
 
-const { setupPgBossQueue } = require("./db/pg")
+const { setupPgBossQueue, executeInsertIfNotExists } = require("./db/pg")
+const { setupAirtableBackup } = require("./db/setupAirtableBackup")
 const { TWITTER_USER_OBJECT } = require("./twitterUserObjectScraping")
 
 async function buildFastify() {
   const pgBossQueue = await setupPgBossQueue()
+  await setupAirtableBackup()
 
   fastify.route({
     method: "POST",
@@ -15,16 +17,29 @@ async function buildFastify() {
         required: ["orgId", "twitterScreenName"],
         properties: {
           orgId: { type: "string" },
+          orgName: { type: "string", nullable: true },
           twitterScreenName: { type: "string" },
         },
       },
     },
-    handler(req, res) {
+    async handler(req, res) {
       fastify.log.info(
         "Received request to scrape Twitter user object: ",
         req.body
       )
-      return pgBossQueue.publish(TWITTER_USER_OBJECT, req.body)
+      await executeInsertIfNotExists(
+        "organizations",
+        {
+          id: req.body.orgId,
+        },
+        {
+          fields: {
+            ...(req.body.orgName ? { Name: req.body.orgName } : {}),
+            Twitter: `http://twitter.com/${req.body.twitterScreenName}`,
+          },
+        }
+      )
+      return await pgBossQueue.publish(TWITTER_USER_OBJECT, req.body)
     },
   })
 

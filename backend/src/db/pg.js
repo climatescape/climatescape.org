@@ -133,6 +133,9 @@ async function executeKnex(knexQueryOrSchemaBuilder) {
  * @returns {Promise<void>}
  */
 async function executeInsertOrUpdate(table, keys, payload) {
+  if (!Object.keys(payload).length) {
+    throw new Error("Use executeInsertIfNotExists() instead")
+  }
   const update = Object.keys(payload)
     .map(key => knex.raw("?? = EXCLUDED.??", [key, key]))
     .join(", ")
@@ -141,18 +144,35 @@ async function executeInsertOrUpdate(table, keys, payload) {
     .map(key => knex.ref(key))
     .join(", ")
 
-  const sql = `? ON CONFLICT (${constraint}) 
-               DO ${(update && `UPDATE SET ${update}`) || "NOTHING"};`
+  const sql = `? ON CONFLICT (${constraint}) DO UPDATE SET ${update};`
   const query = knex.raw(sql, [
-    knex
-      .insert({
-        ...keys,
-        ...payload,
-      })
-      .into(table),
+    knex.insert({ ...keys, ...payload }).into(table),
   ])
   const result = await executeKnex(query)
   if ((update && result.rowCount === 0) || result.rowCount > 1) {
+    throw new Error(
+      `${result.rowCount} rows updated by the query, integrity constraint violation?`
+    )
+  }
+}
+
+/**
+ * @param {string} table - table name
+ * @param {Object} keys - constraint key/value object (insert)
+ * @param {Object} payload - row data values
+ * @returns {Promise<void>}
+ */
+async function executeInsertIfNotExists(table, keys, payload) {
+  const constraint = Object.keys(keys)
+    .map(key => knex.ref(key))
+    .join(", ")
+
+  const sql = `? ON CONFLICT (${constraint}) DO NOTHING;`
+  const query = knex.raw(sql, [
+    knex.insert({ ...keys, ...payload }).into(table),
+  ])
+  const result = await executeKnex(query)
+  if (result.rowCount > 1) {
     throw new Error(
       `${result.rowCount} rows updated by the query, integrity constraint violation?`
     )
@@ -206,5 +226,6 @@ module.exports = {
   executeKnex,
   executeCount,
   executeInsertOrUpdate,
+  executeInsertIfNotExists,
   executeBulkInsertOrUpdate,
 }

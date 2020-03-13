@@ -60,6 +60,34 @@ async function publishTwitterUserObjectScrapingJob(pgBossQueue, org) {
 
 /**
  * @param {PgBoss} pgBossQueue
+ * @param {function(orgId: string, orgName: string): Promise<any>} handler
+ * @returns {Promise<void>}
+ */
+async function onSuccessfulTwitterUserObjectScraping(pgBossQueue, handler) {
+  await pgBossQueue.onComplete(TWITTER_USER_OBJECT, async completionJob => {
+    try {
+      const scrapingJob = completionJob.data
+      // As created in createTwitterUserObjectScrapingJobData()
+      const orgData = scrapingJob.request.data
+      if (!scrapingJob.failed) {
+        await handler(orgData.orgId, orgData.orgName)
+      }
+      // It's strange that pgBoss requires this call, see https://github.com/timgit/pg-boss/issues/151
+      await pgBossQueue.complete(completionJob.id)
+    } catch (err) {
+      console.error(
+        "Error in Twitter user object scraping job completion handler",
+        err
+      )
+      // It's unknown if such explicit completionJob failing is required, but since complete() is required (see above),
+      // explicit fail() might be required, too.
+      await pgBossQueue.fail(completionJob.id, err)
+    }
+  })
+}
+
+/**
+ * @param {PgBoss} pgBossQueue
  * @returns {Promise<void>}
  */
 async function addFirstTimeTwitterUserObjectScrapingJobs(pgBossQueue) {
@@ -159,6 +187,7 @@ async function twitterUserObjectScrapingLoop(pgBossQueue) {
 module.exports = {
   TWITTER_USER_OBJECT,
   addFirstTimeTwitterUserObjectScrapingJobs,
+  onSuccessfulTwitterUserObjectScraping,
   twitterUserObjectScrapingLoop,
   DELAY_BETWEEN_TWITTER_USERS_LOOKUP_API_CALLS_MS,
 }
