@@ -4,6 +4,10 @@
   "description": "An open source project mapping the sustainability landscape",
   "version": "0.1.0",
   "author": "Brendan Loudermilk <brendan@sinceresoftware.co>",
+  "engines": {
+    "node": "12.15.0",
+    "yarn": "1.x"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
     "@fortawesome/free-brands-svg-icons": "^5.12.0",
@@ -53,6 +57,10 @@
     "gatsby"
   ],
   "license": "MIT",
+  "scriptComments": [
+    "heroku-prebuild acts as backend's build, ",
+    "empty heroku-postbuild script prevents the main 'build' script from running when pushing changes to Heroku"
+  ],
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
@@ -61,8 +69,11 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "heroku-prebuild": "cd backend && yarn install",
+    "heroku-postbuild": ""
   },
+  "cacheDirectories": ["node_modules", "backend/node_modules"],
   "repository": {
     "type": "git",
     "url": "https://github.com/bloudermilk/sustainability-landscape"

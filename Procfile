@@ -1,0 +1,1 @@
+worker: cd backend && node src/worker.js
