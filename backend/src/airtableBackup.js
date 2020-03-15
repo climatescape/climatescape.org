@@ -1,5 +1,5 @@
 const { airtableBase, fetchAllRecords } = require("./airtable")
-const { setupAirtableBackup } = require("./db/setupAirtableBackup")
+const { setupTables } = require("./db/setupTables")
 const { executeCount, executeBulkInsertOrUpdate } = require("./db/pg")
 
 /**
@@ -40,7 +40,7 @@ async function bulkUpsertOrganizations(allOrgRecords) {
  * @returns {Promise<void>}
  */
 async function backupOrganizations(allOrgRecords) {
-  await setupAirtableBackup()
+  await setupTables()
   const numOrgsBefore = await executeCount("organizations")
   console.log(`Num organizations before backup: ${numOrgsBefore}`)
   console.log("Backing up organizations in Postgres...")

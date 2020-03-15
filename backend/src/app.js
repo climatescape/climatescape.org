@@ -1,12 +1,12 @@
 const fastify = require("fastify")({ logger: true })
 
 const { setupPgBossQueue, executeInsertIfNotExists } = require("./db/pg")
-const { setupAirtableBackup } = require("./db/setupAirtableBackup")
+const { setupTables } = require("./db/setupTables")
 const { TWITTER_USER_OBJECT } = require("./twitterUserObjectScraping")
 
 async function buildFastify() {
   const pgBossQueue = await setupPgBossQueue()
-  await setupAirtableBackup()
+  await setupTables()
 
   fastify.route({
     method: "POST",

@@ -1,5 +1,5 @@
 const { setupPgBossQueue } = require("./db/pg")
-const { setupScraping } = require("./db/setupScraping")
+const { setupTables } = require("./db/setupTables")
 const {
   onSuccessfulTwitterUserObjectScraping,
   twitterUserObjectScrapingLoop,
@@ -69,7 +69,7 @@ function setupAirtableEnrichment(pgBossQueue) {
 
 async function startWorker() {
   const pgBossQueue = await setupPgBossQueue()
-  await setupScraping()
+  await setupTables()
   await setupAirtableEnrichmentHooks(pgBossQueue)
   setupTwitterUserObjectScraping(pgBossQueue)
   setupAirtableEnrichment(pgBossQueue)
