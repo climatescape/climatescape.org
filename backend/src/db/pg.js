@@ -40,7 +40,13 @@ const pgConfig = {
   // 3. Add to db service in docker-compose.yml:
   //     command:
   //       -c ssl=on -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/var/lib/postgresql/server.key
-  ssl: isProduction,
+  ssl: isProduction
+    ? {
+        require: true,
+        // See https://github.com/brianc/node-postgres/issues/2009
+        rejectUnauthorized: false,
+      }
+    : false,
 }
 
 const pgPool = new Pool(pgConfig)
