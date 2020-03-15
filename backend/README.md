@@ -12,7 +12,9 @@ doc/decisions/4-use-pg-boss-queue.md) queue backed up with Postgres.
  1. Install Node 12.15.0 using [`nvm`](https://github.com/nvm-sh/nvm#install--update-script)
  2. [Install yarn 1.x](https://classic.yarnpkg.com/en/docs/install)
  3. run `yarn install`
- 4. Install and start [Docker Desktop](https://www.docker.com/products/docker-desktop)
+ 4. **Add `TWITTER_API_KEY` and `TWITTER_API_SECRET` to `../.env.development` config file.** Either use your own
+ app's key and secret, or ask @bloudermilk for the Climatescape's credentials.
+ 5. Install and start [Docker Desktop](https://www.docker.com/products/docker-desktop)
 
 If you have problems installing dependencies (running `yarn` command) on Mac OS, try the following:
  1. Follow instructions on [this page](https://github.com/nodejs/node-gyp/blob/master/macOS_Catalina.md)
@@ -29,3 +31,17 @@ For full formation testing, use `docker-compose up -d` and ping the web via
 curl -X POST https://127.0.0.1:3000/twitterUserObject --header 'Content-type: application/json' --data '{"orgId":"climatescape", "twitterScreenName":"climatescape"}'
 ```
 To enter Postgres container for debugging, use `docker exec -it backend_db_1 psql -U postgres`
+
+## Heroku setup
+
+For development, backend could be deployed in any Heroku app, not necessarily the one which belongs to Climatescape.
+
+*From the root project directory*, (i. e. the parent of the `backend/` directory), do:
+
+```
+$ heroku git:remote -a <name-of-your-heroku-app>
+$ heroku addons:create heroku-postgres # the only addon which is needed
+$ heroku plugins:install heroku-config
+$ heroku config:push -f .env.development
+$ git push heroku master
+```
