@@ -1,7 +1,6 @@
 const Url = require("url")
 const Pool = require("pg-pool")
 const Knex = require("knex")
-const pMemoize = require("p-memoize")
 
 // WITHIN_CONTAINER is set in docker-compose.yml
 // We are *not* running within a local container when we run jest tests, e. g. via `yarn test`
@@ -10,7 +9,6 @@ const host = isRunningWithinLocalContainer ? "db" : "localhost"
 // user, password, and the database name correspond to those set in docker-compose.yml
 const pgLocalConnectionString = `postgres://postgres:postgres@${host}:5432/postgres`
 
-const PgBoss = require("pg-boss")
 const { isProduction } = require("../utils")
 
 const pgConnectionString = isProduction
@@ -87,24 +85,6 @@ const pgPoolWrapper = {
     }
   },
 }
-
-const pgBossQueue = new PgBoss({ db: { executeSql: pgPoolWrapper.query } })
-
-pgBossQueue.on("error", err => console.error(err))
-
-/**
- * @returns {Promise<PgBoss>}
- */
-async function setupPgBossQueue() {
-  await pgBossQueue.start()
-  return pgBossQueue
-}
-
-// noinspection JSCheckFunctionSignatures: https://youtrack.jetbrains.com/issue/WEB-44307
-/**
- * @type {function(): Promise<PgBoss>}
- */
-const setupPgBossQueueMemoized = pMemoize(setupPgBossQueue)
 
 /**
  * Don't provide connection to make knex(...) builders "cold" and only start
@@ -226,7 +206,6 @@ async function executeCount(table) {
 
 module.exports = {
   pgConfig,
-  setupPgBossQueue: setupPgBossQueueMemoized,
   pgPool: pgPoolWrapper,
   knex,
   executeKnex,

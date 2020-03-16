@@ -1,6 +1,7 @@
 const fastify = require("fastify")({ logger: true })
 
-const { setupPgBossQueue, executeInsertIfNotExists } = require("./db/pg")
+const { executeInsertIfNotExists } = require("./db/pg")
+const { setupPgBossQueue } = require("./db/pgBoss")
 const { setupTables } = require("./db/setupTables")
 const { TWITTER_USER_OBJECT } = require("./twitterUserObjectScraping")
 
