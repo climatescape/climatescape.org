@@ -17,7 +17,19 @@ const ENRICH_AIRTABLE = "enrichAirtable"
  * @returns {Promise<void>}
  */
 async function addAirtableEnrichmentJob(pgBossQueue, orgId, orgName) {
-  await pgBossQueue.publish(ENRICH_AIRTABLE, { orgId, orgName })
+  await pgBossQueue.publishOnce(
+    ENRICH_AIRTABLE,
+    { orgId, orgName },
+    {
+      retryLimit: 3,
+      // 15 min, in seconds. addAirtableEnrichmentJob() gets executed in the worker process, and Airtable is not an
+      // urgent tasks, therefore we have a relatively lax retry delay. Not more than 15 min because dynos in Heroku are
+      // restarted at least once a day, so with longer period more jobs attempted close to the restart time won't have
+      // a change to retry all 3 times.
+      retryDelay: 15 * 60,
+    },
+    orgId
+  )
 }
 
 /**

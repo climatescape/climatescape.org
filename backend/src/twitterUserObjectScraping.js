@@ -52,9 +52,16 @@ function createTwitterUserObjectScrapingJobData(org) {
  * @param {{id: string, fields: Object}} org from Airtable
  */
 async function publishTwitterUserObjectScrapingJob(pgBossQueue, org) {
-  return await pgBossQueue.publish(
+  return await pgBossQueue.publishOnce(
     TWITTER_USER_OBJECT,
-    createTwitterUserObjectScrapingJobData(org)
+    createTwitterUserObjectScrapingJobData(org),
+    {
+      retryLimit: 3,
+      // 15 min, in seconds. 15 min is the size of the rate limiting window, as documented at
+      // https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-users-lookup
+      retryDelay: 15 * 60,
+    },
+    org.id
   )
 }
 
