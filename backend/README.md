@@ -43,5 +43,7 @@ $ heroku git:remote -a <name-of-your-heroku-app>
 $ heroku addons:create heroku-postgres # the only addon which is needed
 $ heroku plugins:install heroku-config
 $ heroku config:push -f .env.development
+$ heroku config:set NPM_CONFIG_AUDIT=false
+$ heroku config:set NPM_CONFIG_DRY_RUN=true
 $ git push heroku master
 ```

@@ -73,7 +73,7 @@
     "heroku-prebuild": "cd backend && yarn install",
     "heroku-postbuild": ""
   },
-  "cacheDirectories": ["node_modules", "backend/node_modules"],
+  "cacheDirectories": ["backend/node_modules"],
   "repository": {
     "type": "git",
     "url": "https://github.com/bloudermilk/sustainability-landscape"
