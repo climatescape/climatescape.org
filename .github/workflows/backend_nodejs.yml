@@ -22,4 +22,4 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn test
-        working_directory: backend
+        working-directory: backend
