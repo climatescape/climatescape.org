@@ -2,8 +2,8 @@ name: Climatescape website Node.js CI
 
 on:
   push:
-    paths:
-      - '!backend/**'
+    paths-ignore:
+    - 'backend/**'
 
 jobs:
   build:

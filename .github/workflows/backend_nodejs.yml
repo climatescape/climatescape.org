@@ -3,8 +3,9 @@ name: backend CI
 on:
   push:
     paths:
-      - 'backend/**'
-      - '!backend/doc/**'
+    - '.github/workflows/backend_nodejs.yml'
+    - 'backend/**'
+    - '!backend/doc/**'
 
 jobs:
   build:
