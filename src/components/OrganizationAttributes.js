@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import Tag from "./Tag"
 
-export const OrganizationSector = ({ text, ...props }) => (
+export const OrganizationCategory = ({ text, ...props }) => (
   <Tag {...props}>
     <FontAwesomeIcon icon={faBox} className="mr-1" />
     {text}
