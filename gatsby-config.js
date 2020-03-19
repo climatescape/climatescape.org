@@ -53,6 +53,7 @@ const config = {
           {
             baseId: `appNYMWxGF1jMaf5V`,
             tableName: "Categories",
+            mapping: { Cover: `fileNode` },
             tableView: "All Categories",
             tableLinks: [`Categories`, `Parent`],
           },
@@ -68,6 +69,17 @@ const config = {
     },
     `gatsby-plugin-sharp`,
     `gatsby-plugin-postcss`,
+    {
+      resolve: `gatsby-plugin-prefetch-google-fonts`,
+      options: {
+        fonts: [
+          {
+            family: `Roboto`,
+            variants: [`400`, `700`],
+          },
+        ],
+      },
+    },
   ],
 }
 
