@@ -80,50 +80,6 @@ const OrganizationTemplate = ({ data }) => {
           )}
 
           <ul>
-            {org.location && (
-              <li>
-                <span className="w-8 inline-block">
-                  <FontAwesomeIcon
-                    icon={faLocationArrow}
-                    className="mx-1 text-gray-700"
-                  />
-                </span>
-                {org.location}
-              </li>
-            )}
-            {org.headcount && (
-              <li>
-                <span className="w-8 inline-block">
-                  <FontAwesomeIcon
-                    icon={faUsers}
-                    className="mx-1 text-gray-700"
-                  />
-                </span>
-                {org.headcount} employees
-              </li>
-            )}
-            {org.orgType && (
-              <li>
-                <span className="w-8 inline-block">
-                  <FontAwesomeIcon
-                    icon={faBuilding}
-                    className="mx-1 text-gray-700"
-                  />
-                </span>
-                {org.orgType}
-              </li>
-            )}
-            {org.tags && org.tags.length && (
-              <li>
-                <span className="w-8 inline-block">
-                  <FontAwesomeIcon
-                    icon={faTag}
-                    className="mx-1 text-gray-700"
-                  />
-                </span>
-                {org.tags.join(", ")}
-              </li>
-            )}
             {org.capitalTypes && org.capitalTypes.length && (
               <li>
                 <span className="w-8 inline-block">
@@ -166,6 +122,50 @@ const OrganizationTemplate = ({ data }) => {
                   />
                 </span>
                 Strategic
+              </li>
+            )}
+            {org.location && (
+              <li>
+                <span className="w-8 inline-block">
+                  <FontAwesomeIcon
+                    icon={faLocationArrow}
+                    className="mx-1 text-gray-700"
+                  />
+                </span>
+                {org.location}
+              </li>
+            )}
+            {org.headcount && (
+              <li>
+                <span className="w-8 inline-block">
+                  <FontAwesomeIcon
+                    icon={faUsers}
+                    className="mx-1 text-gray-700"
+                  />
+                </span>
+                {org.headcount} employees
+              </li>
+            )}
+            {org.orgType && (
+              <li>
+                <span className="w-8 inline-block">
+                  <FontAwesomeIcon
+                    icon={faBuilding}
+                    className="mx-1 text-gray-700"
+                  />
+                </span>
+                {org.orgType}
+              </li>
+            )}
+            {org.tags && org.tags.length && (
+              <li>
+                <span className="w-8 inline-block">
+                  <FontAwesomeIcon
+                    icon={faTag}
+                    className="mx-1 text-gray-700"
+                  />
+                </span>
+                {org.tags.join(", ")}
               </li>
             )}
           </ul>

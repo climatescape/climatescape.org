@@ -54,6 +54,40 @@ const OrganizationCard = ({
         {description}
       </p>
       <div className="mt-1">
+        {capitalType &&
+          capitalType.map(type => (
+            <OrganizationCapitalType
+              key={type}
+              onClick={() => onApplyFilter.byCapitalType(type)}
+              active={type === currentFilter.byCapitalType}
+              text={type}
+            />
+          ))}
+        {capitalStrategic && (
+          <OrganizationCapitalStrategic
+            key="capitalstrategic"
+            onClick={() => onApplyFilter.byCapitalStrategic(capitalStrategic)}
+            active={capitalStrategic === currentFilter.byCapitalStrategic}
+          />
+        )}
+        {capitalStage &&
+          capitalStage.map(stage => (
+            <OrganizationCapitalStage
+              key={stage}
+              onClick={() => onApplyFilter.byCapitalStage(stage)}
+              active={stage === currentFilter.byCapitalStage}
+              text={stage}
+            />
+          ))}
+        {capitalCheckSize &&
+          capitalCheckSize.map(checkSize => (
+            <OrganizationCapitalCheckSize
+              key={checkSize}
+              onClick={() => onApplyFilter.byCapitalCheckSize(checkSize)}
+              active={checkSize === currentFilter.byCapitalCheckSize}
+              text={checkSize}
+            />
+          ))}
         {sector && showSector && (
           <OrganizationSector
             onClick={() => onApplyFilter.bySector(sector)}
@@ -94,40 +128,6 @@ const OrganizationCard = ({
             text={orgType}
           />
         )}
-        {capitalType &&
-          capitalType.map(type => (
-            <OrganizationCapitalType
-              key={type}
-              onClick={() => onApplyFilter.byCapitalType(type)}
-              active={type === currentFilter.byCapitalType}
-              text={type}
-            />
-          ))}
-        {capitalStrategic && (
-          <OrganizationCapitalStrategic
-            key="capitalstrategic"
-            onClick={() => onApplyFilter.byCapitalStrategic(capitalStrategic)}
-            active={capitalStrategic === currentFilter.byCapitalStrategic}
-          />
-        )}
-        {capitalStage &&
-          capitalStage.map(stage => (
-            <OrganizationCapitalStage
-              key={stage}
-              onClick={() => onApplyFilter.byCapitalStage(stage)}
-              active={stage === currentFilter.byCapitalStage}
-              text={stage}
-            />
-          ))}
-        {capitalCheckSize &&
-          capitalCheckSize.map(checkSize => (
-            <OrganizationCapitalCheckSize
-              key={checkSize}
-              onClick={() => onApplyFilter.byCapitalCheckSize(checkSize)}
-              active={checkSize === currentFilter.byCapitalCheckSize}
-              text={checkSize}
-            />
-          ))}
       </div>
     </div>
   </div>
