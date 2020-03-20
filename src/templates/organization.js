@@ -7,6 +7,10 @@ import {
   faBuilding,
   faLocationArrow,
   faTag,
+  faHandHoldingUsd,
+  faSearchDollar,
+  faHandshake,
+  faMoneyCheck,
 } from "@fortawesome/free-solid-svg-icons"
 
 import OrganizationSocial from "../components/OrganizationSocial"
@@ -14,11 +18,22 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import Section from "../components/Section"
 
+const Breadcrumb = ({ to, children }) => (
+  <Link
+    to={to}
+    className="inline-block text-lg pt-3 px-2 text-gray-700 hover:text-teal-900"
+  >
+    &laquo; {children}
+  </Link>
+)
+
 const OrganizationTemplate = ({ data }) => {
   const siteTitle = data.site.siteMetadata.title
   const orgData = data.airtable.data
 
   const sector = orgData.Sector && orgData.Sector[0]?.data
+  const capitalProfile = orgData.Capital_Profile && orgData.Capital_Profile[0]?.data
+  const isCapital = orgData.Role && orgData.Role.indexOf('Capital') >= 0
   const org = {
     logo: orgData.Logo?.localFiles?.[0]?.childImageSharp?.fixed,
     title: orgData.Name,
@@ -35,6 +50,10 @@ const OrganizationTemplate = ({ data }) => {
     linkedIn: orgData.LinkedIn,
     twitter: orgData.Twitter,
     tags: orgData.Tags,
+    capitalTypes: capitalProfile?.Type,
+    capitalStrategic: capitalProfile?.Strategic,
+    capitalStages: capitalProfile?.Stage,
+    capitalCheckSizes: capitalProfile?.Check_Size,
   }
 
   return (
@@ -42,14 +61,8 @@ const OrganizationTemplate = ({ data }) => {
       <SEO title={`${org.title} on ${siteTitle}`} description={org.tagline} />
 
       <div className="max-w-4xl mx-auto pb-4">
-        {org.sector && (
-          <Link
-            to={`/sectors/${org.sector.slug}`}
-            className="inline-block text-lg pt-3 px-2 text-gray-700 hover:text-teal-900"
-          >
-            &laquo; {org.sector.name}
-          </Link>
-        )}
+        {isCapital && <Breadcrumb to="/capital">Capital</Breadcrumb>}
+        {!isCapital && org.sector && <Breadcrumb to={`/sectors/${org.sector.slug}`}>{org.sector.name}</Breadcrumb>}
 
         <Section>
           <div className="flex items-center text-gray-900">
@@ -111,6 +124,50 @@ const OrganizationTemplate = ({ data }) => {
                 {org.tags.join(", ")}
               </li>
             )}
+            {org.capitalTypes && org.capitalTypes.length && (
+              <li>
+                <span className="w-8 inline-block">
+                  <FontAwesomeIcon
+                    icon={faHandHoldingUsd}
+                    className="mx-1 text-gray-700"
+                  />
+                </span>
+                {org.capitalTypes.join(", ")}
+              </li>
+            )}
+            {org.capitalStages && org.capitalStages.length && (
+              <li>
+                <span className="w-8 inline-block">
+                  <FontAwesomeIcon
+                    icon={faSearchDollar}
+                    className="mx-1 text-gray-700"
+                  />
+                </span>
+                {org.capitalStages.join(", ")}
+              </li>
+            )}
+            {org.capitalCheckSizes && org.capitalCheckSizes.length && (
+              <li>
+                <span className="w-8 inline-block">
+                  <FontAwesomeIcon
+                    icon={faMoneyCheck}
+                    className="mx-1 text-gray-700"
+                  />
+                </span>
+                {org.capitalCheckSizes.join(", ")}
+              </li>
+            )}
+            {org.capitalStrategic && (
+              <li>
+                <span className="w-8 inline-block">
+                  <FontAwesomeIcon
+                    icon={faHandshake}
+                    className="mx-1 text-gray-700"
+                  />
+                </span>
+                Strategic
+              </li>
+            )}
           </ul>
         </Section>
 
@@ -160,7 +217,17 @@ export const query = graphql`
         Homepage
         LinkedIn
         Twitter
+        Role
         Tags
+        Capital_Profile {
+          data {
+            Type
+            Impact_Specific
+            Strategic
+            Stage
+            Check_Size
+          }
+        }
       }
     }
   }
