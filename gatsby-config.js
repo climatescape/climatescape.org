@@ -23,6 +23,7 @@ const config = {
       resolve: `gatsby-source-airtable`,
       options: {
         apiKey: process.env.AIRTABLE_API_KEY,
+        concurrency: 0,
         tables: [
           {
             baseId: `appNYMWxGF1jMaf5V`,
