@@ -1,5 +1,7 @@
 import React from "react"
 import { graphql } from "gatsby"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
 import { stringCompare } from "../utils/string"
 import { makeSlug } from "../utils/slug"
@@ -9,7 +11,6 @@ import OrganizationCard from "../components/OrganizationCard"
 import OrganizationFilter, {
   useOrganizationFilterState,
 } from "../components/OrganizationFilter"
-import AddOrganizationCTA from "../components/AddOrganizationCTA"
 import SEO from "../components/seo"
 
 function getLogo(Logo, LinkedinProfile) {
@@ -19,7 +20,6 @@ function getLogo(Logo, LinkedinProfile) {
 }
 
 const CapitalTemplate = ({ data, pageContext }) => {
-  const sectors = data.sectors.nodes.map(sector => sector.data)
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
 
   // Avoid breaking if the sector has no orgs + map out nested data object
@@ -53,8 +53,6 @@ const CapitalTemplate = ({ data, pageContext }) => {
       })
     )
 
-    console.log(organizations)
-
   // Sort by name (ascending)
   organizations = applyFilter(organizations).sort((a, b) =>
     stringCompare(a.title, b.title)
@@ -69,7 +67,14 @@ const CapitalTemplate = ({ data, pageContext }) => {
           <h2 className="text-3xl tracking-wide font-light flex-grow">
             Climate Capital
           </h2>
-          <AddOrganizationCTA variant="simple" />
+          <a
+            href={data.site.siteMetadata.capitalFormUrl}
+            className="px-4 py-2 leading-none border rounded text-teal-500 border-teal-500 hover:border-transparent hover:text-white hover:bg-teal-500"
+            target="_blank"
+            rel="noopener noreferrer">
+            <FontAwesomeIcon icon={faEdit} className="mr-2" />
+            Edit
+          </a>
         </div>
 
         <OrganizationFilter
@@ -97,9 +102,6 @@ const CapitalTemplate = ({ data, pageContext }) => {
               onApplyFilter={setFilter}
             />
           ))}
-        </div>
-        <div className="bg-white mt-8 p-3 text-center border-b border-gray-400">
-          <AddOrganizationCTA />
         </div>
       </div>
     </Layout>
@@ -172,12 +174,9 @@ export const query = graphql`
         }
       }
     }
-    sectors: allAirtable(filter: { table: { eq: "Sectors" } }) {
-      nodes {
-        data {
-          name: Name
-          slug: Slug
-        }
+    site {
+      siteMetadata {
+        capitalFormUrl
       }
     }
   }

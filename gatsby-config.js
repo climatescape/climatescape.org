@@ -10,7 +10,7 @@ const config = {
     description: `Discover the organizations solving climate change`,
     author: `@climatescape`,
     newsletterUrl: `https://climatescape.substack.com/subscribe`,
-    newCapitalFormUrl: `https://airtable.com/shr5lfPArSN9WVnWi`,
+    capitalFormUrl: `https://airtable.com/shr5lfPArSN9WVnWi`,
   },
   plugins: [
     {
