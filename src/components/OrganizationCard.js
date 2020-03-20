@@ -9,6 +9,10 @@ import {
   OrganizationLocation,
   OrganizationHeadcount,
   OrganizationOrgType,
+  OrganizationCapitalType,
+  OrganizationCapitalStrategic,
+  OrganizationCapitalStage,
+  OrganizationCapitalCheckSize,
 } from "./OrganizationAttributes"
 
 import "./OrganizationCard.css"
@@ -24,6 +28,10 @@ const OrganizationCard = ({
   showSector,
   headcount,
   orgType,
+  capitalType,
+  capitalStrategic,
+  capitalStage,
+  capitalCheckSize,
   currentFilter,
   onApplyFilter,
 }) => (
@@ -68,7 +76,6 @@ const OrganizationCard = ({
         {location && (
           <OrganizationLocation
             onClick={() => onApplyFilter.byLocation(location)}
-            key="location"
             active={location === currentFilter.byLocation}
             text={location}
           />
@@ -76,7 +83,6 @@ const OrganizationCard = ({
         {headcount && (
           <OrganizationHeadcount
             onClick={() => onApplyFilter.byHeadcount(headcount)}
-            key="headcount"
             active={headcount === currentFilter.byHeadcount}
             text={headcount}
           />
@@ -84,11 +90,44 @@ const OrganizationCard = ({
         {orgType && (
           <OrganizationOrgType
             onClick={() => onApplyFilter.byOrgType(orgType)}
-            key="orgtype"
             active={orgType === currentFilter.byOrgType}
             text={orgType}
           />
         )}
+        {capitalType &&
+          capitalType.map(type => (
+            <OrganizationCapitalType
+              key={type}
+              onClick={() => onApplyFilter.byCapitalType(type)}
+              active={type === currentFilter.byCapitalType}
+              text={type}
+            />
+          ))}
+        {capitalStrategic && (
+          <OrganizationCapitalStrategic
+            key="capitalstrategic"
+            onClick={() => onApplyFilter.byCapitalStrategic(capitalStrategic)}
+            active={capitalStrategic === currentFilter.byCapitalStrategic}
+          />
+        )}
+        {capitalStage &&
+          capitalStage.map(stage => (
+            <OrganizationCapitalStage
+              key={stage}
+              onClick={() => onApplyFilter.byCapitalStage(stage)}
+              active={stage === currentFilter.byCapitalStage}
+              text={stage}
+            />
+          ))}
+        {capitalCheckSize &&
+          capitalCheckSize.map(checkSize => (
+            <OrganizationCapitalCheckSize
+              key={checkSize}
+              onClick={() => onApplyFilter.byCapitalCheckSize(checkSize)}
+              active={checkSize === currentFilter.byCapitalCheckSize}
+              text={checkSize}
+            />
+          ))}
       </div>
     </div>
   </div>
@@ -112,6 +151,10 @@ OrganizationCard.propTypes = {
   }),
   headcount: PropTypes.string,
   orgType: PropTypes.string,
+  capitalType: PropTypes.arrayOf(PropTypes.string),
+  capitalStrategic: PropTypes.bool,
+  capitalStage: PropTypes.arrayOf(PropTypes.string),
+  capitalCheckSize: PropTypes.arrayOf(PropTypes.string),
   currentFilter: PropTypes.object,
   onApplyFilter: PropTypes.object,
 }
