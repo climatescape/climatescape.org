@@ -62,7 +62,7 @@ const CapitalTemplate = ({ data, pageContext }) => {
 
   return (
     <Layout contentClassName="bg-gray-200">
-      <SEO title={`Climatescape Capital for Climate - find VCs, grants, project finance, and more`} />
+      <SEO title="Climate Capital on Climatescape" description="Find climate-friendly VCs, grants, project finance, and more on Climatescape" />
 
       <div className="max-w-4xl mx-auto pb-4">
         <div className="flex items-center p-3 md:mt-4">
