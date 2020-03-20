@@ -19,7 +19,7 @@ function getLogo(Logo, LinkedinProfile) {
   return logo
 }
 
-const CapitalTemplate = ({ data, pageContext }) => {
+const CapitalTemplate = ({ data }) => {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
 
   // Avoid breaking if the sector has no orgs + map out nested data object
@@ -49,7 +49,7 @@ const CapitalTemplate = ({ data, pageContext }) => {
         capitalType: CapitalProfile && CapitalProfile[0]?.data.Type,
         capitalStrategic: CapitalProfile && CapitalProfile[0]?.data.Strategic,
         capitalStage: CapitalProfile && CapitalProfile[0]?.data.Stage,
-        capitalCheckSize: CapitalProfile && CapitalProfile[0]?.data.Check_Size,
+        capitalCheckSize: CapitalProfile && CapitalProfile[0]?.data.CheckSize,
       })
     )
 
@@ -60,7 +60,10 @@ const CapitalTemplate = ({ data, pageContext }) => {
 
   return (
     <Layout contentClassName="bg-gray-200">
-      <SEO title="Climate Capital on Climatescape" description="Find climate-friendly VCs, grants, project finance, and more on Climatescape" />
+      <SEO
+        title="Climate Capital on Climatescape"
+        description="Find climate-friendly VCs, grants, project finance, and more on Climatescape"
+      />
 
       <div className="max-w-4xl mx-auto pb-4">
         <div className="flex items-center p-3 md:mt-4">
@@ -71,7 +74,8 @@ const CapitalTemplate = ({ data, pageContext }) => {
             href={data.site.siteMetadata.capitalFormUrl}
             className="px-4 py-2 leading-none border rounded text-teal-500 border-teal-500 hover:border-transparent hover:text-white hover:bg-teal-500"
             target="_blank"
-            rel="noopener noreferrer">
+            rel="noopener noreferrer"
+          >
             <FontAwesomeIcon icon={faEdit} className="mr-2" />
             Edit
           </a>
@@ -113,9 +117,7 @@ export const query = graphql`
     organizations: allAirtable(
       filter: {
         table: { eq: "Organizations" }
-        data: {
-          Role: { eq: "Capital" }
-        }
+        data: { Role: { eq: "Capital" } }
       }
     ) {
       nodes {
@@ -150,7 +152,7 @@ export const query = graphql`
               Type
               Strategic
               Stage
-              Check_Size
+              CheckSize: Check_Size
             }
           }
           LinkedIn_Profiles {

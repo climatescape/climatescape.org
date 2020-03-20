@@ -32,8 +32,9 @@ const OrganizationTemplate = ({ data }) => {
   const orgData = data.airtable.data
 
   const sector = orgData.Sector && orgData.Sector[0]?.data
-  const capitalProfile = orgData.Capital_Profile && orgData.Capital_Profile[0]?.data
-  const isCapital = orgData.Role && orgData.Role.indexOf('Capital') >= 0
+  const capitalProfile =
+    orgData.Capital_Profile && orgData.Capital_Profile[0]?.data
+  const isCapital = orgData.Role && orgData.Role.indexOf("Capital") >= 0
   const org = {
     logo: orgData.Logo?.localFiles?.[0]?.childImageSharp?.fixed,
     title: orgData.Name,
@@ -53,7 +54,7 @@ const OrganizationTemplate = ({ data }) => {
     capitalTypes: capitalProfile?.Type,
     capitalStrategic: capitalProfile?.Strategic,
     capitalStages: capitalProfile?.Stage,
-    capitalCheckSizes: capitalProfile?.Check_Size,
+    capitalCheckSizes: capitalProfile?.CheckSize,
   }
 
   return (
@@ -62,7 +63,11 @@ const OrganizationTemplate = ({ data }) => {
 
       <div className="max-w-4xl mx-auto pb-4">
         {isCapital && <Breadcrumb to="/capital">Capital</Breadcrumb>}
-        {!isCapital && org.sector && <Breadcrumb to={`/sectors/${org.sector.slug}`}>{org.sector.name}</Breadcrumb>}
+        {!isCapital && org.sector && (
+          <Breadcrumb to={`/sectors/${org.sector.slug}`}>
+            {org.sector.name}
+          </Breadcrumb>
+        )}
 
         <Section>
           <div className="flex items-center text-gray-900">
@@ -225,7 +230,7 @@ export const query = graphql`
             Impact_Specific
             Strategic
             Stage
-            Check_Size
+            CheckSize: Check_Size
           }
         }
       }

@@ -71,7 +71,9 @@ export const useOrganizationFilterState = () => {
       )
 
     if (byCapitalStrategic)
-      organizations = organizations.filter(org => org.capitalStrategic === byCapitalStrategic)
+      organizations = organizations.filter(
+        org => org.capitalStrategic === byCapitalStrategic
+      )
 
     if (byCapitalStage)
       organizations = organizations.filter(
@@ -80,23 +82,53 @@ export const useOrganizationFilterState = () => {
 
     if (byCapitalCheckSize)
       organizations = organizations.filter(
-        org => org.capitalCheckSize && org.capitalCheckSize.indexOf(byCapitalCheckSize) >= 0
+        org =>
+          org.capitalCheckSize &&
+          org.capitalCheckSize.indexOf(byCapitalCheckSize) >= 0
       )
 
     return organizations
   }
 
   return [
-    { bySector, byTag, byLocation, byHeadcount, byOrgType, byCapitalType, byCapitalStrategic, byCapitalStage, byCapitalCheckSize },
+    {
+      bySector,
+      byTag,
+      byLocation,
+      byHeadcount,
+      byOrgType,
+      byCapitalType,
+      byCapitalStrategic,
+      byCapitalStage,
+      byCapitalCheckSize,
+    },
     setFilter,
     applyFilter,
   ]
 }
 
 const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
-  const { bySector, byTag, byLocation, byHeadcount, byOrgType, byCapitalType, byCapitalStrategic, byCapitalStage, byCapitalCheckSize } = currentFilter
+  const {
+    bySector,
+    byTag,
+    byLocation,
+    byHeadcount,
+    byOrgType,
+    byCapitalType,
+    byCapitalStrategic,
+    byCapitalStage,
+    byCapitalCheckSize,
+  } = currentFilter
   const hasFilterApplied =
-    bySector || byTag || byLocation || byHeadcount || byOrgType || byCapitalType || byCapitalStrategic || byCapitalStage || byCapitalCheckSize
+    bySector ||
+    byTag ||
+    byLocation ||
+    byHeadcount ||
+    byOrgType ||
+    byCapitalType ||
+    byCapitalStrategic ||
+    byCapitalStage ||
+    byCapitalCheckSize
   return (
     <>
       {hasFilterApplied && (
@@ -107,10 +139,16 @@ const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
           {byLocation && <OrganizationLocation active text={byLocation} />}
           {byHeadcount && <OrganizationHeadcount active text={byHeadcount} />}
           {byOrgType && <OrganizationOrgType active text={byOrgType} />}
-          {byCapitalType && <OrganizationCapitalType active text={byCapitalType} />}
+          {byCapitalType && (
+            <OrganizationCapitalType active text={byCapitalType} />
+          )}
           {byCapitalStrategic && <OrganizationCapitalStrategic active />}
-          {byCapitalStage && <OrganizationCapitalStage active text={byCapitalStage} />}
-          {byCapitalCheckSize && <OrganizationCapitalCheckSize active text={byCapitalCheckSize} />}
+          {byCapitalStage && (
+            <OrganizationCapitalStage active text={byCapitalStage} />
+          )}
+          {byCapitalCheckSize && (
+            <OrganizationCapitalCheckSize active text={byCapitalCheckSize} />
+          )}
           <button
             onClick={() => onClearFilter()}
             className="underline hover:no-underline ml-1"
