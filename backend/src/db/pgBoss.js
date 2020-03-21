@@ -18,6 +18,8 @@ const pgBossQueue = new PgBoss({
       }
     },
   },
+  deleteIntervalHours: 1, // Delete archived jobs after 1 hour
+  maintenanceIntervalMinutes: 1,
 })
 
 pgBossQueue.on("error", err => console.error(err))
