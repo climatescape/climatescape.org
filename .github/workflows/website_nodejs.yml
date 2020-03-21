@@ -3,6 +3,7 @@ name: Climatescape website Node.js CI
 on:
   push:
     paths-ignore:
+    - '.github/workflows/backend_nodejs.yml'
     - '.idea/**'
     - 'backend/**'
 

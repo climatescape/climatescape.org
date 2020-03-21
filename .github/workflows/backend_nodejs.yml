@@ -28,5 +28,5 @@ jobs:
           TWITTER_API_KEY=${{ secrets.TWITTER_API_KEY }}
           TWITTER_API_SECRET=${{ secrets.TWITTER_API_SECRET }}
           END
-      - run: yarn test
+      - run: yarn install && yarn test
         working-directory: backend
