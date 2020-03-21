@@ -10,7 +10,6 @@ import {
 import algoliasearch from "algoliasearch/lite"
 import { Link } from "gatsby"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBuilding } from "@fortawesome/free-solid-svg-icons"
 import { faAlgolia } from "@fortawesome/free-brands-svg-icons"
 import Input from "./input"
 import { Root, HitsWrapper } from "./styles"
@@ -19,15 +18,6 @@ import "./styles.css"
 
 const PageHit = () => ({ hit }) => (
   <div className="text-gray-700 hit">
-    {hit.logo ? (
-      <img alt="Search" src={hit.logo} />
-    ) : (
-      <FontAwesomeIcon
-        icon={faBuilding}
-        className="mr-2"
-        style={{ color: "#6d7571" }}
-      />
-    )}
     <Link to={`/organizations/${hit.path}`}>
       <h4>
         <Highlight attribute="name" hit={hit} tagName="mark" />

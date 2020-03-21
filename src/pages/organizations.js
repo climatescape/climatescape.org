@@ -12,6 +12,12 @@ import OrganizationFilter, {
 import AddOrganizationCTA from "../components/AddOrganizationCTA"
 import SEO from "../components/seo"
 
+function getLogo(Logo, LinkedinProfile) {
+  const rawLogo = Logo || LinkedinProfile?.[0]?.data
+  const logo = rawLogo?.localFiles?.[0]?.childImageSharp?.fixed
+  return logo
+}
+
 const OrganizationsTemplate = ({ data, pageContext }) => {
   const sectors = data.sectors.nodes.map(sector => sector.data)
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
@@ -28,6 +34,7 @@ const OrganizationsTemplate = ({ data, pageContext }) => {
         HQ_Location: HQLocation,
         Tagline,
         Logo,
+        LinkedIn_Profiles: LinkedinProfile,
         Headcount,
         Organization_Type: OrganizationType,
         Sector,
@@ -40,7 +47,7 @@ const OrganizationsTemplate = ({ data, pageContext }) => {
         orgType: OrganizationType,
         slug: makeSlug(Name),
         homepage: Homepage,
-        logo: Logo?.localFiles?.[0]?.childImageSharp?.fixed,
+        logo: getLogo(Logo, LinkedinProfile),
         sector: sectors.find(sector => sector.slug === Sector?.[0]?.data?.Slug),
       })
     )
@@ -128,6 +135,24 @@ export const query = graphql`
                   background: "white"
                 ) {
                   ...GatsbyImageSharpFixed
+                }
+              }
+            }
+          }
+          LinkedIn_Profiles {
+            data {
+              Logo {
+                localFiles {
+                  childImageSharp {
+                    fixed(
+                      width: 64
+                      height: 64
+                      fit: CONTAIN
+                      background: "white"
+                    ) {
+                      ...GatsbyImageSharpFixed
+                    }
+                  }
                 }
               }
             }
