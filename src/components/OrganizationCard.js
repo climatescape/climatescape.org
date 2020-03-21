@@ -28,10 +28,7 @@ const OrganizationCard = ({
   showSector,
   headcount,
   orgType,
-  capitalType,
-  capitalStrategic,
-  capitalStage,
-  capitalCheckSize,
+  capitalProfile,
   currentFilter,
   onApplyFilter,
 }) => (
@@ -54,40 +51,42 @@ const OrganizationCard = ({
         {description}
       </p>
       <div className="mt-1">
-        {capitalType &&
-          capitalType.map(type => (
-            <OrganizationCapitalType
-              key={type}
-              onClick={() => onApplyFilter.byCapitalType(type)}
-              active={type === currentFilter.byCapitalType}
-              text={type}
-            />
-          ))}
-        {capitalStrategic && (
+        {capitalProfile?.type.map(type => (
+          <OrganizationCapitalType
+            key={type}
+            onClick={() => onApplyFilter.byCapitalType(type)}
+            active={type === currentFilter.byCapitalType}
+            text={type}
+          />
+        ))}
+        {capitalProfile?.strategic && (
           <OrganizationCapitalStrategic
             key="capitalstrategic"
-            onClick={() => onApplyFilter.byCapitalStrategic(capitalStrategic)}
-            active={capitalStrategic === currentFilter.byCapitalStrategic}
+            onClick={
+              () => onApplyFilter.byCapitalStrategic(capitalProfile.strategic)
+              // eslint-disable-next-line react/jsx-curly-newline
+            }
+            active={
+              capitalProfile.strategic === currentFilter.byCapitalStrategic
+            }
           />
         )}
-        {capitalStage &&
-          capitalStage.map(stage => (
-            <OrganizationCapitalStage
-              key={stage}
-              onClick={() => onApplyFilter.byCapitalStage(stage)}
-              active={stage === currentFilter.byCapitalStage}
-              text={stage}
-            />
-          ))}
-        {capitalCheckSize &&
-          capitalCheckSize.map(checkSize => (
-            <OrganizationCapitalCheckSize
-              key={checkSize}
-              onClick={() => onApplyFilter.byCapitalCheckSize(checkSize)}
-              active={checkSize === currentFilter.byCapitalCheckSize}
-              text={checkSize}
-            />
-          ))}
+        {capitalProfile?.stage?.map(stage => (
+          <OrganizationCapitalStage
+            key={stage}
+            onClick={() => onApplyFilter.byCapitalStage(stage)}
+            active={stage === currentFilter.byCapitalStage}
+            text={stage}
+          />
+        ))}
+        {capitalProfile?.checkSize?.map(checkSize => (
+          <OrganizationCapitalCheckSize
+            key={checkSize}
+            onClick={() => onApplyFilter.byCapitalCheckSize(checkSize)}
+            active={checkSize === currentFilter.byCapitalCheckSize}
+            text={checkSize}
+          />
+        ))}
         {sector && showSector && (
           <OrganizationSector
             onClick={() => onApplyFilter.bySector(sector)}
@@ -98,15 +97,14 @@ const OrganizationCard = ({
             text={sector.name}
           />
         )}
-        {tags &&
-          tags.map(tag => (
-            <OrganizationTag
-              onClick={() => onApplyFilter.byTag(tag)}
-              key={tag}
-              active={tag === currentFilter.byTag}
-              text={tag}
-            />
-          ))}
+        {tags?.map(tag => (
+          <OrganizationTag
+            onClick={() => onApplyFilter.byTag(tag)}
+            key={tag}
+            active={tag === currentFilter.byTag}
+            text={tag}
+          />
+        ))}
         {location && (
           <OrganizationLocation
             onClick={() => onApplyFilter.byLocation(location)}
@@ -151,10 +149,7 @@ OrganizationCard.propTypes = {
   }),
   headcount: PropTypes.string,
   orgType: PropTypes.string,
-  capitalType: PropTypes.arrayOf(PropTypes.string),
-  capitalStrategic: PropTypes.bool,
-  capitalStage: PropTypes.arrayOf(PropTypes.string),
-  capitalCheckSize: PropTypes.arrayOf(PropTypes.string),
+  capitalProfile: PropTypes.object,
   currentFilter: PropTypes.object,
   onApplyFilter: PropTypes.object,
 }

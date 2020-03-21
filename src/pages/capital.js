@@ -3,8 +3,7 @@ import { graphql } from "gatsby"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
-import { stringCompare } from "../utils/string"
-import { makeSlug } from "../utils/slug"
+import { transformOrganizations } from "../utils/airtable"
 
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
@@ -13,50 +12,15 @@ import OrganizationFilter, {
 } from "../components/OrganizationFilter"
 import SEO from "../components/seo"
 
-function getLogo(Logo, LinkedinProfile) {
-  const rawLogo = Logo || LinkedinProfile?.[0]?.data
-  const logo = rawLogo?.localFiles?.[0]?.childImageSharp?.fixed
-  return logo
-}
-
 const CapitalTemplate = ({ data }) => {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
 
-  // Avoid breaking if the sector has no orgs + map out nested data object
-  let organizations = (data.organizations.nodes || [])
-    .map(o => o.data)
-    .map(
-      ({
-        Name,
-        About,
-        Homepage,
-        HQ_Location: HQLocation,
-        Tagline,
-        Logo,
-        LinkedIn_Profiles: LinkedinProfile,
-        Organization_Type: OrganizationType,
-        Categories,
-        Capital_Profile: CapitalProfile,
-      }) => ({
-        title: Name,
-        description: Tagline || About,
-        location: HQLocation,
-        orgType: OrganizationType,
-        slug: makeSlug(Name),
-        homepage: Homepage,
-        logo: getLogo(Logo, LinkedinProfile),
-        tags: Categories && Categories.map(c => c.data.Name),
-        capitalType: CapitalProfile && CapitalProfile[0]?.data.Type,
-        capitalStrategic: CapitalProfile && CapitalProfile[0]?.data.Strategic,
-        capitalStage: CapitalProfile && CapitalProfile[0]?.data.Stage,
-        capitalCheckSize: CapitalProfile && CapitalProfile[0]?.data.CheckSize,
-      })
-    )
+  let organizations = transformOrganizations(data).map(org => ({
+    ...org,
+    tags: org.categories,
+  }))
 
-  // Sort by name (ascending)
-  organizations = applyFilter(organizations).sort((a, b) =>
-    stringCompare(a.title, b.title)
-  )
+  organizations = applyFilter(organizations)
 
   return (
     <Layout contentClassName="bg-gray-200">
@@ -98,10 +62,7 @@ const CapitalTemplate = ({ data }) => {
               logo={org.logo}
               key={org.title}
               tags={org.tags}
-              capitalType={org.capitalType}
-              capitalStrategic={org.capitalStrategic}
-              capitalStage={org.capitalStage}
-              capitalCheckSize={org.capitalCheckSize}
+              capitalProfile={org.capitalProfile}
               currentFilter={filter}
               onApplyFilter={setFilter}
             />

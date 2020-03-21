@@ -1,9 +1,7 @@
 import React from "react"
 import { graphql } from "gatsby"
 
-import { stringCompare } from "../utils/string"
-import { makeSlug } from "../utils/slug"
-
+import { transformOrganizations } from "../utils/airtable"
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
 import OrganizationFilter, {
@@ -12,50 +10,11 @@ import OrganizationFilter, {
 import AddOrganizationCTA from "../components/AddOrganizationCTA"
 import SEO from "../components/seo"
 
-function getLogo(Logo, LinkedinProfile) {
-  const rawLogo = Logo || LinkedinProfile?.[0]?.data.Logo
-  const logo = rawLogo?.localFiles?.[0]?.childImageSharp?.fixed
-  return logo
-}
-
 const OrganizationsTemplate = ({ data, pageContext }) => {
-  const sectors = data.sectors.nodes.map(sector => sector.data)
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
 
-  // Avoid breaking if the sector has no orgs + map out nested data object
-  let organizations = (data.organizations.nodes || [])
-    .map(o => o.data)
-    .map(
-      ({
-        Name,
-        About,
-        Tags,
-        Homepage,
-        HQ_Location: HQLocation,
-        Tagline,
-        Logo,
-        LinkedIn_Profiles: LinkedinProfile,
-        Headcount,
-        Organization_Type: OrganizationType,
-        Sector,
-      }) => ({
-        title: Name,
-        description: Tagline || About,
-        tags: Tags,
-        location: HQLocation,
-        headcount: Headcount,
-        orgType: OrganizationType,
-        slug: makeSlug(Name),
-        homepage: Homepage,
-        logo: getLogo(Logo, LinkedinProfile),
-        sector: sectors.find(sector => sector.slug === Sector?.[0]?.data?.Slug),
-      })
-    )
-
-  // Sort by name (ascending)
-  organizations = applyFilter(organizations).sort((a, b) =>
-    stringCompare(a.title, b.title)
-  )
+  let organizations = transformOrganizations(data)
+  organizations = applyFilter(organizations)
 
   const organizationsTitle =
     filter.bySector || pageContext.sectorName
