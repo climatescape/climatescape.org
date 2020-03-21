@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - '.github/workflows/backend_nodejs.yml'
+    - '!.idea/**'
     - 'backend/**'
     - '!backend/doc/**'
 
