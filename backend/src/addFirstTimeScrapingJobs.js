@@ -7,6 +7,7 @@ const { fetchAndBackupAllAirtableOrganizations } = require("./airtableBackup")
 async function addFirstTimeScrapingJobs() {
   const pgBossQueue = await setupPgBossQueue()
   await addFirstTimeTwitterUserObjectScrapingJobs(pgBossQueue)
+  await pgBossQueue.stop()
 }
 
 if (require.main === module) {
