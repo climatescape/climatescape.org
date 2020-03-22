@@ -49,4 +49,14 @@ async function buildFastify() {
   return fastify
 }
 
-module.exports = buildFastify
+if (require.main === module) {
+  ;(async () => {
+    try {
+      await buildFastify()
+    } catch (e) {
+      console.error("Error starting fastify server", e)
+    }
+  })()
+}
+
+module.exports = { buildFastify }
