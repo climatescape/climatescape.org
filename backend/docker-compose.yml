@@ -7,7 +7,7 @@ services:
     volumes:
       - ./src:/opt/src
     working_dir: /opt/src
-    command: pm2-dev webApp.js
+    command: pm2-dev web.js
     ports:
       - '3000:3000'
     env_file:

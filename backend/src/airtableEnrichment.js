@@ -34,7 +34,7 @@ async function addAirtableEnrichmentJob(pgBossQueue, orgId, orgName) {
 
 /**
  * @param {{orgId: string, orgName: string}} org
- * @returns {Promise<{Rank: number, "Enrichment Data": Object}>}
+ * @returns {Promise<{Rank: number, 'Enrichment Data': Object}>}
  */
 async function prepareEnrichmentFields(org) {
   const query = knex("scraping_results")
@@ -73,7 +73,7 @@ const MAX_ORGS_PER_AIRTABLE_TABLE_UPDATE = 10
 
 /**
  * @param {Array<{id: string, data: {orgId: string, orgName: string},
- *                Rank: number, "Enrichment Data": Object}>} jobsWithEnrichmentData
+ *                Rank: number, 'Enrichment Data': Object}>} jobsWithEnrichmentData
  */
 async function updateAirtableOrgs(jobsWithEnrichmentData) {
   const airtableTable = isProduction
@@ -107,7 +107,7 @@ async function airtableEnrichmentLoop(pgBossQueue) {
     return
   }
   /**
-   * @type {Array<{id: string, data: {orgId: string, orgName: string}, Rank: number, "Enrichment Data": Object}>}
+   * @type {Array<{id: string, data: {orgId: string, orgName: string}, Rank: number, 'Enrichment Data': Object}>}
    */
   const jobsWithEnrichmentData = []
   await Promise.all(

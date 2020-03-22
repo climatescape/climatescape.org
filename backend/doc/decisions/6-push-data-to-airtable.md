@@ -7,7 +7,7 @@ https://www.gatsbyjs.org/packages/gatsby-source-pg/) plugin.
 
 We chose pushing data to Airtable from the backend to simplify the Gatsby setup, considering that some data pushing from
 backend to Airtable is needed anyway to enable sorting the organizations in the Airtable content management interface
-according to their weight ("Climatescape rank"), which is [one of the goals of the scraping automation project](
+according to their weight ("Rank"), which is [one of the goals of the scraping automation project](
 https://github.com/climatescape/climatescape.org/issues/40#issue-558680900).
 
 See [this message](https://github.com/climatescape/climatescape.org/pull/87#issuecomment-590864830).
