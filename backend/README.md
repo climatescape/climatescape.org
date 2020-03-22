@@ -40,10 +40,15 @@ For development, backend could be deployed in any Heroku app, not necessarily th
 
 ```
 $ heroku git:remote -a <name-of-your-heroku-app>
-$ heroku addons:create heroku-postgres # the only addon which is needed
+$ heroku addons:create heroku-postgres
+# heroku addons:create scheduler
 $ heroku plugins:install heroku-config
 $ heroku config:push -f .env.development
 $ heroku config:set NPM_CONFIG_AUDIT=false
 $ heroku config:set NPM_CONFIG_DRY_RUN=true
 $ git push heroku master
+$ heroku ps:scale worker=1
+$ heroku addons:open scheduler
 ```
+Then, in the opened web interface, add `cd backend && node src/addFirstTimeScrapingJobs.js` as a job to be run every
+10 minutes.
