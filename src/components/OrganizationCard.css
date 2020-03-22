@@ -1,7 +1,0 @@
-.OrganizationCard .OrganizationCard-logo img {
-  filter: grayscale(100%);
-}
-
-.OrganizationCard:hover .OrganizationCard-logo img {
-  filter: none;
-}
