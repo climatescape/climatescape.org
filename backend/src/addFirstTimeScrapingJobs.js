@@ -23,6 +23,8 @@ if (require.main === module) {
       console.error("Error adding first-time scraping jobs", err)
     }
   })()
+  // It's unknown why the process doesn't exit itself, maybe because of pgPool
+  process.exit(0)
 }
 
 module.exports = { addFirstTimeScrapingJobs }
