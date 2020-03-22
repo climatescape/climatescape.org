@@ -10,20 +10,8 @@ const {
   addAirtableEnrichmentJob,
   airtableEnrichmentLoop,
 } = require("./airtableEnrichment")
-const { isProduction } = require("./utils")
+const { isProduction, executeWithFixedDelayAsync } = require("./utils")
 
-/**
- * This is different from {@link setInterval} because the time to execute the function is not taken into account
- * @param {function: Promise<any>} fn
- * @param {number} delay
- */
-function executeWithFixedDelayAsync(fn, delay) {
-  setTimeout(function wrapper() {
-    fn()
-      .then(() => setTimeout(wrapper, delay))
-      .catch(err => console.error(err))
-  }, delay)
-}
 /**
  * @param {PgBoss} pgBossQueue
  */
