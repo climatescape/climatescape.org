@@ -34,23 +34,24 @@ function OrganizationsTemplate({ data, pageContext }) {
       : "All"
 
   return (
-    <Layout contentClassName="bg-gray-200">
+    <Layout contentClassName="bg-gray-100">
       <SEO title={`${organizationsTitle} organizations on Climatescape`} />
 
-      <div className="flex flex-col mx-auto container lg:flex-row">
+      <div className="flex flex-col mx-auto container lg:flex-row font-sans">
         <CategoryList categories={categories} pageContext={pageContext} />
-        <div className="lg:w-4/5">
-          <h2 className="text-3xl tracking-wide font-light p-3 md:mt-4">
-            {organizationsTitle} organizations{" "}
-            <AddOrganizationCTA variant="simple" />
-          </h2>
+        <div className="lg:w-3/5">
+          <div className=" border-b-2 mb-5 border-gray-700  p-3">
+            <h2 className="text-2xl tracking-wide  md:mt-4">
+              {organizationsTitle}
+            </h2>
 
-          <OrganizationFilter
-            currentFilter={filter}
-            onClearFilter={() => setFilter.none()}
-          />
+            <OrganizationFilter
+              currentFilter={filter}
+              onClearFilter={() => setFilter.none()}
+            />
+          </div>
 
-          <div className="bg-white border-gray-300">
+          <div className="">
             {organizations.map(org => (
               <OrganizationCard
                 organization={org}
@@ -61,7 +62,7 @@ function OrganizationsTemplate({ data, pageContext }) {
               />
             ))}
           </div>
-          <div className="bg-white mt-8 p-3 text-center border-b border-gray-400">
+          <div className="mb-3 mt-8 p-3 text-center ">
             <AddOrganizationCTA />
           </div>
         </div>
@@ -92,10 +93,28 @@ export const query = graphql`
             id
             data {
               Name
+              Cover {
+                localFiles {
+                  childImageSharp {
+                    fluid(maxWidth: 32) {
+                      ...GatsbyImageSharpFluid
+                    }
+                  }
+                }
+              }
               Parent {
                 id
                 data {
                   Name
+                  Cover {
+                    localFiles {
+                      childImageSharp {
+                        fluid(maxWidth: 32) {
+                          ...GatsbyImageSharpFluid
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -104,8 +123,22 @@ export const query = graphql`
             localFiles {
               childImageSharp {
                 fixed(
-                  width: 64
-                  height: 64
+                  width: 128
+                  height: 128
+                  fit: CONTAIN
+                  background: "white"
+                ) {
+                  ...GatsbyImageSharpFixed
+                }
+              }
+            }
+          }
+          Photos {
+            localFiles {
+              childImageSharp {
+                fixed(
+                  width: 128
+                  height: 128
                   fit: CONTAIN
                   background: "white"
                 ) {
@@ -120,8 +153,8 @@ export const query = graphql`
                 localFiles {
                   childImageSharp {
                     fixed(
-                      width: 64
-                      height: 64
+                      width: 128
+                      height: 128
                       fit: CONTAIN
                       background: "white"
                     ) {
@@ -161,10 +194,28 @@ export const query = graphql`
             id
             data {
               Name
+              Cover {
+                localFiles {
+                  childImageSharp {
+                    fluid(maxWidth: 32) {
+                      ...GatsbyImageSharpFluid
+                    }
+                  }
+                }
+              }
               Parent {
                 id
                 data {
                   Name
+                  Cover {
+                    localFiles {
+                      childImageSharp {
+                        fluid(maxWidth: 32) {
+                          ...GatsbyImageSharpFluid
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -173,8 +224,22 @@ export const query = graphql`
             localFiles {
               childImageSharp {
                 fixed(
-                  width: 64
-                  height: 64
+                  width: 128
+                  height: 128
+                  fit: CONTAIN
+                  background: "white"
+                ) {
+                  ...GatsbyImageSharpFixed
+                }
+              }
+            }
+          }
+          Photos {
+            localFiles {
+              childImageSharp {
+                fixed(
+                  width: 128
+                  height: 128
                   fit: CONTAIN
                   background: "white"
                 ) {
@@ -188,12 +253,7 @@ export const query = graphql`
               Logo {
                 localFiles {
                   childImageSharp {
-                    fixed(
-                      width: 64
-                      height: 64
-                      fit: CONTAIN
-                      background: "white"
-                    ) {
+                    fixed(width: 128, height: 128, fit: CONTAIN) {
                       ...GatsbyImageSharpFixed
                     }
                   }

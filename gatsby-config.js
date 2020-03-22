@@ -28,7 +28,11 @@ const config = {
             baseId: `appNYMWxGF1jMaf5V`,
             tableName: `Organizations`,
             tableView: `Published`,
-            mapping: { Published: `boolean`, Logo: `fileNode` },
+            mapping: {
+              Published: `boolean`,
+              Logo: `fileNode`,
+              Photos: `fileNode`,
+            },
             tableLinks: [`Sector`, `LinkedIn_Profiles`, `Categories`],
           },
           {

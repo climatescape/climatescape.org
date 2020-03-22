@@ -2,9 +2,8 @@ import { stringCompare } from "./string"
 import { makeSlug } from "./slug"
 
 function getLogo(Logo, LinkedinProfile) {
-  const rawLogo = Logo || LinkedinProfile?.[0]?.data.Logo
-  const logo = rawLogo?.localFiles?.[0]?.childImageSharp?.fixed
-  return logo
+  const logo = Logo || LinkedinProfile?.[0]?.data.Logo
+  return logo?.localFiles?.[0]?.childImageSharp?.fixed
 }
 
 function transformCategory(data) {
@@ -60,6 +59,7 @@ export function transformOrganization({
     Organization_Type: OrganizationType,
     Categories,
     Twitter,
+    Photos,
   },
 }) {
   return {
@@ -77,6 +77,7 @@ export function transformOrganization({
     linkedIn: LinkedIn,
     twitter: Twitter,
     logo: getLogo(Logo, LinkedinProfile),
+    photos: Photos?.localFiles?.map(img => img.childImageSharp.fixed) ?? [],
     categories: Categories?.map(transformCategory) ?? [],
   }
 }
