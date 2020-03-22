@@ -13,7 +13,7 @@ import AddOrganizationCTA from "../components/AddOrganizationCTA"
 import SEO from "../components/seo"
 
 function getLogo(Logo, LinkedinProfile) {
-  const rawLogo = Logo || LinkedinProfile?.[0]?.data
+  const rawLogo = Logo || LinkedinProfile?.[0]?.data.Logo
   const logo = rawLogo?.localFiles?.[0]?.childImageSharp?.fixed
   return logo
 }
