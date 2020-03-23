@@ -5,6 +5,10 @@ import {
   faUsers,
   faBuilding,
   faLocationArrow,
+  faHandHoldingUsd,
+  faSearchDollar,
+  faHandshake,
+  faMoneyCheck,
   faTag,
 } from "@fortawesome/free-solid-svg-icons"
 import Tag from "./Tag"
@@ -40,6 +44,34 @@ export const OrganizationHeadcount = ({ text, ...props }) => (
 export const OrganizationOrgType = ({ text, ...props }) => (
   <Tag {...props}>
     <FontAwesomeIcon icon={faBuilding} className="mr-1" />
+    {text}
+  </Tag>
+)
+
+export const OrganizationCapitalType = ({ text, ...props }) => (
+  <Tag {...props}>
+    <FontAwesomeIcon icon={faHandHoldingUsd} className="mr-1" />
+    {text}
+  </Tag>
+)
+
+export const OrganizationCapitalStrategic = ({ text, ...props }) => (
+  <Tag {...props}>
+    <FontAwesomeIcon icon={faHandshake} className="mr-1" />
+    Strategic
+  </Tag>
+)
+
+export const OrganizationCapitalStage = ({ text, ...props }) => (
+  <Tag {...props}>
+    <FontAwesomeIcon icon={faSearchDollar} className="mr-1" />
+    {text}
+  </Tag>
+)
+
+export const OrganizationCapitalCheckSize = ({ text, ...props }) => (
+  <Tag {...props}>
+    <FontAwesomeIcon icon={faMoneyCheck} className="mr-1" />
     {text}
   </Tag>
 )

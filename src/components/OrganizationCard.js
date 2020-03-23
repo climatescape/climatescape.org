@@ -9,6 +9,10 @@ import {
   OrganizationLocation,
   OrganizationHeadcount,
   OrganizationOrgType,
+  OrganizationCapitalType,
+  OrganizationCapitalStrategic,
+  OrganizationCapitalStage,
+  OrganizationCapitalCheckSize,
 } from "./OrganizationAttributes"
 
 const OrganizationCard = ({
@@ -22,6 +26,7 @@ const OrganizationCard = ({
   showSector,
   headcount,
   orgType,
+  capitalProfile,
   currentFilter,
   onApplyFilter,
 }) => (
@@ -44,6 +49,42 @@ const OrganizationCard = ({
         {description}
       </p>
       <div className="mt-1">
+        {capitalProfile?.type.map(type => (
+          <OrganizationCapitalType
+            key={type}
+            onClick={() => onApplyFilter.byCapitalType(type)}
+            active={type === currentFilter.byCapitalType}
+            text={type}
+          />
+        ))}
+        {capitalProfile?.strategic && (
+          <OrganizationCapitalStrategic
+            key="capitalstrategic"
+            onClick={
+              () => onApplyFilter.byCapitalStrategic(capitalProfile.strategic)
+              // eslint-disable-next-line react/jsx-curly-newline
+            }
+            active={
+              capitalProfile.strategic === currentFilter.byCapitalStrategic
+            }
+          />
+        )}
+        {capitalProfile?.stage?.map(stage => (
+          <OrganizationCapitalStage
+            key={stage}
+            onClick={() => onApplyFilter.byCapitalStage(stage)}
+            active={stage === currentFilter.byCapitalStage}
+            text={stage}
+          />
+        ))}
+        {capitalProfile?.checkSize?.map(checkSize => (
+          <OrganizationCapitalCheckSize
+            key={checkSize}
+            onClick={() => onApplyFilter.byCapitalCheckSize(checkSize)}
+            active={checkSize === currentFilter.byCapitalCheckSize}
+            text={checkSize}
+          />
+        ))}
         {sector && showSector && (
           <OrganizationSector
             onClick={() => onApplyFilter.bySector(sector)}
@@ -54,19 +95,17 @@ const OrganizationCard = ({
             text={sector.name}
           />
         )}
-        {tags &&
-          tags.map(tag => (
-            <OrganizationTag
-              onClick={() => onApplyFilter.byTag(tag)}
-              key={tag}
-              active={tag === currentFilter.byTag}
-              text={tag}
-            />
-          ))}
+        {tags?.map(tag => (
+          <OrganizationTag
+            onClick={() => onApplyFilter.byTag(tag)}
+            key={tag}
+            active={tag === currentFilter.byTag}
+            text={tag}
+          />
+        ))}
         {location && (
           <OrganizationLocation
             onClick={() => onApplyFilter.byLocation(location)}
-            key="location"
             active={location === currentFilter.byLocation}
             text={location}
           />
@@ -74,7 +113,6 @@ const OrganizationCard = ({
         {headcount && (
           <OrganizationHeadcount
             onClick={() => onApplyFilter.byHeadcount(headcount)}
-            key="headcount"
             active={headcount === currentFilter.byHeadcount}
             text={headcount}
           />
@@ -82,7 +120,6 @@ const OrganizationCard = ({
         {orgType && (
           <OrganizationOrgType
             onClick={() => onApplyFilter.byOrgType(orgType)}
-            key="orgtype"
             active={orgType === currentFilter.byOrgType}
             text={orgType}
           />
@@ -110,6 +147,7 @@ OrganizationCard.propTypes = {
   }),
   headcount: PropTypes.string,
   orgType: PropTypes.string,
+  capitalProfile: PropTypes.object,
   currentFilter: PropTypes.object,
   onApplyFilter: PropTypes.object,
 }

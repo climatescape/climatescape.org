@@ -10,6 +10,7 @@ const config = {
     description: `Discover the organizations solving climate change`,
     author: `@climatescape`,
     newsletterUrl: `https://climatescape.substack.com/subscribe`,
+    capitalFormUrl: `https://airtable.com/shr5lfPArSN9WVnWi`,
   },
   plugins: [
     {
@@ -29,7 +30,7 @@ const config = {
             tableName: `Organizations`,
             tableView: `Published`,
             mapping: { Published: `boolean`, Logo: `fileNode` },
-            tableLinks: [`Sector`, `LinkedIn_Profiles`, `Categories`],
+            tableLinks: [`Sector`, `LinkedIn_Profiles`, `Categories`, `Capital_Profile`],
           },
           {
             baseId: `appNYMWxGF1jMaf5V`,
@@ -54,7 +55,12 @@ const config = {
             baseId: `appNYMWxGF1jMaf5V`,
             tableName: "Categories",
             tableView: "All Categories",
-            tableLinks: [`Categories`, `Parent`],
+            tableLinks: [`Parent`],
+          },
+          {
+            baseId: `appNYMWxGF1jMaf5V`,
+            tableName: "Capital Profiles",
+            tableLinks: [`Organization`],
           },
         ],
       },

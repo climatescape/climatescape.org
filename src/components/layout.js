@@ -51,6 +51,15 @@ const Layout = ({ children, contentClassName }) => {
           >
             Twitter
           </a>
+          <span> • </span>
+          <a
+            href={data.site.siteMetadata.newsletterUrl}
+            className="underline hover:no-underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Newsletter
+          </a>
         </div>
         <div className="pt-3 sm:pt-0">
           <a href="https://www.netlify.com" className="inline-block">

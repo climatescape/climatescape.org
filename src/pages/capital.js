@@ -1,35 +1,49 @@
 import React from "react"
 import { graphql } from "gatsby"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
 import { transformOrganizations } from "../utils/airtable"
+
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
 import OrganizationFilter, {
   useOrganizationFilterState,
 } from "../components/OrganizationFilter"
-import AddOrganizationCTA from "../components/AddOrganizationCTA"
 import SEO from "../components/seo"
 
-const OrganizationsTemplate = ({ data, pageContext }) => {
+const CapitalTemplate = ({ data }) => {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
 
-  let organizations = transformOrganizations(data)
-  organizations = applyFilter(organizations)
+  let organizations = transformOrganizations(data).map(org => ({
+    ...org,
+    tags: org.categories,
+  }))
 
-  const organizationsTitle =
-    filter.bySector || pageContext.sectorName
-      ? filter.bySector?.name || pageContext.sectorName
-      : "All"
+  organizations = applyFilter(organizations)
 
   return (
     <Layout contentClassName="bg-gray-200">
-      <SEO title={`${organizationsTitle} organizations on Climatescape`} />
+      <SEO
+        title="Climate Capital on Climatescape"
+        description="Find climate-friendly VCs, grants, project finance, and more on Climatescape"
+      />
 
       <div className="max-w-4xl mx-auto pb-4">
-        <h2 className="text-3xl tracking-wide font-light p-3 md:mt-4">
-          {organizationsTitle} organizations{" "}
-          <AddOrganizationCTA variant="simple" />
-        </h2>
+        <div className="flex items-center p-3 md:mt-4">
+          <h2 className="text-3xl tracking-wide font-light flex-grow">
+            Climate Capital
+          </h2>
+          <a
+            href={data.site.siteMetadata.capitalFormUrl}
+            className="px-4 py-2 leading-none border rounded text-teal-500 border-teal-500 hover:border-transparent hover:text-white hover:bg-teal-500"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FontAwesomeIcon icon={faEdit} className="mr-2" />
+            Edit
+          </a>
+        </div>
 
         <OrganizationFilter
           currentFilter={filter}
@@ -41,23 +55,18 @@ const OrganizationsTemplate = ({ data, pageContext }) => {
             <OrganizationCard
               title={org.title}
               description={org.description}
-              tags={org.tags}
               location={org.location}
-              headcount={org.headcount}
               orgType={org.orgType}
               slug={org.slug}
               homepage={org.homepage}
               logo={org.logo}
-              sector={org.sector}
-              showSector={!pageContext.sectorName}
               key={org.title}
+              tags={org.tags}
+              capitalProfile={org.capitalProfile}
               currentFilter={filter}
               onApplyFilter={setFilter}
             />
           ))}
-        </div>
-        <div className="bg-white mt-8 p-3 text-center border-b border-gray-400">
-          <AddOrganizationCTA />
         </div>
       </div>
     </Layout>
@@ -65,13 +74,11 @@ const OrganizationsTemplate = ({ data, pageContext }) => {
 }
 
 export const query = graphql`
-  query OrganizationsPageQuery($slugRegex: String) {
+  query CapitalPageQuery {
     organizations: allAirtable(
       filter: {
         table: { eq: "Organizations" }
-        data: {
-          Sector: { elemMatch: { data: { Slug: { regex: $slugRegex } } } }
-        }
+        data: { Role: { eq: "Capital" } }
       }
     ) {
       nodes {
@@ -79,11 +86,9 @@ export const query = graphql`
           Name
           Homepage
           About
-          Tags
           Tagline
           HQ_Location
           Organization_Type
-          Headcount
           Logo {
             localFiles {
               childImageSharp {
@@ -96,6 +101,19 @@ export const query = graphql`
                   ...GatsbyImageSharpFixed
                 }
               }
+            }
+          }
+          Categories {
+            data {
+              Name
+            }
+          }
+          Capital_Profile {
+            data {
+              Type
+              Strategic
+              Stage
+              CheckSize: Check_Size
             }
           }
           LinkedIn_Profiles {
@@ -116,23 +134,15 @@ export const query = graphql`
               }
             }
           }
-          Sector {
-            data {
-              Slug
-            }
-          }
         }
       }
     }
-    sectors: allAirtable(filter: { table: { eq: "Sectors" } }) {
-      nodes {
-        data {
-          name: Name
-          slug: Slug
-        }
+    site {
+      siteMetadata {
+        capitalFormUrl
       }
     }
   }
 `
 
-export default OrganizationsTemplate
+export default CapitalTemplate

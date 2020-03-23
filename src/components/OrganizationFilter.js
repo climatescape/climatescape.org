@@ -5,6 +5,10 @@ import {
   OrganizationLocation,
   OrganizationHeadcount,
   OrganizationOrgType,
+  OrganizationCapitalType,
+  OrganizationCapitalStrategic,
+  OrganizationCapitalStage,
+  OrganizationCapitalCheckSize,
 } from "./OrganizationAttributes"
 
 export const useOrganizationFilterState = () => {
@@ -13,6 +17,10 @@ export const useOrganizationFilterState = () => {
   const [byLocation, setLocationFilter] = useState(null)
   const [byHeadcount, setHeadcountFilter] = useState(null)
   const [byOrgType, setOrgTypeFilter] = useState(null)
+  const [byCapitalType, setCapitalTypeFilter] = useState(null)
+  const [byCapitalStrategic, setCapitalStrategicFilter] = useState(null)
+  const [byCapitalStage, setCapitalStageFilter] = useState(null)
+  const [byCapitalCheckSize, setCapitalCheckSizeFilter] = useState(null)
 
   const setFilter = {
     bySector: setSectorFilter,
@@ -20,12 +28,20 @@ export const useOrganizationFilterState = () => {
     byLocation: setLocationFilter,
     byHeadcount: setHeadcountFilter,
     byOrgType: setOrgTypeFilter,
+    byCapitalType: setCapitalTypeFilter,
+    byCapitalStrategic: setCapitalStrategicFilter,
+    byCapitalStage: setCapitalStageFilter,
+    byCapitalCheckSize: setCapitalCheckSizeFilter,
     none: () => {
       setSectorFilter(null)
       setTagFilter(null)
       setLocationFilter(null)
       setHeadcountFilter(null)
       setOrgTypeFilter(null)
+      setCapitalTypeFilter(null)
+      setCapitalStrategicFilter(null)
+      setCapitalStageFilter(null)
+      setCapitalCheckSizeFilter(null)
     },
   }
 
@@ -49,20 +65,70 @@ export const useOrganizationFilterState = () => {
     if (byOrgType)
       organizations = organizations.filter(org => org.orgType === byOrgType)
 
+    if (byCapitalType)
+      organizations = organizations.filter(
+        org => org.capitalType && org.capitalType.indexOf(byCapitalType) >= 0
+      )
+
+    if (byCapitalStrategic)
+      organizations = organizations.filter(
+        org => org.capitalStrategic === byCapitalStrategic
+      )
+
+    if (byCapitalStage)
+      organizations = organizations.filter(
+        org => org.capitalStage && org.capitalStage.indexOf(byCapitalStage) >= 0
+      )
+
+    if (byCapitalCheckSize)
+      organizations = organizations.filter(
+        org =>
+          org.capitalCheckSize &&
+          org.capitalCheckSize.indexOf(byCapitalCheckSize) >= 0
+      )
+
     return organizations
   }
 
   return [
-    { bySector, byTag, byLocation, byHeadcount, byOrgType },
+    {
+      bySector,
+      byTag,
+      byLocation,
+      byHeadcount,
+      byOrgType,
+      byCapitalType,
+      byCapitalStrategic,
+      byCapitalStage,
+      byCapitalCheckSize,
+    },
     setFilter,
     applyFilter,
   ]
 }
 
 const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
-  const { bySector, byTag, byLocation, byHeadcount, byOrgType } = currentFilter
+  const {
+    bySector,
+    byTag,
+    byLocation,
+    byHeadcount,
+    byOrgType,
+    byCapitalType,
+    byCapitalStrategic,
+    byCapitalStage,
+    byCapitalCheckSize,
+  } = currentFilter
   const hasFilterApplied =
-    bySector || byTag || byLocation || byHeadcount || byOrgType
+    bySector ||
+    byTag ||
+    byLocation ||
+    byHeadcount ||
+    byOrgType ||
+    byCapitalType ||
+    byCapitalStrategic ||
+    byCapitalStage ||
+    byCapitalCheckSize
   return (
     <>
       {hasFilterApplied && (
@@ -73,6 +139,16 @@ const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
           {byLocation && <OrganizationLocation active text={byLocation} />}
           {byHeadcount && <OrganizationHeadcount active text={byHeadcount} />}
           {byOrgType && <OrganizationOrgType active text={byOrgType} />}
+          {byCapitalType && (
+            <OrganizationCapitalType active text={byCapitalType} />
+          )}
+          {byCapitalStrategic && <OrganizationCapitalStrategic active />}
+          {byCapitalStage && (
+            <OrganizationCapitalStage active text={byCapitalStage} />
+          )}
+          {byCapitalCheckSize && (
+            <OrganizationCapitalCheckSize active text={byCapitalCheckSize} />
+          )}
           <button
             onClick={() => onClearFilter()}
             className="underline hover:no-underline ml-1"
