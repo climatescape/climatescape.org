@@ -41,7 +41,7 @@ function OrganizationCard({
   } = organization
 
   const subCategories = pageContext ? categories.filter(
-    cat => cat.id !== pageContext.categoryId
+    cat => cat.parent?.id === pageContext.categoryId
   ) : categories
   const img = getLogoImage(organization)
   return (
