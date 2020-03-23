@@ -12,14 +12,15 @@ import OrganizationFilter, {
 } from "../components/OrganizationFilter"
 import SEO from "../components/seo"
 
-const CapitalTemplate = ({ data }) => {
+const CapitalTemplate = ({
+  data: {
+    organizations: { nodes },
+    site,
+  },
+}) => {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
 
-  let organizations = transformOrganizations(data).map(org => ({
-    ...org,
-    tags: org.categories,
-  }))
-
+  let organizations = transformOrganizations(nodes)
   organizations = applyFilter(organizations)
 
   return (
@@ -35,7 +36,7 @@ const CapitalTemplate = ({ data }) => {
             Climate Capital
           </h2>
           <a
-            href={data.site.siteMetadata.capitalFormUrl}
+            href={site.siteMetadata.capitalFormUrl}
             className="px-4 py-2 leading-none border rounded text-teal-500 border-teal-500 hover:border-transparent hover:text-white hover:bg-teal-500"
             target="_blank"
             rel="noopener noreferrer"
@@ -51,18 +52,10 @@ const CapitalTemplate = ({ data }) => {
         />
 
         <div className="bg-white">
-          {organizations.map(org => (
+          {organizations.map(organization => (
             <OrganizationCard
-              title={org.title}
-              description={org.description}
-              location={org.location}
-              orgType={org.orgType}
-              slug={org.slug}
-              homepage={org.homepage}
-              logo={org.logo}
-              key={org.title}
-              tags={org.tags}
-              capitalProfile={org.capitalProfile}
+              key={organization.title}
+              organization={organization}
               currentFilter={filter}
               onApplyFilter={setFilter}
             />
@@ -104,8 +97,15 @@ export const query = graphql`
             }
           }
           Categories {
+            id
             data {
               Name
+              Parent {
+                id
+                data {
+                  Name
+                }
+              }
             }
           }
           Capital_Profile {

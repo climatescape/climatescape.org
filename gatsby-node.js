@@ -5,26 +5,28 @@
  */
 
 const path = require(`path`)
-
-const makeSlug = require(`./src/utils/slug`).makeSlug
+const { makeSlug } = require("./src/utils/slug")
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
 
   const { data } = await graphql(`
     query PagesQuery {
-      sectors: allAirtable(filter: {table: {eq: "Sectors"}}) {
+      categories: allAirtable(filter: { table: { eq: "Categories" } }) {
         nodes {
+          id
           data {
-            slug: Slug
-            name: Name
+            Name
+            Parent {
+              id
+            }
           }
         }
       }
-      organizations: allAirtable(filter: {table: {eq: "Organizations"}}) {
+      organizations: allAirtable(filter: { table: { eq: "Organizations" } }) {
         nodes {
+          id
           data {
-            ID
             Name
           }
         }
@@ -32,24 +34,26 @@ exports.createPages = async ({ graphql, actions }) => {
     }
   `)
 
-  // Create the sectors pages
-  data.sectors.nodes.forEach(({ data }) => {
-    createPage({
-      path: `/sectors/${data.slug}`,
-      component: path.resolve(`./src/pages/organizations.js`),
-      context: {
-        sectorName: data.name,
-        slugRegex: `/${data.slug}/`,
-      },
+  // const categories = transformCategories(data)
+  data.categories.nodes
+    .filter(category => !category.data.Parent)
+    .forEach(category => {
+      createPage({
+        path: `/categories/${makeSlug(category.data.Name)}`,
+        component: path.resolve(`./src/pages/organizations.js`),
+        context: {
+          categoryName: category.data.Name,
+          categoryId: category.id,
+        },
+      })
     })
-  })
 
   // Create the organizations pages
-  data.organizations.nodes.forEach(({ data }) => {
+  data.organizations.nodes.forEach(org => {
     createPage({
-      path: `/organizations/${makeSlug(data.Name)}`,
+      path: `/organizations/${makeSlug(org.data.Name)}`,
       component: path.resolve(`./src/templates/organization.js`),
-      context: { id: data.ID },
+      context: { id: org.id },
     })
   })
 }

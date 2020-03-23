@@ -17,56 +17,36 @@ import OrganizationSocial from "../components/OrganizationSocial"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import Section from "../components/Section"
+import { transformOrganization } from "../utils/airtable"
 
-const Breadcrumb = ({ to, children }) => (
-  <Link
-    to={to}
-    className="inline-block text-lg pt-3 px-2 text-gray-700 hover:text-teal-900"
-  >
-    &laquo; {children}
-  </Link>
-)
-
-const OrganizationTemplate = ({ data }) => {
+export default function OrganizationTemplate({ data }) {
   const siteTitle = data.site.siteMetadata.title
-  const orgData = data.airtable.data
+  const org = transformOrganization(data.organization)
 
-  const sector = orgData.Sector && orgData.Sector[0]?.data
-  const capitalProfile =
-    orgData.Capital_Profile && orgData.Capital_Profile[0]?.data
-  const isCapital = orgData.Role && orgData.Role.indexOf("Capital") >= 0
-  const org = {
-    logo: orgData.Logo?.localFiles?.[0]?.childImageSharp?.fixed,
-    title: orgData.Name,
-    sector: sector && {
-      name: sector.Name,
-      slug: sector.Slug,
-    },
-    tagline: orgData.Tagline,
-    about: orgData.About && orgData.About.replace(orgData.Tagline, ""),
-    location: orgData.HQ_Location,
-    headcount: orgData.Headcount,
-    orgType: orgData.Organization_Type,
-    homepage: orgData.Homepage,
-    linkedIn: orgData.LinkedIn,
-    twitter: orgData.Twitter,
-    tags: orgData.Tags,
-    capitalTypes: capitalProfile?.Type,
-    capitalStrategic: capitalProfile?.Strategic,
-    capitalStages: capitalProfile?.Stage,
-    capitalCheckSizes: capitalProfile?.CheckSize,
-  }
+  const topCategories = org.categories.filter(cat => !cat.parent)
+  const subCategories = org.categories.filter(cat => cat.parent)
+  const topCategory = topCategories[0] || subCategories[0]?.parent
+
+  // Show all sub categories as well as top categories not represented
+  // by sub categories
+  const categoryList = topCategories
+    .filter(
+      category => !subCategories.map(cat => cat.parent.id).includes(category.id)
+    )
+    .concat(subCategories)
 
   return (
     <Layout contentClassName="bg-gray-200">
       <SEO title={`${org.title} on ${siteTitle}`} description={org.tagline} />
 
       <div className="max-w-4xl mx-auto pb-4">
-        {isCapital && <Breadcrumb to="/capital">Capital</Breadcrumb>}
-        {!isCapital && org.sector && (
-          <Breadcrumb to={`/sectors/${org.sector.slug}`}>
-            {org.sector.name}
-          </Breadcrumb>
+        {topCategory && (
+          <Link
+            to={topCategory.slug}
+            className="inline-block text-lg pt-3 px-2 text-gray-700 hover:text-teal-900"
+          >
+            &laquo; {topCategory.name}
+          </Link>
         )}
 
         <Section>
@@ -162,17 +142,19 @@ const OrganizationTemplate = ({ data }) => {
                 {org.orgType}
               </li>
             )}
-            {org.tags && org.tags.length && (
-              <li>
+            {categoryList.map(category => (
+              <li key={category.name}>
                 <span className="w-8 inline-block">
                   <FontAwesomeIcon
                     icon={faTag}
                     className="mx-1 text-gray-700"
                   />
                 </span>
-                {org.tags.join(", ")}
+                <Link to={category?.parent?.slug ?? category.slug}>
+                  {category.name}
+                </Link>
               </li>
-            )}
+            ))}
           </ul>
         </Section>
 
@@ -189,14 +171,14 @@ const OrganizationTemplate = ({ data }) => {
 }
 
 export const query = graphql`
-  query OrganizationPageQuery($id: Int) {
+  query OrganizationPageQuery($id: String) {
     site {
       siteMetadata {
         title
       }
     }
 
-    airtable(table: { eq: "Organizations" }, data: { ID: { eq: $id } }) {
+    organization: airtable(table: { eq: "Organizations" }, id: { eq: $id }) {
       data {
         Logo {
           localFiles {
@@ -207,11 +189,35 @@ export const query = graphql`
             }
           }
         }
+        LinkedIn_Profiles {
+          data {
+            Logo {
+              localFiles {
+                childImageSharp {
+                  fixed(
+                    width: 64
+                    height: 64
+                    fit: CONTAIN
+                    background: "white"
+                  ) {
+                    ...GatsbyImageSharpFixed
+                  }
+                }
+              }
+            }
+          }
+        }
         Name
-        Sector {
+        Categories {
+          id
           data {
             Name
-            Slug
+            Parent {
+              id
+              data {
+                Name
+              }
+            }
           }
         }
         Tagline
@@ -237,5 +243,3 @@ export const query = graphql`
     }
   }
 `
-
-export default OrganizationTemplate

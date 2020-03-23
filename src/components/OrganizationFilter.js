@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import {
-  OrganizationSector,
+  OrganizationCategory,
   OrganizationTag,
   OrganizationLocation,
   OrganizationHeadcount,
@@ -12,7 +12,7 @@ import {
 } from "./OrganizationAttributes"
 
 export const useOrganizationFilterState = () => {
-  const [bySector, setSectorFilter] = useState(null)
+  const [byCategory, setCategoryFilter] = useState(null)
   const [byTag, setTagFilter] = useState(null)
   const [byLocation, setLocationFilter] = useState(null)
   const [byHeadcount, setHeadcountFilter] = useState(null)
@@ -23,7 +23,7 @@ export const useOrganizationFilterState = () => {
   const [byCapitalCheckSize, setCapitalCheckSizeFilter] = useState(null)
 
   const setFilter = {
-    bySector: setSectorFilter,
+    byCategory: setCategoryFilter,
     byTag: setTagFilter,
     byLocation: setLocationFilter,
     byHeadcount: setHeadcountFilter,
@@ -33,7 +33,7 @@ export const useOrganizationFilterState = () => {
     byCapitalStage: setCapitalStageFilter,
     byCapitalCheckSize: setCapitalCheckSizeFilter,
     none: () => {
-      setSectorFilter(null)
+      setCategoryFilter(null)
       setTagFilter(null)
       setLocationFilter(null)
       setHeadcountFilter(null)
@@ -46,9 +46,9 @@ export const useOrganizationFilterState = () => {
   }
 
   const applyFilter = organizations => {
-    if (bySector)
-      organizations = organizations.filter(
-        org => (org.sector && org.sector.slug) === bySector.slug
+    if (byCategory)
+      organizations = organizations.filter(org =>
+        org.categories.find(cat => cat.id === byCategory?.id)
       )
 
     if (byTag)
@@ -67,24 +67,22 @@ export const useOrganizationFilterState = () => {
 
     if (byCapitalType)
       organizations = organizations.filter(
-        org => org.capitalType && org.capitalType.indexOf(byCapitalType) >= 0
+        org => org.capitalProfile?.type?.indexOf(byCapitalType) >= 0
       )
 
     if (byCapitalStrategic)
       organizations = organizations.filter(
-        org => org.capitalStrategic === byCapitalStrategic
+        org => org.capitalProfile?.strategic === byCapitalStrategic
       )
 
     if (byCapitalStage)
       organizations = organizations.filter(
-        org => org.capitalStage && org.capitalStage.indexOf(byCapitalStage) >= 0
+        org => org.capitalProfile?.stage?.indexOf(byCapitalStage) >= 0
       )
 
     if (byCapitalCheckSize)
       organizations = organizations.filter(
-        org =>
-          org.capitalCheckSize &&
-          org.capitalCheckSize.indexOf(byCapitalCheckSize) >= 0
+        org => org.capitalProfile?.checkSize?.indexOf(byCapitalCheckSize) >= 0
       )
 
     return organizations
@@ -92,7 +90,7 @@ export const useOrganizationFilterState = () => {
 
   return [
     {
-      bySector,
+      byCategory,
       byTag,
       byLocation,
       byHeadcount,
@@ -109,7 +107,7 @@ export const useOrganizationFilterState = () => {
 
 const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
   const {
-    bySector,
+    byCategory,
     byTag,
     byLocation,
     byHeadcount,
@@ -119,8 +117,9 @@ const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
     byCapitalStage,
     byCapitalCheckSize,
   } = currentFilter
+
   const hasFilterApplied =
-    bySector ||
+    byCategory ||
     byTag ||
     byLocation ||
     byHeadcount ||
@@ -129,12 +128,13 @@ const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
     byCapitalStrategic ||
     byCapitalStage ||
     byCapitalCheckSize
+
   return (
     <>
       {hasFilterApplied && (
         <p className="p-3 text-gray-700 bg-gray-100 border-b border-gray-400 text-sm">
           <span className="mr-2">Filtered by</span>
-          {bySector && <OrganizationSector active text={bySector.name} />}
+          {byCategory && <OrganizationCategory active text={byCategory.name} />}
           {byTag && <OrganizationTag active text={byTag} />}
           {byLocation && <OrganizationLocation active text={byLocation} />}
           {byHeadcount && <OrganizationHeadcount active text={byHeadcount} />}
