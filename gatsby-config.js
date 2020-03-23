@@ -34,7 +34,12 @@ const config = {
               Logo: `fileNode`,
               Photos: `fileNode`,
             },
-            tableLinks: [`Sector`, `LinkedIn_Profiles`, `Categories`, `Capital_Profile`],
+            tableLinks: [
+              `Sector`,
+              `LinkedIn_Profiles`,
+              `Categories`,
+              `Capital_Profile`,
+            ],
           },
           {
             baseId: `appNYMWxGF1jMaf5V`,
@@ -90,6 +95,7 @@ const config = {
         ],
       },
     },
+    "gatsby-plugin-netlify-cache",
   ],
 }
 
