@@ -63,10 +63,6 @@ export default function OrganizationTemplate({ data }) {
   const siteTitle = data.site.siteMetadata.title
   const org = transformOrganization(data.organization)
 
-  const topCategories = org.categories.filter(cat => !cat.parent)
-  const subCategories = org.categories.filter(cat => cat.parent)
-  const topCategory = topCategories[0] || subCategories[0]?.parent
-
   const img = getLogoImage(org)
 
   return (
@@ -74,15 +70,6 @@ export default function OrganizationTemplate({ data }) {
       <SEO title={`${org.title} on ${siteTitle}`} description={org.tagline} />
 
       <div className="max-w-4xl mx-auto pt-8 pb-4">
-        {false && topCategory && (
-          <Link
-            to={topCategory.slug}
-            className="inline-block text-lg pt-3 px-2 text-gray-700 hover:text-teal-900"
-          >
-            &laquo; {topCategory.name}
-          </Link>
-        )}
-
         <div className="OrganizationCard mb-2 mt-4 flex ">
           <div className="lg:w-3/5">
             <div className="flex">
