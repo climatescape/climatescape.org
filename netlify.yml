@@ -1,0 +1,2 @@
+plugins:
+  - type: .netlify/cache-gatsby
