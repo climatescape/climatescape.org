@@ -11,8 +11,6 @@ import {
   OrganizationOrgType,
 } from "./OrganizationAttributes"
 
-import "./OrganizationCard.css"
-
 const OrganizationCard = ({
   title,
   description,
