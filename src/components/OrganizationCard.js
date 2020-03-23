@@ -12,6 +12,13 @@ import {
 
 import "./OrganizationCard.css"
 
+function getLogoImage({ logo, photos, categories }) {
+  const cat =
+    categories.find(cat => cat.cover) ||
+    categories.find(cat => cat?.parent?.cover)
+  return logo || photos[0] || cat?.cover || cat?.parent.cover
+}
+
 function OrganizationCard({
   pageContext,
   organization,
@@ -25,19 +32,13 @@ function OrganizationCard({
     slug,
     headcount,
     orgType,
-    logo,
-    photos,
     categories,
   } = organization
 
   const subCategories = categories.filter(
     cat => cat.id !== pageContext.categoryId
   )
-
-  const cat =
-    categories.find(cat => cat.cover) ||
-    categories.find(cat => cat?.parent?.cover)
-  const img = logo || photos[0] || cat?.cover || cat?.parent.cover
+  const img = getLogoImage(organization)
   return (
     <div className="OrganizationCard mb-4 mt-4 border-gray-400 border-b flex items-center p-3 text-gray-900">
       <div className="mr-5 w-32  flex-shrink-0 hidden sm:block">

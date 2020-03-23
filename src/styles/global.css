@@ -3,3 +3,8 @@
   text-shadow: 0 2px 1em #000000;
   padding-top: 8px !important;
 }
+
+.organization-img {
+  margin: 1rem 0;
+  height: 250px;
+}

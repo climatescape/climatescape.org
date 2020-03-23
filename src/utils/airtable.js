@@ -43,6 +43,14 @@ export function transformCategories(data) {
   return categories
 }
 
+function transformThumbnails(Photos) {
+  return Photos?.internal
+    ? JSON.parse(Photos.internal.content).map(
+        internal => internal.thumbnails.large
+      )
+    : []
+}
+
 export function transformOrganization({
   id,
   data: {
@@ -77,7 +85,11 @@ export function transformOrganization({
     linkedIn: LinkedIn,
     twitter: Twitter,
     logo: getLogo(Logo, LinkedinProfile),
-    photos: Photos?.localFiles?.map(img => img.childImageSharp.fixed) ?? [],
+    photos:
+      Photos?.localFiles?.map(
+        img => img.childImageSharp.fixed || img.childImageSharp.fluid
+      ) ?? [],
+    thumbnails: transformThumbnails(Photos),
     categories: Categories?.map(transformCategory) ?? [],
   }
 }
