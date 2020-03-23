@@ -32,9 +32,9 @@ function OrganizationCard({
     capitalProfile,
   } = organization
 
-  const subCategories = categories.filter(
-    cat => cat.id !== pageContext.categoryId
-  )
+  const subCategories = pageContext ? categories.filter(
+    cat => cat.parent?.id === pageContext.categoryId
+  ) : categories
   return (
     <div className="OrganizationCard flex items-center border-b border-gray-400 p-3 text-gray-900">
       <div className="mr-5 w-16 flex-shrink-0 hidden sm:block">
@@ -91,8 +91,9 @@ function OrganizationCard({
           {subCategories?.map(category => (
             <OrganizationCategory
               key={category.name}
+              category={category}
               onClick={() => onApplyFilter.byCategory(category)}
-              active={currentFilter?.byCategory?.id === category.id}
+              active={category.id === currentFilter.byCategory?.id}
               text={category.name}
             />
           ))}

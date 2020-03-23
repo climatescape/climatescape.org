@@ -60,6 +60,7 @@ export function transformOrganization({
     Organization_Type: OrganizationType,
     Categories,
     Twitter,
+    Capital_Profile: CapitalProfile,
   },
 }) {
   return {
@@ -78,6 +79,12 @@ export function transformOrganization({
     twitter: Twitter,
     logo: getLogo(Logo, LinkedinProfile),
     categories: Categories?.map(transformCategory) ?? [],
+    capitalProfile: CapitalProfile?.map(({ data }) => ({
+      type: data.Type,
+      strategic: data.Strategic,
+      stage: data.Stage,
+      checkSize: data.CheckSize,
+    }))?.[0],
   }
 }
 
