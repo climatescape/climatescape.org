@@ -101,6 +101,20 @@ export const query = graphql`
           HQ_Location
           Organization_Type
           Headcount
+          Photos {
+            localFiles {
+              childImageSharp {
+                fixed(
+                  width: 128
+                  height: 128
+                  fit: CONTAIN
+                  background: "white"
+                ) {
+                  ...GatsbyImageSharpFixed
+                }
+              }
+            }
+          }
           Categories {
             id
             data {
@@ -170,6 +184,20 @@ export const query = graphql`
           HQ_Location
           Organization_Type
           Headcount
+          Photos {
+            localFiles {
+              childImageSharp {
+                fixed(
+                  width: 128
+                  height: 128
+                  fit: CONTAIN
+                  background: "white"
+                ) {
+                  ...GatsbyImageSharpFixed
+                }
+              }
+            }
+          }
           Categories {
             id
             data {
