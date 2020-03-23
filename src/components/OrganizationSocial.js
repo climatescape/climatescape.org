@@ -5,7 +5,7 @@ import { faLink } from "@fortawesome/free-solid-svg-icons"
 import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons"
 
 const OrganizationSocial = ({ homepage, linkedIn, twitter }) => (
-  <div className="flex">
+  <div className="flex flex-col">
     {homepage && (
       <div
         className={`flex-1 text-center ${(linkedIn || twitter) &&

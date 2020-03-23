@@ -26,7 +26,7 @@ export default function({ categories, pageContext }) {
   const topLevelCategories = categories.filter(category => !category.parent)
 
   return (
-    <div className="left-sidebar hidden lg:block  lg:w-1/5 ">
+    <div className="left-sidebar hidden w-1/5 pl-6 lg:block">
       <h3 className="mt-8 uppercase leading-9 text-gray-700">Categories</h3>
       <ul className="category-list">
         {topLevelCategories.map(category => (

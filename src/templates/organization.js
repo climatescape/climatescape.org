@@ -14,18 +14,28 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 
 import OrganizationSocial from "../components/OrganizationSocial"
+import Section from "../components/Section"
+import {
+  OrganizationCategory,
+  OrganizationLocation,
+  OrganizationHeadcount,
+  OrganizationOrgType,
+} from "../components/OrganizationAttributes"
+
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import Section from "../components/Section"
 import { transformOrganization } from "../utils/airtable"
 
-export default function OrganizationTemplate({ data }) {
-  const siteTitle = data.site.siteMetadata.title
-  const org = transformOrganization(data.organization)
+function getLogoImage({ logo, photos, categories }) {
+  const cat =
+    categories.find(cat => cat.cover) ||
+    categories.find(cat => cat?.parent?.cover)
+  return logo || photos[0] || cat?.cover || cat?.parent.cover
+}
 
+function Tags({ org }) {
   const topCategories = org.categories.filter(cat => !cat.parent)
   const subCategories = org.categories.filter(cat => cat.parent)
-  const topCategory = topCategories[0] || subCategories[0]?.parent
 
   // Show all sub categories as well as top categories not represented
   // by sub categories
@@ -36,11 +46,35 @@ export default function OrganizationTemplate({ data }) {
     .concat(subCategories)
 
   return (
-    <Layout contentClassName="bg-gray-200">
+    <ul>
+      {org.location && <OrganizationLocation text={org.location} />}
+      {org.headcount && (
+        <OrganizationHeadcount text={`${org.headcount} employees`} />
+      )}
+      {org.orgType && <OrganizationOrgType text={org.orgType} />}
+      {categoryList.map(category => (
+        <OrganizationCategory key={category.name} text={category.name} />
+      ))}
+    </ul>
+  )
+}
+
+export default function OrganizationTemplate({ data }) {
+  const siteTitle = data.site.siteMetadata.title
+  const org = transformOrganization(data.organization)
+
+  const topCategories = org.categories.filter(cat => !cat.parent)
+  const subCategories = org.categories.filter(cat => cat.parent)
+  const topCategory = topCategories[0] || subCategories[0]?.parent
+
+  const img = getLogoImage(org)
+
+  return (
+    <Layout contentClassName="bg-gray-100 font-sans">
       <SEO title={`${org.title} on ${siteTitle}`} description={org.tagline} />
 
-      <div className="max-w-4xl mx-auto pb-4">
-        {topCategory && (
+      <div className="max-w-4xl mx-auto pt-8 pb-4">
+        {false && topCategory && (
           <Link
             to={topCategory.slug}
             className="inline-block text-lg pt-3 px-2 text-gray-700 hover:text-teal-900"
@@ -49,122 +83,41 @@ export default function OrganizationTemplate({ data }) {
           </Link>
         )}
 
-        <Section>
-          <div className="flex items-center text-gray-900">
-            {org.logo && <Img fixed={org.logo} className="mr-3 w-16 h-16" />}
+        <div className="OrganizationCard mb-2 mt-4 flex ">
+          <div className="lg:w-3/5">
+            <div className="flex">
+              <div className="mr-5 w-16  flex-shrink-0 hidden sm:block">
+                {img && (
+                  <Img
+                    fixed={img}
+                    className="OrganizationCard-logo rounded-lg w-16 h-16"
+                  />
+                )}
+              </div>
+              <div>
+                <h1 className="flex-grow text-xl font-semibold">{org.title}</h1>
+                <p> {org.description}</p>
+              </div>
+            </div>
+            <Tags org={org} className="mt-3 mb-3" />
 
-            <h1 className="flex-grow text-xl font-semibold">{org.title}</h1>
+            <div className="carousel mt-3 mt-3">
+              {org.photos.slice(0, 1).map(photo => (
+                <Img fluid={photo} className="organization-img rounded-lg" />
+              ))}
+            </div>
+            {org.about && org.about !== org.tagline && (
+              <div className="my-3">{org.about}</div>
+            )}
           </div>
-
-          <h2 className="my-5 pl-3 lg:my-6 border-l-4 border-teal-500 border-solid font-semibold">
-            {org.tagline}
-          </h2>
-
-          {org.about && org.about !== org.tagline && (
-            <div className="my-3">{org.about}</div>
-          )}
-
-          <ul>
-            {org.capitalTypes && org.capitalTypes.length && (
-              <li>
-                <span className="w-8 inline-block">
-                  <FontAwesomeIcon
-                    icon={faHandHoldingUsd}
-                    className="mx-1 text-gray-700"
-                  />
-                </span>
-                {org.capitalTypes.join(", ")}
-              </li>
-            )}
-            {org.capitalStages && org.capitalStages.length && (
-              <li>
-                <span className="w-8 inline-block">
-                  <FontAwesomeIcon
-                    icon={faSearchDollar}
-                    className="mx-1 text-gray-700"
-                  />
-                </span>
-                {org.capitalStages.join(", ")}
-              </li>
-            )}
-            {org.capitalCheckSizes && org.capitalCheckSizes.length && (
-              <li>
-                <span className="w-8 inline-block">
-                  <FontAwesomeIcon
-                    icon={faMoneyCheck}
-                    className="mx-1 text-gray-700"
-                  />
-                </span>
-                {org.capitalCheckSizes.join(", ")}
-              </li>
-            )}
-            {org.capitalStrategic && (
-              <li>
-                <span className="w-8 inline-block">
-                  <FontAwesomeIcon
-                    icon={faHandshake}
-                    className="mx-1 text-gray-700"
-                  />
-                </span>
-                Strategic
-              </li>
-            )}
-            {org.location && (
-              <li>
-                <span className="w-8 inline-block">
-                  <FontAwesomeIcon
-                    icon={faLocationArrow}
-                    className="mx-1 text-gray-700"
-                  />
-                </span>
-                {org.location}
-              </li>
-            )}
-            {org.headcount && (
-              <li>
-                <span className="w-8 inline-block">
-                  <FontAwesomeIcon
-                    icon={faUsers}
-                    className="mx-1 text-gray-700"
-                  />
-                </span>
-                {org.headcount} employees
-              </li>
-            )}
-            {org.orgType && (
-              <li>
-                <span className="w-8 inline-block">
-                  <FontAwesomeIcon
-                    icon={faBuilding}
-                    className="mx-1 text-gray-700"
-                  />
-                </span>
-                {org.orgType}
-              </li>
-            )}
-            {categoryList.map(category => (
-              <li key={category.name}>
-                <span className="w-8 inline-block">
-                  <FontAwesomeIcon
-                    icon={faTag}
-                    className="mx-1 text-gray-700"
-                  />
-                </span>
-                <Link to={category?.parent?.slug ?? category.slug}>
-                  {category.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </Section>
-
-        <Section>
-          <OrganizationSocial
-            homepage={org.homepage}
-            linkedIn={org.linkedIn}
-            twitter={org.twitter}
-          />
-        </Section>
+          <div className="lg:w-1/5">
+            <OrganizationSocial
+              homepage={org.homepage}
+              linkedIn={org.linkedIn}
+              twitter={org.twitter}
+            />
+          </div>
+        </div>
       </div>
     </Layout>
   )
@@ -180,6 +133,26 @@ export const query = graphql`
 
     organization: airtable(table: { eq: "Organizations" }, id: { eq: $id }) {
       data {
+        Name
+        Tagline
+        About
+        HQ_Location
+        Headcount
+        Organization_Type
+        Homepage
+        LinkedIn
+        Twitter
+        Role
+        Tags
+        Capital_Profile {
+          data {
+            Type
+            Impact_Specific
+            Strategic
+            Stage
+            CheckSize: Check_Size
+          }
+        }
         Logo {
           localFiles {
             childImageSharp {
@@ -207,7 +180,18 @@ export const query = graphql`
             }
           }
         }
-        Name
+        Photos {
+          localFiles {
+            childImageSharp {
+              fluid(maxWidth: 700) {
+                ...GatsbyImageSharpFluid
+              }
+            }
+          }
+          internal {
+            content
+          }
+        }
         Categories {
           id
           data {
@@ -218,25 +202,6 @@ export const query = graphql`
                 Name
               }
             }
-          }
-        }
-        Tagline
-        About
-        HQ_Location
-        Headcount
-        Organization_Type
-        Homepage
-        LinkedIn
-        Twitter
-        Role
-        Tags
-        Capital_Profile {
-          data {
-            Type
-            Impact_Specific
-            Strategic
-            Stage
-            CheckSize: Check_Size
           }
         }
       }

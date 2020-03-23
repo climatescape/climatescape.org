@@ -132,7 +132,7 @@ const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
   return (
     <>
       {hasFilterApplied && (
-        <p className="p-3 text-gray-700 bg-gray-100 border-b border-gray-400 text-sm">
+        <p className="text-gray-700  text-sm">
           <span className="mr-2">Filtered by</span>
           {byCategory && <OrganizationCategory active text={byCategory.name} />}
           {byTag && <OrganizationTag active text={byTag} />}
