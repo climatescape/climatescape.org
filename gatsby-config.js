@@ -23,7 +23,7 @@ const config = {
       resolve: `gatsby-source-airtable`,
       options: {
         apiKey: process.env.AIRTABLE_API_KEY,
-        concurrency: 0,
+        concurrency: 0, // Remove limitation on asset fetching concurrency
         tables: [
           {
             baseId: `appNYMWxGF1jMaf5V`,
