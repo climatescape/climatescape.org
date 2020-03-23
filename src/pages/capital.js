@@ -12,7 +12,12 @@ import OrganizationFilter, {
 } from "../components/OrganizationFilter"
 import SEO from "../components/seo"
 
-const CapitalTemplate = ({ data: { organizations: { nodes }, site } }) => {
+const CapitalTemplate = ({
+  data: {
+    organizations: { nodes },
+    site,
+  },
+}) => {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
 
   let organizations = transformOrganizations(nodes)
