@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import {
-  OrganizationSector,
+  OrganizationCategory,
   OrganizationTag,
   OrganizationLocation,
   OrganizationHeadcount,
@@ -12,7 +12,7 @@ import {
 } from "./OrganizationAttributes"
 
 export const useOrganizationFilterState = () => {
-  const [bySector, setSectorFilter] = useState(null)
+  const [byCategory, setSectorFilter] = useState(null)
   const [byTag, setTagFilter] = useState(null)
   const [byLocation, setLocationFilter] = useState(null)
   const [byHeadcount, setHeadcountFilter] = useState(null)
@@ -23,7 +23,7 @@ export const useOrganizationFilterState = () => {
   const [byCapitalCheckSize, setCapitalCheckSizeFilter] = useState(null)
 
   const setFilter = {
-    bySector: setSectorFilter,
+    byCategory: setSectorFilter,
     byTag: setTagFilter,
     byLocation: setLocationFilter,
     byHeadcount: setHeadcountFilter,
@@ -46,9 +46,9 @@ export const useOrganizationFilterState = () => {
   }
 
   const applyFilter = organizations => {
-    if (bySector)
-      organizations = organizations.filter(
-        org => (org.sector && org.sector.slug) === bySector.slug
+    if (byCategory)
+      organizations = organizations.filter(org =>
+        org.categories.find(cat => cat.id === byCategory?.id)
       )
 
     if (byTag)
@@ -92,7 +92,7 @@ export const useOrganizationFilterState = () => {
 
   return [
     {
-      bySector,
+      byCategory,
       byTag,
       byLocation,
       byHeadcount,
@@ -109,7 +109,7 @@ export const useOrganizationFilterState = () => {
 
 const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
   const {
-    bySector,
+    byCategory,
     byTag,
     byLocation,
     byHeadcount,
@@ -119,8 +119,9 @@ const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
     byCapitalStage,
     byCapitalCheckSize,
   } = currentFilter
+
   const hasFilterApplied =
-    bySector ||
+    byCategory ||
     byTag ||
     byLocation ||
     byHeadcount ||
@@ -129,12 +130,13 @@ const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
     byCapitalStrategic ||
     byCapitalStage ||
     byCapitalCheckSize
+
   return (
     <>
       {hasFilterApplied && (
         <p className="p-3 text-gray-700 bg-gray-100 border-b border-gray-400 text-sm">
           <span className="mr-2">Filtered by</span>
-          {bySector && <OrganizationSector active text={bySector.name} />}
+          {byCategory && <OrganizationCategory active text={byCategory.name} />}
           {byTag && <OrganizationTag active text={byTag} />}
           {byLocation && <OrganizationLocation active text={byLocation} />}
           {byHeadcount && <OrganizationHeadcount active text={byHeadcount} />}

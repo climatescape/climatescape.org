@@ -7,46 +7,90 @@ function getLogo(Logo, LinkedinProfile) {
   return logo
 }
 
-export function transformOrganizations({ organizations, sectors }) {
-  sectors = sectors?.nodes.map(sector => sector.data)
+function transformCategory(data) {
+  if (!data || !data.data) {
+    return undefined
+  }
 
-  // Avoid breaking if the sector has no orgs + map out nested data object
-  return (organizations?.nodes ?? [])
-    .map(o => o.data)
-    .map(
-      ({
-        Name,
-        About,
-        Tags,
-        Homepage,
-        HQ_Location: HQLocation,
-        Tagline,
-        Logo,
-        Categories,
-        LinkedIn_Profiles: LinkedinProfile,
-        Headcount,
-        Organization_Type: OrganizationType,
-        Sector,
-        Capital_Profile: CapitalProfile,
-      }) => ({
-        title: Name,
-        description: Tagline || About,
-        tags: Tags,
-        categories: Categories?.map(c => c.data.Name),
-        location: HQLocation,
-        headcount: Headcount,
-        orgType: OrganizationType,
-        slug: makeSlug(Name),
-        homepage: Homepage,
-        logo: getLogo(Logo, LinkedinProfile),
-        sector: sectors?.find(sector => sector.slug === Sector?.[0].data.Slug),
-        capitalProfile: CapitalProfile?.map(({ data }) => ({
-          type: data.Type,
-          strategic: data.Strategic,
-          stage: data.Stage,
-          checkSize: data.CheckSize,
-        }))?.[0],
-      })
-    )
+  const {
+    id,
+    data: { Name, Count, Cover, Parent },
+  } = data
+  const parent = transformCategory(Parent?.[0])
+
+  return {
+    id,
+    name: Name,
+    fullName: parent ? [parent.name, Name].join(" > ") : Name,
+    count: Count,
+    cover: Cover?.localFiles?.[0]?.childImageSharp?.fluid,
+    slug: `/categories/${makeSlug(Name)}`,
+    parent,
+  }
+}
+
+export function transformCategories(data) {
+  const categories = (data.categories?.nodes || [])
+    .map(transformCategory)
+    .sort((a, b) => stringCompare(a.name, b.name))
+
+  if (typeof window === "object") {
+    // eslint-disable-next-line no-restricted-globals
+    window.categories = categories
+    // eslint-disable-next-line no-console
+    console.log({ categories })
+  }
+
+  return categories
+}
+
+export function transformOrganization({
+  id,
+  data: {
+    Name,
+    About,
+    Tags,
+    Homepage,
+    HQ_Location: HQLocation,
+    Tagline,
+    Logo,
+    LinkedIn,
+    LinkedIn_Profiles: LinkedinProfile,
+    Headcount,
+    Organization_Type: OrganizationType,
+    Categories,
+    Twitter,
+  },
+}) {
+  return {
+    id,
+    title: Name,
+    description: Tagline || About,
+    tagline: Tagline,
+    about: (About || "").replace(Tagline, ""),
+    tags: Tags,
+    location: HQLocation,
+    headcount: Headcount,
+    orgType: OrganizationType,
+    slug: `/organizations/${makeSlug(Name)}`,
+    homepage: Homepage,
+    linkedIn: LinkedIn,
+    twitter: Twitter,
+    logo: getLogo(Logo, LinkedinProfile),
+    categories: Categories?.map(transformCategory) ?? [],
+  }
+}
+
+export function transformOrganizations(orgs) {
+  const organizations = orgs
+    .map(transformOrganization)
     .sort((a, b) => stringCompare(a.title, b.title))
+
+  if (typeof window === "object") {
+    // eslint-disable-next-line no-restricted-globals
+    window.organizations = organizations
+    // eslint-disable-next-line no-console
+    console.log({ organizations })
+  }
+  return organizations
 }

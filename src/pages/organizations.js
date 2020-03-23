@@ -1,7 +1,9 @@
 import React from "react"
 import { graphql } from "gatsby"
+import { uniqBy } from "lodash"
 
-import { transformOrganizations } from "../utils/airtable"
+import { transformCategories, transformOrganizations } from "../utils/airtable"
+
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
 import OrganizationFilter, {
@@ -9,55 +11,59 @@ import OrganizationFilter, {
 } from "../components/OrganizationFilter"
 import AddOrganizationCTA from "../components/AddOrganizationCTA"
 import SEO from "../components/seo"
+import CategoryList from "../components/CategoryList"
 
-const OrganizationsTemplate = ({ data, pageContext }) => {
+function OrganizationsTemplate({ data, pageContext }) {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
 
-  let organizations = transformOrganizations(data)
+  // We need to combine organizations from the query for sub-categories
+  // and top-categories which might include duplicate orgs.
+  const orgs = uniqBy(
+    [...data.subOrganizations?.nodes, ...data.topOrganizations?.nodes],
+    org => org.data.Name
+  )
+
+  let organizations = transformOrganizations(orgs)
+  const categories = transformCategories(data)
+
   organizations = applyFilter(organizations)
 
   const organizationsTitle =
-    filter.bySector || pageContext.sectorName
-      ? filter.bySector?.name || pageContext.sectorName
+    filter.byCategory || pageContext.categoryName
+      ? filter.byCategory?.name || pageContext.categoryName
       : "All"
 
   return (
     <Layout contentClassName="bg-gray-200">
       <SEO title={`${organizationsTitle} organizations on Climatescape`} />
 
-      <div className="max-w-4xl mx-auto pb-4">
-        <h2 className="text-3xl tracking-wide font-light p-3 md:mt-4">
-          {organizationsTitle} organizations{" "}
-          <AddOrganizationCTA variant="simple" />
-        </h2>
+      <div className="flex flex-col mx-auto container lg:flex-row">
+        <CategoryList categories={categories} pageContext={pageContext} />
+        <div className="lg:w-4/5 border-gray-300 lg:border-r">
+          <h2 className="text-3xl tracking-wide font-light p-3 md:mt-4">
+            {organizationsTitle} organizations{" "}
+            <AddOrganizationCTA variant="simple" />
+          </h2>
 
-        <OrganizationFilter
-          currentFilter={filter}
-          onClearFilter={() => setFilter.none()}
-        />
+          <OrganizationFilter
+            currentFilter={filter}
+            onClearFilter={() => setFilter.none()}
+          />
 
-        <div className="bg-white">
-          {organizations.map(org => (
-            <OrganizationCard
-              title={org.title}
-              description={org.description}
-              tags={org.tags}
-              location={org.location}
-              headcount={org.headcount}
-              orgType={org.orgType}
-              slug={org.slug}
-              homepage={org.homepage}
-              logo={org.logo}
-              sector={org.sector}
-              showSector={!pageContext.sectorName}
-              key={org.title}
-              currentFilter={filter}
-              onApplyFilter={setFilter}
-            />
-          ))}
-        </div>
-        <div className="bg-white mt-8 p-3 text-center border-b border-gray-400">
-          <AddOrganizationCTA />
+          <div className="bg-white">
+            {organizations.map(org => (
+              <OrganizationCard
+                organization={org}
+                pageContext={pageContext}
+                key={org.title}
+                currentFilter={filter}
+                onApplyFilter={setFilter}
+              />
+            ))}
+          </div>
+          <div className="bg-white mt-8 p-3 text-center border-b border-gray-400">
+            <AddOrganizationCTA />
+          </div>
         </div>
       </div>
     </Layout>
@@ -65,13 +71,11 @@ const OrganizationsTemplate = ({ data, pageContext }) => {
 }
 
 export const query = graphql`
-  query OrganizationsPageQuery($slugRegex: String) {
-    organizations: allAirtable(
+  query OrganizationsPageQuery($categoryId: String) {
+    topOrganizations: allAirtable(
       filter: {
         table: { eq: "Organizations" }
-        data: {
-          Sector: { elemMatch: { data: { Slug: { regex: $slugRegex } } } }
-        }
+        data: { Categories: { elemMatch: { id: { eq: $categoryId } } } }
       }
     ) {
       nodes {
@@ -84,6 +88,18 @@ export const query = graphql`
           HQ_Location
           Organization_Type
           Headcount
+          Categories {
+            id
+            data {
+              Name
+              Parent {
+                id
+                data {
+                  Name
+                }
+              }
+            }
+          }
           Logo {
             localFiles {
               childImageSharp {
@@ -116,19 +132,99 @@ export const query = graphql`
               }
             }
           }
-          Sector {
+        }
+      }
+    }
+    subOrganizations: allAirtable(
+      filter: {
+        table: { eq: "Organizations" }
+        data: {
+          Categories: {
+            elemMatch: {
+              data: { Parent: { elemMatch: { id: { eq: $categoryId } } } }
+            }
+          }
+        }
+      }
+    ) {
+      nodes {
+        data {
+          Name
+          Homepage
+          About
+          Tags
+          Tagline
+          HQ_Location
+          Organization_Type
+          Headcount
+          Categories {
+            id
             data {
-              Slug
+              Name
+              Parent {
+                id
+                data {
+                  Name
+                }
+              }
+            }
+          }
+          Logo {
+            localFiles {
+              childImageSharp {
+                fixed(
+                  width: 64
+                  height: 64
+                  fit: CONTAIN
+                  background: "white"
+                ) {
+                  ...GatsbyImageSharpFixed
+                }
+              }
+            }
+          }
+          LinkedIn_Profiles {
+            data {
+              Logo {
+                localFiles {
+                  childImageSharp {
+                    fixed(
+                      width: 64
+                      height: 64
+                      fit: CONTAIN
+                      background: "white"
+                    ) {
+                      ...GatsbyImageSharpFixed
+                    }
+                  }
+                }
+              }
             }
           }
         }
       }
     }
-    sectors: allAirtable(filter: { table: { eq: "Sectors" } }) {
+    categories: allAirtable(filter: { table: { eq: "Categories" } }) {
       nodes {
+        id
         data {
-          name: Name
-          slug: Slug
+          Name
+          Count
+          Parent {
+            id
+            data {
+              Name
+            }
+          }
+          Cover {
+            localFiles {
+              childImageSharp {
+                fluid(maxWidth: 32) {
+                  ...GatsbyImageSharpFluid
+                }
+              }
+            }
+          }
         }
       }
     }

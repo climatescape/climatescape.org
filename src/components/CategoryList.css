@@ -1,0 +1,13 @@
+.category.selected {
+  margin-left: -10px;
+}
+.category.selected a {
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.left-sidebar h3,
+.category-list .category {
+  line-height: 2.25rem;
+}

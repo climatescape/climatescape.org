@@ -1,44 +1,16 @@
 import React from "react"
-import { Link, useStaticQuery, graphql } from "gatsby"
+import { Link, graphql } from "gatsby"
 
-import { stringCompare } from "../utils/string"
+import { transformCategories } from "../utils/airtable"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import TopicCard from "../components/TopicCard"
 
-const IndexPage = () => {
-  const data = useStaticQuery(graphql`
-    query HomeQuery {
-      site {
-        siteMetadata {
-          newsletterUrl
-        }
-      }
+export default function IndexPage({ data }) {
+  const categories = transformCategories(data)
 
-      sectors: allAirtable(filter: { table: { eq: "Sectors" } }) {
-        nodes {
-          data {
-            Name
-            Slug
-            Cover {
-              localFiles {
-                childImageSharp {
-                  fluid(maxWidth: 500) {
-                    ...GatsbyImageSharpFluid
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `)
-
-  const sectors = data.sectors.nodes.sort((a, b) =>
-    stringCompare(a.data.Name, b.data.Name)
-  )
+  const topCategories = categories.filter(cat => !cat.parent)
 
   return (
     <Layout contentClassName="text-gray-900">
@@ -50,16 +22,11 @@ const IndexPage = () => {
 
       <div id="organizations" className="py-6 md:py-12 bg-teal-100">
         <h2 className="text-2xl md:text-3xl font-light px-6 pt-3 pb-1 max-w-6xl mx-auto">
-          Browse by Sector
+          Browse by Category
         </h2>
         <div className="p-3 flex flex-wrap max-w-6xl mx-auto">
-          {sectors.map(node => (
-            <TopicCard
-              title={node.data.Name}
-              img={node.data.Cover.localFiles[0].childImageSharp.fluid}
-              path={`/sectors/${node.data.Slug}`}
-              key={node.data.Name}
-            />
+          {topCategories.map(cat => (
+            <TopicCard category={cat} key={cat.name} />
           ))}
         </div>
       </div>
@@ -138,4 +105,36 @@ const IndexPage = () => {
   )
 }
 
-export default IndexPage
+export const query = graphql`
+  query HomeQuery {
+    site {
+      siteMetadata {
+        newsletterUrl
+      }
+    }
+
+    categories: allAirtable(filter: { table: { eq: "Categories" } }) {
+      nodes {
+        id
+        data {
+          Name
+          Parent {
+            id
+            data {
+              Name
+            }
+          }
+          Cover {
+            localFiles {
+              childImageSharp {
+                fluid(maxWidth: 500) {
+                  ...GatsbyImageSharpFluid
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
