@@ -18,8 +18,7 @@ import "./OrganizationCard.css"
 
 function getLogoImage({ logo, photos, categories }) {
   const cat =
-    categories.find(cat => cat.cover) ||
-    categories.find(cat => cat?.parent?.cover)
+    categories.find(c => c.cover) || categories.find(c => c?.parent?.cover)
   return logo || photos[0] || cat?.cover || cat?.parent.cover
 }
 
@@ -40,9 +39,9 @@ function OrganizationCard({
     categories,
   } = organization
 
-  const subCategories = pageContext ? categories.filter(
-    cat => cat.parent?.id === pageContext.categoryId
-  ) : categories
+  const subCategories = pageContext
+    ? categories.filter(cat => cat.parent?.id === pageContext.categoryId)
+    : categories
   const img = getLogoImage(organization)
   return (
     <div className="OrganizationCard border-gray-400 border-b flex items-center p-4 text-gray-900">

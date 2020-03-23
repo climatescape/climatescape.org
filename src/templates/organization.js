@@ -1,20 +1,8 @@
 import React from "react"
-import { graphql, Link } from "gatsby"
+import { graphql } from "gatsby"
 import Img from "gatsby-image"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {
-  faUsers,
-  faBuilding,
-  faLocationArrow,
-  faTag,
-  faHandHoldingUsd,
-  faSearchDollar,
-  faHandshake,
-  faMoneyCheck,
-} from "@fortawesome/free-solid-svg-icons"
 
 import OrganizationSocial from "../components/OrganizationSocial"
-import Section from "../components/Section"
 import {
   OrganizationCategory,
   OrganizationLocation,
@@ -28,8 +16,7 @@ import { transformOrganization } from "../utils/airtable"
 
 function getLogoImage({ logo, photos, categories }) {
   const cat =
-    categories.find(cat => cat.cover) ||
-    categories.find(cat => cat?.parent?.cover)
+    categories.find(c => c.cover) || categories.find(c => c?.parent?.cover)
   return logo || photos[0] || cat?.cover || cat?.parent.cover
 }
 
