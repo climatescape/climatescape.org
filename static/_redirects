@@ -1,4 +1,9 @@
-/sectors/capital/         /capital
-/sectors/capital          /capital
-/sectors/investors/       /capital
-/sectors/investors        /capital
+/sectors/capital                  /capital
+/sectors/investors                /capital
+/sectors/energy                   /categories/energy
+/sectors/transportation           /categories/transportation
+/sectors/food-and-agriculture     /categories/food-and-agriculture
+/sectors/carbon                   /categories/carbon
+/sectors/land-use                 /categories/carbon
+/sectors/research                 /organizations/
+/sectors/water-systems            /categories/water
