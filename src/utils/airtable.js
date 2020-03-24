@@ -3,7 +3,7 @@ import { makeSlug } from "./slug"
 
 function getLogo(Logo, LinkedinProfile) {
   const logo = Logo || LinkedinProfile?.[0]?.data.Logo
-  return logo?.localFiles?.[0]?.childImageSharp?.fixed
+  return logo?.localFiles?.[0]?.childImageSharp?.resize
 }
 
 function transformCategory(data) {
@@ -16,13 +16,14 @@ function transformCategory(data) {
     data: { Name, Count, Cover, Parent },
   } = data
   const parent = transformCategory(Parent?.[0])
+  const cover = Cover?.localFiles?.[0]?.childImageSharp
 
   return {
     id,
     name: Name,
     fullName: parent ? [parent.name, Name].join(" > ") : Name,
     count: Count,
-    cover: Cover?.localFiles?.[0]?.childImageSharp?.fluid,
+    cover: cover?.fluid || cover?.resize,
     slug: `/categories/${makeSlug(Name)}`,
     parent,
   }
@@ -48,7 +49,7 @@ function transformThumbnails(Photos) {
     ? JSON.parse(Photos.internal.content).map(
         internal => internal.thumbnails.large
       )
-    : []
+    : Photos
 }
 
 export function transformOrganization({
@@ -93,10 +94,7 @@ export function transformOrganization({
       stage: data.Stage,
       checkSize: data.CheckSize,
     }))?.[0],
-    photos:
-      Photos?.localFiles?.map(
-        img => img.childImageSharp.fixed || img.childImageSharp.fluid
-      ) ?? [],
+    photos: Photos?.localFiles?.map(i => i.childImageSharp).map(i => i.resize || i.fixed || i.fluid) || [],
     thumbnails: transformThumbnails(Photos),
   }
 }
