@@ -1,6 +1,7 @@
 ## Sample airtable queries
 
 [explorer](http://localhost:8000/__graphQl)
+[Gatsby+GraphQL docs](https://www.gatsbyjs.org/docs/graphql-reference/)
 
 ### Top Level Categories
 
