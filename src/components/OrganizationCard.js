@@ -125,7 +125,7 @@ export default function OrganizationCard({
           <Link to={slug} className="">
             <img
               src={img.src}
-              alt={`Logo of ${title}`}
+              alt={`${title} logo`}
               className="OrganizationCard-logo blend-multiply rounded-lg w-32 h-32"
             />
           </Link>
