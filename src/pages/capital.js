@@ -75,66 +75,7 @@ export const query = graphql`
       }
     ) {
       nodes {
-        data {
-          Name
-          Homepage
-          About
-          Tagline
-          HQ_Location
-          Organization_Type
-          Logo {
-            localFiles {
-              childImageSharp {
-                fixed(
-                  width: 64
-                  height: 64
-                  fit: CONTAIN
-                  background: "white"
-                ) {
-                  ...GatsbyImageSharpFixed
-                }
-              }
-            }
-          }
-          Categories {
-            id
-            data {
-              Name
-              Parent {
-                id
-                data {
-                  Name
-                }
-              }
-            }
-          }
-          Capital_Profile {
-            data {
-              Type
-              Strategic
-              Stage
-              CheckSize: Check_Size
-            }
-          }
-          LinkedIn_Profiles {
-            data {
-              Logo {
-                localFiles {
-                  childImageSharp {
-                    fixed(
-                      width: 64
-                      height: 64
-                      fit: CONTAIN
-                      background: "white"
-                    ) {
-                      ...GatsbyImageSharpFixed
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+        ...CapitalOrganizationCard
       }
     }
     site {

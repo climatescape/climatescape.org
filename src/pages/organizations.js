@@ -92,60 +92,7 @@ export const query = graphql`
       }
     ) {
       nodes {
-        data {
-          Name
-          Homepage
-          About
-          Tags
-          Tagline
-          HQ_Location
-          Organization_Type
-          Headcount
-          Categories {
-            id
-            data {
-              Name
-              Parent {
-                id
-                data {
-                  Name
-                }
-              }
-            }
-          }
-          Logo {
-            localFiles {
-              childImageSharp {
-                fixed(
-                  width: 128
-                  height: 128
-                  fit: CONTAIN
-                  background: "white"
-                ) {
-                  ...GatsbyImageSharpFixed
-                }
-              }
-            }
-          }
-          LinkedIn_Profiles {
-            data {
-              Logo {
-                localFiles {
-                  childImageSharp {
-                    fixed(
-                      width: 128
-                      height: 128
-                      fit: CONTAIN
-                      background: "white"
-                    ) {
-                      ...GatsbyImageSharpFixed
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+        ...OrganizationCard
       }
     }
     subOrganizations: allAirtable(
@@ -161,55 +108,7 @@ export const query = graphql`
       }
     ) {
       nodes {
-        data {
-          Name
-          Homepage
-          About
-          Tags
-          Tagline
-          HQ_Location
-          Organization_Type
-          Headcount
-          Categories {
-            id
-            data {
-              Name
-              Parent {
-                id
-                data {
-                  Name
-                }
-              }
-            }
-          }
-          Logo {
-            localFiles {
-              childImageSharp {
-                fixed(
-                  width: 128
-                  height: 128
-                  fit: CONTAIN
-                  background: "white"
-                ) {
-                  ...GatsbyImageSharpFixed
-                }
-              }
-            }
-          }
-          LinkedIn_Profiles {
-            data {
-              Logo {
-                localFiles {
-                  childImageSharp {
-                    fixed(width: 128, height: 128, fit: CONTAIN) {
-                      ...GatsbyImageSharpFixed
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+        ...OrganizationCard
       }
     }
   }

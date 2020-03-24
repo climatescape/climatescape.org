@@ -1,5 +1,5 @@
 import React from "react"
-import { Link } from "gatsby"
+import { Link, graphql } from "gatsby"
 import Img from "gatsby-image"
 import PropTypes from "prop-types"
 
@@ -20,7 +20,7 @@ function getLogoImage({ logo, photos, categories }) {
   return logo || photos[0] || cat?.cover || cat?.parent.cover
 }
 
-function OrganizationCard({
+export default function OrganizationCard({
   pageContext,
   organization,
   currentFilter,
@@ -146,4 +146,70 @@ OrganizationCard.propTypes = {
   onApplyFilter: PropTypes.object,
 }
 
-export default OrganizationCard
+// Includes all the expected attributes for rendering an OrganizationCard. To
+// query Capital Profile information, use the CapitalOrganizationCard fragment
+export const query = graphql`
+  fragment OrganizationCardLogo on AirtableField {
+    localFiles {
+      childImageSharp {
+        fixed(
+          width: 128
+          height: 128
+          fit: CONTAIN
+          background: "white"
+        ) {
+          ...GatsbyImageSharpFixed
+        }
+      }
+    }
+  }
+
+  fragment OrganizationCard on Airtable {
+    data {
+      Name
+      Homepage
+      About
+      Tags
+      Tagline
+      HQ_Location
+      Organization_Type
+      Headcount
+      Categories {
+        id
+        data {
+          Name
+          Parent {
+            id
+            data {
+              Name
+            }
+          }
+        }
+      }
+      Logo {
+        ...OrganizationCardLogo
+      }
+      LinkedIn_Profiles {
+        data {
+          Logo {
+            ...OrganizationCardLogo
+          }
+        }
+      }
+    }
+  }
+
+  fragment CapitalOrganizationCard on Airtable {
+    ...OrganizationCard
+    data {
+      Capital_Profile {
+        data {
+          Type
+          Strategic
+          Stage
+          CheckSize: Check_Size
+        }
+      }
+    }
+  }
+`
