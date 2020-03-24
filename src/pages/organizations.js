@@ -89,7 +89,14 @@ export const query = graphql`
       filter: {
         table: { eq: "Organizations" }
         data: {
-          Role: { in: ["Products & Services", "Research & Development", "Advocacy", "Network"] }
+          Role: {
+            in: [
+              "Products & Services"
+              "Research & Development"
+              "Advocacy"
+              "Network"
+            ]
+          }
           Categories: { elemMatch: { id: { eq: $categoryId } } }
         }
       }
@@ -155,7 +162,14 @@ export const query = graphql`
       filter: {
         table: { eq: "Organizations" }
         data: {
-          Role: { in: ["Products & Services", "Research & Development", "Advocacy", "Network"] }
+          Role: {
+            in: [
+              "Products & Services"
+              "Research & Development"
+              "Advocacy"
+              "Network"
+            ]
+          }
           Categories: {
             elemMatch: {
               data: { Parent: { elemMatch: { id: { eq: $categoryId } } } }
