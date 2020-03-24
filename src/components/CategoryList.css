@@ -1,13 +1,11 @@
-.category.selected {
-  margin-left: -10px;
-}
-.category.selected a {
-  padding: 5px 10px;
-  border-radius: 5px;
-  text-decoration: none;
+.CategoryList .TopCategory {
+  @apply font-sans text-gray-700 underline;
 }
 
-.left-sidebar h3,
-.category-list .category {
-  line-height: 2.25rem;
+.CategoryList .TopCategory.selected {
+  @apply no-underline -ml-2;
+}
+
+.CategoryList .TopCategory.selected a {
+  @apply bg-gray-300 py-1 px-2 rounded;
 }
