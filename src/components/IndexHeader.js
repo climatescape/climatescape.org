@@ -11,7 +11,7 @@ const IndexHeader = ({
   filter,
   onClearFilter,
 }) => (
-  <div className="border-b border-gray-400 p-3">
+  <div className="border-b border-gray-400 py-3">
     <div className="flex items-center">
       <h2 className="text-2xl tracking-wide md:mt-4 flex-grow">{title}</h2>
 
