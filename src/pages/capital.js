@@ -1,12 +1,11 @@
 import React from "react"
 import { graphql } from "gatsby"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
 import { transformOrganizations } from "../utils/airtable"
 
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
+import IndexHeader from "../components/IndexHeader"
 import OrganizationFilter, {
   useOrganizationFilterState,
 } from "../components/OrganizationFilter"
@@ -24,30 +23,18 @@ const CapitalTemplate = ({
   organizations = applyFilter(organizations)
 
   return (
-    <Layout contentClassName="bg-gray-200">
+    <Layout contentClassName="bg-gray-100">
       <SEO
         title="Climate Capital on Climatescape"
         description="Find climate-friendly VCs, grants, project finance, and more on Climatescape"
       />
 
       <div className="max-w-4xl mx-auto pb-4">
-        <div className="flex items-center p-3 md:mt-4">
-          <h2 className="text-3xl tracking-wide font-light flex-grow">
-            Climate Capital
-          </h2>
-          <a
-            href={site.siteMetadata.capitalFormUrl}
-            className="px-4 py-2 leading-none border rounded text-teal-500 border-teal-500 hover:border-transparent hover:text-white hover:bg-teal-500"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FontAwesomeIcon icon={faEdit} className="mr-2" />
-            Edit
-          </a>
-        </div>
-
-        <OrganizationFilter
-          currentFilter={filter}
+        <IndexHeader
+          title="Climate Capital"
+          buttonText="Edit"
+          buttonUrl={site.siteMetadata.capitalFormUrl}
+          filter={filter}
           onClearFilter={() => setFilter.none()}
         />
 
