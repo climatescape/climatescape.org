@@ -3,7 +3,8 @@ import { makeSlug } from "./slug"
 
 function getLogo(Logo, LinkedinProfile) {
   const logo = Logo || LinkedinProfile?.[0]?.data.Logo
-  return logo?.localFiles?.[0]?.childImageSharp?.resize
+  const logoSharp = logo?.localFiles?.[0]?.childImageSharp
+  return logoSharp?.resize || logoSharp?.fuild || logoSharp?.fixed
 }
 
 function transformCategory(data) {
@@ -94,7 +95,10 @@ export function transformOrganization({
       stage: data.Stage,
       checkSize: data.CheckSize,
     }))?.[0],
-    photos: Photos?.localFiles?.map(i => i.childImageSharp).map(i => i.resize || i.fixed || i.fluid) || [],
+    photos:
+      Photos?.localFiles
+        ?.map(i => i.childImageSharp)
+        .map(i => i.resize || i.fixed || i.fluid) || [],
     thumbnails: transformThumbnails(Photos),
   }
 }

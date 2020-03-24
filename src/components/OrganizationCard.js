@@ -1,6 +1,5 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
-import Img from "gatsby-image"
 import PropTypes from "prop-types"
 
 import {
@@ -16,7 +15,7 @@ import {
 
 function getLogoImage({ logo, photos, categories }) {
   const cat =
-   categories.find(c => c.cover) || categories.find(c => c?.parent?.cover)
+    categories.find(c => c.cover) || categories.find(c => c?.parent?.cover)
   return logo || photos[0] || cat?.cover || cat?.parent.cover
 }
 
@@ -48,6 +47,7 @@ export default function OrganizationCard({
           <Link to={slug} className="">
             <img
               src={img.src}
+              alt={`Logo of ${title}`}
               className="OrganizationCard-logo blend-multiply rounded-lg w-32 h-32"
             />
           </Link>
