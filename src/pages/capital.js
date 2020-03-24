@@ -27,7 +27,7 @@ const CapitalTemplate = ({
         description="Find climate-friendly VCs, grants, project finance, and more on Climatescape"
       />
 
-      <div className="max-w-4xl mx-auto pb-4">
+      <div className="max-w-3xl mx-auto pb-4">
         <IndexHeader
           title="Climate Capital"
           buttonText="Edit"
@@ -36,7 +36,7 @@ const CapitalTemplate = ({
           onClearFilter={() => setFilter.none()}
         />
 
-        <div className="bg-white">
+        <div>
           {organizations.map(organization => (
             <OrganizationCard
               key={organization.title}
