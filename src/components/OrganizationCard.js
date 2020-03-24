@@ -1,6 +1,5 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
-import Img from "gatsby-image"
 import PropTypes from "prop-types"
 
 import {
@@ -46,8 +45,9 @@ export default function OrganizationCard({
       <div className="mr-5 w-32  flex-shrink-0 hidden sm:block">
         {img && (
           <Link to={slug} className="">
-            <Img
-              fixed={img}
+            <img
+              src={img.src}
+              alt={`Logo of ${title}`}
               className="OrganizationCard-logo blend-multiply rounded-lg w-32 h-32"
             />
           </Link>
@@ -152,8 +152,18 @@ export const query = graphql`
   fragment OrganizationCardLogo on AirtableField {
     localFiles {
       childImageSharp {
-        fixed(width: 128, height: 128, fit: CONTAIN, background: "white") {
-          ...GatsbyImageSharpFixed
+        resize(width: 256, height: 256, fit: CONTAIN, background: "white") {
+          src
+        }
+      }
+    }
+  }
+
+  fragment OrganizationCardPhoto on AirtableField {
+    localFiles {
+      childImageSharp {
+        resize(width: 256, height: 256, fit: COVER) {
+          src
         }
       }
     }
@@ -169,14 +179,23 @@ export const query = graphql`
       HQ_Location
       Organization_Type
       Headcount
+      Photos {
+        ...OrganizationCardPhoto
+      }
       Categories {
         id
         data {
           Name
+          Cover {
+            ...OrganizationCardPhoto
+          }
           Parent {
             id
             data {
               Name
+              Cover {
+                ...OrganizationCardPhoto
+              }
             }
           }
         }
