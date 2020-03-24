@@ -152,12 +152,7 @@ export const query = graphql`
   fragment OrganizationCardLogo on AirtableField {
     localFiles {
       childImageSharp {
-        fixed(
-          width: 128
-          height: 128
-          fit: CONTAIN
-          background: "white"
-        ) {
+        fixed(width: 128, height: 128, fit: CONTAIN, background: "white") {
           ...GatsbyImageSharpFixed
         }
       }
