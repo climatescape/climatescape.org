@@ -82,7 +82,17 @@ export const query = graphql`
     topOrganizations: allAirtable(
       filter: {
         table: { eq: "Organizations" }
-        data: { Categories: { elemMatch: { id: { eq: $categoryId } } } }
+        data: {
+          Role: {
+            in: [
+              "Products & Services"
+              "Research & Development"
+              "Advocacy"
+              "Network"
+            ]
+          }
+          Categories: { elemMatch: { id: { eq: $categoryId } } }
+        }
       }
     ) {
       nodes {
@@ -93,6 +103,14 @@ export const query = graphql`
       filter: {
         table: { eq: "Organizations" }
         data: {
+          Role: {
+            in: [
+              "Products & Services"
+              "Research & Development"
+              "Advocacy"
+              "Network"
+            ]
+          }
           Categories: {
             elemMatch: {
               data: { Parent: { elemMatch: { id: { eq: $categoryId } } } }
