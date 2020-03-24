@@ -101,11 +101,16 @@ export default function OrganizationTemplate({ data }) {
             </div>
             <Tags org={org} />
 
-            <div className="carousel my-6">
-              {org.photos.slice(0, 1).map(photo => (
-                <Img fluid={photo} className="organization-img rounded-lg" />
-              ))}
-            </div>
+            {org.thumbnails[0] && (
+              <div className="carousel my-8 bg-gray-200 rounded-lg p-4">
+                <img
+                  src={org.thumbnails[0].url}
+                  alt={org.title}
+                  style={{ height: "20rem" }}
+                  className="organization-img mx-auto"
+                />
+              </div>
+            )}
             {org.about && org.about !== org.tagline && (
               <div className="my-6">{org.about}</div>
             )}
@@ -166,6 +171,9 @@ export const query = graphql`
             }
           }
         }
+        Photos {
+          ...OrganizationCardPhoto
+        }
         LinkedIn_Profiles {
           data {
             Logo {
@@ -188,10 +196,16 @@ export const query = graphql`
           id
           data {
             Name
+            Cover {
+              ...OrganizationCardPhoto
+            }
             Parent {
               id
               data {
                 Name
+                Cover {
+                  ...OrganizationCardPhoto
+                }
               }
             }
           }

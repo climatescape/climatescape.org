@@ -167,6 +167,9 @@ export const query = graphql`
         }
       }
     }
+    internal {
+      content
+    }
   }
 
   fragment OrganizationCard on Airtable {
