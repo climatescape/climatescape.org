@@ -34,9 +34,9 @@ function OrganizationsTemplate({ data, pageContext }) {
     <Layout contentClassName="bg-gray-100">
       <SEO title={`${organizationsTitle} organizations on Climatescape`} />
 
-      <div className="flex flex-col mx-auto container lg:flex-row font-sans">
+      <div className="flex flex-col mx-auto container lg:flex-row font-sans lg:w-4/5">
         <CategoryList categories={categories} pageContext={pageContext} />
-        <div className="lg:w-3/5">
+        <div className="lg:w-4/5">
           <div className="border-b-2 border-gray-700 p-3">
             <h2 className="text-2xl tracking-wide md:mt-4">
               {organizationsTitle}
