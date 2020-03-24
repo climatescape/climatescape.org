@@ -154,18 +154,6 @@ export const query = graphql`
             }
           }
         }
-        Photos {
-          localFiles {
-            childImageSharp {
-              fluid(maxWidth: 700) {
-                ...GatsbyImageSharpFluid
-              }
-            }
-          }
-          internal {
-            content
-          }
-        }
         Categories {
           id
           data {
