@@ -16,7 +16,7 @@ import {
 function getLogoImage({ logo, photos, categories }) {
   const cat =
     categories.find(c => c.cover) || categories.find(c => c?.parent?.cover)
-  return logo || photos[0] || cat?.cover || cat?.parent.cover
+  return photos[0] || logo || cat?.cover || cat?.parent.cover
 }
 
 export default function OrganizationCard({
