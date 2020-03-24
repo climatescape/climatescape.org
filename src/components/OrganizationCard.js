@@ -14,8 +14,6 @@ import {
   OrganizationCapitalCheckSize,
 } from "./OrganizationAttributes"
 
-import "./OrganizationCard.css"
-
 function getLogoImage({ logo, photos, categories }) {
   const cat =
     categories.find(c => c.cover) || categories.find(c => c?.parent?.cover)
@@ -50,7 +48,7 @@ function OrganizationCard({
           <Link to={slug} className="">
             <Img
               fixed={img}
-              className="OrganizationCard-logo rounded-lg w-32 h-32"
+              className="OrganizationCard-logo blend-multiply rounded-lg w-32 h-32"
             />
           </Link>
         )}

@@ -63,7 +63,11 @@ const Layout = ({ children, contentClassName }) => {
         </div>
         <div className="pt-3 sm:pt-0">
           <a href="https://www.netlify.com" className="inline-block">
-            <img src={NetlifyLogo} alt="Deploys by Netlify" />
+            <img
+              className="blend-multiply"
+              src={NetlifyLogo}
+              alt="Deploys by Netlify"
+            />
           </a>
         </div>
       </footer>
