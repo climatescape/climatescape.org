@@ -6,9 +6,8 @@ import { transformCategories, transformOrganizations } from "../utils/airtable"
 
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
-import OrganizationFilter, {
-  useOrganizationFilterState,
-} from "../components/OrganizationFilter"
+import IndexHeader from "../components/IndexHeader"
+import { useOrganizationFilterState } from "../components/OrganizationFilter"
 import AddOrganizationCTA from "../components/AddOrganizationCTA"
 import SEO from "../components/seo"
 import CategoryList from "../components/CategoryList"
@@ -28,7 +27,7 @@ function OrganizationsTemplate({ data, pageContext }) {
 
   organizations = applyFilter(organizations)
 
-  const organizationsTitle = pageContext.categoryName || "All"
+  const organizationsTitle = pageContext.categoryName || "All Organizations"
 
   return (
     <Layout contentClassName="bg-gray-100">
@@ -37,16 +36,11 @@ function OrganizationsTemplate({ data, pageContext }) {
       <div className="flex flex-col mx-auto container lg:flex-row font-sans">
         <CategoryList categories={categories} pageContext={pageContext} />
         <div className="lg:w-3/5">
-          <div className="border-b-2 border-gray-700 p-3">
-            <h2 className="text-2xl tracking-wide md:mt-4">
-              {organizationsTitle}
-            </h2>
-
-            <OrganizationFilter
-              currentFilter={filter}
-              onClearFilter={() => setFilter.none()}
-            />
-          </div>
+          <IndexHeader
+            title={organizationsTitle}
+            filter={filter}
+            onClearFilter={() => setFilter.none()}
+          />
 
           <div className="">
             {organizations.map(org => (
