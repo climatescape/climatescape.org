@@ -8,3 +8,7 @@
   margin: 1rem 0;
   height: 250px;
 }
+
+.blend-multiply {
+  mix-blend-mode: multiply;
+}
