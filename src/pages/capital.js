@@ -6,9 +6,7 @@ import { transformOrganizations } from "../utils/airtable"
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
 import IndexHeader from "../components/IndexHeader"
-import OrganizationFilter, {
-  useOrganizationFilterState,
-} from "../components/OrganizationFilter"
+import { useOrganizationFilterState } from "../components/OrganizationFilter"
 import SEO from "../components/seo"
 
 const CapitalTemplate = ({
