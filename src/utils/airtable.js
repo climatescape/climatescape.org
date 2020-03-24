@@ -50,7 +50,7 @@ function transformThumbnails(Photos) {
     ? JSON.parse(Photos.internal.content).map(
         internal => internal.thumbnails.large
       )
-    : Photos
+    : []
 }
 
 export function transformOrganization({
