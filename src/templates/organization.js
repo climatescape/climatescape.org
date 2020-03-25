@@ -74,7 +74,10 @@ function Tags({ org }) {
 
 export default function OrganizationTemplate({ data }) {
   const siteTitle = data.site.siteMetadata.title
-  const org = transformOrganization(data.organization)
+  const org = transformOrganization(data.organization, (raw, out) => ({
+    ...out,
+    fullPhotos: raw.data.fullPhotos?.localFiles || []
+  }))
 
   const img = getLogoImage(org)
 
@@ -96,15 +99,15 @@ export default function OrganizationTemplate({ data }) {
               </div>
               <div>
                 <h1 className="flex-grow text-xl font-semibold">{org.title}</h1>
-                <p> {org.description}</p>
+                <p>{org.description}</p>
               </div>
             </div>
             <Tags org={org} />
 
-            {org.thumbnails[0] && (
+            {org.fullPhotos[0] && (
               <div className="carousel my-8 bg-gray-200 rounded-lg p-4">
                 <img
-                  src={org.thumbnails[0].url}
+                  src={org.fullPhotos[0].publicURL}
                   alt={org.title}
                   style={{ height: "20rem" }}
                   className="organization-img mx-auto"
@@ -173,6 +176,11 @@ export const query = graphql`
         }
         Photos {
           ...OrganizationCardPhoto
+        }
+        fullPhotos: Photos {
+          localFiles {
+            publicURL
+          }
         }
         LinkedIn_Profiles {
           data {
