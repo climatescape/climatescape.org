@@ -1,7 +1,7 @@
-import React, { useState } from "react"
+import React from "react"
 import classnames from "classnames"
 
-import { useStaticQuery, graphql } from "gatsby"
+import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import ContributorCard from "../components/ContributorCard"
@@ -11,16 +11,19 @@ const Header = ({ children, className = {} }) => (
     className={classnames(
       "text-gray-900 text-2xl md:text-3xl font-light my-3",
       className
-    )}>
+    )}
+  >
     {children}
   </h2>
 )
 
 const TextLink = ({ href, children, newWindow = false }) => {
-  const newWindowArgs = newWindow ? {
-    target: "blank",
-    rel: "noopener noreferrer"
-  } : {}
+  const newWindowArgs = newWindow
+    ? {
+        target: "blank",
+        rel: "noopener noreferrer",
+      }
+    : {}
 
   return (
     <a
@@ -43,7 +46,11 @@ export default function ContributePage({ data }) {
       website: Website,
     }))
 
-  const { organizationFormUrl, capitalFormUrl, contributorFormUrl } = data.site.siteMetadata
+  const {
+    organizationFormUrl,
+    capitalFormUrl,
+    contributorFormUrl,
+  } = data.site.siteMetadata
 
   return (
     <Layout contentClassName="bg-gray-100">
@@ -54,16 +61,24 @@ export default function ContributePage({ data }) {
             <Header>Submit an Organization</Header>
             <p>
               We invite anyone to submit new organizations to our website. The
-              only requirement for acceptance is a positive impact to
-              climate change mitigation or adaptation.
+              only requirement for acceptance is a positive impact to climate
+              change mitigation or adaptation.
             </p>
             <p className="mt-2">
               For investors, organizations providing grants, project finance, or
-              other forms of capital, use the <TextLink newWindow href={capitalFormUrl}>Capital Form</TextLink>.
+              other forms of capital, use the{" "}
+              <TextLink newWindow href={capitalFormUrl}>
+                Capital Form
+              </TextLink>
+              .
             </p>
             <p className="mt-2">
               For organizations providing products, services, research,
-              networks, or otherwise, use the <TextLink newWindow href={organizationFormUrl}>Organization Form</TextLink>.
+              networks, or otherwise, use the{" "}
+              <TextLink newWindow href={organizationFormUrl}>
+                Organization Form
+              </TextLink>
+              .
             </p>
             <Header className="pt-3">Join our Team</Header>
             <p className="my-2">
@@ -73,16 +88,26 @@ export default function ContributePage({ data }) {
             </p>
             <ol className="list-decimal list-outside ml-5">
               <li className="mt-1">
-                Apply to join our <TextLink newWindow href={contributorFormUrl}>editorial team</TextLink>
+                Apply to join our{" "}
+                <TextLink newWindow href={contributorFormUrl}>
+                  editorial team
+                </TextLink>
               </li>
               <li className="mt-1">
                 Contribute to the development of this website{" "}
-                <TextLink newWindow href="https://github.com/bloudermilk/climatescape/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22">on GitHub</TextLink>
+                <TextLink
+                  newWindow
+                  href="https://github.com/bloudermilk/climatescape/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22"
+                >
+                  on GitHub
+                </TextLink>
               </li>
             </ol>
             <p className="my-2">
               Want to help another way?{" "}
-              <TextLink href="mailto:brendan@sinceresoftware.co">Contact us</TextLink>
+              <TextLink href="mailto:brendan@sinceresoftware.co">
+                Get in touch
+              </TextLink>
             </p>
           </div>
         </div>
