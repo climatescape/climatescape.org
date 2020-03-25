@@ -34,14 +34,7 @@ const config = {
               Logo: `fileNode`,
               Photos: `fileNode`,
             },
-            tableLinks: [`Sector`, `LinkedIn_Profiles`, `Categories`, `Capital_Profile`],
-          },
-          {
-            baseId: `appNYMWxGF1jMaf5V`,
-            tableName: `Sectors`,
-            tableView: `Published`,
-            mapping: { Cover: `fileNode` },
-            tableLinks: [`Organizations`],
+            tableLinks: [`LinkedIn_Profiles`, `Categories`, `Capital_Profile`],
           },
           {
             baseId: `appNYMWxGF1jMaf5V`,
