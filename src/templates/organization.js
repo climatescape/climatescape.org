@@ -76,7 +76,7 @@ export default function OrganizationTemplate({ data }) {
   const siteTitle = data.site.siteMetadata.title
   const org = transformOrganization(data.organization, (raw, out) => ({
     ...out,
-    fullPhotos: raw.data.fullPhotos?.localFiles || []
+    fullPhotos: raw.data.fullPhotos?.localFiles || [],
   }))
 
   const img = getLogoImage(org)

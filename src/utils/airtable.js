@@ -57,7 +57,7 @@ function transformThumbnails(Photos) {
 // simplifies data structures.
 // Optionally accepts a `userTransform` function to further modify the `out`
 // value with `raw` data before returning
-export function transformOrganization(raw, userTransform = (raw, out) => out) {
+export function transformOrganization(raw, userTransform = (_, out) => out) {
   const {
     id,
     data: {
@@ -105,7 +105,7 @@ export function transformOrganization(raw, userTransform = (raw, out) => out) {
       Photos?.localFiles
         ?.map(i => i.childImageSharp)
         .map(i => i.resize || i.fixed || i.fluid) || [],
-    thumbnails: transformThumbnails(Photos)
+    thumbnails: transformThumbnails(Photos),
   })
 }
 
