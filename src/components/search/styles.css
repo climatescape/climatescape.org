@@ -16,7 +16,7 @@
 }
 
 .algolia-bar {
-   @apply leading-8 text-left inline-block pl-4 bg-gray-200 rounded-b-sm;
+  @apply leading-8 text-left inline-block pl-4 bg-gray-200 rounded-b-sm;
 }
 
 .algolia-bar span {
@@ -29,4 +29,12 @@
 
 .search-root .hit a {
   @apply flex-grow;
+}
+
+.no-results span {
+  @apply pl-4 leading-8;
+}
+
+.no-results .highlight {
+  @apply pl-0 font-bold;
 }

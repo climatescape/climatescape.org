@@ -30,7 +30,15 @@ const hitComps = { PageHit }
 
 const Results = connectStateResults(
   ({ searchState: state, searchResults: res, children }) =>
-    res && res.nbHits > 0 ? children : `No results for '${state.query}'`
+    res && res.nbHits > 0 ? (
+      children
+    ) : (
+      <div className="no-results text-gray-700">
+        <span>
+          No results found for <span className="highlight">{state.query}</span>
+        </span>
+      </div>
+    )
 )
 
 const useClickOutside = (ref, handler, events) => {
