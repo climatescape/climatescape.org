@@ -16,14 +16,12 @@ export default function IndexPage({ data }) {
     <Layout contentClassName="text-gray-900">
       <SEO />
 
-      <h2 className="bg-teal-500 text-2xl md:text-4xl text-center font-light tracking-wide text-white px-2 sm:px-6 pt-8 pb-16 md:pt-12 md:pb-24">
-        Discover&nbsp;the&nbsp;organizations solving&nbsp;climate&nbsp;change
+      <h2 className="font-bold text-2xl md:text-4xl text-center font-light tracking-wide text-gray-800 px-2 sm:px-6 pt-8 pb-16 md:pt-12 md:pb-24">
+        Discover&nbsp;the&nbsp;organizations <br />{" "}
+        solving&nbsp;climate&nbsp;change
       </h2>
 
-      <div id="organizations" className="py-6 md:py-12 bg-teal-100">
-        <h2 className="text-2xl md:text-3xl font-light px-6 pt-3 pb-1 max-w-6xl mx-auto">
-          Browse by Category
-        </h2>
+      <div id="organizations" className="py-6 md:py-6 bg-gray-100">
         <div className="p-3 flex flex-wrap max-w-6xl mx-auto">
           {topCategories.map(cat => (
             <TopicCard category={cat} key={cat.name} />

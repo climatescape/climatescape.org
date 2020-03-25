@@ -82,6 +82,7 @@ const config = {
             family: `Roboto`,
             variants: [`400`, `700`],
           },
+          { family: "Roboto Mono" },
         ],
       },
     },

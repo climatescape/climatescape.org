@@ -13,7 +13,9 @@ const IndexHeader = ({
 }) => (
   <div className="border-b border-gray-400 py-3">
     <div className="flex items-center">
-      <h2 className="text-2xl tracking-wide md:mt-4 flex-grow">{title}</h2>
+      <h2 className="text-2xl tracking-wide md:mt-4 font-title flex-grow">
+        {title}
+      </h2>
 
       {buttonText && buttonUrl && (
         <a

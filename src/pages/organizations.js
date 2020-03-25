@@ -31,10 +31,10 @@ function OrganizationsTemplate({ data, pageContext }) {
   const { organizationFormUrl } = data.site.siteMetadata
 
   return (
-    <Layout contentClassName="bg-gray-100">
+    <Layout contentClassName="bg-gray-100 px-6">
       <SEO title={`${organizationsTitle} organizations on Climatescape`} />
 
-      <div className="flex flex-col mx-auto container lg:flex-row font-sans">
+      <div className="flex flex-col mx-auto container lg:flex-row font-sans ">
         <CategoryList categories={categories} pageContext={pageContext} />
         <div className="lg:w-3/5">
           <IndexHeader

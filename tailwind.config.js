@@ -5,6 +5,7 @@ module.exports = {
     },
     fontFamily: {
       sans: `Roboto, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";`,
+      title: `Roboto Mono, Robot, system-ui`,
     },
     extend: {},
   },
