@@ -18,6 +18,7 @@ const AddOrganizationCTA = ({ url, text = "Add an organization" }) => (
 )
 
 AddOrganizationCTA.propTypes = {
+  text: PropTypes.string,
   url: PropTypes.string,
 }
 
