@@ -53,27 +53,33 @@ function transformThumbnails(Photos) {
     : []
 }
 
-export function transformOrganization({
-  id,
-  data: {
-    Name,
-    About,
-    Tags,
-    Homepage,
-    HQ_Location: HQLocation,
-    Tagline,
-    Logo,
-    LinkedIn,
-    LinkedIn_Profiles: LinkedinProfile,
-    Headcount,
-    Organization_Type: OrganizationType,
-    Categories,
-    Twitter,
-    Capital_Profile: CapitalProfile,
-    Photos,
-  },
-}) {
-  return {
+// Accepts a `raw` organization from GraphQL, cleans up the key formatting and
+// simplifies data structures.
+// Optionally accepts a `userTransform` function to further modify the `out`
+// value with `raw` data before returning
+export function transformOrganization(raw, userTransform = (_, out) => out) {
+  const {
+    id,
+    data: {
+      Name,
+      About,
+      Tags,
+      Homepage,
+      HQ_Location: HQLocation,
+      Tagline,
+      Logo,
+      LinkedIn,
+      LinkedIn_Profiles: LinkedinProfile,
+      Headcount,
+      Organization_Type: OrganizationType,
+      Categories,
+      Twitter,
+      Capital_Profile: CapitalProfile,
+      Photos,
+    },
+  } = raw
+
+  return userTransform(raw, {
     id,
     title: Name,
     description: Tagline || About,
@@ -100,12 +106,12 @@ export function transformOrganization({
         ?.map(i => i.childImageSharp)
         .map(i => i.resize || i.fixed || i.fluid) || [],
     thumbnails: transformThumbnails(Photos),
-  }
+  })
 }
 
 export function transformOrganizations(orgs) {
   const organizations = orgs
-    .map(transformOrganization)
+    .map(org => transformOrganization(org))
     .sort((a, b) => stringCompare(a.title, b.title))
 
   if (typeof window === "object") {
