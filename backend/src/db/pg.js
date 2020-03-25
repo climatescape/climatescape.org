@@ -1,7 +1,6 @@
 const Url = require("url")
 const Pool = require("pg-pool")
 const Knex = require("knex")
-const pMemoize = require("p-memoize")
 
 // WITHIN_CONTAINER is set in docker-compose.yml
 // We are *not* running within a local container when we run jest tests, e. g. via `yarn test`
@@ -10,8 +9,7 @@ const host = isRunningWithinLocalContainer ? "db" : "localhost"
 // user, password, and the database name correspond to those set in docker-compose.yml
 const pgLocalConnectionString = `postgres://postgres:postgres@${host}:5432/postgres`
 
-const PgBoss = require("pg-boss")
-const { isProduction } = require("./utils")
+const { isProduction } = require("../utils")
 
 const pgConnectionString = isProduction
   ? process.env.DATABASE_URL
@@ -40,7 +38,13 @@ const pgConfig = {
   // 3. Add to db service in docker-compose.yml:
   //     command:
   //       -c ssl=on -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/var/lib/postgresql/server.key
-  ssl: isProduction,
+  ssl: isProduction
+    ? {
+        require: true,
+        // See https://github.com/brianc/node-postgres/issues/2009
+        rejectUnauthorized: false,
+      }
+    : false,
 }
 
 const pgPool = new Pool(pgConfig)
@@ -82,24 +86,6 @@ const pgPoolWrapper = {
   },
 }
 
-const pgBossQueue = new PgBoss({ db: { executeSql: pgPoolWrapper.query } })
-
-pgBossQueue.on("error", err => console.error(err))
-
-/**
- * @returns {Promise<PgBoss>}
- */
-async function setupPgBossQueue() {
-  await pgBossQueue.start()
-  return pgBossQueue
-}
-
-// noinspection JSCheckFunctionSignatures: https://youtrack.jetbrains.com/issue/WEB-44307
-/**
- * @type {function(): Promise<PgBoss>}
- */
-const setupPgBossQueueMemoized = pMemoize(setupPgBossQueue)
-
 /**
  * Don't provide connection to make knex(...) builders "cold" and only start
  * execution of the query in {@link executeKnex}.
@@ -133,6 +119,9 @@ async function executeKnex(knexQueryOrSchemaBuilder) {
  * @returns {Promise<void>}
  */
 async function executeInsertOrUpdate(table, keys, payload) {
+  if (!Object.keys(payload).length) {
+    throw new Error("Use executeInsertIfNotExists() instead")
+  }
   const update = Object.keys(payload)
     .map(key => knex.raw("?? = EXCLUDED.??", [key, key]))
     .join(", ")
@@ -141,18 +130,35 @@ async function executeInsertOrUpdate(table, keys, payload) {
     .map(key => knex.ref(key))
     .join(", ")
 
-  const sql = `? ON CONFLICT (${constraint}) 
-               DO ${(update && `UPDATE SET ${update}`) || "NOTHING"};`
+  const sql = `? ON CONFLICT (${constraint}) DO UPDATE SET ${update};`
   const query = knex.raw(sql, [
-    knex
-      .insert({
-        ...keys,
-        ...payload,
-      })
-      .into(table),
+    knex.insert({ ...keys, ...payload }).into(table),
   ])
   const result = await executeKnex(query)
   if ((update && result.rowCount === 0) || result.rowCount > 1) {
+    throw new Error(
+      `${result.rowCount} rows updated by the query, integrity constraint violation?`
+    )
+  }
+}
+
+/**
+ * @param {string} table - table name
+ * @param {Object} keys - constraint key/value object (insert)
+ * @param {Object} payload - row data values
+ * @returns {Promise<void>}
+ */
+async function executeInsertIfNotExists(table, keys, payload) {
+  const constraint = Object.keys(keys)
+    .map(key => knex.ref(key))
+    .join(", ")
+
+  const sql = `? ON CONFLICT (${constraint}) DO NOTHING;`
+  const query = knex.raw(sql, [
+    knex.insert({ ...keys, ...payload }).into(table),
+  ])
+  const result = await executeKnex(query)
+  if (result.rowCount > 1) {
     throw new Error(
       `${result.rowCount} rows updated by the query, integrity constraint violation?`
     )
@@ -200,11 +206,11 @@ async function executeCount(table) {
 
 module.exports = {
   pgConfig,
-  setupPgBossQueue: setupPgBossQueueMemoized,
   pgPool: pgPoolWrapper,
   knex,
   executeKnex,
   executeCount,
   executeInsertOrUpdate,
+  executeInsertIfNotExists,
   executeBulkInsertOrUpdate,
 }

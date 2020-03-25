@@ -1,6 +1,6 @@
 const { airtableBase, fetchAllRecords } = require("./airtable")
-const { setupAirtableBackup } = require("./setupAirtableBackup")
-const { executeCount, executeBulkInsertOrUpdate } = require("./pg")
+const { setupTables } = require("./db/setupTables")
+const { executeCount, executeBulkInsertOrUpdate } = require("./db/pg")
 
 /**
  * @returns {Promise<Array<Object>>}
@@ -40,7 +40,7 @@ async function bulkUpsertOrganizations(allOrgRecords) {
  * @returns {Promise<void>}
  */
 async function backupOrganizations(allOrgRecords) {
-  await setupAirtableBackup()
+  await setupTables()
   const numOrgsBefore = await executeCount("organizations")
   console.log(`Num organizations before backup: ${numOrgsBefore}`)
   console.log("Backing up organizations in Postgres...")
@@ -59,12 +59,8 @@ async function backupOrganizations(allOrgRecords) {
  * @returns {Promise<void>}
  */
 async function fetchAndBackupAllAirtableOrganizations() {
-  try {
-    const allOrgRecords = await fetchAllOrgRecordsFromAirtable()
-    await backupOrganizations(allOrgRecords)
-  } catch (e) {
-    console.error("Error backing up organizations", e)
-  }
+  const allOrgRecords = await fetchAllOrgRecordsFromAirtable()
+  await backupOrganizations(allOrgRecords)
 }
 
 module.exports = { backupOrganizations, fetchAndBackupAllAirtableOrganizations }

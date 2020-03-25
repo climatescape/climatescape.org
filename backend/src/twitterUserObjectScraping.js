@@ -1,7 +1,7 @@
 const _ = require("lodash")
 const { acquireTwitterApp, getTwitterScreenName } = require("./twitter")
 const { isProduction } = require("./utils")
-const { executeInsertOrUpdate } = require("./pg")
+const { executeInsertOrUpdate } = require("./db/pg")
 const { determineOrgsToScrapeFirstTime } = require("./firstTimeScraping")
 
 /**
@@ -52,10 +52,45 @@ function createTwitterUserObjectScrapingJobData(org) {
  * @param {{id: string, fields: Object}} org from Airtable
  */
 async function publishTwitterUserObjectScrapingJob(pgBossQueue, org) {
-  return await pgBossQueue.publish(
+  return await pgBossQueue.publishOnce(
     TWITTER_USER_OBJECT,
-    createTwitterUserObjectScrapingJobData(org)
+    createTwitterUserObjectScrapingJobData(org),
+    {
+      retryLimit: 3,
+      // 15 min, in seconds. 15 min is the size of the rate limiting window, as documented at
+      // https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-users-lookup
+      retryDelay: 15 * 60,
+    },
+    org.id
   )
+}
+
+/**
+ * @param {PgBoss} pgBossQueue
+ * @param {function(orgId: string, orgName: string): Promise<any>} handler
+ * @returns {Promise<void>}
+ */
+async function onSuccessfulTwitterUserObjectScraping(pgBossQueue, handler) {
+  await pgBossQueue.onComplete(TWITTER_USER_OBJECT, async completionJob => {
+    try {
+      const scrapingJob = completionJob.data
+      // As created in createTwitterUserObjectScrapingJobData()
+      const orgData = scrapingJob.request.data
+      if (!scrapingJob.failed) {
+        await handler(orgData.orgId, orgData.orgName)
+      }
+      // It's strange that pgBoss requires this call, see https://github.com/timgit/pg-boss/issues/151
+      await pgBossQueue.complete(completionJob.id)
+    } catch (err) {
+      console.error(
+        "Error in Twitter user object scraping job completion handler",
+        err
+      )
+      // It's unknown if such explicit completionJob failing is required, but since complete() is required (see above),
+      // explicit fail() might be required, too.
+      await pgBossQueue.fail(completionJob.id, err)
+    }
+  })
 }
 
 /**
@@ -73,41 +108,28 @@ async function addFirstTimeTwitterUserObjectScrapingJobs(pgBossQueue) {
 }
 
 /**
- * @param {PgBoss} pgBossQueue
- * @param {string} jobId
  * @param {{orgId: string, orgName: string, twitterUserObject: Object}} orgData
  * @returns {Promise<void>}
  */
-async function storeTwitterUserObject(pgBossQueue, jobId, orgData) {
-  try {
-    const now = new Date()
-    await executeInsertOrUpdate(
-      "scraping_results",
-      {
-        org_id: orgData.orgId,
-        request_type: TWITTER_USER_OBJECT,
-        created_at: now,
-      },
-      {
-        updated_at: now,
-        result: orgData.twitterUserObject,
-      }
-    )
-    console.log(
-      `Twitter user object for ${JSON.stringify(
-        orgData
-      )} was successfully stored in the database`
-    )
-    await pgBossQueue.complete(jobId)
-  } catch (err) {
-    console.error(
-      `Error while storing twitter user object for ${JSON.stringify(
-        orgData
-      )} in the database`,
-      err
-    )
-    await pgBossQueue.fail(jobId, err)
-  }
+async function storeTwitterUserObject(orgData) {
+  const now = new Date()
+  await executeInsertOrUpdate(
+    "scraping_results",
+    {
+      org_id: orgData.orgId,
+      request_type: TWITTER_USER_OBJECT,
+      created_at: now,
+    },
+    {
+      updated_at: now,
+      result: orgData.twitterUserObject,
+    }
+  )
+  console.log(
+    `Twitter user object for ${JSON.stringify(
+      orgData
+    )} was successfully stored in the database`
+  )
 }
 
 /**
@@ -131,34 +153,46 @@ const DELAY_BETWEEN_TWITTER_USERS_LOOKUP_API_CALLS_MS = 10000
  * @returns {Promise<void>}
  */
 async function twitterUserObjectScrapingLoop(pgBossQueue) {
-  const jobs = await pgBossQueue.fetch(
+  const pgBossJobs = await pgBossQueue.fetch(
     TWITTER_USER_OBJECT,
     MAX_ACCOUNTS_PER_TWITTER_USERS_LOOKUP_API_CALL
   )
-  if (!jobs) {
+  if (!pgBossJobs) {
     return
   }
   let orgsWithTwitterUserObjects
   try {
-    orgsWithTwitterUserObjects = await scrapeTwitterUserObjects(jobs)
+    orgsWithTwitterUserObjects = await scrapeTwitterUserObjects(pgBossJobs)
   } catch (err) {
     console.error(
-      `Error scraping Twitter user objects for ${JSON.stringify(jobs)}`,
+      `Error scraping Twitter user objects for ${JSON.stringify(pgBossJobs)}`,
       err
     )
-    await pgBossQueue.fail(jobs.map(job => job.id))
+    await pgBossQueue.fail(pgBossJobs.map(job => job.id))
     return
   }
   await Promise.all(
-    orgsWithTwitterUserObjects.map((orgData, i) =>
-      storeTwitterUserObject(pgBossQueue, jobs[i].id, orgData)
-    )
+    orgsWithTwitterUserObjects.map(async (orgData, i) => {
+      try {
+        await storeTwitterUserObject(orgData)
+        await pgBossQueue.complete(pgBossJobs[i].id)
+      } catch (err) {
+        console.error(
+          `Error while storing Twitter user object for ${JSON.stringify(
+            orgData
+          )} in the database`,
+          err
+        )
+        await pgBossQueue.fail(pgBossJobs[i].id, err)
+      }
+    })
   )
 }
 
 module.exports = {
   TWITTER_USER_OBJECT,
   addFirstTimeTwitterUserObjectScrapingJobs,
+  onSuccessfulTwitterUserObjectScraping,
   twitterUserObjectScrapingLoop,
   DELAY_BETWEEN_TWITTER_USERS_LOOKUP_API_CALLS_MS,
 }

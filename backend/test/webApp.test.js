@@ -1,11 +1,11 @@
 const supertest = require("supertest")
 
-const buildFastify = require("../src/app")
-const { pgPool } = require("../src/pg")
+const { buildFastify } = require("../src/web")
+const { pgPool } = require("../src/db/pg")
 const { sleep } = require("../src/utils")
 const { fillSampleOrgData } = require("./prepareDb")
 
-describe("web server", () => {
+describe("web app", () => {
   let fastify
   let request
   beforeAll(async () => {

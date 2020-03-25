@@ -1,5 +1,6 @@
 const waitForExpect = require("wait-for-expect")
-const { setupPgBossQueue, executeCount } = require("../src/pg")
+const { executeCount } = require("../src/db/pg")
+const { setupPgBossQueue } = require("../src/db/pgBoss")
 const {
   addFirstTimeTwitterUserObjectScrapingJobs,
 } = require("../src/twitterUserObjectScraping")

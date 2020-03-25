@@ -10,6 +10,8 @@ services:
     command: pm2-dev web.js
     ports:
       - '3000:3000'
+    env_file:
+      - ../.env.development
     environment:
       WITHIN_CONTAINER: 'true'
   worker:
@@ -20,6 +22,8 @@ services:
       - ./src:/opt/src
     working_dir: /opt/src
     command: pm2-dev worker.js
+    env_file:
+      - ../.env.development
     environment:
       WITHIN_CONTAINER: 'true'
   db:

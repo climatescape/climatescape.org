@@ -1,5 +1,5 @@
-const { knex, executeKnex } = require("./pg")
-const { setupScraping } = require("./setupScraping")
+const { knex, executeKnex } = require("./db/pg")
+const { setupTables } = require("./db/setupTables")
 
 /**
  * @param {string} requestType request type, e. g. "twitterUserObject"
@@ -7,7 +7,7 @@ const { setupScraping } = require("./setupScraping")
  * objects
  */
 async function determineOrgsToScrapeFirstTime(requestType) {
-  await setupScraping()
+  await setupTables()
   const lastResultsByRequestTypeQuery = knex("scraping_results")
     .select("org_id", "result as last_result")
     .distinctOn("org_id")

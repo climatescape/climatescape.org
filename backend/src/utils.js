@@ -18,4 +18,22 @@ function configureEnvironment() {
   }
 }
 
-module.exports = { isProduction, sleep, configureEnvironment }
+/**
+ * This is different from {@link setInterval} because the time to execute the function is not taken into account
+ * @param {function: Promise<any>} fn
+ * @param {number} delayMs
+ */
+function executeWithFixedDelayAsync(fn, delayMs) {
+  setTimeout(function wrapper() {
+    fn()
+      .then(() => setTimeout(wrapper, delayMs))
+      .catch(err => console.error(err))
+  }, delayMs)
+}
+
+module.exports = {
+  isProduction,
+  sleep,
+  configureEnvironment,
+  executeWithFixedDelayAsync,
+}

@@ -1,6 +1,11 @@
-name: Node.js CI
+name: Climatescape website Node.js CI
 
-on: [push]
+on:
+  push:
+    paths-ignore:
+    - '.github/workflows/backend_nodejs.yml'
+    - '.idea/**'
+    - 'backend/**'
 
 jobs:
   build:

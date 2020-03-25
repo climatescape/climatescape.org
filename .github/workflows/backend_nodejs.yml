@@ -1,0 +1,32 @@
+name: backend CI
+
+on:
+  push:
+    paths:
+    - '.github/workflows/backend_nodejs.yml'
+    - '!.idea/**'
+    - 'backend/**'
+    - '!backend/doc/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.15.0]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: |
+          tee -a .env.development << END
+          AIRTABLE_API_KEY=${{ secrets.AIRTABLE_API_KEY }}
+          TWITTER_API_KEY=${{ secrets.TWITTER_API_KEY }}
+          TWITTER_API_SECRET=${{ secrets.TWITTER_API_SECRET }}
+          END
+      - run: yarn install && yarn test
+        working-directory: backend
