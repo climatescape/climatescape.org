@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import {
   OrganizationCategory,
-  OrganizationTag,
   OrganizationLocation,
   OrganizationHeadcount,
   OrganizationOrgType,
@@ -13,7 +12,6 @@ import {
 
 export const useOrganizationFilterState = () => {
   const [byCategory, setCategoryFilter] = useState(null)
-  const [byTag, setTagFilter] = useState(null)
   const [byLocation, setLocationFilter] = useState(null)
   const [byHeadcount, setHeadcountFilter] = useState(null)
   const [byOrgType, setOrgTypeFilter] = useState(null)
@@ -24,7 +22,6 @@ export const useOrganizationFilterState = () => {
 
   const setFilter = {
     byCategory: setCategoryFilter,
-    byTag: setTagFilter,
     byLocation: setLocationFilter,
     byHeadcount: setHeadcountFilter,
     byOrgType: setOrgTypeFilter,
@@ -34,7 +31,6 @@ export const useOrganizationFilterState = () => {
     byCapitalCheckSize: setCapitalCheckSizeFilter,
     none: () => {
       setCategoryFilter(null)
-      setTagFilter(null)
       setLocationFilter(null)
       setHeadcountFilter(null)
       setOrgTypeFilter(null)
@@ -49,11 +45,6 @@ export const useOrganizationFilterState = () => {
     if (byCategory)
       organizations = organizations.filter(org =>
         org.categories.find(cat => cat.id === byCategory?.id)
-      )
-
-    if (byTag)
-      organizations = organizations.filter(
-        org => org.tags && org.tags.indexOf(byTag) >= 0
       )
 
     if (byLocation)
@@ -91,7 +82,6 @@ export const useOrganizationFilterState = () => {
   return [
     {
       byCategory,
-      byTag,
       byLocation,
       byHeadcount,
       byOrgType,
@@ -108,7 +98,6 @@ export const useOrganizationFilterState = () => {
 const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
   const {
     byCategory,
-    byTag,
     byLocation,
     byHeadcount,
     byOrgType,
@@ -120,7 +109,6 @@ const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
 
   const hasFilterApplied =
     byCategory ||
-    byTag ||
     byLocation ||
     byHeadcount ||
     byOrgType ||
@@ -135,7 +123,6 @@ const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
         <p className="text-gray-700  text-sm">
           <span className="mr-2">Filtered by</span>
           {byCategory && <OrganizationCategory active text={byCategory.name} />}
-          {byTag && <OrganizationTag active text={byTag} />}
           {byLocation && <OrganizationLocation active text={byLocation} />}
           {byHeadcount && <OrganizationHeadcount active text={byHeadcount} />}
           {byOrgType && <OrganizationOrgType active text={byOrgType} />}

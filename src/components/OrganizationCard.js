@@ -177,7 +177,6 @@ export const query = graphql`
       Name
       Homepage
       About
-      Tags
       Tagline
       HQ_Location
       Organization_Type
