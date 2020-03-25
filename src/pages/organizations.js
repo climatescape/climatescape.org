@@ -28,6 +28,7 @@ function OrganizationsTemplate({ data, pageContext }) {
   organizations = applyFilter(organizations)
 
   const organizationsTitle = pageContext.categoryName || "All Organizations"
+  const { organizationFormUrl } = data.site.siteMetadata
 
   return (
     <Layout contentClassName="bg-gray-100">
@@ -38,6 +39,8 @@ function OrganizationsTemplate({ data, pageContext }) {
         <div className="lg:w-3/5">
           <IndexHeader
             title={organizationsTitle}
+            buttonText="Edit"
+            buttonUrl={organizationFormUrl}
             filter={filter}
             onClearFilter={() => setFilter.none()}
           />
@@ -53,9 +56,8 @@ function OrganizationsTemplate({ data, pageContext }) {
               />
             ))}
           </div>
-          <div className="mb-3 mt-8 p-3 text-center ">
-            <AddOrganizationCTA />
-          </div>
+
+          <AddOrganizationCTA url={organizationFormUrl} />
         </div>
       </div>
     </Layout>
@@ -64,6 +66,11 @@ function OrganizationsTemplate({ data, pageContext }) {
 
 export const query = graphql`
   query OrganizationsPageQuery($categoryId: String) {
+    site {
+      siteMetadata {
+        organizationFormUrl
+      }
+    }
     categories: allAirtable(filter: { table: { eq: "Categories" } }) {
       nodes {
         id

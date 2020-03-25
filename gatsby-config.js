@@ -11,6 +11,8 @@ const config = {
     author: `@climatescape`,
     newsletterUrl: `https://climatescape.substack.com/subscribe`,
     capitalFormUrl: `https://airtable.com/shr5lfPArSN9WVnWi`,
+    organizationFormUrl: `https://airtable.com/shr2jS8vVpTsQUF1P`,
+    contributorFormUrl: `https://airtable.com/shr4WZDPBs7mk1doW`,
   },
   plugins: [
     {
