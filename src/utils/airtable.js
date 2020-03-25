@@ -63,7 +63,6 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
     data: {
       Name,
       About,
-      Tags,
       Homepage,
       HQ_Location: HQLocation,
       Tagline,
@@ -85,7 +84,6 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
     description: Tagline || About,
     tagline: Tagline,
     about: (About || "").replace(Tagline, ""),
-    tags: Tags,
     location: HQLocation,
     headcount: Headcount,
     orgType: OrganizationType,

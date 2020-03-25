@@ -9,20 +9,12 @@ import {
   faSearchDollar,
   faHandshake,
   faMoneyCheck,
-  faTag,
 } from "@fortawesome/free-solid-svg-icons"
 import Tag from "./Tag"
 
 export const OrganizationCategory = ({ text, ...props }) => (
   <Tag {...props}>
     <FontAwesomeIcon icon={faBox} className="mr-1" />
-    {text}
-  </Tag>
-)
-
-export const OrganizationTag = ({ text, ...props }) => (
-  <Tag {...props}>
-    <FontAwesomeIcon icon={faTag} className="mr-1" />
     {text}
   </Tag>
 )

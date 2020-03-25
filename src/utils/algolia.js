@@ -14,11 +14,6 @@ const pageQuery = `query PagesQuery {
             url
           }
         }
-        Sector {
-          data {
-            Name
-          }
-        }
         Categories {
           data {
             Name
@@ -49,7 +44,6 @@ function getLogo({ Logo, LinkedIn }) {
 }
 
 function transformData(data) {
-  const sectors = data.Sector ? data.Sector.map(sector => sector.data.Name) : []
   const categories = data.Categories
     ? data.Categories.map(category => category.data.Name)
     : []
@@ -63,7 +57,6 @@ function transformData(data) {
     about: data.About,
     tagLine: data.Tagline,
     logo: getLogo(data),
-    sectors,
     categories,
   }
 }

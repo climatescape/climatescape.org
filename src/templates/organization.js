@@ -155,7 +155,6 @@ export const query = graphql`
         LinkedIn
         Twitter
         Role
-        Tags
         Capital_Profile {
           data {
             Type
