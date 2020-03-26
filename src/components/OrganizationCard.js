@@ -40,9 +40,10 @@ export default function OrganizationCard({
     ? categories.filter(cat => cat.parent?.id === pageContext.categoryId)
     : categories
   const img = getLogoImage(organization)
+
   return (
     <div className="OrganizationCard border-gray-400 border-b flex items-center py-4 text-gray-900">
-      <div className="flex-grow self-start pr-3">
+      <div className="flex-grow self-start pr-8">
         <p>
           <Link to={slug} className="font-bold hover:text-teal-500 mr-2">
             {title}
@@ -120,13 +121,13 @@ export default function OrganizationCard({
           )}
         </div>
       </div>
-      <div className="w-32 flex-shrink-0 hidden sm:block">
+      <div className="w-24 flex-shrink-0 hidden sm:block">
         {img && (
           <Link to={slug} className="">
             <img
               src={img.src}
               alt={`${title} logo`}
-              className="OrganizationCard-logo blend-multiply rounded-lg w-32 h-32"
+              className="OrganizationCard-logo blend-multiply rounded-lg w-24 h-24"
             />
           </Link>
         )}
