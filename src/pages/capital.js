@@ -5,6 +5,7 @@ import { transformOrganizations } from "../utils/airtable"
 
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
+import AddOrganizationCTA from "../components/AddOrganizationCTA"
 import IndexHeader from "../components/IndexHeader"
 import { useOrganizationFilterState } from "../components/OrganizationFilter"
 import SEO from "../components/seo"
@@ -20,6 +21,8 @@ const CapitalTemplate = ({
   let organizations = transformOrganizations(nodes)
   organizations = applyFilter(organizations)
 
+  const { capitalFormUrl } = site.siteMetadata
+
   return (
     <Layout contentClassName="bg-gray-100">
       <SEO
@@ -31,7 +34,7 @@ const CapitalTemplate = ({
         <IndexHeader
           title="Climate Capital"
           buttonText="Edit"
-          buttonUrl={site.siteMetadata.capitalFormUrl}
+          buttonUrl={capitalFormUrl}
           filter={filter}
           onClearFilter={() => setFilter.none()}
         />
@@ -46,6 +49,8 @@ const CapitalTemplate = ({
             />
           ))}
         </div>
+
+        <AddOrganizationCTA url={capitalFormUrl} />
       </div>
     </Layout>
   )

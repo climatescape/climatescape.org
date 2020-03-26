@@ -18,7 +18,7 @@ const IndexHeader = ({
       {buttonText && buttonUrl && (
         <a
           href={buttonUrl}
-          className="px-4 py-2 leading-none border rounded text-teal-500 border-teal-500 hover:border-transparent hover:text-white hover:bg-teal-500"
+          className="px-4 py-2 leading-none border rounded text-teal-500 border-teal-500 hover:text-white hover:bg-teal-500"
           target="_blank"
           rel="noopener noreferrer"
         >
