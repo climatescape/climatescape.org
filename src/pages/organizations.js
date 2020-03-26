@@ -35,7 +35,12 @@ function OrganizationsTemplate({ data, pageContext }) {
       <SEO title={`${organizationsTitle} organizations on Climatescape`} />
 
       <div className="flex flex-col mx-auto container lg:flex-row font-sans ">
-        <CategoryList categories={categories} pageContext={pageContext} />
+        <CategoryList
+          categories={categories}
+          onApplyFilter={setFilter}
+          currentFilter={filter}
+          pageContext={pageContext}
+        />
         <div className="lg:w-3/5">
           <IndexHeader
             title={organizationsTitle}
