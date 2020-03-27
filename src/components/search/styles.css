@@ -1,5 +1,5 @@
 .search-root {
-  @apply relative my-0 mx-auto text-white;
+  @apply relative flex-grow flex items-center;
 }
 
 .search-root form {
@@ -7,20 +7,19 @@
 }
 
 .search-root input {
-  @apply text-white border border-solid border-white rounded-full mr-1 leading-8
-    flex-grow;
+  @apply text-gray-800 font-title leading-8 flex flex-grow;
 }
 
 .search-root input::placeholder {
-  @apply text-white;
+  @apply text-gray-800 font-title;
 }
 
 .algolia-bar {
-  @apply leading-8 text-left inline-block pl-4 bg-gray-200 rounded-b-sm;
+  @apply leading-8 text-left inline-block pl-4 border-t border-gray-300 rounded-b-sm justify-center flex;
 }
 
 .algolia-bar span {
-  @apply inline-block pl-4;
+  @apply inline-block;
 }
 
 .search-root .hit {
@@ -37,4 +36,46 @@
 
 .no-results .highlight {
   @apply pl-0 font-bold;
+}
+
+.hits-wrapper {
+  display: grid;
+  z-index: 2;
+  -webkit-overflow-scrolling: touch;
+  position: absolute;
+  left: 0;
+  top: 3em;
+  width: 40vw;
+  overflow: hidden;
+  border: 1px solid #979797;
+  background: white;
+  border-radius: 4px;
+}
+
+.hits-wrapper li:first-child {
+  border-top: none;
+}
+
+.hits-wrapper li {
+  line-height: 2em;
+  border-top: 1px solid #efefef;
+  padding-left: 1em;
+  text-align: left;
+}
+
+.hits-wrapper * {
+  margin-top: 0;
+  padding: 0;
+}
+
+.hits-wrapper ul {
+  margin-top: 2px;
+  list-style: none;
+  overflow-y: hidden;
+  max-height: 80vh;
+}
+
+.hits-wrapper mark {
+  background-color: white;
+  font-weight: bold;
 }

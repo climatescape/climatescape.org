@@ -12,7 +12,7 @@ import { Link } from "gatsby"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faAlgolia } from "@fortawesome/free-brands-svg-icons"
 import Input from "./input"
-import { Root, HitsWrapper } from "./styles"
+import { Root } from "./styles"
 
 import "./styles.css"
 
@@ -96,16 +96,21 @@ export default function Search({ collapse }) {
       >
         <Configure hitsPerPage={8} />
         <Input onFocus={() => setFocus(true)} {...{ collapse, focus }} />
-        <HitsWrapper show={searchQuery?.length > 0 && focus}>
-          {indices.map(({ name, hitComp }) => (
-            <Index key={name} indexName={name}>
-              <Results>
-                <Hits hitComponent={hitComps[hitComp](() => setFocus(false))} />
-              </Results>
-            </Index>
-          ))}
-          <PoweredBy />
-        </HitsWrapper>
+        {searchQuery?.length > 0 && focus && (
+          <div className="hits-wrapper">
+            {/* <HitsWrapper show={searchQuery?.length > 0 && focus}> */}
+            {indices.map(({ name, hitComp }) => (
+              <Index key={name} indexName={name}>
+                <Results>
+                  <Hits
+                    hitComponent={hitComps[hitComp](() => setFocus(false))}
+                  />
+                </Results>
+              </Index>
+            ))}
+            <PoweredBy />
+          </div>
+        )}
       </InstantSearch>
     </div>
   )
