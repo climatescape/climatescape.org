@@ -7,6 +7,12 @@ function getLogo(Logo, LinkedinProfile) {
   return logoSharp?.resize || logoSharp?.fuild || logoSharp?.fixed
 }
 
+function getDescription(description) {
+  const offset = 30
+  const index = description?.slice(offset).search(/\./) ?? -1
+  return index === -1 ? description : description.substr(0, index + offset + 1)
+}
+
 function transformCategory(data) {
   if (!data || !data.data) {
     return undefined
@@ -81,7 +87,7 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
   return userTransform(raw, {
     id,
     title: Name,
-    description: Tagline || About,
+    description: getDescription(Tagline || About),
     tagline: Tagline,
     about: (About || "").replace(Tagline, ""),
     location: HQLocation,
