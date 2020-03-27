@@ -70,7 +70,9 @@ export default function({
 
   return (
     <div className="CategoryList leading-9 hidden w-1/5  mb-8 lg:block">
-      <h3 className="mt-8 uppercase text-gray-700">Categories</h3>
+      <h3 className="text-sm font-title  tracking-wide mt-8 uppercase text-gray-700">
+        Categories
+      </h3>
       <ul>
         {topCategories.map(category => (
           <TopCategory
@@ -83,7 +85,10 @@ export default function({
       </ul>
       {selectedCategory && subCategories.length > 0 && (
         <>
-          <h3 className="mt-8 mb-4 uppercase text-gray-700 leading-snug">
+          <h3
+            style={{ maxWidth: "90%" }}
+            className="text-sm font-title tracking-wide mt-8 mb-4 uppercase text-gray-700 leading-snug"
+          >
             {selectedCategory.name} Categories
           </h3>
           <ul>
