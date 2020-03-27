@@ -16,17 +16,31 @@ export default function IndexPage({ data }) {
     <Layout contentClassName="text-gray-900">
       <SEO />
 
-      <h2 className="font-bold text-2xl md:text-4xl text-center font-light tracking-wide text-gray-800 px-2 sm:px-6 pt-8 pb-16 md:pt-12 md:pb-24">
+      <h2 className="font-bold text-2xl md:text-4xl text-center font-light tracking-wide text-gray-800 px-2 sm:px-6 pt-8 pb-4 md:pt-16 md:pb-8">
         Discover&nbsp;the&nbsp;organizations <br />{" "}
         solving&nbsp;climate&nbsp;change
       </h2>
 
-      <div id="organizations" className="py-6 md:py-6 bg-gray-100">
+      <div id="organizations" className="md:py-6">
         <div className="p-3 flex flex-wrap max-w-6xl mx-auto">
           {topCategories.map(cat => (
             <TopicCard category={cat} key={cat.name} />
           ))}
         </div>
+      </div>
+
+      <h2 className="font-bold text-2xl md:text-4xl text-center font-light tracking-wide text-gray-800 mt-6">
+        Funding for climate projects
+      </h2>
+
+      <div className="flex justify-center max-w-6xl mx-auto p-3 mb-6">
+        <TopicCard
+          category={{
+            slug: "/capital",
+            cover: data.capitalPhoto.childImageSharp.fluid,
+            name: "Climate Capital",
+          }}
+        />
       </div>
 
       <div id="about" className="max-w-6xl mx-auto lg:flex items-start py-4">
@@ -108,6 +122,14 @@ export const query = graphql`
     site {
       siteMetadata {
         newsletterUrl
+      }
+    }
+
+    capitalPhoto: file(relativePath: { eq: "capital.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 500) {
+          ...GatsbyImageSharpFluid
+        }
       }
     }
 
