@@ -116,6 +116,7 @@ export default function ContributePage({ data }) {
           <div>
             {contributors.map(contributor => (
               <ContributorCard
+                key={contributor.name}
                 name={contributor.name}
                 contributions={contributor.contributions}
                 avatar={contributor.avatar}
@@ -148,7 +149,7 @@ export const query = graphql`
           Avatar {
             localFiles {
               childImageSharp {
-                fluid(maxWidth: 500) {
+                fluid(maxWidth: 100) {
                   ...GatsbyImageSharpFluid
                 }
               }
