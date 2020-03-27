@@ -35,7 +35,11 @@ export default function IndexPage({ data }) {
 
       <div className="flex justify-center max-w-6xl mx-auto p-3 mb-6">
         <TopicCard
-          category={{ slug: "/capital", cover: data.capitalPhoto.childImageSharp.fluid, name: "Climate Capital" }}
+          category={{
+            slug: "/capital",
+            cover: data.capitalPhoto.childImageSharp.fluid,
+            name: "Climate Capital",
+          }}
         />
       </div>
 
