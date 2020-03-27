@@ -24,7 +24,7 @@ const CapitalTemplate = ({
   const { capitalFormUrl } = site.siteMetadata
 
   return (
-    <Layout contentClassName="bg-gray-100">
+    <Layout contentClassName="bg-gray-100 px-3 sm:px-6">
       <SEO
         title="Climate Capital on Climatescape"
         description="Find climate-friendly VCs, grants, project finance, and more on Climatescape"
