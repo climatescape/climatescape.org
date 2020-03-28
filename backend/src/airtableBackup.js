@@ -3,7 +3,7 @@ const { setupTables } = require("./db/setupTables")
 const { executeCount, executeBulkInsertOrUpdate } = require("./db/pg")
 
 /**
- * @returns {Promise<Array<Object>>}
+ * @returns {Promise<Array<Object>>} array of orgs from Airtable
  */
 async function fetchAllOrgRecordsFromAirtable() {
   console.log("Fetching organizations from Airtable...")
@@ -16,12 +16,12 @@ async function fetchAllOrgRecordsFromAirtable() {
 }
 
 /**
- * @param {Array<Object>} allOrgRecords
+ * @param {Array<Object>} orgs - array or orgs from Airtable
  * @returns {Promise<number>} the number of rows updated
  */
-async function bulkUpsertOrganizations(allOrgRecords) {
+async function bulkUpsertOrganizations(orgs) {
   const now = new Date()
-  const insertData = allOrgRecords.map(orgRecord => ({
+  const insertData = orgs.map(orgRecord => ({
     ...orgRecord,
     created_at: now,
     updated_at: now,
@@ -36,18 +36,18 @@ async function bulkUpsertOrganizations(allOrgRecords) {
 }
 
 /**
- * @param {Array<Object>} allOrgRecords
+ * @param {Array<Object>} orgs - array of orgs from Airtable
  * @returns {Promise<void>}
  */
-async function backupOrganizations(allOrgRecords) {
+async function backupOrganizations(orgs) {
   await setupTables()
   const numOrgsBefore = await executeCount("organizations")
   console.log(`Num organizations before backup: ${numOrgsBefore}`)
   console.log("Backing up organizations in Postgres...")
-  const numDbRowsUpdated = await bulkUpsertOrganizations(allOrgRecords)
-  if (numDbRowsUpdated !== allOrgRecords.length) {
+  const numDbRowsUpdated = await bulkUpsertOrganizations(orgs)
+  if (numDbRowsUpdated !== orgs.length) {
     console.error(
-      `Number of rows updated [${numDbRowsUpdated}] != number of org records [${allOrgRecords.length}]`
+      `Number of rows updated [${numDbRowsUpdated}] != number of org records [${orgs.length}]`
     )
   }
   const numOrgsAfter = await executeCount("organizations")

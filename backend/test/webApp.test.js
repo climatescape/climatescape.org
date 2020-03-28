@@ -3,7 +3,7 @@ const supertest = require("supertest")
 const { buildFastify } = require("../src/web")
 const { pgPool } = require("../src/db/pg")
 const { sleep } = require("../src/utils")
-const { fillSampleOrgData } = require("./prepareDb")
+const { loadSampleOrgsIntoDb } = require("./prepareDb")
 
 describe("web app", () => {
   let fastify
@@ -21,7 +21,7 @@ describe("web app", () => {
   })
 
   test("happy path", async () => {
-    await fillSampleOrgData()
+    await loadSampleOrgsIntoDb()
 
     await request
       .post("/twitterUserObject")

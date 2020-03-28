@@ -1,9 +1,9 @@
 const { prepareEnrichmentFields } = require("../src/airtableEnrichment")
-const { fillSampleOrgData } = require("./prepareDb")
+const { loadSampleOrgsIntoDb } = require("./prepareDb")
 const { knex, executeKnex } = require("../src/db/pg")
 
 describe("prepareEnrichmentFields", () => {
-  beforeAll(fillSampleOrgData)
+  beforeAll(loadSampleOrgsIntoDb)
   test("happy path", async () => {
     await executeKnex(
       knex("scraping_results").insert({

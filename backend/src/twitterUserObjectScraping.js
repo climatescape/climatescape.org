@@ -2,7 +2,6 @@ const _ = require("lodash")
 const { acquireTwitterApp, getTwitterScreenName } = require("./twitter")
 const { isProduction } = require("./utils")
 const { executeInsertOrUpdate } = require("./db/pg")
-const { determineOrgsToScrapeFirstTime } = require("./firstTimeScraping")
 
 /**
  * @type {string}
@@ -95,10 +94,10 @@ async function onSuccessfulTwitterUserObjectScraping(pgBossQueue, handler) {
 
 /**
  * @param {PgBoss} pgBossQueue
+ * @param {Array<{id: string, fields: Object}>} orgsToScrape - array of orgs from Airtable
  * @returns {Promise<void>}
  */
-async function addFirstTimeTwitterUserObjectScrapingJobs(pgBossQueue) {
-  const orgsToScrape = await determineOrgsToScrapeFirstTime(TWITTER_USER_OBJECT)
+async function addTwitterUserObjectScrapingJobs(pgBossQueue, orgsToScrape) {
   const orgsWithTwitter = orgsToScrape.filter(getTwitterScreenName)
   await Promise.all(
     orgsWithTwitter.map(org =>
@@ -191,7 +190,7 @@ async function twitterUserObjectScrapingLoop(pgBossQueue) {
 
 module.exports = {
   TWITTER_USER_OBJECT,
-  addFirstTimeTwitterUserObjectScrapingJobs,
+  addTwitterUserObjectScrapingJobs,
   onSuccessfulTwitterUserObjectScraping,
   twitterUserObjectScrapingLoop,
   DELAY_BETWEEN_TWITTER_USERS_LOOKUP_API_CALLS_MS,

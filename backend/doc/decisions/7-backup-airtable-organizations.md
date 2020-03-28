@@ -2,9 +2,10 @@ We backup Airtable organizations (see [`airtableBackup`](../../src/airtableBacku
 Alternative path is to determine the organizations requiring first-time scraping directly pulling all organizations from
 Airtable.
 
-Organizations are persisted because then we can determine the organization requiring first-time scraping in [a single
-database query](../../src/firstTimeScraping.js) rather than a series of queries: one for each organization. The backup
-is also a safety net against catastrophic data loss or removal in Airtable.
+Organizations are persisted because then we can determine the organization requiring first-time scraping in a single
+database query (see [`addFirstTimeScrapingJobs.js`](../../src/addFirstTimeScrapingJobs.js),
+`determineOrgsToScrapeFirstTime()` function) rather than a series of queries: one for each organization. The backup is
+also a safety net against catastrophic data loss or removal in Airtable.
 
 In the future, two other benefits of the backup are possible:
  - Pulling data from Airtable and determining first-time scraping jobs (or periodic re-scraping jobs) can be decoupled

@@ -11,12 +11,16 @@ async function truncateAllTables() {
   await executeKnex(knex("organizations").delete())
 }
 
-async function fillSampleOrgData() {
-  await truncateAllTables()
-  const orgRecords = JSON.parse(
+async function makeSampleOrgs() {
+  return JSON.parse(
     await fs.readFile(path.resolve(__dirname, "airtableOrgs.json"), "utf-8")
   )
-  await backupOrganizations(orgRecords)
 }
 
-module.exports = { truncateAllTables, fillSampleOrgData }
+async function loadSampleOrgsIntoDb() {
+  await truncateAllTables()
+  const orgs = await makeSampleOrgs()
+  await backupOrganizations(orgs)
+}
+
+module.exports = { truncateAllTables, makeSampleOrgs, loadSampleOrgsIntoDb }
