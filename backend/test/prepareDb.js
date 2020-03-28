@@ -2,7 +2,7 @@ const path = require("path")
 const fs = require("fs").promises
 const { knex, executeKnex } = require("../src/db/pg")
 const { setupTables } = require("../src/db/setupTables")
-const { backupOrganizations } = require("../src/airtableBackup")
+const { backupOrgsInDb } = require("../src/airtableBackup")
 
 async function truncateAllTables() {
   await setupTables()
@@ -20,7 +20,7 @@ async function makeSampleOrgs() {
 async function loadSampleOrgsIntoDb() {
   await truncateAllTables()
   const orgs = await makeSampleOrgs()
-  await backupOrganizations(orgs)
+  await backupOrgsInDb(orgs)
 }
 
 module.exports = { truncateAllTables, makeSampleOrgs, loadSampleOrgsIntoDb }

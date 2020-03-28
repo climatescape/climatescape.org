@@ -5,11 +5,13 @@ const { executeCount, executeBulkInsertOrUpdate } = require("./db/pg")
 /**
  * @returns {Promise<Array<Object>>} array of orgs from Airtable
  */
-async function fetchAllOrgRecordsFromAirtable() {
+async function fetchAllOrgsFromAirtable() {
   console.log("Fetching organizations from Airtable...")
   const allOrgRecords = await fetchAllRecords(
     airtableBase("Organizations").select()
   )
+  // Cleans up irrelevant fields: references to the parent table, callback
+  // functions, etc.
   return allOrgRecords.map(orgRecord => {
     return { id: orgRecord.id, fields: orgRecord.fields }
   })
@@ -19,10 +21,10 @@ async function fetchAllOrgRecordsFromAirtable() {
  * @param {Array<Object>} orgs - array or orgs from Airtable
  * @returns {Promise<number>} the number of rows updated
  */
-async function bulkUpsertOrganizations(orgs) {
+async function bulkUpsertOrgs(orgs) {
   const now = new Date()
-  const insertData = orgs.map(orgRecord => ({
-    ...orgRecord,
+  const insertData = orgs.map(org => ({
+    ...org,
     created_at: now,
     updated_at: now,
     deleted_at: null,
@@ -39,15 +41,15 @@ async function bulkUpsertOrganizations(orgs) {
  * @param {Array<Object>} orgs - array of orgs from Airtable
  * @returns {Promise<void>}
  */
-async function backupOrganizations(orgs) {
+async function backupOrgsInDb(orgs) {
   await setupTables()
   const numOrgsBefore = await executeCount("organizations")
   console.log(`Num organizations before backup: ${numOrgsBefore}`)
   console.log("Backing up organizations in Postgres...")
-  const numDbRowsUpdated = await bulkUpsertOrganizations(orgs)
+  const numDbRowsUpdated = await bulkUpsertOrgs(orgs)
   if (numDbRowsUpdated !== orgs.length) {
     console.error(
-      `Number of rows updated [${numDbRowsUpdated}] != number of org records [${orgs.length}]`
+      `Number of rows updated [${numDbRowsUpdated}] != number of orgs [${orgs.length}]`
     )
   }
   const numOrgsAfter = await executeCount("organizations")
@@ -58,9 +60,9 @@ async function backupOrganizations(orgs) {
 /**
  * @returns {Promise<void>}
  */
-async function fetchAndBackupAllAirtableOrganizations() {
-  const allOrgRecords = await fetchAllOrgRecordsFromAirtable()
-  await backupOrganizations(allOrgRecords)
+async function fetchAndBackupInDbAllAirtableOrgs() {
+  const orgs = await fetchAllOrgsFromAirtable()
+  await backupOrgsInDb(orgs)
 }
 
-module.exports = { backupOrganizations, fetchAndBackupAllAirtableOrganizations }
+module.exports = { backupOrgsInDb, fetchAndBackupInDbAllAirtableOrgs }

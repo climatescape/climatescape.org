@@ -5,7 +5,7 @@ const {
   TWITTER_USER_OBJECT,
   addTwitterUserObjectScrapingJobs,
 } = require("./twitterUserObjectScraping")
-const { fetchAndBackupAllAirtableOrganizations } = require("./airtableBackup")
+const { fetchAndBackupInDbAllAirtableOrgs } = require("./airtableBackup")
 
 /**
  * @param {string} requestType request type, e. g. "twitterUserObject"
@@ -43,7 +43,7 @@ async function addFirstTimeScrapingJobs() {
 if (require.main === module) {
   ;(async () => {
     try {
-      await fetchAndBackupAllAirtableOrganizations()
+      await fetchAndBackupInDbAllAirtableOrgs()
     } catch (err) {
       console.error("Error backing up Airtable organizations", err)
     }

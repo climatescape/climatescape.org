@@ -6,7 +6,7 @@ const {
 } = require("../src/twitterUserObjectScraping")
 const { makeSampleOrgs } = require("./prepareDb")
 
-test("addFirstTimeTwitterUserObjectScrapingJobs", async () => {
+test("addTwitterUserObjectScrapingJobs", async () => {
   const pgBossQueue = await setupPgBossQueue()
   const orgs = await makeSampleOrgs()
   await addTwitterUserObjectScrapingJobs(pgBossQueue, orgs)

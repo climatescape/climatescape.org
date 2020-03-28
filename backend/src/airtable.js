@@ -1,3 +1,5 @@
+// This file contains everything for dealing directly with Airtable API.
+
 const Airtable = require("airtable")
 const { configureEnvironment, sleep } = require("./utils")
 
