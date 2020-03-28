@@ -151,7 +151,7 @@ const DELAY_BETWEEN_TWITTER_USERS_LOOKUP_API_CALLS_MS = 10000
  * @param {PgBoss} pgBossQueue
  * @returns {Promise<void>}
  */
-async function twitterUserObjectScrapingLoop(pgBossQueue) {
+async function processTwitterUserObjectScrapingJobs(pgBossQueue) {
   const pgBossJobs = await pgBossQueue.fetch(
     TWITTER_USER_OBJECT,
     MAX_ACCOUNTS_PER_TWITTER_USERS_LOOKUP_API_CALL
@@ -192,6 +192,6 @@ module.exports = {
   TWITTER_USER_OBJECT,
   addTwitterUserObjectScrapingJobs,
   onSuccessfulTwitterUserObjectScraping,
-  twitterUserObjectScrapingLoop,
+  processTwitterUserObjectScrapingJobs,
   DELAY_BETWEEN_TWITTER_USERS_LOOKUP_API_CALLS_MS,
 }

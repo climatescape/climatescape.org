@@ -98,7 +98,7 @@ async function updateAirtableOrgs(jobsWithEnrichmentData) {
  * @param {PgBoss} pgBossQueue
  * @returns {Promise<void>}
  */
-async function airtableEnrichmentLoop(pgBossQueue) {
+async function processAirtableEnrichmentJobs(pgBossQueue) {
   const pgBossJobs = await pgBossQueue.fetch(
     ENRICH_AIRTABLE,
     MAX_ORGS_PER_AIRTABLE_TABLE_UPDATE
@@ -144,5 +144,5 @@ async function airtableEnrichmentLoop(pgBossQueue) {
 module.exports = {
   addAirtableEnrichmentJob,
   prepareEnrichmentFields, // for tests
-  airtableEnrichmentLoop,
+  processAirtableEnrichmentJobs,
 }
