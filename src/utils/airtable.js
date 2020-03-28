@@ -54,7 +54,7 @@ export function transformCategories(data) {
 function transformThumbnails(Photos) {
   return Photos?.internal
     ? JSON.parse(Photos.internal.content).map(
-        internal => internal.thumbnails.large
+        internal => internal.thumbnails?.large
       )
     : []
 }
