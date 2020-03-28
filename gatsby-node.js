@@ -49,11 +49,13 @@ exports.createPages = async ({ graphql, actions }) => {
     })
 
   // Create the organizations pages
-  data.organizations.nodes.forEach(org => {
-    createPage({
-      path: `/organizations/${makeSlug(org.data.Name)}`,
-      component: path.resolve(`./src/templates/organization.js`),
-      context: { id: org.id },
+  data.organizations.nodes
+    .filter(({ data: { Name, Homepage } }) => Name && Homepage)
+    .forEach(org => {
+      createPage({
+        path: `/organizations/${makeSlug(org.data.Name)}`,
+        component: path.resolve(`./src/templates/organization.js`),
+        context: { id: org.id },
+      })
     })
-  })
 }

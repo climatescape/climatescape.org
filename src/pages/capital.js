@@ -61,7 +61,11 @@ export const query = graphql`
     organizations: allAirtable(
       filter: {
         table: { eq: "Organizations" }
-        data: { Role: { eq: "Capital" } }
+        data: {
+          Name: { ne: null }
+          Homepage: { ne: null }
+          Role: { eq: "Capital" }
+        }
       }
     ) {
       nodes {

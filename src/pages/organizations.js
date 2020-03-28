@@ -103,6 +103,8 @@ export const query = graphql`
               "Network"
             ]
           }
+          Name: { ne: null }
+          Homepage: { ne: null }
           Categories: { elemMatch: { id: { eq: $categoryId } } }
         }
       }
@@ -123,6 +125,8 @@ export const query = graphql`
               "Network"
             ]
           }
+          Name: { ne: null }
+          Homepage: { ne: null }
           Categories: {
             elemMatch: {
               data: { Parent: { elemMatch: { id: { eq: $categoryId } } } }
