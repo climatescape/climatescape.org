@@ -10,8 +10,10 @@ const config = {
     description: `Discover the organizations solving climate change`,
     author: `@climatescape`,
     newsletterUrl: `https://climatescape.substack.com/subscribe`,
-    capitalFormUrl: `https://airtable.com/shr5lfPArSN9WVnWi`,
-    organizationFormUrl: `https://airtable.com/shr2jS8vVpTsQUF1P`,
+    capitalAddFormUrl: `https://airtable.com/shrBK2iC6AQ4Yb2lq`,
+    capitalEditFormUrl: `https://airtable.com/shrFuDB1VcHqlYd1d`,
+    organizationAddFormUrl: `https://airtable.com/shrquIaKs7TQDqFFY`,
+    organizationEditFormUrl: `https://airtable.com/shrgoaO5ppAxlqt31`,
     contributorFormUrl: `https://airtable.com/shr4WZDPBs7mk1doW`,
   },
   plugins: [

@@ -2,7 +2,7 @@ import React from "react"
 import { graphql } from "gatsby"
 import Img from "gatsby-image"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faLink } from "@fortawesome/free-solid-svg-icons"
+import { faLink, faEdit } from "@fortawesome/free-solid-svg-icons"
 import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons"
 
 import {
@@ -17,10 +17,19 @@ import SEO from "../components/seo"
 import Carousel from "../components/carousel"
 import { transformOrganization } from "../utils/airtable"
 
+function isCapital(org) {
+  return org.role?.includes("Capital")
+}
+
 function getLogoImage({ logo, photos, categories }) {
   const cat =
     categories.find(c => c.cover) || categories.find(c => c?.parent?.cover)
   return logo || photos[0] || cat?.cover || cat?.parent.cover
+}
+function getEditUrl({ data, org }) {
+  const { capitalEditFormUrl, organizationEditFormUrl } = data.site.siteMetadata
+  const url = isCapital(org) ? capitalEditFormUrl : organizationEditFormUrl
+  return `${url}?prefill_Organization=${encodeURI(org.title)}`
 }
 
 function SocialLink({ href, text, icon }) {
@@ -74,7 +83,8 @@ function Tags({ org }) {
 }
 
 export default function OrganizationTemplate({ data }) {
-  const siteTitle = data.site.siteMetadata.title
+  const { siteTitle } = data.site.siteMetadata.title
+
   const org = transformOrganization(data.organization, (raw, out) => ({
     ...out,
     fullPhotos: raw.data.fullPhotos?.localFiles || [],
@@ -124,6 +134,15 @@ export default function OrganizationTemplate({ data }) {
           </div>
           <div className="lg:w-2/5">
             <div className="flex flex-col">
+              <a
+                href={getEditUrl({ data, org })}
+                className="w-28 self-end mr-4 px-4 py-2 leading-none border rounded text-teal-500 border-teal-500 hover:text-white hover:bg-teal-500"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FontAwesomeIcon icon={faEdit} className="mr-2" />
+                Edit
+              </a>
               <SocialLink text="Homepage" href={org.homepage} icon={faLink} />
               <SocialLink
                 text="LinkedIn"
@@ -143,6 +162,8 @@ export const query = graphql`
   query OrganizationPageQuery($id: String) {
     site {
       siteMetadata {
+        organizationEditFormUrl
+        capitalEditFormUrl
         title
       }
     }

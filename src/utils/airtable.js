@@ -81,6 +81,7 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
       Twitter,
       Capital_Profile: CapitalProfile,
       Photos,
+      Role,
     },
   } = raw
 
@@ -98,6 +99,7 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
     linkedIn: LinkedIn,
     twitter: Twitter,
     logo: getLogo(Logo, LinkedinProfile),
+    role: Role,
     categories: Categories?.map(transformCategory) ?? [],
     capitalProfile: CapitalProfile?.map(({ data }) => ({
       type: data.Type,
