@@ -49,8 +49,23 @@ function fetchAllRecords(airtableQuery) {
   })
 }
 
+/**
+ * @returns {Promise<Array<Object>>} array of orgs from Airtable
+ */
+async function fetchAllOrgsFromAirtable() {
+  console.log("Fetching organizations from Airtable...")
+  const allOrgRecords = await fetchAllRecords(
+    airtableBase("Organizations").select()
+  )
+  // Cleans up irrelevant fields: references to the parent table, callback
+  // functions, etc.
+  return allOrgRecords.map(orgRecord => {
+    return { id: orgRecord.id, fields: orgRecord.fields }
+  })
+}
+
 module.exports = {
   airtableBase,
   DELAY_BETWEEN_AIRTABLE_API_CALLS_MS,
-  fetchAllRecords,
+  fetchAllOrgsFromAirtable,
 }

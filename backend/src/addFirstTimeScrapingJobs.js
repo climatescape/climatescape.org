@@ -1,3 +1,8 @@
+// This file is an executable Node script that is supposed to be run once every 10 minutes in Heroku via Scheduler. It
+// fetches organizations that have been newly added to Airtable since the last run, backups them in Postgres (see
+// decision 7-backup-airtable-organizations.md), pushes jobs to pg-boss queue for so-called "first-time scraping", and
+// exits. These jobs will then be picked up by the background worker (see worker.js) asynchronously.
+
 const { knex, executeKnex } = require("./db/pg")
 const { setupTables } = require("./db/setupTables")
 const { setupPgBossQueue } = require("./db/pgBoss")
@@ -5,7 +10,8 @@ const {
   TWITTER_USER_OBJECT,
   addTwitterUserObjectScrapingJobs,
 } = require("./twitterUserObjectScraping")
-const { fetchAndBackupInDbAllAirtableOrgs } = require("./airtableBackup")
+const { fetchAllOrgsFromAirtable } = require("./airtable")
+const { backupOrgsInDb } = require("./airtableBackup")
 
 /**
  * @param {string} requestType request type, e. g. "twitterUserObject"
@@ -43,7 +49,8 @@ async function addFirstTimeScrapingJobs() {
 if (require.main === module) {
   ;(async () => {
     try {
-      await fetchAndBackupInDbAllAirtableOrgs()
+      const orgs = await fetchAllOrgsFromAirtable()
+      await backupOrgsInDb(orgs)
     } catch (err) {
       console.error("Error backing up Airtable organizations", err)
     }
