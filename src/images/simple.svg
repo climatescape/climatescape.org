@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="114px" height="51px" viewBox="0 0 114 51" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="172px" height="51px" viewBox="0 0 172 51" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 61.2 (89653) - https://sketch.com -->
     <title>netlify-callout-vertical-light copy</title>
     <desc>Created with Sketch.</desc>
     <defs>
-        <rect id="path-1" x="0" y="0" width="114" height="51" rx="4"></rect>
+        <rect id="path-1" x="0" y="0" width="172" height="51" rx="4"></rect>
     </defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="netlify-callout-vertical-light-copy">
@@ -14,19 +14,19 @@
                         <use xlink:href="#path-1"></use>
                     </mask>
                     <g id="path-1"></g>
-                    <rect id="path-1" stroke="#F7F8F8" stroke-width="2" fill="#FFFFFF" fill-rule="nonzero" mask="url(#mask-2)" x="0" y="0" width="114" height="51" rx="4"></rect>
+                    <rect id="path-1" stroke="#F7F8F8" stroke-width="2" fill="#FFFFFF" fill-rule="nonzero" mask="url(#mask-2)" x="0" y="0" width="172" height="51" rx="4"></rect>
                 </g>
             </g>
-            <g id="simply" transform="translate(11.000000, 12.000000)" fill="#313D3E" fill-rule="nonzero">
+            <g id="simply" transform="translate(7.000000, 12.000000)" fill="#313D3E" fill-rule="nonzero">
                 <rect id="Rectangle" x="0" y="16" width="5" height="12"></rect>
                 <rect id="Rectangle" x="10" y="7" width="5" height="21"></rect>
                 <rect id="Rectangle" x="20" y="0" width="5" height="28"></rect>
             </g>
-            <text id="Simple" font-family="SpaceGrotesk-SemiBold, Space Grotesk" font-size="16" font-weight="500" fill="#404E4F">
-                <tspan x="48" y="37">Simple</tspan>
+            <text id="Simple-Analytics" font-family="SpaceGrotesk-SemiBold, Space Grotesk" font-size="16" font-weight="500" fill="#404E4F">
+                <tspan x="44" y="37">Simple Analytics</tspan>
             </text>
-            <text id="STATS-BY" font-family="HelveticaNeue-Medium, Helvetica Neue" font-size="8" font-weight="400" letter-spacing="0.6" fill="#BCBCBC">
-                <tspan x="48" y="20">STATS BY</tspan>
+            <text id="PUBLIC-STATS-BY" font-family="HelveticaNeue-Medium, Helvetica Neue" font-size="8" font-weight="400" letter-spacing="0.6" fill="#BCBCBC">
+                <tspan x="44" y="20">PUBLIC STATS BY</tspan>
             </text>
         </g>
     </g>
