@@ -1,12 +1,13 @@
 import React from "react"
 
 import classnames from "classnames"
+import withWindow from "../../utils/withWindow"
 import useCurrentWitdh from "../../utils/useCurrentWitdh"
 
 //
 // images: array of image. { url, title }
 //
-export default function Carousel({ images = [], height, onClickRoot }) {
+function Carousel({ images = [], height, onClickRoot }) {
   const [width, setWidth] = React.useState(0)
   const [isHoverMode, setIsHoverMode] = React.useState(false)
   const [currentIndex, setCurrentIndex] = React.useState(0)
@@ -204,3 +205,5 @@ export default function Carousel({ images = [], height, onClickRoot }) {
     </div>
   )
 }
+
+export default withWindow(Carousel)
