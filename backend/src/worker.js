@@ -11,7 +11,7 @@ const {
   processTwitterUserObjectScrapingJobs,
   DELAY_BETWEEN_TWITTER_USERS_LOOKUP_API_CALLS_MS,
 } = require("./twitterUserObjectScraping")
-const { DELAY_BETWEEN_AIRTABLE_API_CALLS_MS } = require("./airtable")
+const { DELAY_BETWEEN_AIRTABLE_API_CALLS_MS } = require("./api/airtable")
 const {
   addAirtableEnrichmentJob,
   processAirtableEnrichmentJobs,

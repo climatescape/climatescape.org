@@ -1,15 +1,18 @@
 const waitForExpect = require("wait-for-expect")
 const { executeCount } = require("../src/db/pg")
 const { setupPgBossQueue } = require("../src/db/pgBoss")
+const { backupOrgsInDb } = require("../src/airtableBackup")
 const {
   addTwitterUserObjectScrapingJobs,
   getTwitterScreenName,
 } = require("../src/twitterUserObjectScraping")
-const { makeSampleOrgs } = require("./prepareDb")
+const { truncateAllTables, makeSampleOrgs } = require("./prepareDb")
 
 test("addTwitterUserObjectScrapingJobs", async () => {
+  await truncateAllTables()
   const pgBossQueue = await setupPgBossQueue()
   const orgs = await makeSampleOrgs()
+  await backupOrgsInDb(orgs)
   await addTwitterUserObjectScrapingJobs(pgBossQueue, orgs)
   await waitForExpect(
     async () => {

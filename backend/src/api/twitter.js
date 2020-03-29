@@ -2,7 +2,7 @@
 
 const Twitter = require("twitter-lite/twitter")
 const pMemoize = require("p-memoize")
-const { isProduction, configureEnvironment, getCleanPath } = require("./utils")
+const { isProduction, configureEnvironment } = require("../utils")
 
 /**
  * @returns {Promise<Twitter>}

@@ -4,7 +4,7 @@
 const util = require("util")
 const { isProduction } = require("./utils")
 const { knex, executeKnex } = require("./db/pg")
-const { airtableBase } = require("./airtable")
+const { airtableBase } = require("./api/airtable")
 const { TWITTER_USER_OBJECT } = require("./twitterUserObjectScraping")
 const { computeRank } = require("./rank")
 
@@ -78,6 +78,7 @@ const MAX_ORGS_PER_AIRTABLE_TABLE_UPDATE = 10
 /**
  * @param {Array<{id: string, data: {orgId: string, orgName: string},
  *                Rank: number, 'Enrichment Data': Object}>} jobsWithEnrichmentData
+ * @return {Promise<void>}
  */
 async function updateAirtableOrgs(jobsWithEnrichmentData) {
   const airtableTable = isProduction

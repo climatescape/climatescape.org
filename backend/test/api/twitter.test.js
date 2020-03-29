@@ -1,4 +1,4 @@
-const { acquireTwitterAppFactory } = require("../src/twitter")
+const { acquireTwitterAppFactory } = require("../../src/api/twitter")
 
 test("Twitter API", async () => {
   const createTwitterApp = acquireTwitterAppFactory(true)

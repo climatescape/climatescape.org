@@ -10,7 +10,7 @@ const {
   TWITTER_USER_OBJECT,
   addTwitterUserObjectScrapingJobs,
 } = require("./twitterUserObjectScraping")
-const { fetchAllOrgsFromAirtable } = require("./airtable")
+const { fetchAllOrgsFromAirtable } = require("./api/airtable")
 const { backupOrgsInDb } = require("./airtableBackup")
 
 /**

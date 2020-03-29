@@ -3,7 +3,7 @@
 // worker - see worker.js.
 
 const _ = require("lodash")
-const { acquireTwitterApp } = require("./twitter")
+const { acquireTwitterApp } = require("./api/twitter")
 const { isProduction, getCleanPath } = require("./utils")
 const { executeInsertOrUpdate } = require("./db/pg")
 
@@ -20,7 +20,11 @@ const TWITTER_USER_OBJECT = "twitterUserObject"
  * @returns {Promise<Array<{orgId: string, orgName: string, twitterUserObject: Object}>>}
  */
 async function scrapeTwitterUserObjects(jobs) {
-  console.log(`Scraping Twitter user objects for: ${JSON.stringify(jobs)}`)
+  console.log(
+    `Scraping Twitter user objects for ${jobs.length} orgs: ${JSON.stringify(
+      jobs
+    )}`
+  )
   if (!isProduction) {
     return jobs.map(job => ({
       ...job.data,
@@ -32,6 +36,8 @@ async function scrapeTwitterUserObjects(jobs) {
   const response = await app.post("users/lookup", {
     screen_name: screenNames,
   })
+  // TODO match orgs with twitter screen name ids - blindly relying on Twitter returning the same number of objects
+  //  in the same order as asked is unreliable
   const result = _.zipWith(jobs, response, (job, userObject) => ({
     ...job.data,
     twitterUserObject: userObject,
