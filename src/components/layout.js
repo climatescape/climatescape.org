@@ -13,6 +13,7 @@ import Navbar from "./Navbar"
 
 import "./layout.css"
 import NetlifyLogo from "../images/netlify.svg"
+import SimpleLogo from "../images/simple.svg"
 
 const Layout = ({ children, contentClassName }) => {
   const data = useStaticQuery(graphql`
@@ -69,8 +70,22 @@ const Layout = ({ children, contentClassName }) => {
               alt="Deploys by Netlify"
             />
           </a>
+          <a
+            href="https://simpleanalytics.com/climatescape.org"
+            className="inline-block ml-2"
+          >
+            <img
+              className="blend-multiply"
+              src={SimpleLogo}
+              alt="Stats by Simple Analytics"
+            />
+          </a>
         </div>
       </footer>
+      <script async defer src="https://sapi.climatescape.org/app.js" />
+      <noscript>
+        <img src="https://sapi.climatescape.org/image.gif" alt="hi" />
+      </noscript>
     </div>
   )
 }
