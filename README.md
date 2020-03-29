@@ -46,6 +46,26 @@ You can now use this IP address / port to access your local environment from you
 </p>
 </details>
 
+### Bulding
+
+Before submitting your Pull Request you should test that the project builds.
+
+With Gatsby, some code can work on development mode but requires some adaptation for the build. For example when using `window` that is not accessible in SSR (Server-Side Rendering) mode.
+
+To build the project locally:
+
+1.  Create a `.env.production` file at the root of the project
+    replacing `YOUR_KEY_HERE` by the key you copied in the previous step:
+    ```bash
+    $ cp .env.development .env.production
+    # OR
+    $ cp .env.sample .env.production
+    ```
+2.  Build the project using the `npm run build` command.
+3.  You can then run the website using the `serve public` command.
+
+    Note: if you do not have the `serve` command you can install it using the `npm install -g serve` command
+
 ## Architecture
 
 Our site is built with [Gatsby][gatsby], a static site generator that uses
