@@ -24,22 +24,10 @@
 
 .search-root .hit {
   @apply flex items-center;
-  /* Avoid having search results displayed on multiple lines */
-  height: 2em;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  width: 100%;
 }
 
 .search-root .hit a {
   @apply flex-grow;
-}
-
-@media (max-width: 768px) {
-  .no-results {
-    text-align: center;
-  }
 }
 
 .no-results span {
@@ -55,33 +43,22 @@
   z-index: 2;
   -webkit-overflow-scrolling: touch;
   left: 0;
-  top: 3em;
   overflow: hidden;
   border: 1px solid #979797;
   background: white;
   border-radius: 4px;
   position: absolute;
-  width: 90%;
 }
 
-
-@media (max-width: 768px) {
-  .hits-wrapper {
-    position: fixed;
-    width: 100%;
-    right: 0;
-    left: 0;
-  }
-}
-
-.hits-wrapper li:first-child {
+li:first-child {
   border-top: none;
 }
 
 .hits-wrapper li {
   line-height: 2em;
   border-top: 1px solid #efefef;
-  padding-left: 1em;
+  padding-left: 1rem;
+  padding-right: 1rem;
   text-align: left;
 }
 

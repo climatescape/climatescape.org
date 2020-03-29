@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createRef } from "react"
+import classnames from "classnames"
 import {
   InstantSearch,
   Index,
@@ -11,13 +12,14 @@ import algoliasearch from "algoliasearch/lite"
 import { Link } from "gatsby"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faAlgolia } from "@fortawesome/free-brands-svg-icons"
+import useBreakpoint from "../../utils/useBreakpoint"
 import Input from "./input"
 import { Root } from "./styles"
 
 import "./styles.css"
 
 const PageHit = () => ({ hit }) => (
-  <div className="text-gray-700 hit">
+  <div className="text-gray-700 hit truncate w-full">
     <Link to={`/organizations/${hit.path}`}>
       <h4>
         <Highlight attribute="name" hit={hit} tagName="mark" />
@@ -33,7 +35,7 @@ const Results = connectStateResults(
     res && res.nbHits > 0 ? (
       children
     ) : (
-      <div className="no-results text-gray-700">
+      <div className="no-results text-center md:text-left text-gray-700">
         <span>
           No results found for <span className="highlight">{state.query}</span>
         </span>
@@ -78,6 +80,7 @@ export default function Search({ collapse }) {
   const ref = createRef()
   const [searchQuery, setQuery] = useState(``)
   const [focus, setFocus] = useState(false)
+  const { isDesktop, isMobile } = useBreakpoint()
   useClickOutside(ref, () => setFocus(false))
 
   const searchClient = algoliasearch(
@@ -97,7 +100,12 @@ export default function Search({ collapse }) {
         <Configure hitsPerPage={8} />
         <Input onFocus={() => setFocus(true)} {...{ collapse, focus }} />
         {searchQuery?.length > 0 && focus && (
-          <div className="hits-wrapper">
+          <div
+            className={classnames("hits-wrapper w-full", {
+              "fixed w-full inset-x-0 rounded-none": !isDesktop,
+            })}
+            style={{ top: isMobile ? "2.5rem" : "3rem" }}
+          >
             {/* <HitsWrapper show={searchQuery?.length > 0 && focus}> */}
             {indices.map(({ name, hitComp }) => (
               <Index key={name} indexName={name}>
