@@ -70,7 +70,10 @@ const Layout = ({ children, contentClassName }) => {
               alt="Deploys by Netlify"
             />
           </a>
-          <a href="https://simpleanalytics.com/climatescape.org" className="inline-block ml-2">
+          <a
+            href="https://simpleanalytics.com/climatescape.org"
+            className="inline-block ml-2"
+          >
             <img
               className="blend-multiply"
               src={SimpleLogo}
@@ -79,8 +82,10 @@ const Layout = ({ children, contentClassName }) => {
           </a>
         </div>
       </footer>
-      <script async defer src="https://sapi.climatescape.org/app.js"></script>
-      <noscript><img src="https://sapi.climatescape.org/image.gif" alt="hi" /></noscript>
+      <script async defer src="https://sapi.climatescape.org/app.js" />
+      <noscript>
+        <img src="https://sapi.climatescape.org/image.gif" alt="hi" />
+      </noscript>
     </div>
   )
 }
