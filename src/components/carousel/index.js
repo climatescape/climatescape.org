@@ -4,6 +4,9 @@ import classnames from "classnames"
 import withWindow from "../../utils/withWindow"
 import useCurrentWitdh from "../../utils/useCurrentWitdh"
 
+const PREV_KEYS = [38, 37, 72, 75] // up, left, h, k
+const NEXT_KEYS = [40, 39, 74, 76] // down, right, j, l
+
 //
 // images: array of image. { url, title }
 //
@@ -18,9 +21,7 @@ function Carousel({ images = [], height, onClickRoot }) {
 
   const rootRef = React.useRef(null)
 
-  //
   // set isHoverMode to true and hide it after some time
-  //
   let timeoutId = null
   const activateHoverMode = () => {
     setIsHoverMode(true)
@@ -30,9 +31,7 @@ function Carousel({ images = [], height, onClickRoot }) {
     }, 600)
   }
 
-  //
   // currentIndex utilities
-  //
 
   const previous = () => {
     if (currentIndex > 0) {
@@ -50,46 +49,21 @@ function Carousel({ images = [], height, onClickRoot }) {
     }
   }
 
-  //
-  // window resize handling
-  //
-
-  // retrieve our carousel width
+  // window resize handling: retrieve our carousel width
   // we use the windowWidth to recalculate our element width when the window width changed
   // (is resized).
   React.useEffect(() => {
     setWidth(rootRef.current?.offsetWidth || 0)
   }, [rootRef.current, setWidth, windowWidth])
 
-  //
   // keyboard shortcuts handling
-  //
-
   const handleKeyDown = React.useCallback(
     e => {
       // arrow up/down button should select next/previous list element.
       // we also use vim-keys (h,j,k,l)
-      if (
-        // up
-        e.keyCode === 38 ||
-        // left
-        e.keyCode === 37 ||
-        // h
-        e.keyCode === 72 ||
-        // k
-        e.keyCode === 75
-      ) {
+      if (PREV_KEYS.indexOf(e.keyCode) >= 0) {
         previous()
-      } else if (
-        // down
-        e.keyCode === 40 ||
-        // right
-        e.keyCode === 39 ||
-        // j
-        e.keyCode === 74 ||
-        // l
-        e.keyCode === 76
-      ) {
+      } else if (NEXT_KEYS.indexOf(e.keyCode) >= 0) {
         next()
       }
 
@@ -98,8 +72,6 @@ function Carousel({ images = [], height, onClickRoot }) {
     [setIsHoverMode, setCurrentIndex, currentIndex]
   )
 
-  // TODO: for now we add a listener for the whole document, maybe we would want to reduce it only
-  //  when we hover the carousel?
   React.useEffect(() => {
     document.addEventListener("keydown", handleKeyDown)
 
@@ -107,10 +79,6 @@ function Carousel({ images = [], height, onClickRoot }) {
       document.removeEventListener("keydown", handleKeyDown)
     }
   }, [handleKeyDown])
-
-  //
-  //
-  //
 
   return (
     <div
