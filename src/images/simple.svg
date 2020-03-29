@@ -10,11 +10,11 @@
         <g id="netlify-callout-vertical-light-copy">
             <g id="Background">
                 <g id="path-1-Clipped">
-                    <mask id="mask-2" fill="white">
+                    <mask id="mask-2">
                         <use xlink:href="#path-1"></use>
                     </mask>
                     <g id="path-1"></g>
-                    <rect id="path-1" stroke="#F7F8F8" stroke-width="2" fill="#FFFFFF" fill-rule="nonzero" mask="url(#mask-2)" x="0" y="0" width="172" height="51" rx="4"></rect>
+                    <rect id="path-1" stroke="#F7F8F8" stroke-width="2" fill-rule="nonzero" mask="url(#mask-2)" x="0" y="0" width="172" height="51" rx="4"></rect>
                 </g>
             </g>
             <g id="simply" transform="translate(7.000000, 12.000000)" fill="#313D3E" fill-rule="nonzero">

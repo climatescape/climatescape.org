@@ -62,20 +62,16 @@ const Layout = ({ children, contentClassName }) => {
             Newsletter
           </a>
         </div>
-        <div className="pt-3 sm:pt-0">
-          <a href="https://www.netlify.com" className="inline-block">
-            <img
-              className="blend-multiply"
-              src={NetlifyLogo}
-              alt="Deploys by Netlify"
-            />
+        <div className="pt-3 sm:pt-0 flex">
+          <a href="https://www.netlify.com">
+            <img className="h-12" src={NetlifyLogo} alt="Deploys by Netlify" />
           </a>
           <a
             href="https://simpleanalytics.com/climatescape.org"
-            className="inline-block ml-2"
+            className="ml-2"
           >
             <img
-              className="blend-multiply"
+              className="h-12"
               src={SimpleLogo}
               alt="Stats by Simple Analytics"
             />
