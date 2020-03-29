@@ -1,3 +1,6 @@
+// This file includes logic related to background enrichment of Airtable with the scraped and computed data (currently -
+// Rank, see rank.js). This logic is called from the background worker - see worker.js.
+
 const util = require("util")
 const { isProduction } = require("./utils")
 const { knex, executeKnex } = require("./db/pg")
@@ -6,6 +9,7 @@ const { TWITTER_USER_OBJECT } = require("./twitterUserObjectScraping")
 const { computeRank } = require("./rank")
 
 /**
+ * Used as the name of pg-boss jobs for Airtable enrichment.
  * @type {string}
  */
 const ENRICH_AIRTABLE = "enrichAirtable"

@@ -28,6 +28,9 @@ async function buildFastify() {
         "Received request to scrape Twitter user object: ",
         req.body
       )
+      // Normally, in non-debug scenarios, downstream background jobs expect the organization to be backed up (see
+      // airtableBackup.js) before any scraping or enrichment can happen. Since web.js is used for debugging, it's not
+      // the case - and we have to insert an "artificial" record into the organizations table first.
       await executeInsertIfNotExists(
         "organizations",
         {

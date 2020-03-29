@@ -1,9 +1,15 @@
+// This file includes logic related to background scraping of Twitter user objects (see
+// https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object). It is called from the background
+// worker - see worker.js.
+
 const _ = require("lodash")
-const { acquireTwitterApp, getTwitterScreenName } = require("./twitter")
-const { isProduction } = require("./utils")
+const { acquireTwitterApp } = require("./twitter")
+const { isProduction, getCleanPath } = require("./utils")
 const { executeInsertOrUpdate } = require("./db/pg")
 
 /**
+ * Used as both the name of pg-boss jobs for Twitter use object scraping and the value for the request_type column in
+ * the scraping_results table in Postgres.
  * @type {string}
  */
 const TWITTER_USER_OBJECT = "twitterUserObject"
@@ -32,6 +38,45 @@ async function scrapeTwitterUserObjects(jobs) {
   }))
   console.log(`Scraped Twitter user objects: ${JSON.stringify(result)}`)
   return result
+}
+
+/**
+ * @param {{id: string, fields: Object}} org from Airtable
+ * @returns {string}
+ */
+function getTwitterUrlString(org) {
+  // noinspection JSUnresolvedVariable
+  return org.fields["Twitter Override"] || org.fields.Twitter
+}
+
+/**
+ * @param {{id: string, fields: Object}} org from Airtable
+ */
+function orgToString(org) {
+  return `${org.fields.Name} [${org.id}]`
+}
+
+/**
+ * @param {{id: string, fields: Object}} org from Airtable
+ * @returns {string|null}
+ */
+function getTwitterScreenName(org) {
+  const twitterUrlString = getTwitterUrlString(org)
+  if (!twitterUrlString) {
+    console.log(`No Twitter URL known for org ${orgToString(org)}`)
+    return null
+  }
+  try {
+    return getCleanPath(twitterUrlString)
+  } catch (err) {
+    console.log(
+      `Twitter URL for org ${orgToString(
+        org
+      )} is not valid: ${twitterUrlString}`,
+      err
+    )
+    return null
+  }
 }
 
 /**
@@ -194,4 +239,5 @@ module.exports = {
   onSuccessfulTwitterUserObjectScraping,
   processTwitterUserObjectScrapingJobs,
   DELAY_BETWEEN_TWITTER_USERS_LOOKUP_API_CALLS_MS,
+  getTwitterScreenName, // for testing
 }
