@@ -1,3 +1,7 @@
+// This file includes the logic of the web "face" of backend - don't confuse it with the "backend" of the Climatescape
+// site itself, which is Netlify. Currently, this web face is used only for debugging - see backend/README.md for
+// information.
+
 const fastify = require("fastify")({ logger: true })
 
 const { executeInsertIfNotExists } = require("./db/pg")

@@ -33,7 +33,8 @@ A [*web*](src/web.js) app is not intended to be deployed in Heroku: it is curren
 
 Postgres database is used for [backing up organizations from Airtable](doc/decisions/7-backup-airtable-organizations.md)
 and persisting scraping results. [pg-boss](doc/decisions/4-use-pg-boss-queue.md) queue (which itself runs on top of the
-same Postgres database instance) is used as a job manager for worker.
+same Postgres database instance) is used as a job manager for worker. Postgres is accessed using
+[Knex.js](doc/decisions/8-use-knex.md) as the query builder.
 
 ## Local setup
 
@@ -62,7 +63,8 @@ and then run `yarn jest`.
     curl -X POST https://127.0.0.1:3000/twitterUserObject --header 'Content-type: application/json' --data '{"orgId":"climatescape", "twitterScreenName":"climatescape"}'
     ```
 
-To inspect database contents, enter Postgres container via `docker exec -it backend_db_1 psql -U postgres`.
+To inspect database contents, enter Postgres container via `docker exec -it backend_db_1 psql -U postgres`. To drop
+the database contents completely, run `docker-compose down && docker volume rm backend_dbdata`.
 
 ## Heroku setup
 

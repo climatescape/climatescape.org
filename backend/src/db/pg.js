@@ -1,3 +1,6 @@
+// This file contains everything related to setup and direct usage of the Postgres database, except the pg-boss queue
+// (which uses Postgres as the storage). pg-boss related logic is in pgBoss.js.
+
 const Url = require("url")
 const Pool = require("pg-pool")
 const Knex = require("knex")

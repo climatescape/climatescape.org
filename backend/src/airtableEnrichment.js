@@ -1,5 +1,6 @@
 // This file includes logic related to background enrichment of Airtable with the scraped and computed data (currently -
-// Rank, see rank.js). This logic is called from the background worker - see worker.js.
+// Rank, see rank.js). See decision 6-push-data-to-airtable.md for more discussion. This logic is called from the
+// background worker - see worker.js.
 
 const util = require("util")
 const { isProduction } = require("./utils")
