@@ -2,8 +2,7 @@ import React from "react"
 import { graphql } from "gatsby"
 import Img from "gatsby-image"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faLink } from "@fortawesome/free-solid-svg-icons"
-import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons"
+import { faLinkedin, faTwitter, fFoo } from "@fortawesome/free-brands-svg-icons"
 
 import {
   OrganizationCategory,
