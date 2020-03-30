@@ -1,6 +1,11 @@
 name: Climatescape website Node.js CI
 
 on:
+  pull_request:
+    paths-ignore:
+    - '.github/workflows/backend_nodejs.yml'
+    - '.idea/**'
+    - 'backend/**'
   push:
     paths-ignore:
     - '.github/workflows/backend_nodejs.yml'
