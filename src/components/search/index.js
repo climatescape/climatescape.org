@@ -11,7 +11,6 @@ import algoliasearch from "algoliasearch/lite"
 import { Link } from "gatsby"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faAlgolia } from "@fortawesome/free-brands-svg-icons"
-import useBreakpoint from "../../utils/useBreakpoint"
 import Input from "./input"
 import { Root } from "./styles"
 
@@ -75,7 +74,6 @@ export default function Search({ collapse }) {
   const ref = createRef()
   const [searchQuery, setQuery] = useState(``)
   const [focus, setFocus] = useState(false)
-  const { isDesktop, isMobile } = useBreakpoint()
   useClickOutside(ref, () => setFocus(false))
 
   const searchClient = algoliasearch(
