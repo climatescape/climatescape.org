@@ -19,7 +19,7 @@ const Navbar = () => {
   `)
 
   return (
-    <nav className="border-b border-gray-500 px-6">
+    <nav className="border-b border-gray-500 px-2 md:px-6">
       <div className="container flex mx-auto justify-between flex-wrap">
         <Link className="flex lg:w-1/5 flex-shrink-0" to="/">
           {/* <img
@@ -32,10 +32,12 @@ const Navbar = () => {
           </span>
         </Link>
 
-        <div className="lg:w-4/5 flex justify-between border-l border-gray-500 py-2 pl-8 hidden md:flex">
-          {isSSR ? <SearchInput /> : <Search />}
+        <div className="w-2/5 sm:w-4/5 flex lg:justify-between border-l border-gray-500 md:py-2 pl-2 sm:pl-8">
+          <div className="w-full md:w-2/5 flex">
+            {isSSR ? <SearchInput /> : <Search />}
+          </div>
 
-          <div className="text-sm sm:text-right">
+          <div className="md:w-3/5 flex items-center text-sm sm:text-right hidden md:block">
             <Link
               to="/categories/atmosphere"
               className="block mt-4 sm:inline-block sm:mt-0 mr-4"
@@ -52,7 +54,7 @@ const Navbar = () => {
 
             <Link
               to="/contribute"
-              className="inline-block text-sm px-4 py-2 leading-none border rounded  border-gray-600 hover:border-gray-700 mt-4 sm:mt-0"
+              className="inline-block text-sm px-4 py-2 leading-none border rounded  border-gray-600 hover:border-gray-700 sm:mt-0"
             >
               Contribute
             </Link>

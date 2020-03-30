@@ -18,6 +18,10 @@
   @apply leading-8 text-left inline-block pl-4 border-t border-gray-300 rounded-b-sm justify-center flex;
 }
 
+.algolia-bar svg {
+  color: #5468ff;
+}
+
 .algolia-bar span {
   @apply inline-block;
 }
@@ -39,27 +43,28 @@
 }
 
 .hits-wrapper {
-  display: grid;
-  z-index: 2;
-  -webkit-overflow-scrolling: touch;
-  position: absolute;
-  left: 0;
-  top: 3em;
-  width: 90%;
-  overflow: hidden;
-  border: 1px solid #979797;
-  background: white;
-  border-radius: 4px;
+  top: 2.5rem;
+}
+
+@screen md {
+  .hits-wrapper {
+    top: 3rem;
+  }
 }
 
 .hits-wrapper li:first-child {
   border-top: none;
 }
 
+li:first-child {
+  border-top: none;
+}
+
 .hits-wrapper li {
   line-height: 2em;
   border-top: 1px solid #efefef;
-  padding-left: 1em;
+  padding-left: 1rem;
+  padding-right: 1rem;
   text-align: left;
 }
 

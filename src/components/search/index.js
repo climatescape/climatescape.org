@@ -17,7 +17,7 @@ import { Root } from "./styles"
 import "./styles.css"
 
 const PageHit = () => ({ hit }) => (
-  <div className="text-gray-700 hit">
+  <div className="text-gray-700 hit truncate w-full">
     <Link to={`/organizations/${hit.path}`}>
       <h4>
         <Highlight attribute="name" hit={hit} tagName="mark" />
@@ -33,7 +33,7 @@ const Results = connectStateResults(
     res && res.nbHits > 0 ? (
       children
     ) : (
-      <div className="no-results text-gray-700">
+      <div className="no-results text-center md:text-left text-gray-700">
         <span>
           No results found for <span className="highlight">{state.query}</span>
         </span>
@@ -61,11 +61,7 @@ const PoweredBy = () => (
   <div className="algolia-bar text-gray-700">
     <span>
       <a href="https://algolia.com">
-        <FontAwesomeIcon
-          icon={faAlgolia}
-          className="mr-2"
-          style={{ color: "#5468ff" }}
-        />
+        <FontAwesomeIcon icon={faAlgolia} className="mr-2" />
         powered by Aloglia
       </a>
     </span>
@@ -92,12 +88,15 @@ export default function Search({ collapse }) {
         indexName={indices[0].name}
         onSearchStateChange={({ query }) => setQuery(query)}
         root={{ Root, props: { ref } }}
-        styles={{ position: "relative" }}
       >
         <Configure hitsPerPage={8} />
-        <Input onFocus={() => setFocus(true)} {...{ collapse, focus }} />
+        <Input
+          className="w-full"
+          onFocus={() => setFocus(true)}
+          {...{ collapse, focus }}
+        />
         {searchQuery?.length > 0 && focus && (
-          <div className="hits-wrapper">
+          <div className="hits-wrapper fixed w-full grid z-10 left-0 right-0 overflow-hidden bg-white border border-gray-500 md:absolute md:rounded-md scrolling-touch">
             {/* <HitsWrapper show={searchQuery?.length > 0 && focus}> */}
             {indices.map(({ name, hitComp }) => (
               <Index key={name} indexName={name}>
