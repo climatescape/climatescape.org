@@ -21,7 +21,6 @@
   background: hsla(0, 0%, 100%, 0.5);
 }
 
-
 .carousel .image-landmark.current {
   background: white !important;
 }
