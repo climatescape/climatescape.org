@@ -19,18 +19,18 @@
     "algoliasearch": "^4.0.2",
     "classnames": "^2.2.6",
     "dotenv": "^8.2.0",
-    "gatsby": "^2.18.12",
+    "gatsby": "^2.20.8",
     "gatsby-image": "^2.2.34",
     "gatsby-plugin-algolia": "^0.5.0",
-    "gatsby-plugin-manifest": "^2.2.31",
+    "gatsby-plugin-manifest": "^2.3.3",
     "gatsby-plugin-offline": "^3.0.27",
     "gatsby-plugin-postcss": "^2.1.18",
     "gatsby-plugin-prefetch-google-fonts": "^1.4.3",
     "gatsby-plugin-react-helmet": "^3.1.16",
-    "gatsby-plugin-sharp": "^2.3.5",
+    "gatsby-plugin-sharp": "^2.5.3",
     "gatsby-source-airtable": "^2.0.12",
     "gatsby-source-filesystem": "^2.1.40",
-    "gatsby-transformer-sharp": "^2.3.7",
+    "gatsby-transformer-sharp": "^2.4.3",
     "lodash": "^4.17.15",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
@@ -78,7 +78,9 @@
     "heroku-prebuild": "cd backend && yarn install",
     "heroku-postbuild": ""
   },
-  "cacheDirectories": ["backend/node_modules"],
+  "cacheDirectories": [
+    "backend/node_modules"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/bloudermilk/sustainability-landscape"
