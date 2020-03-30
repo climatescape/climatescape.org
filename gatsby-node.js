@@ -28,6 +28,7 @@ exports.createPages = async ({ graphql, actions }) => {
           id
           data {
             Name
+            Role
           }
         }
       }

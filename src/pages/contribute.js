@@ -47,8 +47,8 @@ export default function ContributePage({ data }) {
     }))
 
   const {
-    organizationFormUrl,
-    capitalFormUrl,
+    organizationAddFormUrl,
+    capitalAddFormUrl,
     contributorFormUrl,
   } = data.site.siteMetadata
 
@@ -67,7 +67,7 @@ export default function ContributePage({ data }) {
             <p className="mt-2">
               For investors, organizations providing grants, project finance, or
               other forms of capital, use the{" "}
-              <TextLink newWindow href={capitalFormUrl}>
+              <TextLink newWindow href={capitalAddFormUrl}>
                 Capital Form
               </TextLink>
               .
@@ -75,7 +75,7 @@ export default function ContributePage({ data }) {
             <p className="mt-2">
               For organizations providing products, services, research,
               networks, or otherwise, use the{" "}
-              <TextLink newWindow href={organizationFormUrl}>
+              <TextLink newWindow href={organizationAddFormUrl}>
                 Organization Form
               </TextLink>
               .
@@ -134,8 +134,8 @@ export const query = graphql`
   query ContributorsQuery {
     site {
       siteMetadata {
-        capitalFormUrl
-        organizationFormUrl
+        capitalAddFormUrl
+        organizationAddFormUrl
         contributorFormUrl
       }
     }

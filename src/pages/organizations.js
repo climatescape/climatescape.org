@@ -8,7 +8,6 @@ import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
 import IndexHeader from "../components/IndexHeader"
 import { useOrganizationFilterState } from "../components/OrganizationFilter"
-import AddOrganizationCTA from "../components/AddOrganizationCTA"
 import SEO from "../components/seo"
 import CategoryList from "../components/CategoryList"
 
@@ -28,7 +27,7 @@ function OrganizationsTemplate({ data, pageContext }) {
   organizations = applyFilter(organizations)
 
   const organizationsTitle = pageContext.categoryName || "All Organizations"
-  const { organizationFormUrl } = data.site.siteMetadata
+  const { organizationAddFormUrl } = data.site.siteMetadata
 
   return (
     <Layout contentClassName="bg-gray-100 px-3 sm:px-6">
@@ -44,8 +43,8 @@ function OrganizationsTemplate({ data, pageContext }) {
         <div className="lg:w-3/5">
           <IndexHeader
             title={organizationsTitle}
-            buttonText="Edit"
-            buttonUrl={organizationFormUrl}
+            buttonText="Add"
+            buttonUrl={organizationAddFormUrl}
             filter={filter}
             onClearFilter={() => setFilter.none()}
           />
@@ -61,8 +60,6 @@ function OrganizationsTemplate({ data, pageContext }) {
               />
             ))}
           </div>
-
-          <AddOrganizationCTA url={organizationFormUrl} />
         </div>
       </div>
     </Layout>
@@ -73,7 +70,7 @@ export const query = graphql`
   query OrganizationsPageQuery($categoryId: String) {
     site {
       siteMetadata {
-        organizationFormUrl
+        organizationAddFormUrl
       }
     }
     categories: allAirtable(filter: { table: { eq: "Categories" } }) {

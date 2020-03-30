@@ -5,7 +5,6 @@ import { transformOrganizations } from "../utils/airtable"
 
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
-import AddOrganizationCTA from "../components/AddOrganizationCTA"
 import IndexHeader from "../components/IndexHeader"
 import { useOrganizationFilterState } from "../components/OrganizationFilter"
 import SEO from "../components/seo"
@@ -21,7 +20,7 @@ const CapitalTemplate = ({
   let organizations = transformOrganizations(nodes)
   organizations = applyFilter(organizations)
 
-  const { capitalFormUrl } = site.siteMetadata
+  const { capitalAddFormUrl } = site.siteMetadata
 
   return (
     <Layout contentClassName="bg-gray-100 px-3 sm:px-6">
@@ -33,8 +32,8 @@ const CapitalTemplate = ({
       <div className="max-w-3xl mx-auto pb-4">
         <IndexHeader
           title="Climate Capital"
-          buttonText="Edit"
-          buttonUrl={capitalFormUrl}
+          buttonText="Add"
+          buttonUrl={capitalAddFormUrl}
           filter={filter}
           onClearFilter={() => setFilter.none()}
         />
@@ -49,8 +48,6 @@ const CapitalTemplate = ({
             />
           ))}
         </div>
-
-        <AddOrganizationCTA url={capitalFormUrl} />
       </div>
     </Layout>
   )
@@ -70,7 +67,7 @@ export const query = graphql`
     }
     site {
       siteMetadata {
-        capitalFormUrl
+        capitalAddFormUrl
       }
     }
   }

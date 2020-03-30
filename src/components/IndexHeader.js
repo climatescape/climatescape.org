@@ -1,6 +1,6 @@
 import React from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit } from "@fortawesome/free-solid-svg-icons"
+import { faPlus } from "@fortawesome/free-solid-svg-icons"
 
 import OrganizationFilter from "./OrganizationFilter"
 
@@ -20,11 +20,11 @@ const IndexHeader = ({
       {buttonText && buttonUrl && (
         <a
           href={buttonUrl}
-          className="px-4 py-2 leading-none border rounded text-teal-500 border-teal-500 hover:text-white hover:bg-teal-500"
+          className="mt-4 px-4 py-2 leading-none border rounded text-teal-500 border-teal-500 hover:text-white hover:bg-teal-500"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <FontAwesomeIcon icon={faEdit} className="mr-2" />
+          <FontAwesomeIcon icon={faPlus} className="mr-2" />
           {buttonText}
         </a>
       )}
