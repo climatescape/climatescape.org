@@ -1,3 +1,8 @@
+// This file contains everything related to setup and use of pg-boss queue, which is used to fuel background task
+// processing (see decision 3-background-task-processing.md). See
+// https://github.com/timgit/pg-boss/blob/master/docs/usage.md for instructions about how to use pg-boss. See
+// 4-use-pg-boss-queue.md for discussion of the decision to use pg-boss.
+
 const util = require("util")
 const PgBoss = require("pg-boss")
 const pMemoize = require("p-memoize")

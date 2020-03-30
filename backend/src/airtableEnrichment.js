@@ -1,11 +1,16 @@
+// This file includes logic related to background enrichment of Airtable with the scraped and computed data (currently -
+// Rank, see rank.js). See decision 6-push-data-to-airtable.md for more discussion. This logic is called from the
+// background worker - see worker.js.
+
 const util = require("util")
 const { isProduction } = require("./utils")
 const { knex, executeKnex } = require("./db/pg")
-const { airtableBase } = require("./airtable")
+const { airtableBase } = require("./api/airtable")
 const { TWITTER_USER_OBJECT } = require("./twitterUserObjectScraping")
 const { computeRank } = require("./rank")
 
 /**
+ * Used as the name of pg-boss jobs for Airtable enrichment.
  * @type {string}
  */
 const ENRICH_AIRTABLE = "enrichAirtable"
@@ -74,6 +79,7 @@ const MAX_ORGS_PER_AIRTABLE_TABLE_UPDATE = 10
 /**
  * @param {Array<{id: string, data: {orgId: string, orgName: string},
  *                Rank: number, 'Enrichment Data': Object}>} jobsWithEnrichmentData
+ * @return {Promise<void>}
  */
 async function updateAirtableOrgs(jobsWithEnrichmentData) {
   const airtableTable = isProduction
@@ -98,7 +104,7 @@ async function updateAirtableOrgs(jobsWithEnrichmentData) {
  * @param {PgBoss} pgBossQueue
  * @returns {Promise<void>}
  */
-async function airtableEnrichmentLoop(pgBossQueue) {
+async function processAirtableEnrichmentJobs(pgBossQueue) {
   const pgBossJobs = await pgBossQueue.fetch(
     ENRICH_AIRTABLE,
     MAX_ORGS_PER_AIRTABLE_TABLE_UPDATE
@@ -144,5 +150,5 @@ async function airtableEnrichmentLoop(pgBossQueue) {
 module.exports = {
   addAirtableEnrichmentJob,
   prepareEnrichmentFields, // for tests
-  airtableEnrichmentLoop,
+  processAirtableEnrichmentJobs,
 }

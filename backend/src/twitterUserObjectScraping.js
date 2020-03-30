@@ -1,10 +1,15 @@
+// This file includes logic related to background scraping of Twitter user objects (see
+// https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object). It is called from the background
+// worker - see worker.js.
+
 const _ = require("lodash")
-const { acquireTwitterApp, getTwitterScreenName } = require("./twitter")
-const { isProduction } = require("./utils")
+const { acquireTwitterApp } = require("./api/twitter")
+const { isProduction, getCleanPath } = require("./utils")
 const { executeInsertOrUpdate } = require("./db/pg")
-const { determineOrgsToScrapeFirstTime } = require("./firstTimeScraping")
 
 /**
+ * Used as both the name of pg-boss jobs for Twitter use object scraping and the value for the request_type column in
+ * the scraping_results table in Postgres.
  * @type {string}
  */
 const TWITTER_USER_OBJECT = "twitterUserObject"
@@ -15,7 +20,11 @@ const TWITTER_USER_OBJECT = "twitterUserObject"
  * @returns {Promise<Array<{orgId: string, orgName: string, twitterUserObject: Object}>>}
  */
 async function scrapeTwitterUserObjects(jobs) {
-  console.log(`Scraping Twitter user objects for: ${JSON.stringify(jobs)}`)
+  console.log(
+    `Scraping Twitter user objects for ${jobs.length} orgs: ${JSON.stringify(
+      jobs
+    )}`
+  )
   if (!isProduction) {
     return jobs.map(job => ({
       ...job.data,
@@ -27,12 +36,53 @@ async function scrapeTwitterUserObjects(jobs) {
   const response = await app.post("users/lookup", {
     screen_name: screenNames,
   })
+  // TODO match orgs with twitter screen name ids - blindly relying on Twitter returning the same number of objects
+  //  in the same order as asked is unreliable
   const result = _.zipWith(jobs, response, (job, userObject) => ({
     ...job.data,
     twitterUserObject: userObject,
   }))
   console.log(`Scraped Twitter user objects: ${JSON.stringify(result)}`)
   return result
+}
+
+/**
+ * @param {{id: string, fields: Object}} org from Airtable
+ * @returns {string}
+ */
+function getTwitterUrlString(org) {
+  // noinspection JSUnresolvedVariable
+  return org.fields["Twitter Override"] || org.fields.Twitter
+}
+
+/**
+ * @param {{id: string, fields: Object}} org from Airtable
+ */
+function orgToString(org) {
+  return `${org.fields.Name} [${org.id}]`
+}
+
+/**
+ * @param {{id: string, fields: Object}} org from Airtable
+ * @returns {string|null}
+ */
+function getTwitterScreenName(org) {
+  const twitterUrlString = getTwitterUrlString(org)
+  if (!twitterUrlString) {
+    console.log(`No Twitter URL known for org ${orgToString(org)}`)
+    return null
+  }
+  try {
+    return getCleanPath(twitterUrlString)
+  } catch (err) {
+    console.log(
+      `Twitter URL for org ${orgToString(
+        org
+      )} is not valid: ${twitterUrlString}`,
+      err
+    )
+    return null
+  }
 }
 
 /**
@@ -95,10 +145,10 @@ async function onSuccessfulTwitterUserObjectScraping(pgBossQueue, handler) {
 
 /**
  * @param {PgBoss} pgBossQueue
+ * @param {Array<{id: string, fields: Object}>} orgsToScrape - array of orgs from Airtable
  * @returns {Promise<void>}
  */
-async function addFirstTimeTwitterUserObjectScrapingJobs(pgBossQueue) {
-  const orgsToScrape = await determineOrgsToScrapeFirstTime(TWITTER_USER_OBJECT)
+async function addTwitterUserObjectScrapingJobs(pgBossQueue, orgsToScrape) {
   const orgsWithTwitter = orgsToScrape.filter(getTwitterScreenName)
   await Promise.all(
     orgsWithTwitter.map(org =>
@@ -152,7 +202,7 @@ const DELAY_BETWEEN_TWITTER_USERS_LOOKUP_API_CALLS_MS = 10000
  * @param {PgBoss} pgBossQueue
  * @returns {Promise<void>}
  */
-async function twitterUserObjectScrapingLoop(pgBossQueue) {
+async function processTwitterUserObjectScrapingJobs(pgBossQueue) {
   const pgBossJobs = await pgBossQueue.fetch(
     TWITTER_USER_OBJECT,
     MAX_ACCOUNTS_PER_TWITTER_USERS_LOOKUP_API_CALL
@@ -191,8 +241,9 @@ async function twitterUserObjectScrapingLoop(pgBossQueue) {
 
 module.exports = {
   TWITTER_USER_OBJECT,
-  addFirstTimeTwitterUserObjectScrapingJobs,
+  addTwitterUserObjectScrapingJobs,
   onSuccessfulTwitterUserObjectScraping,
-  twitterUserObjectScrapingLoop,
+  processTwitterUserObjectScrapingJobs,
   DELAY_BETWEEN_TWITTER_USERS_LOOKUP_API_CALLS_MS,
+  getTwitterScreenName, // for testing
 }

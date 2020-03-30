@@ -31,9 +31,24 @@ function executeWithFixedDelayAsync(fn, delayMs) {
   }, delayMs)
 }
 
+/**
+ * Converts URLs like http://twitter.com/something to just "something", cleaning the tail slash if needed.
+ * @param {string} urlString
+ * @returns {string}
+ */
+function getCleanPath(urlString) {
+  const url = new URL(urlString)
+  let path = url.pathname.substring(1) // Remove leading "/"
+  if (path.charAt(path.length - 1) === "/") {
+    path = path.substring(0, path.length - 1)
+  }
+  return path
+}
+
 module.exports = {
   isProduction,
   sleep,
   configureEnvironment,
   executeWithFixedDelayAsync,
+  getCleanPath,
 }

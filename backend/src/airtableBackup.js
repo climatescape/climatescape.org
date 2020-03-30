@@ -1,28 +1,18 @@
-const { airtableBase, fetchAllRecords } = require("./airtable")
+// This file includes logic of backup of Airtable data (currently, only organizations) in Postgres. So far, it is used
+// only in addFirstTimeScrapingJobs.js, but, in principle, backup could also be done as part of periodic re-scraping:
+// see https://github.com/climatescape/climatescape.org/issues/110.
+
 const { setupTables } = require("./db/setupTables")
 const { executeCount, executeBulkInsertOrUpdate } = require("./db/pg")
 
 /**
- * @returns {Promise<Array<Object>>}
- */
-async function fetchAllOrgRecordsFromAirtable() {
-  console.log("Fetching organizations from Airtable...")
-  const allOrgRecords = await fetchAllRecords(
-    airtableBase("Organizations").select()
-  )
-  return allOrgRecords.map(orgRecord => {
-    return { id: orgRecord.id, fields: orgRecord.fields }
-  })
-}
-
-/**
- * @param {Array<Object>} allOrgRecords
+ * @param {Array<Object>} orgs - array or orgs from Airtable
  * @returns {Promise<number>} the number of rows updated
  */
-async function bulkUpsertOrganizations(allOrgRecords) {
+async function bulkUpsertOrgs(orgs) {
   const now = new Date()
-  const insertData = allOrgRecords.map(orgRecord => ({
-    ...orgRecord,
+  const insertData = orgs.map(org => ({
+    ...org,
     created_at: now,
     updated_at: now,
     deleted_at: null,
@@ -36,18 +26,18 @@ async function bulkUpsertOrganizations(allOrgRecords) {
 }
 
 /**
- * @param {Array<Object>} allOrgRecords
+ * @param {Array<Object>} orgs - array of orgs from Airtable
  * @returns {Promise<void>}
  */
-async function backupOrganizations(allOrgRecords) {
+async function backupOrgsInDb(orgs) {
   await setupTables()
   const numOrgsBefore = await executeCount("organizations")
   console.log(`Num organizations before backup: ${numOrgsBefore}`)
   console.log("Backing up organizations in Postgres...")
-  const numDbRowsUpdated = await bulkUpsertOrganizations(allOrgRecords)
-  if (numDbRowsUpdated !== allOrgRecords.length) {
+  const numDbRowsUpdated = await bulkUpsertOrgs(orgs)
+  if (numDbRowsUpdated !== orgs.length) {
     console.error(
-      `Number of rows updated [${numDbRowsUpdated}] != number of org records [${allOrgRecords.length}]`
+      `Number of rows updated [${numDbRowsUpdated}] != number of orgs [${orgs.length}]`
     )
   }
   const numOrgsAfter = await executeCount("organizations")
@@ -55,12 +45,4 @@ async function backupOrganizations(allOrgRecords) {
   console.log(`Saved ${numOrgsAfter - numOrgsBefore} new organizations`)
 }
 
-/**
- * @returns {Promise<void>}
- */
-async function fetchAndBackupAllAirtableOrganizations() {
-  const allOrgRecords = await fetchAllOrgRecordsFromAirtable()
-  await backupOrganizations(allOrgRecords)
-}
-
-module.exports = { backupOrganizations, fetchAndBackupAllAirtableOrganizations }
+module.exports = { backupOrgsInDb }
