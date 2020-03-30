@@ -1,0 +1,26 @@
+.carousel .carousel-slides {
+  transition-duration: 0.25s;
+}
+
+.carousel .carousel-slides .carousel-slide {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  transform-origin: center center;
+  transform: scale(1);
+  transition: transform 0.5s;
+}
+
+.carousel .carousel-landmarks {
+  background: rgba(0, 0, 0, 0.25);
+  transition: .85s all ease-in;
+  transform: translateY(0px);
+}
+
+.carousel .image-landmark {
+  height: 2px;
+  background: hsla(0, 0%, 100%, 0.5);
+}
+
+.carousel .image-landmark.current {
+  background: white !important;
+}

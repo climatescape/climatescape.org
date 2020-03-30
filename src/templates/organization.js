@@ -14,6 +14,7 @@ import {
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
+import Carousel from "../components/carousel"
 import { transformOrganization } from "../utils/airtable"
 
 function getLogoImage({ logo, photos, categories }) {
@@ -105,12 +106,15 @@ export default function OrganizationTemplate({ data }) {
             <Tags org={org} />
 
             {org.fullPhotos[0] && (
-              <div className="carousel my-8 bg-gray-200 rounded-lg p-4">
-                <img
-                  src={org.fullPhotos[0].publicURL}
-                  alt={org.title}
-                  style={{ height: "20rem" }}
-                  className="organization-img mx-auto"
+              <div className="carousel my-8 bg-gray-200 rounded-lg">
+                <Carousel
+                  height="20rem"
+                  // FIXME: using reverse since the images are in the reverse order of airtable
+                  // display
+                  images={org.fullPhotos.reverse().map(photo => ({
+                    url: photo.publicURL,
+                    title: photo.title,
+                  }))}
                 />
               </div>
             )}
