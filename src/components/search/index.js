@@ -1,10 +1,11 @@
 import React, { useState, useEffect, createRef } from "react"
+import classnames from "classnames"
 import {
   InstantSearch,
   Index,
-  Hits,
   Highlight,
   Configure,
+  connectHits,
   connectStateResults,
 } from "react-instantsearch-dom"
 import algoliasearch from "algoliasearch/lite"
@@ -16,8 +17,13 @@ import { Root } from "./styles"
 
 import "./styles.css"
 
-const PageHit = () => ({ hit }) => (
-  <div className="text-gray-700 hit truncate w-full">
+const PageHit = () => ({ hit, selected, onMouseHover }) => (
+  <div
+    className={classnames("text-gray-700 hit px-4 truncate w-full", {
+      selected,
+    })}
+    onMouseEnter={onMouseHover}
+  >
     <Link to={`/organizations/${hit.path}`}>
       <h4>
         <Highlight attribute="name" hit={hit} tagName="mark" />
@@ -27,6 +33,28 @@ const PageHit = () => ({ hit }) => (
 )
 
 const hitComps = { PageHit }
+
+const Hits = connectHits(
+  ({
+    hits,
+    hitComponent,
+    onMouseHoverHit,
+    selectedIndex,
+    onMouseLeaverHits,
+  }) => (
+    <ul className="ais-Hits-list" onMouseLeave={onMouseLeaverHits}>
+      {hits.map((hit, index) => (
+        <li key={hit.objectID} className="ais-Hits-item">
+          {React.createElement(hitComponent, {
+            hit,
+            selected: index === selectedIndex,
+            onMouseHover: () => onMouseHoverHit(index),
+          })}
+        </li>
+      ))}
+    </ul>
+  )
+)
 
 const Results = connectStateResults(
   ({ searchState: state, searchResults: res, children }) =>
@@ -57,6 +85,7 @@ const useClickOutside = (ref, handler, events) => {
     }
   })
 }
+
 const PoweredBy = () => (
   <div className="algolia-bar text-gray-700">
     <span>
@@ -70,7 +99,116 @@ const PoweredBy = () => (
 
 const indices = [{ name: `Pages`, title: `Pages`, hitComp: `PageHit` }]
 
-export default function Search({ collapse }) {
+function SearchContent({
+  searchQuery,
+  focus,
+  onFocus,
+  onRemoveFocus,
+  collapse,
+}) {
+  const NO_LINE_SELECTED = -1
+  // By default we use -1 and not 0 to avoid displaying a selected background on the first result of
+  // the list, which can be weird when using the mouse to hover an item of the list: it would display
+  // the first line and the hovered line with the same background.
+  // This way we enter the "keyboard navigation mode" only when up/down is used.
+  const [selectedIndex, setSelectedIndex] = useState(NO_LINE_SELECTED)
+
+  React.useEffect(() => {
+    // reset selected index if we reset the search query
+    if (searchQuery?.length === 0) {
+      setSelectedIndex(NO_LINE_SELECTED)
+    }
+  }, [searchQuery, setSelectedIndex])
+
+  // keyboard shortcuts handling
+  const handleKeyDown = e => {
+    // we use javascript to retrieve the number of hits.
+    // tried to connect this SearchContent component to retrieve the number of hits using
+    // connectHits, connectStats, and connectStateResults on Search but it didn't worked.
+    const nbHits = document.querySelectorAll(".hits-wrapper .hit")?.length
+
+    const UP_KEY = 38
+    const DOWN_KEY = 40
+    const ENTER_KEY = 13
+
+    // arrow up/down button should select next/previous list element
+    if (e.keyCode === UP_KEY) {
+      if (selectedIndex > 0) {
+        setSelectedIndex(selectedIndex - 1)
+      } else {
+        setSelectedIndex(nbHits - 1)
+      }
+    } else if (e.keyCode === DOWN_KEY) {
+      if (selectedIndex < nbHits - 1) {
+        setSelectedIndex(selectedIndex + 1)
+      } else {
+        setSelectedIndex(0)
+      }
+    }
+    // enter key
+    else if (e.keyCode === ENTER_KEY) {
+      // When the keyboard has not been used to select an item (using up/down arrow) and we use
+      // enter we select the first item of the list.
+      if (selectedIndex === NO_LINE_SELECTED) {
+        document.querySelector(".hits-wrapper a")?.click()
+      } else {
+        // simulate a click on the link of the selected line.
+        document.querySelector(".hits-wrapper .selected a")?.click()
+      }
+    }
+  }
+
+  //
+  // hover handling
+  // Behaviour: like Google search:
+  // - when we hover an item, the selectedIndex becames the index of the hovered item, so when we
+  //   use the up/down button, it begins at the mouse hover position.
+  // - when the mouse quit the search block, we reset the selectedIndex
+  //
+
+  // when the mouse quit the search block, we reset the selectedIndex
+  const handleOnMouseLeaverHits = () => {
+    setSelectedIndex(NO_LINE_SELECTED)
+  }
+
+  // when the mouse is hover an item, the selectedIndex becames the index of the hovered item, so
+  //  when we use the up/down button, it begins at the mouse hover position.
+  const handleOnMouseHoverHit = hitIndex => {
+    setSelectedIndex(hitIndex)
+  }
+
+  return (
+    <>
+      <Configure hitsPerPage={8} />
+      <Input
+        className="w-full"
+        onFocus={onFocus}
+        onKeyDown={handleKeyDown}
+        {...{ collapse, focus }}
+      />
+      {searchQuery?.length > 0 && focus && (
+        <div className="hits-wrapper fixed w-full grid z-10 left-0 right-0 overflow-hidden bg-white border border-gray-500 md:absolute md:rounded-md scrolling-touch">
+          {/* <HitsWrapper show={searchQuery?.length > 0 && focus}> */}
+          {indices.map(({ name, hitComp }) => (
+            <Index key={name} indexName={name}>
+              <Results>
+                <Hits
+                  hitComponent={hitComps[hitComp](onRemoveFocus)}
+                  selectedIndex={selectedIndex}
+                  onMouseLeaverHits={handleOnMouseLeaverHits}
+                  onMouseHoverHit={handleOnMouseHoverHit}
+                />
+              </Results>
+            </Index>
+          ))}
+          <PoweredBy />
+        </div>
+      )}
+    </>
+  )
+}
+
+function Search({ collapse }) {
   const ref = createRef()
   const [searchQuery, setQuery] = useState(``)
   const [focus, setFocus] = useState(false)
@@ -89,28 +227,16 @@ export default function Search({ collapse }) {
         onSearchStateChange={({ query }) => setQuery(query)}
         root={{ Root, props: { ref } }}
       >
-        <Configure hitsPerPage={8} />
-        <Input
-          className="w-full"
+        <SearchContent
+          searchQuery={searchQuery}
+          collapse={collapse}
+          focus={focus}
           onFocus={() => setFocus(true)}
-          {...{ collapse, focus }}
+          onRemoveFocus={() => setFocus(false)}
         />
-        {searchQuery?.length > 0 && focus && (
-          <div className="hits-wrapper fixed w-full grid z-10 left-0 right-0 overflow-hidden bg-white border border-gray-500 md:absolute md:rounded-md scrolling-touch">
-            {/* <HitsWrapper show={searchQuery?.length > 0 && focus}> */}
-            {indices.map(({ name, hitComp }) => (
-              <Index key={name} indexName={name}>
-                <Results>
-                  <Hits
-                    hitComponent={hitComps[hitComp](() => setFocus(false))}
-                  />
-                </Results>
-              </Index>
-            ))}
-            <PoweredBy />
-          </div>
-        )}
       </InstantSearch>
     </div>
   )
 }
+
+export default Search
