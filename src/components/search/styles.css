@@ -52,6 +52,11 @@
   }
 }
 
+.hits-wrapper .hit.selected,
+.hits-wrapper .selected mark {
+  background: #edf2f7;
+}
+
 .hits-wrapper li:first-child {
   border-top: none;
 }
@@ -63,8 +68,6 @@ li:first-child {
 .hits-wrapper li {
   line-height: 2em;
   border-top: 1px solid #efefef;
-  padding-left: 1rem;
-  padding-right: 1rem;
   text-align: left;
 }
 
