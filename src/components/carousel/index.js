@@ -4,6 +4,8 @@ import classnames from "classnames"
 import withWindow from "../../utils/withWindow"
 import useCurrentWitdh from "../../utils/useCurrentWitdh"
 
+import "./styles.css"
+
 const PREV_KEYS = [38, 37, 72, 75] // up, left, h, k
 const NEXT_KEYS = [40, 39, 74, 76] // down, right, j, l
 
@@ -84,7 +86,7 @@ function Carousel({ images = [], height, onClickRoot }) {
     <div
       ref={rootRef}
       role="presentation"
-      className="relative cursor-pointer text-center overflow-hidden"
+      className="carousel relative cursor-pointer text-center overflow-hidden"
       // allow parent to define a custom onClickRoot. By default we display the next image on click
       onClick={onClickRoot || next}
       onMouseEnter={activateHoverMode}
@@ -93,21 +95,15 @@ function Carousel({ images = [], height, onClickRoot }) {
       <div
         className="flex carousel-slides"
         style={{
-          transitionDuration: "0.25s",
           transform: `translateX(-${currentIndex * width}px)`,
         }}
       >
         {images.map(image => (
           <div
             key={image.url}
-            className="flex relative justify-center items-center w-full"
+            className="carousel-slide flex relative justify-center items-center w-full"
             style={{
               height,
-              scrollSnapAlign: "start",
-              flexShrink: "0",
-              transformOrigin: "center center",
-              transform: "scale(1)",
-              transition: "transform 0.5s",
             }}
           >
             <img
@@ -122,14 +118,12 @@ function Carousel({ images = [], height, onClickRoot }) {
         ))}
       </div>
       <div
-        className={classnames("flex absolute w-full bottom-0", {
-          invisible: !isHoverMode,
-        })}
-        style={{
-          background: "rgba(0, 0, 0, 0.25",
-          transition: ".85s all ease-in",
-          transform: "translateY(0px)",
-        }}
+        className={classnames(
+          "carousel-landmarks flex absolute w-full bottom-0",
+          {
+            invisible: !isHoverMode,
+          }
+        )}
       >
         {images.map((image, index) => {
           const isCurrent = index === currentIndex
@@ -137,11 +131,9 @@ function Carousel({ images = [], height, onClickRoot }) {
           return (
             <div key={image.url} className="flex flex-auto p-1">
               <div
-                className="rounded-full w-full"
-                style={{
-                  height: "2px",
-                  background: !isCurrent ? "hsla(0,0%,100%,0.5)" : "white",
-                }}
+                className={classnames("image-landmark rounded-full w-full", {
+                  current: isCurrent,
+                })}
               />
             </div>
           )
