@@ -30,7 +30,7 @@ const Layout = ({ children, contentClassName }) => {
     <div className="flex flex-col min-h-screen antialiased">
       <Navbar />
       <main className={`flex-grow ${contentClassName}`}>{children}</main>
-      <footer className="text-gray-800 bg-gray-200 text-center sm:text-left py-3 sm:px-6 sm:flex items-center justify-between">
+      <footer className="text-gray-800 bg-gray-200 text-center md:text-left py-3 md:px-6 md:flex items-center justify-between">
         <div className="">
           <span>
             ©{data.site.siteMetadata.title}&nbsp;
@@ -62,20 +62,16 @@ const Layout = ({ children, contentClassName }) => {
             Newsletter
           </a>
         </div>
-        <div className="pt-3 sm:pt-0">
-          <a href="https://www.netlify.com" className="inline-block">
-            <img
-              className="blend-multiply"
-              src={NetlifyLogo}
-              alt="Deploys by Netlify"
-            />
+        <div className="pt-3 sm:pt-0 flex justify-center">
+          <a href="https://www.netlify.com">
+            <img className="h-12" src={NetlifyLogo} alt="Deploys by Netlify" />
           </a>
           <a
             href="https://simpleanalytics.com/climatescape.org"
-            className="inline-block ml-2"
+            className="ml-2"
           >
             <img
-              className="blend-multiply"
+              className="h-12"
               src={SimpleLogo}
               alt="Stats by Simple Analytics"
             />
