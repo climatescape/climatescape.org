@@ -3,10 +3,17 @@ import { connectSearchBox } from "react-instantsearch-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSearch } from "@fortawesome/free-solid-svg-icons"
 
-function Input(props) {
+function Input({
+  isSearchStalled,
+  indexContextValue,
+  createURL,
+  currentRefinement,
+  focus,
+  ...rest
+}) {
   return (
     <input
-      {...props}
+      {...rest}
       className="outline-none border-none bg-transparent text-gray-800 leading-8 font-title flex flex-grow placeholder-gray-800"
     />
   )
