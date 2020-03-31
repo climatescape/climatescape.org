@@ -165,7 +165,7 @@ function SearchContent({
         {...{ collapse, focus }}
       />
       {searchQuery?.length > 0 && focus && (
-        <div className="hits-wrapper fixed w-full grid z-10 left-0 right-0 overflow-hidden bg-white border border-gray-500 top-0 md:absolute md:rounded-md scrolling-touch transform translate-y-10 md:translate-y-12">
+        <div className="hits-wrapper fixed w-full grid z-10 left-0 right-0 top-0 overflow-hidden bg-white border border-gray-500 md:absolute md:rounded-md scrolling-touch transform translate-y-10 md:translate-y-12">
           {/* <HitsWrapper show={searchQuery?.length > 0 && focus}> */}
           {indices.map(({ name, hitComp }) => (
             <Index key={name} indexName={name}>
