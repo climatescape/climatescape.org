@@ -83,7 +83,7 @@ function Tags({ org }) {
 }
 
 export default function OrganizationTemplate({ data }) {
-  const { siteTitle } = data.site.siteMetadata.title
+  const siteTitle = data.site.siteMetadata.title
 
   const org = transformOrganization(data.organization, (raw, out) => ({
     ...out,
