@@ -7,25 +7,26 @@ import {
   Highlight,
   Configure,
   connectHits,
-  connectStateResults,
 } from "react-instantsearch-dom"
 import algoliasearch from "algoliasearch/lite"
 import { Link } from "gatsby"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faAlgolia } from "@fortawesome/free-brands-svg-icons"
 import Input from "./input"
-import { Root } from "./styles"
+import Results from "./Results"
+import PoweredBy from "./PoweredBy"
 
 import "./styles.css"
 
 const PageHit = () => ({ hit, selected, onMouseHover }) => (
   <div
-    className={classnames("text-gray-700 hit px-4 truncate w-full", {
-      selected,
-    })}
+    className={classnames(
+      "text-gray-700 hit px-4 truncate w-full flex items-center",
+      {
+        selected,
+      }
+    )}
     onMouseEnter={onMouseHover}
   >
-    <Link to={`/organizations/${hit.path}`}>
+    <Link to={`/organizations/${hit.path}`} className="flex-grow">
       <h4>
         <Highlight attribute="name" hit={hit} tagName="mark" />
       </h4>
@@ -57,19 +58,6 @@ const Hits = connectHits(
   )
 )
 
-const Results = connectStateResults(
-  ({ searchState: state, searchResults: res, children }) =>
-    res && res.nbHits > 0 ? (
-      children
-    ) : (
-      <div className="no-results text-center md:text-left text-gray-700">
-        <span>
-          No results found for <span className="highlight">{state.query}</span>
-        </span>
-      </div>
-    )
-)
-
 const useClickOutside = (ref, handler, events) => {
   if (!events) events = [`mousedown`, `touchstart`]
 
@@ -86,17 +74,6 @@ const useClickOutside = (ref, handler, events) => {
     }
   })
 }
-
-const PoweredBy = () => (
-  <div className="algolia-bar text-gray-700">
-    <span>
-      <a href="https://algolia.com">
-        <FontAwesomeIcon icon={faAlgolia} className="mr-2" />
-        powered by Aloglia
-      </a>
-    </span>
-  </div>
-)
 
 const indices = [{ name: `Pages`, title: `Pages`, hitComp: `PageHit` }]
 
@@ -188,7 +165,7 @@ function SearchContent({
         {...{ collapse, focus }}
       />
       {searchQuery?.length > 0 && focus && (
-        <div className="hits-wrapper fixed w-full grid z-10 left-0 right-0 overflow-hidden bg-white border border-gray-500 md:absolute md:rounded-md scrolling-touch">
+        <div className="hits-wrapper fixed w-full grid z-10 left-0 right-0 top-0 overflow-hidden bg-white border border-gray-500 md:absolute md:rounded-md scrolling-touch transform translate-y-10 md:translate-y-12">
           {/* <HitsWrapper show={searchQuery?.length > 0 && focus}> */}
           {indices.map(({ name, hitComp }) => (
             <Index key={name} indexName={name}>
@@ -221,12 +198,11 @@ function Search({ collapse }) {
   )
 
   return (
-    <div className="search-root" ref={ref}>
+    <div className="relative flex-grow flex items-center" ref={ref}>
       <InstantSearch
         searchClient={searchClient}
         indexName={indices[0].name}
         onSearchStateChange={({ query }) => setQuery(query)}
-        root={{ Root, props: { ref } }}
       >
         <SearchContent
           searchQuery={searchQuery}
