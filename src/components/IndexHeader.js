@@ -10,6 +10,10 @@ const IndexHeader = ({
   buttonUrl,
   filter,
   onClearFilter,
+  categories,
+  pageContext,
+  onApplyFilter,
+  organizations,
 }) => (
   <div className="border-b border-gray-400 py-3">
     <div className="flex items-center">
@@ -30,7 +34,14 @@ const IndexHeader = ({
       )}
     </div>
 
-    <OrganizationFilter currentFilter={filter} onClearFilter={onClearFilter} />
+    <OrganizationFilter
+      currentFilter={filter}
+      onClearFilter={onClearFilter}
+      categories={categories}
+      pageContext={pageContext}
+      onApplyFilter={onApplyFilter}
+      organizations={organizations}
+    />
   </div>
 )
 

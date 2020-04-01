@@ -10,6 +10,8 @@ import {
   OrganizationCapitalCheckSize,
 } from "./OrganizationAttributes"
 
+import Select from "react-select"
+
 export const useOrganizationFilterState = () => {
   const [byCategory, setCategoryFilter] = useState(null)
   const [byLocation, setLocationFilter] = useState(null)
@@ -95,7 +97,63 @@ export const useOrganizationFilterState = () => {
   ]
 }
 
-const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
+const formatSubcategoryOptions = (categories, pageContext) => {
+  let subCategories = categories
+    .filter(
+      category =>
+        pageContext.categoryId === category.parent?.id && category.count > 0
+    )
+    .map(result => ({
+      value: result,
+      label: result.name,
+    }))
+
+  return [{ value: null, label: "None" }, ...subCategories]
+}
+
+const formatHeadcounts = organizations => {
+  let formatted = organizations
+    .reduce((array, organization) => {
+      let { headcount } = organization
+      return array.includes(headcount) || headcount == null
+        ? array
+        : [...array, headcount]
+    }, [])
+    .map(result => ({
+      value: result,
+      label: result,
+    }))
+
+  formatted.unshift({ value: null, label: "None" })
+
+  return formatted
+}
+
+const formatOrgTypes = organizations => {
+  let formatted = organizations
+    .reduce((array, organization) => {
+      let { orgType } = organization
+      return array.includes(orgType) || orgType == null
+        ? array
+        : [...array, orgType]
+    }, [])
+    .map(result => ({
+      value: result,
+      label: result,
+    }))
+  formatted.unshift({ value: null, label: "None" })
+
+  return formatted
+}
+
+const OrganizationFilter = ({
+  currentFilter,
+  onClearFilter,
+  categories,
+  pageContext,
+  onApplyFilter,
+  organizations,
+}) => {
   const {
     byCategory,
     byLocation,
@@ -117,33 +175,78 @@ const OrganizationFilter = ({ currentFilter, onClearFilter }) => {
     byCapitalStage ||
     byCapitalCheckSize
 
+  const formattedSubcategories = formatSubcategoryOptions(
+    categories,
+    pageContext
+  )
+
+  const formattedHeadCounts = formatHeadcounts(organizations)
+  const formattedOrgTypes = formatOrgTypes(organizations)
+
+  const styles = {
+    container: styles => ({
+      ...styles,
+      display: "inline-block",
+      width: "20%",
+      marginRight: "8px",
+    }),
+    control: provided => ({
+      ...provided,
+      minHeight: "25px",
+      borderRadius: "9999px",
+    }),
+    indicatorsContainer: provided => ({
+      ...provided,
+      height: "25px",
+    }),
+    indicatorSeparator: provided => ({
+      ...provided,
+      display: "none",
+    }),
+    clearIndicator: provided => ({
+      ...provided,
+      padding: "5px",
+    }),
+    dropdownIndicator: provided => ({
+      ...provided,
+      padding: "5px",
+    }),
+  }
+
   return (
     <>
-      {hasFilterApplied && (
-        <p className="text-gray-700  text-sm">
-          <span className="mr-2">Filtered by</span>
-          {byCategory && <OrganizationCategory active text={byCategory.name} />}
-          {byLocation && <OrganizationLocation active text={byLocation} />}
-          {byHeadcount && <OrganizationHeadcount active text={byHeadcount} />}
-          {byOrgType && <OrganizationOrgType active text={byOrgType} />}
-          {byCapitalType && (
-            <OrganizationCapitalType active text={byCapitalType} />
-          )}
-          {byCapitalStrategic && <OrganizationCapitalStrategic active />}
-          {byCapitalStage && (
-            <OrganizationCapitalStage active text={byCapitalStage} />
-          )}
-          {byCapitalCheckSize && (
-            <OrganizationCapitalCheckSize active text={byCapitalCheckSize} />
-          )}
-          <button
-            onClick={() => onClearFilter()}
-            className="underline hover:no-underline ml-1"
-          >
-            clear
-          </button>
-        </p>
-      )}
+      {
+        <div className="text-gray-700  text-sm">
+          <span className="mr-2 inline-block">
+            <span>{organizations.length} Companies | </span>
+            Filter by
+          </span>
+          <Select
+            options={formattedSubcategories}
+            onChange={category => onApplyFilter.byCategory(category?.value)}
+            styles={styles}
+            isSearchable={false}
+            placeholder={byCategory?.name || "Sub category"}
+            value={byCategory?.name}
+          />
+          <Select
+            options={formattedHeadCounts}
+            onChange={size => onApplyFilter.byHeadcount(size?.value)}
+            styles={styles}
+            isSearchable={false}
+            placeholder={byHeadcount || "Size"}
+            value={byHeadcount}
+          />
+          <Select
+            options={formattedOrgTypes}
+            onChange={orgType => onApplyFilter.byOrgType(orgType?.value)}
+            styles={styles}
+            isSearchable={false}
+            placeholder={byOrgType || "Org Type"}
+            value={byOrgType}
+          />
+        </div>
+      }
     </>
   )
 }

@@ -47,6 +47,10 @@ function OrganizationsTemplate({ data, pageContext }) {
             buttonUrl={organizationAddFormUrl}
             filter={filter}
             onClearFilter={() => setFilter.none()}
+            categories={categories}
+            pageContext={pageContext}
+            onApplyFilter={setFilter}
+            organizations={organizations}
           />
 
           <div className="">
