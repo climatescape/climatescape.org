@@ -141,6 +141,7 @@ const formatOrgTypes = organizations => {
       value: result,
       label: result,
     }))
+
   formatted.unshift({ value: null, label: "None" })
 
   return formatted
