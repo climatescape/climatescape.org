@@ -176,13 +176,14 @@ const OrganizationFilter = ({
     byCapitalStage ||
     byCapitalCheckSize
 
-  const formattedSubcategories = formatSubcategoryOptions(
-    categories,
-    pageContext
-  )
+  const formattedSubcategories = pageContext
+    ? formatSubcategoryOptions(categories, pageContext)
+    : null
 
-  const formattedHeadCounts = formatHeadcounts(organizations)
-  const formattedOrgTypes = formatOrgTypes(organizations)
+  const formattedHeadCounts = pageContext
+    ? formatHeadcounts(organizations)
+    : null
+  const formattedOrgTypes = pageContext ? formatOrgTypes(organizations) : null
 
   const styles = {
     container: styles => ({
@@ -219,7 +220,7 @@ const OrganizationFilter = ({
       {
         <div className="text-gray-700  text-sm">
           <span className="mr-2 inline-block">
-            <span>{organizations.length} Companies | </span>
+            <span>{organizations?.length} Companies | </span>
             Filter by
           </span>
           <Select
