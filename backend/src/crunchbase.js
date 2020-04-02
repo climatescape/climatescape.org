@@ -35,7 +35,7 @@ async function crunchbaseEnrich({ name, homepage, crunchbase, twitter, linkedin 
 // Accepts an OrganizationSummary from Crunchbase and returns a populated
 // Airtable Organization object
 function mapCrunchbase({
-  webPath, name, primaryRole, shortDescription, profileImageUrl, homepageUrl,
+  webPath, primaryRole, shortDescription, profileImageUrl,
   facebookUrl, twitterUrl, linkedinUrl, cityName, regionName, countryCode,
 }) {
   let role
@@ -43,16 +43,14 @@ function mapCrunchbase({
   if (primaryRole === "investor") role = "Capital"
 
   return {
-    Name: name,
-    Tagline: shortDescription,
-    Logo: profileImageUrl,
+    "Tagline Override": shortDescription,
+    Logo: profileImageUrl && [{ url: profileImageUrl }],
     "Crunchbase URL Override": `https://crunchbase.com/${webPath}`,
     Role: role,
-    Homepage: homepageUrl,
     Facebook: facebookUrl,
     "Twitter Override": twitterUrl,
     "LinkedIn Override": linkedinUrl,
-    "HQ Location": [cityName, regionName, countryCode].filter(x => x).join(", "),
+    "HQ Location Override": [cityName, regionName, countryCode].filter(x => x).join(", "),
   }
 }
 
