@@ -14,28 +14,28 @@ import Tag from "./Tag"
 
 export const OrganizationCategory = ({ text, ...props }) => (
   <Tag {...props}>
-    <FontAwesomeIcon icon={faBox} className="mr-1" />
+    <FontAwesomeIcon icon={faBox} className="mr-2" />
     {text}
   </Tag>
 )
 
 export const OrganizationLocation = ({ text, ...props }) => (
   <Tag {...props}>
-    <FontAwesomeIcon icon={faLocationArrow} className="mr-1" />
+    <FontAwesomeIcon icon={faLocationArrow} className="mr-2" />
     {text}
   </Tag>
 )
 
 export const OrganizationHeadcount = ({ text, ...props }) => (
   <Tag {...props}>
-    <FontAwesomeIcon icon={faUsers} className="mr-1" />
+    <FontAwesomeIcon icon={faUsers} className="mr-2" />
     {text}
   </Tag>
 )
 
 export const OrganizationOrgType = ({ text, ...props }) => (
   <Tag {...props}>
-    <FontAwesomeIcon icon={faBuilding} className="mr-1" />
+    <FontAwesomeIcon icon={faBuilding} className="mr-2" />
     {text}
   </Tag>
 )
