@@ -1,6 +1,6 @@
 const axios = require("axios")
 
-const { getDomain, camelizeKeys } = require("./utils")
+const { getUrlDomain, camelizeKeys } = require("./utils")
 
 const API_KEY = process.env.CRUNCHBASE_API_KEY
 const ODM_ORGS_URL = "https://api.crunchbase.com/v3.1/odm-organizations"
@@ -10,7 +10,7 @@ const ODM_ORGS_URL = "https://api.crunchbase.com/v3.1/odm-organizations"
 // TODO: We will want to fall back to search by Name at some point
 // TODO: We will want to handle multiple results at some point
 async function crunchbaseEnrich({ name, homepage, crunchbase, twitter, linkedin }) {
-  const domain = getDomain(homepage)
+  const domain = getUrlDomain(homepage)
   const results = await fetchCrunchbase({ domain })
 
   if (results.length == 0) {

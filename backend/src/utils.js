@@ -47,7 +47,7 @@ function getCleanPath(urlString) {
 }
 
 // Given a URL, return just the domain. Strip the subdomain if it equals "www"
-function getDomain(string) {
+function getUrlDomain(string) {
   let hostname
 
   try {
@@ -72,6 +72,6 @@ module.exports = {
   configureEnvironment,
   executeWithFixedDelayAsync,
   getCleanPath,
-  getDomain,
+  getUrlDomain,
   camelizeKeys
 }
