@@ -1,5 +1,6 @@
 require("log-timestamp") // Adds timestamps to console.log() output
 const dotenv = require("dotenv")
+const { camelCase, toPairs, fromPairs } = require("lodash")
 
 // Unlike NODE_ENV, this solution doesn't require any local setup moves from devs, nor setting any configs in Heroku.
 // See https://stackoverflow.com/a/28489160
@@ -58,6 +59,13 @@ function getDomain(string) {
   return hostname.startsWith("www.") ? hostname.substr(4) : hostname
 }
 
+// Given an `object`, return a new object converted to camelCase
+function camelizeKeys(object) {
+  return fromPairs(
+    toPairs(object).map(([k, v]) => [camelCase(k), v])
+  )
+}
+
 module.exports = {
   isProduction,
   sleep,
@@ -65,4 +73,5 @@ module.exports = {
   executeWithFixedDelayAsync,
   getCleanPath,
   getDomain,
+  camelizeKeys
 }

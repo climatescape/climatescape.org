@@ -1,7 +1,6 @@
 const axios = require("axios")
-const { camelCase, toPairs, fromPairs } = require("lodash")
 
-const { getDomain } = require("./utils")
+const { getDomain, camelizeKeys } = require("./utils")
 
 const API_KEY = process.env.CRUNCHBASE_API_KEY
 const ODM_ORGS_URL = "https://api.crunchbase.com/v3.1/odm-organizations"
@@ -79,13 +78,6 @@ async function fetchCrunchbase({ domain, name }) {
   return response.data.data.items.map(({ type, uuid, properties }) => ({
     type, uuid, ...camelizeKeys(properties)
   }))
-}
-
-// Given an `object`, return a new object converted to camelCase
-function camelizeKeys(object) {
-  return fromPairs(
-    toPairs(object).map(([k, v]) => [camelCase(k), v])
-  )
 }
 
 module.exports = {
