@@ -45,10 +45,24 @@ function getCleanPath(urlString) {
   return path
 }
 
+// Given a URL, return just the domain. Strip the subdomain if it equals "www"
+function getDomain(string) {
+  let hostname
+
+  try {
+    ({ hostname } = new URL(string))
+  } catch {
+    return null
+  }
+
+  return hostname.startsWith("www.") ? hostname.substr(4) : hostname
+}
+
 module.exports = {
   isProduction,
   sleep,
   configureEnvironment,
   executeWithFixedDelayAsync,
   getCleanPath,
+  getDomain,
 }
