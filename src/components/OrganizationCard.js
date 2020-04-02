@@ -57,7 +57,7 @@ export default function OrganizationCard({
           {truncateDescription(description)}
         </p>
         <div className="mt-1">
-          {capitalProfile?.type.map(type => (
+          {capitalProfile?.type?.map(type => (
             <OrganizationCapitalType
               key={type}
               onClick={() => onApplyFilter.byCapitalType(type)}
