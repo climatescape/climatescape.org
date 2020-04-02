@@ -1,7 +1,13 @@
 import React from "react"
 import classnames from "classnames"
 
-const liClassName = "flex flex-row mt-3 font-medium text-sm text-gray-800"
+function Li({ children }) {
+  return (
+    <li className="flex flex-row mt-3 font-medium text-sm text-gray-800">
+      {children}
+    </li>
+  )
+}
 
 function Link({ icon, text, href, className }) {
   if (!href) {
@@ -9,7 +15,7 @@ function Link({ icon, text, href, className }) {
   }
 
   return (
-    <li className={liClassName}>
+    <Li>
       <a
         className={className ? classnames(className) : "flex underline"}
         href={href}
@@ -19,16 +25,19 @@ function Link({ icon, text, href, className }) {
         <div className="mr-3">{icon}</div>
         <span>{text}</span>
       </a>
-    </li>
+    </Li>
   )
 }
 
-function Item({ icon, text }) {
+function Item({ icon, text, hidden }) {
+  if (hidden) {
+    return null
+  }
   return (
-    <li className={liClassName}>
+    <Li>
       <div className="mr-3">{icon}</div>
       <span>{text}</span>
-    </li>
+    </Li>
   )
 }
 

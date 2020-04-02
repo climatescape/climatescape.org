@@ -48,7 +48,7 @@ function AttributesSection({ org }) {
     .concat(subCategories)
 
   return (
-    <SidebarSectionList title="In a snapshot" className="flex flex-col mb-12">
+    <SidebarSectionList title="In a snapshot" className="flex flex-col mb-8">
       {categoryList.map(category => (
         <SidebarSectionList.Item
           key={category.name}
@@ -56,31 +56,30 @@ function AttributesSection({ org }) {
           icon={<FontAwesomeIcon icon={faBox} />}
         />
       ))}
-      {org.location && (
+      {
         <SidebarSectionList.Item
           text={org.location}
           icon={<FontAwesomeIcon icon={faMapMarkerAlt} />}
+          hidden={!org.location}
         />
-      )}
-      {org.orgType && (
-        <SidebarSectionList.Item
-          text={org.orgType}
-          icon={<FontAwesomeIcon icon={faBuilding} />}
-        />
-      )}
-      {org.headcount && (
-        <SidebarSectionList.Item
-          text={`${org.headcount} employees`}
-          icon={<FontAwesomeIcon icon={faUsers} />}
-        />
-      )}
+      }
+      <SidebarSectionList.Item
+        text={org.orgType}
+        icon={<FontAwesomeIcon icon={faBuilding} />}
+        hidden={!org.orgType}
+      />
+      <SidebarSectionList.Item
+        text={`${org.headcount} employees`}
+        icon={<FontAwesomeIcon icon={faUsers} />}
+        hidden={!org.headcount}
+      />
     </SidebarSectionList>
   )
 }
 
-function SocialLinksSection({ org }) {
+function SocialLinksSection({ data, org }) {
   return (
-    <SidebarSectionList title="Links" className="flex flex-col mb-12">
+    <SidebarSectionList title="Links" className="flex flex-col mb-8">
       <SidebarSectionList.Link
         text="Homepage"
         href={org.homepage}
@@ -95,6 +94,11 @@ function SocialLinksSection({ org }) {
         text={parseTwitterPath(org.twitter)}
         href={buildUrl(org.twitter, "Twitter")}
         icon={<FontAwesomeIcon icon={faTwitter} />}
+      />
+      <SidebarSectionList.Link
+        href={getEditUrl({ data, org })}
+        text="Suggest an Edit"
+        icon={<FontAwesomeIcon icon={faEdit} />}
       />
     </SidebarSectionList>
   )
@@ -152,15 +156,7 @@ export default function OrganizationTemplate({ data }) {
           <div className="flex flex-col lg:w-2/5 items-center">
             <div className="flex flex-col">
               <AttributesSection org={org} />
-              <SocialLinksSection org={org} />
-              <SidebarSectionList>
-                <SidebarSectionList.Link
-                  href={getEditUrl({ data, org })}
-                  className="flex items-center text-center px-2 py-2 leading-none border rounded border-gray-700 text-sm hover:text-white hover:bg-teal-500"
-                  text="Suggest an Edit"
-                  icon={<FontAwesomeIcon icon={faEdit} />}
-                />
-              </SidebarSectionList>
+              <SocialLinksSection data={data} org={org} />
             </div>
           </div>
         </div>
