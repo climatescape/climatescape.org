@@ -27,6 +27,14 @@ export default function IndexPage({ data }) {
             <TopicCard category={cat} key={cat.name} />
           ))}
         </div>
+        <div className="text-center">
+          <Link
+            to="/organizations"
+            className="text-lg text-blue-600 hover:text-blue-400"
+          >
+            View All Organizations <span className="text-2xl">&rsaquo;</span>
+          </Link>
+        </div>
       </div>
 
       <h2 className="font-bold text-2xl md:text-4xl text-center font-light tracking-wide text-gray-800 mt-6">
