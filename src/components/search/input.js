@@ -14,7 +14,9 @@ function Input({
   return (
     <input
       {...rest}
-      className="outline-none border-none bg-transparent text-gray-800 leading-8 font-title flex flex-grow placeholder-gray-800"
+      // w-full avoid having vertical scroll.
+      // overflow-hidden is a little bit tricky. Fixes the vertical scroll on Firefox.
+      className="w-full overflow-hidden outline-none border-none bg-transparent text-gray-800 leading-8 font-title flex flex-grow placeholder-gray-800"
     />
   )
 }
