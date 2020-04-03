@@ -134,6 +134,7 @@ export default function OrganizationCard({
               src={img.src}
               alt={`${title} logo`}
               className="OrganizationCard-logo blend-multiply rounded-lg w-24 h-24"
+              loading="lazy"
             />
           </Link>
         )}
