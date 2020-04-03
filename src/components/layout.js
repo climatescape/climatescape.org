@@ -61,6 +61,24 @@ const Layout = ({ children, contentClassName }) => {
           >
             Newsletter
           </a>
+          <span> • </span>
+          <a
+            href="https://airtable.com/shraY1nLoEKJ8UsNH/tblPH0ZgLZYGVEhEo?blocks=hide"
+            className="underline hover:no-underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            AirTable
+          </a>
+          <span> • </span>
+          <a
+            href="https://github.com/climatescape/climatescape.org"
+            className="underline hover:no-underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Github
+          </a>
         </div>
         <div className="pt-3 sm:pt-0 flex justify-center">
           <a href="https://www.netlify.com">
