@@ -79,6 +79,15 @@ const Layout = ({ children, contentClassName }) => {
           >
             Github
           </a>
+          <span> • </span>
+          <a
+            href="https://www.notion.so/Climatescape-FAQ-ac0b381c39574ec8a8cd4ba1df4315d9"
+            className="underline hover:no-underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            FAQ
+          </a>
         </div>
         <div className="pt-3 sm:pt-0 flex justify-center">
           <a href="https://www.netlify.com">
