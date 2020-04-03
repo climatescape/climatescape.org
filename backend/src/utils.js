@@ -51,7 +51,7 @@ function getUrlDomain(string) {
   let hostname
 
   try {
-    ({ hostname } = new URL(string))
+    ;({ hostname } = new URL(string))
   } catch {
     return null
   }
@@ -61,9 +61,7 @@ function getUrlDomain(string) {
 
 // Given an `object`, return a new object converted to camelCase
 function camelizeKeys(object) {
-  return fromPairs(
-    toPairs(object).map(([k, v]) => [camelCase(k), v])
-  )
+  return fromPairs(toPairs(object).map(([k, v]) => [camelCase(k), v]))
 }
 
 module.exports = {
@@ -73,5 +71,5 @@ module.exports = {
   executeWithFixedDelayAsync,
   getCleanPath,
   getUrlDomain,
-  camelizeKeys
+  camelizeKeys,
 }

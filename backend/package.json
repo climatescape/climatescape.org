@@ -23,6 +23,7 @@
     "twitter-lite": "^0.9.4",
     "url": "^0.11.0"
   },
+  "license": "MIT",
   "devDependenciesComment": "Have to use eslint 5.x until https://youtrack.jetbrains.com/issue/WEB-43692 is fixed",
   "devDependencies": {
     "eslint": "^5.16.0",

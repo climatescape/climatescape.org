@@ -23,6 +23,7 @@ async function main() {
   // Procedure for clearing the buffer and recording the promise (used in two
   // places below)
   const clearBuffer = () => {
+    return // TODO remove me!
     console.log("Clearing buffer", buffer)
     const promise = table.update(buffer).catch(console.error)
     updates.push(promise)
