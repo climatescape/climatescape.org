@@ -1,4 +1,5 @@
 import React from "react"
+import "./organization.css"
 import { graphql } from "gatsby"
 import Img from "gatsby-image"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -35,7 +36,7 @@ function getEditUrl({ data, org }) {
   return `${url}?prefill_Organization=${encodeURI(org.title)}`
 }
 
-function AttributesSection({ org }) {
+function AttributesSection({ org, className }) {
   const topCategories = org.categories.filter(cat => !cat.parent)
   const subCategories = org.categories.filter(cat => cat.parent)
 
@@ -48,7 +49,7 @@ function AttributesSection({ org }) {
     .concat(subCategories)
 
   return (
-    <SidebarSectionList title="In a snapshot" className="flex flex-col mb-8">
+    <SidebarSectionList title="In a snapshot" className={className}>
       {categoryList.map(category => (
         <SidebarSectionList.Item
           key={category.name}
@@ -77,9 +78,9 @@ function AttributesSection({ org }) {
   )
 }
 
-function SocialLinksSection({ data, org }) {
+function SocialLinksSection({ data, org, className }) {
   return (
-    <SidebarSectionList title="Links" className="flex flex-col mb-8">
+    <SidebarSectionList title="Links" className={className}>
       <SidebarSectionList.Link
         text="Homepage"
         href={org.homepage}
@@ -118,11 +119,11 @@ export default function OrganizationTemplate({ data }) {
     <Layout contentClassName="bg-gray-100 font-sans">
       <SEO title={`${org.title} on ${siteTitle}`} description={org.tagline} />
 
-      <div className="max-w-4xl mx-auto pt-8 pb-4">
-        <div className="mb-10 mt-6 flex ">
-          <div className="lg:w-3/5">
+      <div className="max-w-4xl mx-auto lg:pt-8 pb-4 p-4 xs:p-8 lg:p-0">
+        <div className="mb-10 md:mt-6 flex flex-col lg:flex-row">
+          <div className="w-5/5 lg:w-3/5">
             <div className="flex">
-              <div className="mr-5 w-16 flex-shrink-0 hidden sm:block">
+              <div className="mr-5 w-16 flex-shrink-0 block">
                 {img && (
                   <Img
                     fixed={img}
@@ -149,14 +150,21 @@ export default function OrganizationTemplate({ data }) {
                 />
               </div>
             )}
+
             {org.about && org.about !== org.tagline && (
               <div className="my-6">{org.about}</div>
             )}
           </div>
-          <div className="flex flex-col lg:w-2/5 items-center">
-            <div className="flex flex-col">
-              <AttributesSection org={org} />
-              <SocialLinksSection data={data} org={org} />
+
+          <div className="flex flex-col w-5/5 lg:w-2/5 lg:pl-16 items-center mt-3 lg:mt-0">
+            <div className="sidebar-sections-container w-full flex flex-col sm:flex-row lg:flex-col justify-start justify-around lg:justify-start">
+              <AttributesSection org={org} className="flex flex-col mb-8" />
+
+              <SocialLinksSection
+                data={data}
+                org={org}
+                className="flex flex-col mb-8"
+              />
             </div>
           </div>
         </div>
