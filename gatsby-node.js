@@ -49,6 +49,26 @@ exports.createPages = async ({ graphql, actions }) => {
       })
     })
 
+  const capitalTypes = [
+    "Venture Capital",
+    "Project Finance",
+    "Private Equity",
+    "Incubator",
+    "Accelerator",
+    "Grant",
+    "Prize",
+    "Angel",
+  ]
+  capitalTypes.forEach(type => {
+    createPage({
+      path: `/capital/${makeSlug(type)}`,
+      component: path.resolve(`./src/pages/capital.js`),
+      context: {
+        capitalType: type,
+      },
+    })
+  })
+
   // Create the organizations pages
   data.organizations.nodes.forEach(org => {
     createPage({
