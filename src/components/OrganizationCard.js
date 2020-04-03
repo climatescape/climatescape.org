@@ -213,6 +213,13 @@ export const query = graphql`
       Logo {
         ...OrganizationCardLogo
       }
+      Crunchbase_ODM {
+        data {
+          Logo {
+            ...OrganizationCardLogo
+          }
+        }
+      }
       LinkedIn_Profiles {
         data {
           Logo {
