@@ -1,4 +1,4 @@
-const { getCleanPath, getUrlDomain } = require("../src/utils")
+const { getCleanPath, getUrlDomain, getSocialPath } = require("../src/utils")
 
 test("getCleanPath", () => {
   expect(getCleanPath("https://twitter.com/climatescape")).toBe("climatescape")
@@ -22,4 +22,20 @@ test("getUrlDomain", () => {
   expect(getUrlDomain("https://airthium.com/test?1=123")).toBe("airthium.com")
   expect(getUrlDomain("lacking-a-protocol.com")).toBe(null)
   expect(getUrlDomain("not a domain")).toBe(null)
+})
+
+test("getSocialPath", () => {
+  expect(
+    getSocialPath("https://www.crunchbase.com/organization/acciona-energy")
+  ).toBe("organization/acciona-energy")
+  expect(getSocialPath("https://www.crunchbase.com/")).toBe(null)
+  expect(getSocialPath("https://www.crunchbase.com")).toBe(null)
+  expect(getSocialPath("https://twitter.com/SomeDope_Handle")).toBe(
+    "somedope_handle"
+  )
+  expect(getSocialPath("https://www.linkedin.com/company/centrica/")).toBe(
+    "company/centrica"
+  )
+  expect(getSocialPath(null)).toBe(null)
+  expect(getSocialPath(undefined)).toBe(null)
 })

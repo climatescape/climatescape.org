@@ -13,20 +13,19 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
 const table = base("Organizations")
 
 async function main() {
-  const organizations = await table.select().firstPage()//all()
+  const organizations = await table.select().all()
   const totalCount = organizations.length
   var foundCount = 0
   var updatedCount = 0
+  const outcomes = {}
   var buffer = [] // Array of up to 10 updates to be sent as a batch to Airtable
   const updates = [] // Array of Promises returned from updates to Airtable
 
   // Procedure for clearing the buffer and recording the promise (used in two
   // places below)
-  const clearBuffer = () => {
-    return // TODO remove me!
-    console.log("Clearing buffer", buffer)
-    const promise = table.update(buffer).catch(console.error)
-    updates.push(promise)
+  const flushBuffer = () => {
+    console.dir(buffer, { depth: null })
+    updates.push(table.update(buffer).catch(console.error))
     buffer = []
   }
 
@@ -34,13 +33,24 @@ async function main() {
 
   await asyncForEach(organizations, async organization => {
     const fields = organization.fields
-    const raw = await crunchbaseEnrich(camelizeKeys(fields))
+    let outcome
 
-    if (!raw) return
+    try {
+      outcome = await crunchbaseEnrich(camelizeKeys(fields))
+    } catch (err) {
+      return console.error(
+        `Error enriching name="${fields.name}" homepage="${fields.homepage}"`,
+        err
+      )
+    }
+
+    outcomes[outcome.msg] = (outcomes[outcome.msg] || 0) + 1
+
+    if (!outcome.result) return console.dir(outcome, { depth: null })
 
     foundCount++
 
-    const mapped = mapCrunchbase(raw)
+    const mapped = mapCrunchbase(outcome.result)
     const missing = missingFields(fields, mapped)
 
     if (missing) {
@@ -52,11 +62,11 @@ async function main() {
       })
     }
 
-    if (buffer.length === 10) clearBuffer()
+    if (buffer.length === 10) flushBuffer()
   })
 
   // If we finished with a partial buffer, send one final update
-  if (buffer.length) clearBuffer()
+  if (buffer.length) flushBuffer()
 
   console.log(`Waiting for ${updates.length} updates to finish`)
 
@@ -64,7 +74,8 @@ async function main() {
   // case any aren't finished yet (e.g. the final update)
   await Promise.all(updates)
 
-  console.log(`Finished updating ${updatedCount} records of ${foundCount} found, ${totalCount} total`)
+  console.log(`Finished: updated=${updatedCount} matched=${foundCount} total=${totalCount}`)
+  console.log(`Outcomes: `, outcomes)
 }
 
 // Return a subset of source with only the fields present in source and missing
@@ -85,4 +96,10 @@ async function asyncForEach(array, callback) {
   }
 }
 
-main();
+(async () => {
+  try {
+    await main();
+  } catch (err) {
+    console.error("main() failed with exception", err)
+  }
+})();

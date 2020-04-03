@@ -1,9 +1,10 @@
 const axios = require("axios")
 
-const { getUrlDomain, camelizeKeys } = require("./utils")
+const { getUrlDomain, getSocialPath, camelizeKeys } = require("./utils")
 
 const API_KEY = process.env.CRUNCHBASE_API_KEY
 const ODM_ORGS_URL = "https://api.crunchbase.com/v3.1/odm-organizations"
+const SITES = ["twitter", "facebook", "linkedin", "homepage"]
 
 // Accepts the `domain` OR `name` of an organization and queries the Crunchbase
 // ODM API. Return an array of results formatted in camelCase
@@ -31,46 +32,95 @@ async function fetchCrunchbase({ domain, name }) {
   }))
 }
 
-// Accepts an organization and returns an enriched version of that organization
-// as well as a raw Crunchbase enrichment object.
-// TODO: We will want to fall back to search by Name at some point
-// TODO: We will want to handle multiple results at some point
-async function crunchbaseEnrich({
-  name,
-  homepage,
-  crunchbase,
-  twitter,
-  linkedin,
-}) {
-  const domain = getUrlDomain(homepage)
-  const results = await fetchCrunchbase({ domain })
+// Given an Airtable organization `ours` and a Crunchbase organization `theirs`,
+// return a confidence score between 0 and Infinity, inclusive, where a higher
+// number indicates higher confidence that the two organizations match
+function evaluateConfidence(ours, theirs) {
+  let score = 0
 
-  if (!results.length) {
-    console.log(
-      `crunchbaseEnrich: no results for Organization '${name}' domain: ${domain}`
-    )
-  } else if (results.length > 1) {
-    console.log(
-      `crunchbaseEnrich: multiple results for Organization '${name}' domain: ${domain}`,
-      results
-    )
-  } else {
-    const result = results[0]
-
-    // TODO: We can implement a more robust confidence check here, using other
-    // attributes like social media profiles to determine if we have the correct
-    // result. Name frequently doesn't match due to minor inconsistencies in the
-    // spelling or formatting
-    if (result.name === name) {
-      return result
-    }
-
-    console.log(
-      `crunchbaseEnrich: name mismatch for Organization '${name}' got ${result.name}`
-    )
+  const us = {
+    name: ours.name.toLowerCase(),
+    homepage: getUrlDomain(ours.homepage),
+    crunchbase: getSocialPath(ours.crunchbase),
+    twitter: getSocialPath(ours.twitter),
+    linkedin: getSocialPath(ours.linkedIn),
+    facebook: getSocialPath(ours.facebook),
   }
 
-  return null
+  const them = {
+    name: theirs.name.toLowerCase(),
+    homepage: getUrlDomain(theirs.homepageUrl),
+    crunchbase: theirs.webPath.toLowerCase(),
+    twitter: getSocialPath(theirs.twitterUrl),
+    linkedin: getSocialPath(theirs.linkedinUrl),
+    facebook: getSocialPath(theirs.facebookUrl),
+  }
+
+  // A match on the Crunchbase URL is an automatic perfect score
+  if (us.crunchbase === them.crunchbase) return Infinity
+
+  // A match on the name (case-insensitive) is a pretty good indication
+  if (us.name === them.name) score += 10
+
+  // A match to any websites is a really good indication
+  SITES.forEach(website => {
+    if (us[website] && us[website] === them[website]) score += 20
+  })
+
+  return score
+}
+
+// Accepts an organization and returns an enriched version of that organization
+// as well as a raw Crunchbase enrichment object. If the organization could not
+// be enriched, returns a reason (~err) as the first value
+async function crunchbaseEnrich(organization, options = { method: "domain" }) {
+  const { name, homepage } = organization
+  const { method } = options
+
+  const results = await fetchCrunchbase(
+    method === "domain" ? { domain: getUrlDomain(homepage) } : { name }
+  )
+
+  if (!results.length) {
+    // If we can't match the domain, try falling back to a name search
+    if (method === "domain") {
+      return await crunchbaseEnrich(organization, { method: "name" })
+    } else {
+      return {
+        msg: `no-results`,
+        context: { organization, options },
+      }
+    }
+  }
+
+  // Score each of the results and select the highest scoring
+  const scored = results.map(
+    org => ({ _score: evaluateConfidence(organization, org), ...org })
+  )
+  const maxScore = scored.reduce((max, org) => Math.max(max, org._score), 0)
+
+  // A score of 0 means we couldn't match anything
+  if (maxScore === 0) {
+    return {
+      msg: `no-matches`,
+      context: { organization, options, scored },
+    }
+  }
+
+  const top = scored.filter(org => org._score === maxScore)
+
+  if (top.length > 1) {
+    return {
+      msg: `multiple-matches`,
+      context: { organization, options, scored },
+    }
+  } else {
+    return {
+      msg: `success-${method}`,
+      result: top[0],
+      context: { organization, options, scored },
+    }
+  }
 }
 
 // Accepts an OrganizationSummary from Crunchbase and returns a populated
@@ -94,7 +144,7 @@ function mapCrunchbase({
   return {
     "Tagline Override": shortDescription,
     Logo: profileImageUrl && [{ url: profileImageUrl }],
-    "Crunchbase URL Override": `https://crunchbase.com/${webPath}`,
+    Crunchbase: `https://crunchbase.com/${webPath}`,
     Role: role,
     Facebook: facebookUrl,
     "Twitter Override": twitterUrl,
@@ -109,4 +159,5 @@ module.exports = {
   crunchbaseEnrich,
   fetchCrunchbase,
   mapCrunchbase,
+  evaluateConfidence,
 }

@@ -6,10 +6,12 @@ const {
   fetchCrunchbase,
   mapCrunchbase,
   crunchbaseEnrich,
+  evaluateConfidence,
 } = require("../src/crunchbase")
 
 const CrunchbaseAirthiumByName = require("./mocks/crunchbase/name-airthium.json")
 const CrunchbaseAirthiumByDomain = require("./mocks/crunchbase/domain-airthium.com.json")
+const CrunchbaseArrivalByDomain = require("./mocks/crunchbase/domain-arrival.com.json")
 
 const AirthiumOrganizationSummary = {
   type: "OrganizationSummary",
@@ -73,7 +75,7 @@ test("mapCrunchbase", () => {
       },
     ],
     Role: undefined,
-    "Crunchbase URL Override": "https://crunchbase.com/organization/airthium",
+    Crunchbase: "https://crunchbase.com/organization/airthium",
     "Twitter Override": "https://twitter.com/airthium",
     "LinkedIn Override": "https://www.linkedin.com/company/airthium/",
     Facebook: "https://www.facebook.com/aithium/",
@@ -85,11 +87,94 @@ test("crunchbaseEnrich single positive result", async () => {
   axios.get.mockResolvedValue({ data: CrunchbaseAirthiumByName })
 
   const organization = { name: "Airthium", homepage: "https://airthium.com/" }
-  const result = await crunchbaseEnrich(organization)
+  const { result } = await crunchbaseEnrich(organization)
 
   expect(result).toEqual(
     expect.objectContaining({
       name: "Airthium",
     })
   )
+})
+
+test("crunchbaseEnrich multiple results disambiguated", async () => {
+  axios.get.mockResolvedValue({ data: CrunchbaseArrivalByDomain })
+
+  const organization = {
+    name: "Arrival",
+    homepage: "https://arrival.com/",
+    twitter: "https://twitter.com/arrival",
+    linkedIn: "https://www.linkedin.com/company/arrival-ltd/",
+  }
+
+  const { result } = await crunchbaseEnrich(organization)
+
+  expect(result).toEqual(
+    expect.objectContaining({
+      name: "Arrival",
+    })
+  )
+})
+
+test.todo("crunchbaseEnrich single results name mismatch")
+test.todo("crunchbaseEnrich name mismatch, domain match, no social")
+test.todo("crunchbaseEnrich - no domain match, name search fallback")
+
+test("evaluateConfidence crunchbase override", () => {
+  const ours = {
+    name: "Wont Match",
+    crunchbase: "https://www.crunchbase.com/organization/will-match",
+    twitter: "https://twitter.com/wontmatch",
+    facebook: "https://facebook.com/wontmatch",
+    linkedIn: "https://www.linkedin.com/company/wont-match",
+  }
+
+  const theirs = {
+    name: "Cant Match",
+    webPath: "organization/will-match",
+    twitterUrl: "https://twitter.com/cantmatch",
+    facebookUrl: "https://facebook.com/cantmatch",
+    linkedinUrl: "https://www.linkedin.com/company/cant-match",
+  }
+
+  expect(evaluateConfidence(ours, theirs)).toBe(Infinity)
+})
+
+test("evaluateConfidence name only", () => {
+  const ours = {
+    name: "Will Match",
+    crunchbase: "https://www.crunchbase.com/organization/wont-match",
+    twitter: "https://twitter.com/wontmatch",
+    facebook: "https://facebook.com/wontmatch",
+    linkedIn: "https://www.linkedin.com/company/wont-match",
+  }
+
+  const theirs = {
+    name: "Will Match",
+    webPath: "organization/cant-match",
+    twitterUrl: "https://twitter.com/cantmatch",
+    facebookUrl: "https://facebook.com/cantmatch",
+    linkedinUrl: "https://www.linkedin.com/company/cant-match",
+  }
+
+  expect(evaluateConfidence(ours, theirs)).toBe(10)
+})
+
+test("evaluateConfidence name mismatch, social match", () => {
+  const ours = {
+    name: "Wont Match",
+    crunchbase: null,
+    twitter: "https://twitter.com/willmatch",
+    facebook: "https://facebook.com/willmatch",
+    linkedIn: "https://www.linkedin.com/company/will-match",
+  }
+
+  const theirs = {
+    name: "Cant Match",
+    webPath: "organization/cant-match",
+    twitterUrl: "https://twitter.com/willmatch",
+    facebookUrl: "https://facebook.com/willmatch",
+    linkedinUrl: "https://www.linkedin.com/company/will-match",
+  }
+
+  expect(evaluateConfidence(ours, theirs)).toBe(60)
 })
