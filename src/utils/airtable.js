@@ -1,8 +1,9 @@
 import { stringCompare } from "./string"
 import { makeSlug } from "./slug"
 
-function getLogo(Logo, LinkedinProfile) {
-  const logo = Logo || LinkedinProfile?.[0]?.data.Logo
+function getLogo(Logo, LinkedinProfile, Crunchbase) {
+  const logo =
+    Logo || LinkedinProfile?.[0]?.data.Logo || Crunchbase?.[0]?.data.Logo
   const logoSharp = logo?.localFiles?.[0]?.childImageSharp
   return logoSharp?.resize || logoSharp?.fuild || logoSharp?.fixed
 }
@@ -74,6 +75,7 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
       Categories,
       Twitter,
       Capital_Profile: CapitalProfile,
+      Crunchbase_ODM: Crunchbase,
       Photos,
       Role,
     },
@@ -92,7 +94,7 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
     homepage: Homepage,
     linkedIn: LinkedIn,
     twitter: Twitter,
-    logo: getLogo(Logo, LinkedinProfile),
+    logo: getLogo(Logo, LinkedinProfile, Crunchbase),
     role: Role,
     categories: Categories?.map(transformCategory) ?? [],
     capitalProfile: CapitalProfile?.map(({ data }) => ({

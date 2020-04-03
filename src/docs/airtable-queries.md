@@ -117,3 +117,19 @@ query OrganizationPageQuery {
   }
 }
 ```
+
+### Capital Profiles
+
+```graphql
+query CapitalPageQuery {
+  capitalTypes: allAirtable(filter: { table: { eq: "Capital Profiles" } }) {
+    nodes {
+      id
+      data {
+        Name
+        Type
+      }
+    }
+  }
+}
+```
