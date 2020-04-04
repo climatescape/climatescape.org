@@ -149,7 +149,6 @@ const formatOrgTypes = organizations => {
 
 const OrganizationFilter = ({
   currentFilter,
-  onClearFilter,
   categories,
   pageContext,
   onApplyFilter,
@@ -189,17 +188,21 @@ const OrganizationFilter = ({
     container: styles => ({
       ...styles,
       display: "inline-block",
-      width: "20%",
       marginRight: "8px",
+      maxWidth: "30%",
+      maxHeight: "24px",
+      verticalAlign: "middle",
     }),
     control: provided => ({
       ...provided,
-      minHeight: "25px",
+      minHeight: "24px",
+      maxHeight: "24px",
       borderRadius: "9999px",
+      maxWidth: "100%",
     }),
     indicatorsContainer: provided => ({
       ...provided,
-      height: "25px",
+      height: "24px",
     }),
     indicatorSeparator: provided => ({
       ...provided,
@@ -213,13 +216,41 @@ const OrganizationFilter = ({
       ...provided,
       padding: "5px",
     }),
+    placeholder: provided => ({
+      ...provided,
+      position: "static",
+      top: "auto",
+      transform: "none",
+      maxWidth: "100%",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      maxHeight: "24px",
+      whiteSpace: "nowrap",
+    }),
+    option: provided => ({
+      ...provided,
+      maxWidth: "none",
+    }),
+    singleValue: provided => ({
+      ...provided,
+      maxWidth: "none",
+      position: "static",
+      top: "auto",
+      transform: "none",
+    }),
+    valueContainer: provided => ({
+      ...provided,
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      maxWidth: "100%",
+    }),
   }
 
   return (
     <>
       {
-        <div className="text-gray-700  text-sm">
-          <span className="mr-2 inline-block">
+        <div className="text-gray-700  text-sm max-w-6xl mt-3">
+          <span className="mr-2 inline-block h-6 min-h-full">
             <span>{organizations?.length} Companies | </span>
             Filter by
           </span>
@@ -228,9 +259,10 @@ const OrganizationFilter = ({
             onChange={category => onApplyFilter.byCategory(category?.value)}
             styles={styles}
             isSearchable={false}
-            placeholder={byCategory?.name || "Sub category"}
-            value={byCategory?.name}
+            placeholder={byCategory ? byCategory.name : "Sub category"}
+            value={byCategory ? byCategory.name : null}
           />
+
           <Select
             options={formattedHeadCounts}
             onChange={size => onApplyFilter.byHeadcount(size?.value)}
