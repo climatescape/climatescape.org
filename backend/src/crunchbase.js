@@ -98,9 +98,10 @@ async function crunchbaseEnrich(organization, options = { method: "domain" }) {
     org => ({ _score: evaluateConfidence(organization, org), ...org })
   )
   const maxScore = scored.reduce((max, org) => Math.max(max, org._score), 0)
+  const scoreThreshold = method === "domain" ? 0 : 10
 
   // A score of 0 means we couldn't match anything
-  if (maxScore === 0) {
+  if (maxScore <= scoreThreshold) {
     return {
       msg: `no-matches`,
       context: { organization, options, scored },
@@ -126,6 +127,8 @@ async function crunchbaseEnrich(organization, options = { method: "domain" }) {
 // Accepts an OrganizationSummary from Crunchbase and returns a populated
 // Airtable Organization object
 function mapCrunchbase({
+  name,
+  uuid,
   webPath,
   primaryRole,
   shortDescription,
@@ -136,22 +139,28 @@ function mapCrunchbase({
   cityName,
   regionName,
   countryCode,
+  stockExchange,
+  stockSymbol,
+  domain,
+  homepageUrl,
 }) {
-  let role
-
-  if (primaryRole === "investor") role = "Capital"
-
   return {
-    "Tagline Override": shortDescription,
+    Name: name,
+    UUID: uuid,
+    "Short Description": shortDescription,
     Logo: profileImageUrl && [{ url: profileImageUrl }],
-    Crunchbase: `https://crunchbase.com/${webPath}`,
-    Role: role,
+    "Web Path": webPath,
+    "Primary Role": primaryRole,
+    Domain: domain,
+    Homepage: homepageUrl,
     Facebook: facebookUrl,
-    "Twitter Override": twitterUrl,
-    "LinkedIn Override": linkedinUrl,
-    "HQ Location Override": [cityName, regionName, countryCode]
-      .filter(x => x)
-      .join(", "),
+    Twitter: twitterUrl,
+    LinkedIn: linkedinUrl,
+    "Stock Exchange": stockExchange,
+    "Stock Symbol": stockSymbol,
+    City: cityName,
+    Region: regionName,
+    Country: countryCode,
   }
 }
 

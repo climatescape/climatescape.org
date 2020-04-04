@@ -7,36 +7,34 @@ const { crunchbaseEnrich, mapCrunchbase } = require("../../backend/src/crunchbas
 const { camelizeKeys } = require("../../backend/src/utils")
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
-  "appAix36fGcTDsrLq"// prod: "appNYMWxGF1jMaf5V"
+  "appns0oChLLWsKa2J"// prod: "appNYMWxGF1jMaf5V"
 )
 
-const table = base("Organizations")
-
 async function main() {
-  const organizations = await table.select().all()
-  const totalCount = organizations.length
-  var foundCount = 0
-  var updatedCount = 0
+  const organizations = await base("Organizations").select().all()
   const outcomes = {}
-  var buffer = [] // Array of up to 10 updates to be sent as a batch to Airtable
+  var updateBuffer = [] // Array of up to 10 updates to be sent as a batch to Airtable
+  var createBuffer = [] // Array of up to 10 creates to be sent as a batch to Airtable
+  var destroyBuffer = [] // Array of up to 10 destroys to be sent as a batch to Airtable
   const updates = [] // Array of Promises returned from updates to Airtable
 
-  // Procedure for clearing the buffer and recording the promise (used in two
-  // places below)
-  const flushBuffer = () => {
-    console.dir(buffer, { depth: null })
-    updates.push(table.update(buffer).catch(console.error))
-    buffer = []
+  // Procedure for clearing a buffer and recording the promise
+  const flushBuffer = (buffer, op) => {
+    console.dir(buffer, { depth: null }) // Log entire buffer
+    const promise = base("Crunchbase ODM")[op](buffer).catch(console.error)
+    updates.push(promise)
+    buffer.length = 0
   }
 
-  console.log(`Trying to enrich ${totalCount} organizations`)
+  console.log(`Trying to enrich ${organizations.length} organizations`)
 
   await asyncForEach(organizations, async organization => {
-    const fields = organization.fields
+    const fields = camelizeKeys(organization.fields)
+    const recId = fields.crunchbaseOdm && fields.crunchbaseOdm[0]
     let outcome
 
     try {
-      outcome = await crunchbaseEnrich(camelizeKeys(fields))
+      outcome = await crunchbaseEnrich(fields)
     } catch (err) {
       return console.error(
         `Error enriching name="${fields.name}" homepage="${fields.homepage}"`,
@@ -46,48 +44,48 @@ async function main() {
 
     outcomes[outcome.msg] = (outcomes[outcome.msg] || 0) + 1
 
-    if (!outcome.result) return console.dir(outcome, { depth: null })
+    // Couldn't find a match, log the result for debugging
+    if (!outcome.result) {
+      console.dir(outcome, { depth: null })
 
-    foundCount++
+      // If we already have a record in Airtable, destroy it. This ensures that
+      // improvements (to our algorithm or Crunchbase's dataset) to our
+      // false positive rate can be recorded
+      if (recId) {
+        destroyBuffer.push(recId)
+        if (destroyBuffer.length === 10) flushBuffer(destroyBuffer, 'destroy')
+      }
+    } else {
+      const mapped = mapCrunchbase(outcome.result)
 
-    const mapped = mapCrunchbase(outcome.result)
-    const missing = missingFields(fields, mapped)
-
-    if (missing) {
-      updatedCount++
-
-      buffer.push({
-        id: organization.getId(),
-        fields: missing,
-      })
+      // If we already have a record in Airtable, update it, otherwise create one
+      if (recId) {
+        updateBuffer.push({ id: recId, fields: mapped })
+        if (updateBuffer.length === 10) flushBuffer(updateBuffer, 'update')
+      } else {
+        createBuffer.push({
+          fields: {
+            Organization: [organization.getId()],
+            ...mapped
+          }
+        })
+        if (createBuffer.length === 10) flushBuffer(createBuffer, 'create')
+      }
     }
-
-    if (buffer.length === 10) flushBuffer()
   })
 
-  // If we finished with a partial buffer, send one final update
-  if (buffer.length) flushBuffer()
-
-  console.log(`Waiting for ${updates.length} updates to finish`)
+  // If we finished with any partial buffers, flush them now
+  if (updateBuffer.length) flushBuffer(updateBuffer, 'update')
+  if (createBuffer.length) flushBuffer(createBuffer, 'create')
+  if (destroyBuffer.length) flushBuffer(destroyBuffer, 'destroy')
 
   // Updates have been happening asynchronously. Wait until all have resolved in
   // case any aren't finished yet (e.g. the final update)
+  console.log(`Waiting for ${updates.length} Airtable API calls to finish`)
   await Promise.all(updates)
 
-  console.log(`Finished: updated=${updatedCount} matched=${foundCount} total=${totalCount}`)
+  // Log final stats
   console.log(`Outcomes: `, outcomes)
-}
-
-// Return a subset of source with only the fields present in source and missing
-// from dest. If no fields are missing, the return value is `null`
-function missingFields(dest, source) {
-  const missing = Object.keys(source).reduce((accum, key) => {
-    if (!dest[key] && source[key]) accum[key] = source[key]
-
-    return accum
-  }, {})
-
-  return Object.keys(missing).length ? missing : null
 }
 
 async function asyncForEach(array, callback) {
