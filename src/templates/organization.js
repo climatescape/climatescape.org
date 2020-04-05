@@ -87,6 +87,11 @@ function SocialLinksSection({ data, org, className }) {
         icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
       />
       <SidebarSectionList.Link
+        text="Crunchbase"
+        href={org.crunchbase}
+        icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
+      />
+      <SidebarSectionList.Link
         text={org.title}
         href={org.linkedIn}
         icon={<FontAwesomeIcon icon={faLinkedin} />}
@@ -194,6 +199,7 @@ export const query = graphql`
         Homepage
         LinkedIn
         Twitter
+        Crunchbase
         Role
         Capital_Profile {
           data {
