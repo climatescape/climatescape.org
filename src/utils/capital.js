@@ -1,5 +1,3 @@
-import { makeSlug } from "./slug"
-
 export const capitalStages = [
   "Pre-Seed",
   "Seed",
@@ -9,12 +7,39 @@ export const capitalStages = [
 ]
 
 export const capitalTypes = [
-  { name: "Venture Capital" },
-  { name: "Project Finance" },
-  { name: "Private Equity" },
-  { name: "Incubator" },
-  { name: "Accelerator" },
-  { name: "Grant" },
-  { name: "Prize" },
-  { name: "Angel" },
-].map(type => ({ ...type, slug: makeSlug(type.name) }))
+  {
+    name: "Venture Capital",
+    slug: "venture-capital",
+    image: "ventureCapital",
+  },
+  {
+    name: "Accelerator",
+    slug: "accelerator",
+    image: "accelerator",
+  },
+  {
+    name: "Project Finance",
+    slug: "project-finance",
+    image: "projectFinance",
+  },
+  {
+    name: "Angel",
+    slug: "angel",
+    image: "angel",
+  },
+  {
+    name: "Grant",
+    slug: "grant",
+    image: "grant",
+  },
+  {
+    name: "Incubator",
+    slug: "incubator",
+    image: "incubator",
+  },
+  {
+    name: "Prize",
+    slug: "prize",
+    image: "prize",
+  },
+]

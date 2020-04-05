@@ -2,10 +2,21 @@ import React from "react"
 import { Link, graphql } from "gatsby"
 
 import { transformCategories } from "../utils/airtable"
+import { capitalTypes } from "../utils/capital"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import TopicCard from "../components/TopicCard"
+
+function ViewAll({ name, href }) {
+  return (
+    <div className="text-center">
+      <Link to={href} className="text-lg text-blue-600 hover:text-blue-700">
+        View All {name} <span className="text-2xl">&rsaquo;</span>
+      </Link>
+    </div>
+  )
+}
 
 export default function IndexPage({ data }) {
   const categories = transformCategories(data)
@@ -27,28 +38,28 @@ export default function IndexPage({ data }) {
             <TopicCard category={cat} key={cat.name} />
           ))}
         </div>
-        <div className="text-center">
-          <Link
-            to="/organizations"
-            className="text-lg text-blue-600 hover:text-blue-400"
-          >
-            View All Organizations <span className="text-2xl">&rsaquo;</span>
-          </Link>
-        </div>
+        <ViewAll href="/organizations" name="Organizations" />
       </div>
 
-      <h2 className="font-bold text-2xl md:text-4xl text-center font-light tracking-wide text-gray-800 mt-6">
-        Funding for climate projects
-      </h2>
-
-      <div className="flex justify-center max-w-6xl mx-auto p-3 mb-6">
-        <TopicCard
-          category={{
-            slug: "/capital",
-            cover: data.capitalPhoto.childImageSharp.fluid,
-            name: "Climate Capital",
-          }}
-        />
+      <div className="bg-gray-200 pb-12 my-12">
+        <div id="organizations" className="py-6">
+          <h2 className="font-bold text-2xl md:text-4xl text-center font-light tracking-wide text-gray-800 mt-6 mb-3">
+            Funding for climate projects
+          </h2>
+          <div className="p-3 flex flex-wrap max-w-6xl mx-auto">
+            {capitalTypes.map(({ name, slug, image }) => (
+              <TopicCard
+                key={slug}
+                category={{
+                  slug: `/capital/${slug}`,
+                  cover: data[image]?.childImageSharp.fluid,
+                  name,
+                }}
+              />
+            ))}
+          </div>
+          <ViewAll href="/capital" name="Capital" />
+        </div>
       </div>
 
       <div id="about" className="max-w-6xl mx-auto lg:flex items-start py-4">
@@ -133,7 +144,50 @@ export const query = graphql`
       }
     }
 
-    capitalPhoto: file(relativePath: { eq: "capital.jpg" }) {
+    ventureCapital: file(relativePath: { eq: "capital/venture capital.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 500) {
+          ...GatsbyImageSharpFluid
+        }
+      }
+    }
+
+    incubator: file(relativePath: { eq: "capital/incubator.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 500) {
+          ...GatsbyImageSharpFluid
+        }
+      }
+    }
+    grant: file(relativePath: { eq: "capital/grant.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 500) {
+          ...GatsbyImageSharpFluid
+        }
+      }
+    }
+    prize: file(relativePath: { eq: "capital/prize.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 500) {
+          ...GatsbyImageSharpFluid
+        }
+      }
+    }
+    accelerator: file(relativePath: { eq: "capital/accelerator.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 500) {
+          ...GatsbyImageSharpFluid
+        }
+      }
+    }
+    projectFinance: file(relativePath: { eq: "capital/project finance.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 500) {
+          ...GatsbyImageSharpFluid
+        }
+      }
+    }
+    angel: file(relativePath: { eq: "capital/angel.jpg" }) {
       childImageSharp {
         fluid(maxWidth: 500) {
           ...GatsbyImageSharpFluid
