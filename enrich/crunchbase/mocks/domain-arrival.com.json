@@ -1,0 +1,76 @@
+{
+  "metadata": {
+    "version": 31,
+    "www_path_prefix": "https://www.crunchbase.com",
+    "api_path_prefix": "https://api.crunchbase.com",
+    "image_path_prefix": "http://public.crunchbase.com/t_api_images/"
+  },
+  "data": {
+    "paging": {
+      "total_items": 2,
+      "number_of_pages": 1,
+      "current_page": 1,
+      "sort_order": "custom",
+      "items_per_page": 100,
+      "next_page_url": null,
+      "prev_page_url": null,
+      "key_set_url": null,
+      "collection_url": "https://api.crunchbase.com/v3.1/organizations",
+      "updated_since": null
+    },
+    "items": [
+      {
+        "type": "OrganizationSummary",
+        "uuid": "70521c8884f0410d9c64fba6bae2f90c",
+        "properties": {
+          "permalink": "arrival-f90c",
+          "api_path": "organizations/arrival-f90c",
+          "web_path": "organization/arrival-f90c",
+          "api_url": "https://api.crunchbase.com/v3.1/organizations/arrival-f90c",
+          "name": "Arrival",
+          "stock_exchange": null,
+          "stock_symbol": null,
+          "primary_role": "company",
+          "short_description": "Arrival is a technology company that develops electric vehicles.",
+          "profile_image_url": "http://public.crunchbase.com/t_api_images/cegqodchqz0lyrjmoqm0",
+          "domain": "arrival.com",
+          "homepage_url": "https://arrival.com",
+          "facebook_url": "https://www.facebook.com/ArrivalGB/",
+          "twitter_url": "https://twitter.com/arrival",
+          "linkedin_url": "https://www.linkedin.com/company/arrival-ltd",
+          "city_name": "London",
+          "region_name": "England",
+          "country_code": "United Kingdom",
+          "created_at": 1579229021,
+          "updated_at": 1579283425
+        }
+      },
+      {
+        "type": "OrganizationSummary",
+        "uuid": "e16222e9ba77253f281fa4d55888ba4c",
+        "properties": {
+          "permalink": "arrival-communications",
+          "api_path": "organizations/arrival-communications",
+          "web_path": "organization/arrival-communications",
+          "api_url": "https://api.crunchbase.com/v3.1/organizations/arrival-communications",
+          "name": "Arrival Communications",
+          "stock_exchange": null,
+          "stock_symbol": null,
+          "primary_role": "company",
+          "short_description": "Arrival Communications is building a facilities-based network for businesses in smaller cities throughout the Western United States.",
+          "profile_image_url": "http://public.crunchbase.com/t_api_images/v1458536976/oo5xxzsx9zx5cwilwzwc.png",
+          "domain": "arrival.com",
+          "homepage_url": "http://www.arrival.com",
+          "facebook_url": "https://www.facebook.com/pages/Arrival-Communications-Bakersfield-CA/198235550193183",
+          "twitter_url": null,
+          "linkedin_url": "https://www.linkedin.com/company-beta/29087/",
+          "city_name": "San Francisco",
+          "region_name": "California",
+          "country_code": "United States",
+          "created_at": 1377094154,
+          "updated_at": 1578559223
+        }
+      }
+    ]
+  }
+}
