@@ -90,7 +90,7 @@ function ContributionSection({ data, org, className }) {
 
       {org.source && (
         <SidebarSectionList.Link
-          text={org.source.name}
+          text={`Source - ${org.source.name}`}
           href={org.source.url}
           icon={<FontAwesomeIcon icon={faFileAlt} />}
         />
