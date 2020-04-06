@@ -1,14 +1,4 @@
 import React, { useState } from "react"
-import {
-  OrganizationCategory,
-  OrganizationLocation,
-  OrganizationHeadcount,
-  OrganizationOrgType,
-  OrganizationCapitalType,
-  OrganizationCapitalStrategic,
-  OrganizationCapitalStage,
-  OrganizationCapitalCheckSize,
-} from "./OrganizationAttributes"
 
 import Select from "react-select"
 
@@ -119,6 +109,11 @@ const formatHeadcounts = organizations => {
         ? array
         : [...array, headcount]
     }, [])
+    .sort((a, b) => {
+      return (
+        parseInt(a.match(/\d+,?/gi).pop()) - parseInt(b.match(/\d+,?/gi).pop())
+      )
+    })
     .map(result => ({
       value: result,
       label: result,
@@ -154,26 +149,7 @@ const OrganizationFilter = ({
   onApplyFilter,
   organizations,
 }) => {
-  const {
-    byCategory,
-    byLocation,
-    byHeadcount,
-    byOrgType,
-    byCapitalType,
-    byCapitalStrategic,
-    byCapitalStage,
-    byCapitalCheckSize,
-  } = currentFilter
-
-  const hasFilterApplied =
-    byCategory ||
-    byLocation ||
-    byHeadcount ||
-    byOrgType ||
-    byCapitalType ||
-    byCapitalStrategic ||
-    byCapitalStage ||
-    byCapitalCheckSize
+  const { byCategory, byHeadcount, byOrgType } = currentFilter
 
   const formattedSubcategories = pageContext
     ? formatSubcategoryOptions(categories, pageContext)
@@ -199,6 +175,7 @@ const OrganizationFilter = ({
       maxHeight: "24px",
       borderRadius: "9999px",
       maxWidth: "100%",
+      backgroundColor: "#f7fafc",
     }),
     indicatorsContainer: provided => ({
       ...provided,
@@ -214,7 +191,8 @@ const OrganizationFilter = ({
     }),
     dropdownIndicator: provided => ({
       ...provided,
-      padding: "5px",
+      padding: "0px",
+      paddingRight: "5px",
     }),
     placeholder: provided => ({
       ...provided,
@@ -224,13 +202,20 @@ const OrganizationFilter = ({
       maxWidth: "100%",
       overflow: "hidden",
       textOverflow: "ellipsis",
-      maxHeight: "24px",
       whiteSpace: "nowrap",
     }),
-    option: provided => ({
+    menu: provided => ({
       ...provided,
-      maxWidth: "none",
+      width: "max-content",
+      minWidth: "100%",
     }),
+
+    option: (provided, { isFocused }) => {
+      return {
+        ...provided,
+        backgroundColor: isFocused ? "#e2e8f0" : null,
+      }
+    },
     singleValue: provided => ({
       ...provided,
       maxWidth: "none",
@@ -259,8 +244,8 @@ const OrganizationFilter = ({
             onChange={category => onApplyFilter.byCategory(category?.value)}
             styles={styles}
             isSearchable={false}
-            placeholder={byCategory ? byCategory.name : "Sub category"}
-            value={byCategory ? byCategory.name : null}
+            placeholder={byCategory?.name ?? "Sub category"}
+            value={byCategory?.name ?? null}
           />
 
           <Select
