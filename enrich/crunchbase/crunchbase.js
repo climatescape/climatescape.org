@@ -1,6 +1,6 @@
 const axios = require("axios")
 
-const { getUrlDomain, getSocialPath, camelizeKeys } = require("./utils")
+const { getUrlDomain, getSocialPath, camelizeKeys } = require("../../backend/src/utils")
 
 const API_KEY = process.env.CRUNCHBASE_API_KEY
 const ODM_ORGS_URL = "https://api.crunchbase.com/v3.1/odm-organizations"

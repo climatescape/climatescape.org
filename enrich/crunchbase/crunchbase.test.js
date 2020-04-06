@@ -7,11 +7,11 @@ const {
   mapCrunchbase,
   crunchbaseEnrich,
   evaluateConfidence,
-} = require("../src/crunchbase")
+} = require("./crunchbase")
 
-const CrunchbaseAirthiumByName = require("./mocks/crunchbase/name-airthium.json")
-const CrunchbaseAirthiumByDomain = require("./mocks/crunchbase/domain-airthium.com.json")
-const CrunchbaseArrivalByDomain = require("./mocks/crunchbase/domain-arrival.com.json")
+const CrunchbaseAirthiumByName = require("./mocks/name-airthium.json")
+const CrunchbaseAirthiumByDomain = require("./mocks/domain-airthium.com.json")
+const CrunchbaseArrivalByDomain = require("./mocks/domain-arrival.com.json")
 
 const AirthiumOrganizationSummary = {
   type: "OrganizationSummary",
@@ -66,20 +66,26 @@ test("fetchCrunchbase by domain", async () => {
 
 test("mapCrunchbase", () => {
   expect(mapCrunchbase(AirthiumOrganizationSummary)).toEqual({
-    "Tagline Override":
-      "Airthium makes low cost, zero emission, 30kW+ Thermodynamic energy storage systems, as well as high efficiency diesel generators",
+    Name: "Airthium",
+    UUID: "f21dbee02fb520b65b91da08a3abeebc",
+    "Short Description": "Airthium makes low cost, zero emission, 30kW+ Thermodynamic energy storage systems, as well as high efficiency diesel generators",
     Logo: [
       {
-        url:
-          "http://public.crunchbase.com/t_api_images/v1503423190/hbk5jk03rluo7u9mwpig.png",
+        url: "http://public.crunchbase.com/t_api_images/v1503423190/hbk5jk03rluo7u9mwpig.png",
       },
     ],
-    Role: undefined,
-    Crunchbase: "https://crunchbase.com/organization/airthium",
-    "Twitter Override": "https://twitter.com/airthium",
-    "LinkedIn Override": "https://www.linkedin.com/company/airthium/",
+    "Web Path": "organization/airthium",
+    "Primary Role": "company",
+    Domain: "airthium.com/",
+    Homepage: "http://www.airthium.com/",
     Facebook: "https://www.facebook.com/aithium/",
-    "HQ Location Override": "Palaiseau, Ile-de-France, France",
+    Twitter: "https://twitter.com/airthium",
+    LinkedIn: "https://www.linkedin.com/company/airthium/",
+    "Stock Exchange": null,
+    "Stock Symbol": null,
+    City: "Palaiseau",
+    Region: "Ile-de-France",
+    Country: "France",
   })
 })
 

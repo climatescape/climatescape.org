@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "crunchbase-enricher": "node script.js"
   },
   "author": "Climatescape",
@@ -12,5 +12,8 @@
     "airtable": "^0.8.1",
     "axios": "^0.19.2",
     "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "jest": "^25.2.7"
   }
 }

@@ -3,12 +3,11 @@ const Airtable = require("airtable")
 
 dot.config({ path: `../../.env.development` })
 
-const { crunchbaseEnrich, mapCrunchbase } = require("../../backend/src/crunchbase")
+const { crunchbaseEnrich, mapCrunchbase } = require("./crunchbase")
 const { camelizeKeys } = require("../../backend/src/utils")
 
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
-  "appns0oChLLWsKa2J"// prod: "appNYMWxGF1jMaf5V"
-)
+const BASE = "appNYMWxGF1jMaf5V"
+const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(BASE)
 
 async function main() {
   const organizations = await base("Organizations").select().all()
