@@ -97,7 +97,10 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
     twitter: Twitter,
     logo: getLogo(Logo, LinkedinProfile, Crunchbase),
     role: Role,
-    source: Source,
+    source: Source?.map(source => ({
+      name: source.data.Name,
+      url: source.data.URL,
+    }))?.[0],
     categories: Categories?.map(transformCategory) ?? [],
     capitalProfile: CapitalProfile?.map(({ data }) => ({
       type: data.Type,

@@ -42,7 +42,8 @@ const config = {
               `LinkedIn_Profiles`,
               `Categories`,
               `Capital_Profile`,
-              "Crunchbase ODM",
+              "Crunchbase_ODM",
+              `Source`
             ],
           },
           {
@@ -75,6 +76,11 @@ const config = {
             tableLinks: [`Organization`],
             mapping: { Logo: `fileNode` },
           },
+          {
+            baseId: `appNYMWxGF1jMaf5V`,
+            tableName: "Sources",
+            tableLinks: [`Organizations`],
+          }
         ],
       },
     },
