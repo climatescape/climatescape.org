@@ -1,5 +1,6 @@
 require("log-timestamp") // Adds timestamps to console.log() output
 const dotenv = require("dotenv")
+const { camelCase, toPairs, fromPairs } = require("lodash")
 
 // Unlike NODE_ENV, this solution doesn't require any local setup moves from devs, nor setting any configs in Heroku.
 // See https://stackoverflow.com/a/28489160
@@ -45,10 +46,43 @@ function getCleanPath(urlString) {
   return path
 }
 
+// Given a URL, return just the domain. Strip the subdomain if it equals "www"
+function getUrlDomain(string) {
+  try {
+    const { hostname } = new URL(string)
+
+    return hostname.startsWith("www.") ? hostname.substr(4) : hostname
+  } catch {
+    return null
+  }
+}
+
+// Given a URL, return just the path, without leading or trailing slashes,
+// converted to lowercase
+function getSocialPath(string) {
+  try {
+    const { pathname } = new URL(string)
+
+    if (!pathname || pathname.length <= 1) return null
+
+    return pathname.replace(/^\/|\/$/g, "").toLowerCase()
+  } catch {
+    return null
+  }
+}
+
+// Given an `object`, return a new object converted to camelCase
+function camelizeKeys(object) {
+  return fromPairs(toPairs(object).map(([k, v]) => [camelCase(k), v]))
+}
+
 module.exports = {
   isProduction,
   sleep,
   configureEnvironment,
   executeWithFixedDelayAsync,
   getCleanPath,
+  getUrlDomain,
+  camelizeKeys,
+  getSocialPath,
 }

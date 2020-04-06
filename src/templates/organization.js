@@ -12,7 +12,11 @@ import {
   faBuilding,
   faFileAlt,
 } from "@fortawesome/free-solid-svg-icons"
-import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons"
+import {
+  faLinkedin,
+  faTwitter,
+  faFacebook,
+} from "@fortawesome/free-brands-svg-icons"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -108,6 +112,11 @@ function SocialLinksSection({ org, className }) {
         icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
       />
       <SidebarSectionList.Link
+        text="Crunchbase"
+        href={org.crunchbase}
+        icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
+      />
+      <SidebarSectionList.Link
         text={org.title}
         href={org.linkedIn}
         icon={<FontAwesomeIcon icon={faLinkedin} />}
@@ -116,6 +125,11 @@ function SocialLinksSection({ org, className }) {
         text={parseTwitterPath(org.twitter)}
         href={buildUrl(org.twitter, "Twitter")}
         icon={<FontAwesomeIcon icon={faTwitter} />}
+      />
+      <SidebarSectionList.Link
+        text="Facebook"
+        href={org.facebook}
+        icon={<FontAwesomeIcon icon={faFacebook} />}
       />
     </SidebarSectionList>
   )
@@ -210,6 +224,8 @@ export const query = graphql`
         Homepage
         LinkedIn
         Twitter
+        Facebook
+        Crunchbase
         Role
         Capital_Profile {
           data {

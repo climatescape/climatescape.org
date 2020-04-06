@@ -11,7 +11,7 @@
 }
 
 .ais-Hits-item .selected,
-.ais-Hits-item .selected .ais-Highlight-highlighted {
+.ais-Hits-item .selected mark {
   background-color: #edf2f7;
 }
 
@@ -23,7 +23,7 @@
   max-height: 80vh;
 }
 
-.ais-Highlight-highlighted {
+.ais-Hits-item mark {
   padding: 0;
   margin-top: 0;
   background-color: white;

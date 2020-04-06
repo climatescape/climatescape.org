@@ -1,0 +1,28 @@
+{
+  "name": "crunchbase-enricher",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint .",
+    "lintfix": "eslint . --fix",
+    "crunchbase-enricher": "node script.js"
+  },
+  "author": "Climatescape",
+  "license": "MIT",
+  "dependencies": {
+    "airtable": "^0.8.1",
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "jest": "^25.2.7",
+    "eslint": "^5.16.0",
+    "eslint-plugin-jest": "^23.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "1.19.1"
+  }
+}
