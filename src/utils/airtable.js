@@ -80,6 +80,7 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
       Facebook,
       Photos,
       Role,
+      Source,
     },
   } = raw
 
@@ -100,6 +101,10 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
     facebook: Facebook,
     logo: getLogo(Logo, LinkedinProfile, CrunchbaseODM),
     role: Role,
+    source: Source?.map(source => ({
+      name: source.data.Name,
+      url: source.data.URL,
+    }))?.[0],
     categories: Categories?.map(transformCategory) ?? [],
     capitalProfile: CapitalProfile?.map(({ data }) => ({
       type: data.Type,

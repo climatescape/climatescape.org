@@ -22,7 +22,7 @@ function Link({ icon, text, href, className }) {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <div className="mr-3">{icon}</div>
+        <div className="mr-3 w-3">{icon}</div>
         <span>{text}</span>
       </a>
     </Li>
@@ -35,7 +35,7 @@ function Item({ icon, text, hidden }) {
   }
   return (
     <Li>
-      <div className="mr-3">{icon}</div>
+      <div className="mr-3 w-3">{icon}</div>
       <span>{text}</span>
     </Li>
   )

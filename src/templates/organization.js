@@ -10,6 +10,7 @@ import {
   faMapMarkerAlt,
   faUsers,
   faBuilding,
+  faFileAlt,
 } from "@fortawesome/free-solid-svg-icons"
 import {
   faLinkedin,
@@ -82,7 +83,27 @@ function AttributesSection({ org, className }) {
   )
 }
 
-function SocialLinksSection({ data, org, className }) {
+function ContributionSection({ data, org, className }) {
+  return (
+    <SidebarSectionList title="Edit History" className={className}>
+      <SidebarSectionList.Link
+        href={getEditUrl({ data, org })}
+        text="Suggest an Edit"
+        icon={<FontAwesomeIcon icon={faEdit} />}
+      />
+
+      {org.source && (
+        <SidebarSectionList.Link
+          text={`Source - ${org.source.name}`}
+          href={org.source.url}
+          icon={<FontAwesomeIcon icon={faFileAlt} />}
+        />
+      )}
+    </SidebarSectionList>
+  )
+}
+
+function SocialLinksSection({ org, className }) {
   return (
     <SidebarSectionList title="Links" className={className}>
       <SidebarSectionList.Link
@@ -109,11 +130,6 @@ function SocialLinksSection({ data, org, className }) {
         text="Facebook"
         href={org.facebook}
         icon={<FontAwesomeIcon icon={faFacebook} />}
-      />
-      <SidebarSectionList.Link
-        href={getEditUrl({ data, org })}
-        text="Suggest an Edit"
-        icon={<FontAwesomeIcon icon={faEdit} />}
       />
     </SidebarSectionList>
   )
@@ -173,11 +189,11 @@ export default function OrganizationTemplate({ data }) {
           <div className="flex flex-col w-5/5 lg:w-2/5 lg:pl-16 items-center mt-3 lg:mt-0">
             <div className="sidebar-sections-container w-full flex flex-col sm:flex-row lg:flex-col justify-start justify-around lg:justify-start">
               <AttributesSection org={org} className="flex flex-col mb-8" />
-
-              <SocialLinksSection
-                data={data}
+              <SocialLinksSection org={org} className="flex flex-col mb-8" />
+              <ContributionSection
                 org={org}
                 className="flex flex-col mb-8"
+                data={data}
               />
             </div>
           </div>
@@ -271,6 +287,12 @@ export const query = graphql`
                 }
               }
             }
+          }
+        }
+        Source {
+          data {
+            Name
+            URL
           }
         }
       }
