@@ -9,18 +9,28 @@ const { camelizeKeys } = require("../../backend/src/utils")
 const BASE = "appNYMWxGF1jMaf5V"
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(BASE)
 
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array) // eslint-disable-line no-await-in-loop
+  }
+}
+
 async function main() {
-  const organizations = await base("Organizations").select().all()
+  const organizations = await base("Organizations")
+    .select()
+    .all()
   const outcomes = {}
-  var updateBuffer = [] // Array of up to 10 updates to be sent as a batch to Airtable
-  var createBuffer = [] // Array of up to 10 creates to be sent as a batch to Airtable
-  var destroyBuffer = [] // Array of up to 10 destroys to be sent as a batch to Airtable
+  const updateBuffer = [] // Array of up to 10 updates to be sent as a batch to Airtable
+  const createBuffer = [] // Array of up to 10 creates to be sent as a batch to Airtable
+  const destroyBuffer = [] // Array of up to 10 destroys to be sent as a batch to Airtable
   const updates = [] // Array of Promises returned from updates to Airtable
 
   // Procedure for clearing a buffer and recording the promise
   const flushBuffer = (buffer, op) => {
     console.dir(buffer, { depth: null }) // Log entire buffer
-    const promise = base("Crunchbase ODM")[op](buffer).catch(console.error)
+    const promise = base("Crunchbase ODM")
+      [op](buffer)
+      .catch(console.error)
     updates.push(promise)
     buffer.length = 0
   }
@@ -52,7 +62,7 @@ async function main() {
       // false positive rate can be recorded
       if (recId) {
         destroyBuffer.push(recId)
-        if (destroyBuffer.length === 10) flushBuffer(destroyBuffer, 'destroy')
+        if (destroyBuffer.length === 10) flushBuffer(destroyBuffer, "destroy")
       }
     } else {
       const mapped = mapCrunchbase(outcome.result)
@@ -60,23 +70,25 @@ async function main() {
       // If we already have a record in Airtable, update it, otherwise create one
       if (recId) {
         updateBuffer.push({ id: recId, fields: mapped })
-        if (updateBuffer.length === 10) flushBuffer(updateBuffer, 'update')
+        if (updateBuffer.length === 10) flushBuffer(updateBuffer, "update")
       } else {
         createBuffer.push({
           fields: {
             Organization: [organization.getId()],
-            ...mapped
-          }
+            ...mapped,
+          },
         })
-        if (createBuffer.length === 10) flushBuffer(createBuffer, 'create')
+        if (createBuffer.length === 10) flushBuffer(createBuffer, "create")
       }
     }
+
+    return null
   })
 
   // If we finished with any partial buffers, flush them now
-  if (updateBuffer.length) flushBuffer(updateBuffer, 'update')
-  if (createBuffer.length) flushBuffer(createBuffer, 'create')
-  if (destroyBuffer.length) flushBuffer(destroyBuffer, 'destroy')
+  if (updateBuffer.length) flushBuffer(updateBuffer, "update")
+  if (createBuffer.length) flushBuffer(createBuffer, "create")
+  if (destroyBuffer.length) flushBuffer(destroyBuffer, "destroy")
 
   // Updates have been happening asynchronously. Wait until all have resolved in
   // case any aren't finished yet (e.g. the final update)
@@ -87,16 +99,10 @@ async function main() {
   console.log(`Outcomes: `, outcomes)
 }
 
-async function asyncForEach(array, callback) {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array);
-  }
-}
-
-(async () => {
+;(async () => {
   try {
-    await main();
+    await main()
   } catch (err) {
     console.error("main() failed with exception", err)
   }
-})();
+})()

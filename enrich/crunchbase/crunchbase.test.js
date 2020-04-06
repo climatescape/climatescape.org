@@ -68,10 +68,12 @@ test("mapCrunchbase", () => {
   expect(mapCrunchbase(AirthiumOrganizationSummary)).toEqual({
     Name: "Airthium",
     UUID: "f21dbee02fb520b65b91da08a3abeebc",
-    "Short Description": "Airthium makes low cost, zero emission, 30kW+ Thermodynamic energy storage systems, as well as high efficiency diesel generators",
+    "Short Description":
+      "Airthium makes low cost, zero emission, 30kW+ Thermodynamic energy storage systems, as well as high efficiency diesel generators",
     Logo: [
       {
-        url: "http://public.crunchbase.com/t_api_images/v1503423190/hbk5jk03rluo7u9mwpig.png",
+        url:
+          "http://public.crunchbase.com/t_api_images/v1503423190/hbk5jk03rluo7u9mwpig.png",
       },
     ],
     "Web Path": "organization/airthium",

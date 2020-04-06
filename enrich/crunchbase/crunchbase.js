@@ -1,6 +1,10 @@
 const axios = require("axios")
 
-const { getUrlDomain, getSocialPath, camelizeKeys } = require("../../backend/src/utils")
+const {
+  getUrlDomain,
+  getSocialPath,
+  camelizeKeys,
+} = require("../../backend/src/utils")
 
 const API_KEY = process.env.CRUNCHBASE_API_KEY
 const ODM_ORGS_URL = "https://api.crunchbase.com/v3.1/odm-organizations"
@@ -85,18 +89,18 @@ async function crunchbaseEnrich(organization, options = { method: "domain" }) {
     // If we can't match the domain, try falling back to a name search
     if (method === "domain") {
       return await crunchbaseEnrich(organization, { method: "name" })
-    } else {
-      return {
-        msg: `no-results`,
-        context: { organization, options },
-      }
+    }
+    return {
+      msg: `no-results`,
+      context: { organization, options },
     }
   }
 
   // Score each of the results and select the highest scoring
-  const scored = results.map(
-    org => ({ _score: evaluateConfidence(organization, org), ...org })
-  )
+  const scored = results.map(org => ({
+    _score: evaluateConfidence(organization, org),
+    ...org,
+  }))
   const maxScore = scored.reduce((max, org) => Math.max(max, org._score), 0)
   const scoreThreshold = method === "domain" ? 0 : 10
 
@@ -115,12 +119,11 @@ async function crunchbaseEnrich(organization, options = { method: "domain" }) {
       msg: `multiple-matches`,
       context: { organization, options, scored },
     }
-  } else {
-    return {
-      msg: `success-${method}`,
-      result: top[0],
-      context: { organization, options, scored },
-    }
+  }
+  return {
+    msg: `success-${method}`,
+    result: top[0],
+    context: { organization, options, scored },
   }
 }
 
