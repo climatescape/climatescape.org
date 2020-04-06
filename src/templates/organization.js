@@ -78,6 +78,21 @@ function AttributesSection({ org, className }) {
   )
 }
 
+function ContributionSection({ org, className }) {
+  if (!org.source.includes("Amasia")) {
+    return null
+  }
+  return (
+    <SidebarSectionList title="History" className={className}>
+      <SidebarSectionList.Item
+        text={org.source}
+        icon={<FontAwesomeIcon icon={faBuilding} />}
+        hidden={!org.source}
+      />
+    </SidebarSectionList>
+  )
+}
+
 function SocialLinksSection({ data, org, className }) {
   return (
     <SidebarSectionList title="Links" className={className}>
@@ -159,12 +174,12 @@ export default function OrganizationTemplate({ data }) {
           <div className="flex flex-col w-5/5 lg:w-2/5 lg:pl-16 items-center mt-3 lg:mt-0">
             <div className="sidebar-sections-container w-full flex flex-col sm:flex-row lg:flex-col justify-start justify-around lg:justify-start">
               <AttributesSection org={org} className="flex flex-col mb-8" />
-
               <SocialLinksSection
                 data={data}
                 org={org}
                 className="flex flex-col mb-8"
               />
+              <ContributionSection org={org} className="flex flex-col mb-8" />
             </div>
           </div>
         </div>
@@ -195,6 +210,7 @@ export const query = graphql`
         LinkedIn
         Twitter
         Role
+        Source
         Capital_Profile {
           data {
             Type

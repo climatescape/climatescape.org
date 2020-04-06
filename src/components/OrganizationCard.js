@@ -189,6 +189,7 @@ export const query = graphql`
       Organization_Type
       Headcount
       Role
+      Source
       Photos {
         ...OrganizationCardPhoto
       }

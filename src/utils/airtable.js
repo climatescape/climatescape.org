@@ -78,6 +78,7 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
       Crunchbase_ODM: Crunchbase,
       Photos,
       Role,
+      Source,
     },
   } = raw
 
@@ -96,6 +97,7 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
     twitter: Twitter,
     logo: getLogo(Logo, LinkedinProfile, Crunchbase),
     role: Role,
+    source: Source,
     categories: Categories?.map(transformCategory) ?? [],
     capitalProfile: CapitalProfile?.map(({ data }) => ({
       type: data.Type,
