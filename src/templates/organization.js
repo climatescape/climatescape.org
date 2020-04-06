@@ -11,7 +11,11 @@ import {
   faUsers,
   faBuilding,
 } from "@fortawesome/free-solid-svg-icons"
-import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons"
+import {
+  faLinkedin,
+  faTwitter,
+  faFacebook,
+} from "@fortawesome/free-brands-svg-icons"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -100,6 +104,11 @@ function SocialLinksSection({ data, org, className }) {
         text={parseTwitterPath(org.twitter)}
         href={buildUrl(org.twitter, "Twitter")}
         icon={<FontAwesomeIcon icon={faTwitter} />}
+      />
+      <SidebarSectionList.Link
+        text="Facebook"
+        href={org.facebook}
+        icon={<FontAwesomeIcon icon={faFacebook} />}
       />
       <SidebarSectionList.Link
         href={getEditUrl({ data, org })}
@@ -199,6 +208,7 @@ export const query = graphql`
         Homepage
         LinkedIn
         Twitter
+        Facebook
         Crunchbase
         Role
         Capital_Profile {
