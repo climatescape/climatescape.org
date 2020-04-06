@@ -44,7 +44,7 @@ export default function IndexPage({ data }) {
       <div className="bg-gray-200 pb-12 my-12">
         <div id="organizations" className="py-6">
           <h2 className="font-bold text-2xl md:text-4xl text-center font-light tracking-wide text-gray-800 mt-6 mb-3">
-            Funding for climate projects
+            Capital &amp; Startup Programs
           </h2>
           <div className="p-3 flex flex-wrap max-w-6xl mx-auto">
             {capitalTypes.map(({ name, slug, image }) => (
