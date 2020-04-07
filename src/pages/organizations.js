@@ -21,8 +21,8 @@ function OrganizationsTemplate({ data, pageContext }) {
     org => org.data.Name
   )
 
-  let organizations = transformOrganizations(orgs)
-  organizations = applyFilter(organizations)
+  const allOrganizations = transformOrganizations(orgs)
+  const organizations = applyFilter(allOrganizations)
 
   const categories = transformCategories(data)
 
@@ -44,6 +44,7 @@ function OrganizationsTemplate({ data, pageContext }) {
             onClearFilter={() => setFilter.none()}
             onApplyFilter={setFilter}
             organizations={organizations}
+            allOrganizations={allOrganizations}
             showFilters={["headcount", "orgType"]}
           />
 

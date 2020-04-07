@@ -12,6 +12,7 @@ const IndexHeader = ({
   onClearFilter,
   onApplyFilter,
   organizations,
+  allOrganizations,
   showFilters,
 }) => (
   <div className="border-b border-gray-400 py-3">
@@ -39,7 +40,7 @@ const IndexHeader = ({
       currentFilter={filter}
       onClearFilter={onClearFilter}
       onApplyFilter={onApplyFilter}
-      organizations={organizations}
+      organizations={allOrganizations}
       showFilters={showFilters}
     />
   </div>

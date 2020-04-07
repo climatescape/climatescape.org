@@ -56,7 +56,7 @@ const STYLES = {
       ...provided,
       backgroundColor: isFocused ? "#e2e8f0" : null,
       fontWeight: isSelected ? "bold" : "normal",
-      fontColor: "#111"
+      color: "#111"
     }
   },
   singleValue: provided => ({

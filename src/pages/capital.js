@@ -21,8 +21,8 @@ const CapitalTemplate = ({
 
   console.log(filter)
 
-  let organizations = transformOrganizations(nodes)
-  organizations = applyFilter(organizations)
+  const allOrganizations = transformOrganizations(nodes)
+  const organizations = applyFilter(allOrganizations)
 
   const { capitalAddFormUrl } = site.siteMetadata
 
@@ -47,6 +47,7 @@ const CapitalTemplate = ({
             onClearFilter={() => setFilter.none()}
             onApplyFilter={setFilter}
             organizations={organizations}
+            allOrganizations={allOrganizations}
             showFilters={["capitalCheckSize", "capitalImpactSpecific", "capitalStrategic", "category", "orgType"]}
           />
 
