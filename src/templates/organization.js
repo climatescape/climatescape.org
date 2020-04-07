@@ -144,6 +144,8 @@ export default function OrganizationTemplate({ data }) {
   }))
 
   const img = getLogoImage(org)
+  // create variable to hide logo container if org doesn't have a logo
+  const showImg = !img ? "none" : "inline-block"
 
   return (
     <Layout contentClassName="bg-gray-100 font-sans">
@@ -153,7 +155,10 @@ export default function OrganizationTemplate({ data }) {
         <div className="mb-10 md:mt-6 flex flex-col lg:flex-row">
           <div className="w-5/5 lg:w-3/5">
             <div className="flex">
-              <div className="mr-5 w-16 flex-shrink-0 block">
+              <div
+                className="mr-5 w-16 flex-shrink-0 block"
+                style={{ display: showImg }}
+              >
                 {img && (
                   <Img
                     fixed={img}
