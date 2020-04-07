@@ -38,7 +38,13 @@ const config = {
               Logo: `fileNode`,
               Photos: `fileNode`,
             },
-            tableLinks: [`LinkedIn_Profiles`, `Categories`, `Capital_Profile`],
+            tableLinks: [
+              `LinkedIn_Profiles`,
+              `Categories`,
+              `Capital_Profile`,
+              "Crunchbase_ODM",
+              `Source`
+            ],
           },
           {
             baseId: `appNYMWxGF1jMaf5V`,
@@ -64,6 +70,17 @@ const config = {
             tableName: "Capital Profiles",
             tableLinks: [`Organization`],
           },
+          {
+            baseId: `appNYMWxGF1jMaf5V`,
+            tableName: "Crunchbase ODM",
+            tableLinks: [`Organization`],
+            mapping: { Logo: `fileNode` },
+          },
+          {
+            baseId: `appNYMWxGF1jMaf5V`,
+            tableName: "Sources",
+            tableLinks: [`Organizations`],
+          }
         ],
       },
     },

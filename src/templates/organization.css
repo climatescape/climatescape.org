@@ -1,0 +1,10 @@
+/*
+ * We do not have a space-evenly class name with tailwind (see https: //github.com/tailwindcss/tailwindcss/pull/22).
+ * Uses space-evenly instead of justify-content: space-around; to render better on most browsers (except edge)
+ * In lg we do not need a justify-content. There is no need to override it.
+*/
+@screen md {
+  .sidebar-sections-container {
+    justify-content: space-evenly;
+  }
+}

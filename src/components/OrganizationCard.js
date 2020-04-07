@@ -49,7 +49,7 @@ export default function OrganizationCard({
 
   return (
     <div className="OrganizationCard border-gray-400 border-b flex items-center py-4 text-gray-900">
-      <div className="flex-grow self-start pr-8">
+      <div className="flex-grow self-center pr-8">
         <p>
           <Link to={slug} className="font-bold hover:text-teal-500 mr-2">
             {title}
@@ -129,6 +129,7 @@ export default function OrganizationCard({
               src={img.src}
               alt={`${title} logo`}
               className="OrganizationCard-logo blend-multiply rounded-lg w-24 h-24"
+              loading="lazy"
             />
           </Link>
         )}
@@ -207,6 +208,13 @@ export const query = graphql`
       }
       Logo {
         ...OrganizationCardLogo
+      }
+      Crunchbase_ODM {
+        data {
+          Logo {
+            ...OrganizationCardLogo
+          }
+        }
       }
       LinkedIn_Profiles {
         data {

@@ -8,12 +8,14 @@ import OrganizationCard from "../components/OrganizationCard"
 import IndexHeader from "../components/IndexHeader"
 import { useOrganizationFilterState } from "../components/OrganizationFilter"
 import SEO from "../components/seo"
+import CapitalFilters from "../components/capital/CapitalFilters"
 
 const CapitalTemplate = ({
   data: {
     organizations: { nodes },
     site,
   },
+  pageContext,
 }) => {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
 
@@ -28,25 +30,30 @@ const CapitalTemplate = ({
         title="Climate Capital on Climatescape"
         description="Find climate-friendly VCs, grants, project finance, and more on Climatescape"
       />
-
-      <div className="max-w-3xl mx-auto pb-4">
-        <IndexHeader
-          title="Climate Capital"
-          buttonText="Add"
-          buttonUrl={capitalAddFormUrl}
-          filter={filter}
-          onClearFilter={() => setFilter.none()}
+      <div className="flex flex-col mx-auto container lg:flex-row font-sans ">
+        <CapitalFilters
+          pageContext={pageContext}
+          currentFilter={filter}
+          onApplyFilter={setFilter}
         />
-
-        <div>
-          {organizations.map(organization => (
-            <OrganizationCard
-              key={organization.title}
-              organization={organization}
-              currentFilter={filter}
-              onApplyFilter={setFilter}
-            />
-          ))}
+        <div className="lg:w-3/5">
+          <IndexHeader
+            title={pageContext.capitalType || "Climate Capital"}
+            buttonText="Add"
+            buttonUrl={capitalAddFormUrl}
+            filter={filter}
+            onClearFilter={() => setFilter.none()}
+          />
+          <div>
+            {organizations.map(organization => (
+              <OrganizationCard
+                key={organization.title}
+                organization={organization}
+                currentFilter={filter}
+                onApplyFilter={setFilter}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </Layout>
@@ -54,11 +61,16 @@ const CapitalTemplate = ({
 }
 
 export const query = graphql`
-  query CapitalPageQuery {
+  query CapitalPageQuery($capitalType: String) {
     organizations: allAirtable(
       filter: {
         table: { eq: "Organizations" }
-        data: { Role: { eq: "Capital" } }
+        data: {
+          Role: { eq: "Capital" }
+          Capital_Profile: {
+            elemMatch: { data: { Type: { eq: $capitalType } } }
+          }
+        }
       }
     ) {
       nodes {
