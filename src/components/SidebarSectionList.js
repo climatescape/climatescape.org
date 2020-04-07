@@ -23,7 +23,7 @@ function Link({ icon, text, href, className }) {
         rel="noopener noreferrer"
       >
         <div className="mr-3 w-3">{icon}</div>
-        <span>{text}</span>
+        <span className="hover:text-gray-600">{text}</span>
       </a>
     </Li>
   )

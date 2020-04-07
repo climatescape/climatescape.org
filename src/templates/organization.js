@@ -52,7 +52,7 @@ function AttributesSection({ org, className }) {
       category => !subCategories.map(cat => cat.parent.id).includes(category.id)
     )
     .concat(subCategories)
-
+  if (!categoryList.length) return null
   return (
     <SidebarSectionList title="In a snapshot" className={className}>
       {categoryList.map(category => (
@@ -79,26 +79,6 @@ function AttributesSection({ org, className }) {
         icon={<FontAwesomeIcon icon={faUsers} />}
         hidden={!org.headcount}
       />
-    </SidebarSectionList>
-  )
-}
-
-function ContributionSection({ data, org, className }) {
-  return (
-    <SidebarSectionList title="Edit History" className={className}>
-      <SidebarSectionList.Link
-        href={getEditUrl({ data, org })}
-        text="Suggest an Edit"
-        icon={<FontAwesomeIcon icon={faEdit} />}
-      />
-
-      {org.source && (
-        <SidebarSectionList.Link
-          text={`Source - ${org.source.name}`}
-          href={org.source.url}
-          icon={<FontAwesomeIcon icon={faFileAlt} />}
-        />
-      )}
     </SidebarSectionList>
   )
 }
@@ -131,6 +111,26 @@ function SocialLinksSection({ org, className }) {
         href={org.facebook}
         icon={<FontAwesomeIcon icon={faFacebook} />}
       />
+    </SidebarSectionList>
+  )
+}
+
+function ContributionSection({ data, org, className }) {
+  return (
+    <SidebarSectionList title="Edit History" className={className}>
+      <SidebarSectionList.Link
+        href={getEditUrl({ data, org })}
+        text="Suggest an Edit"
+        icon={<FontAwesomeIcon icon={faEdit} />}
+      />
+
+      {org.source && (
+        <SidebarSectionList.Link
+          text={`Source - ${org.source.name}`}
+          href={org.source.url}
+          icon={<FontAwesomeIcon icon={faFileAlt} />}
+        />
+      )}
     </SidebarSectionList>
   )
 }
