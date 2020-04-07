@@ -15,14 +15,15 @@ function CapitalType({ type, pageContext }) {
   )
 }
 
-function CapitalStage({ type, currentFilter, onApplyFilter }) {
-  const selected = type === currentFilter.byCapitalStage
+function CapitalStage({ stage, currentFilter, onApplyFilter }) {
+  const selected = stage === currentFilter.byCapitalStage
+  const handleClick = () => onApplyFilter.byCapitalStage(selected ? null : stage)
 
   return (
     <li className={`font-sans my-1 `}>
       {/*  eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a href="#" onClick={() => onApplyFilter.byCapitalStage(type)}>
-        <Pill name={type} selected={selected} />
+      <a href="#" onClick={handleClick}>
+        <Pill name={stage} selected={selected} />
       </a>
     </li>
   )
@@ -39,10 +40,10 @@ function Stages({ pageContext, currentFilter, onApplyFilter }) {
         Stages
       </h3>
       <ul>
-        {capitalStages.map(type => (
+        {capitalStages.map(stage => (
           <CapitalStage
-            key={type}
-            type={type}
+            key={stage}
+            stage={stage}
             currentFilter={currentFilter}
             onApplyFilter={onApplyFilter}
           />

@@ -1,10 +1,11 @@
 import React, { useState } from "react"
+import _ from "lodash"
 
 import Select from "react-select"
 
 // We prefer to use Tailwind when possible, but this is the preferred way to
 // achieve custom styles with react-select. See https://react-select.com/styles
-const styles = {
+const STYLES = {
   container: styles => ({
     ...styles,
     display: "inline-block",
@@ -29,10 +30,6 @@ const styles = {
     ...provided,
     display: "none",
   }),
-  clearIndicator: provided => ({
-    ...provided,
-    padding: "5px",
-  }),
   dropdownIndicator: provided => ({
     ...provided,
     padding: "0px",
@@ -54,10 +51,12 @@ const styles = {
     minWidth: "100%",
   }),
 
-  option: (provided, { isFocused }) => {
+  option: (provided, { isFocused, isSelected }) => {
     return {
       ...provided,
       backgroundColor: isFocused ? "#e2e8f0" : null,
+      fontWeight: isSelected ? "bold" : "normal",
+      fontColor: "#111"
     }
   },
   singleValue: provided => ({
@@ -75,7 +74,6 @@ const styles = {
   }),
 }
 
-
 export const useOrganizationFilterState = () => {
   const [byCategory, setCategoryFilter] = useState(null)
   const [byLocation, setLocationFilter] = useState(null)
@@ -85,6 +83,7 @@ export const useOrganizationFilterState = () => {
   const [byCapitalStrategic, setCapitalStrategicFilter] = useState(null)
   const [byCapitalStage, setCapitalStageFilter] = useState(null)
   const [byCapitalCheckSize, setCapitalCheckSizeFilter] = useState(null)
+  const [byCapitalImpactSpecific, setCapitalImpactSpecificFilter] = useState(null)
 
   const setFilter = {
     byCategory: setCategoryFilter,
@@ -95,6 +94,7 @@ export const useOrganizationFilterState = () => {
     byCapitalStrategic: setCapitalStrategicFilter,
     byCapitalStage: setCapitalStageFilter,
     byCapitalCheckSize: setCapitalCheckSizeFilter,
+    byCapitalImpactSpecific: setCapitalImpactSpecificFilter,
     none: () => {
       setCategoryFilter(null)
       setLocationFilter(null)
@@ -104,6 +104,7 @@ export const useOrganizationFilterState = () => {
       setCapitalStrategicFilter(null)
       setCapitalStageFilter(null)
       setCapitalCheckSizeFilter(null)
+      setCapitalImpactSpecificFilter(null)
     },
   }
 
@@ -127,7 +128,7 @@ export const useOrganizationFilterState = () => {
         org => org.capitalProfile?.type?.indexOf(byCapitalType) >= 0
       )
 
-    if (byCapitalStrategic)
+    if (byCapitalStrategic !== null)
       organizations = organizations.filter(
         org => org.capitalProfile?.strategic === byCapitalStrategic
       )
@@ -140,6 +141,11 @@ export const useOrganizationFilterState = () => {
     if (byCapitalCheckSize)
       organizations = organizations.filter(
         org => org.capitalProfile?.checkSize?.indexOf(byCapitalCheckSize) >= 0
+      )
+
+    if (byCapitalImpactSpecific !== null)
+      organizations = organizations.filter(
+        org => org.capitalProfile?.impactSpecific === byCapitalImpactSpecific
       )
 
     return organizations
@@ -155,120 +161,172 @@ export const useOrganizationFilterState = () => {
       byCapitalStrategic,
       byCapitalStage,
       byCapitalCheckSize,
+      byCapitalImpactSpecific,
     },
     setFilter,
     applyFilter,
   ]
 }
 
-const formatSubcategoryOptions = (categories, pageContext) => {
-  let subCategories = categories
-    .filter(
-      category =>
-        pageContext.categoryId === category.parent?.id && category.count > 0
-    )
-    .map(result => ({
-      value: result,
-      label: result.name,
-    }))
+const AnyOption = { value: null, label: "Any" }
+const CapitalImpactSpecificOptions = [
+  AnyOption,
+  { value: true, label: "Only impact-specific" },
+  { value: false, label: "Not impact-specific" },
+]
+const CapitalStrategicOptions = [
+  AnyOption,
+  { value: true, label: "Only corporate/strategic" },
+  { value: false, label: "Not corporate/strategic" },
+]
+const makeOption = value => ({ value, label: value })
+const extractNumeric = str => (
+  parseInt(str.replace('k', '000').replace('M', '000000').match(/\d+,?/gi).pop(), 10)
+)
 
-  return [{ value: null, label: "Any" }, ...subCategories]
+const formatCategories = organizations => {
+  const formatted = _.
+    chain(organizations).
+    flatMap("categories").
+    compact().
+    uniqBy(category => category.id).
+    sortBy(category => category.name).
+    map(category => ({
+      value: category,
+      label: category.name,
+    })).
+    value()
+
+  return [AnyOption, ...formatted]
 }
 
 const formatHeadcounts = organizations => {
-  let formatted = organizations
-    .reduce((array, organization) => {
-      let { headcount } = organization
-      return array.includes(headcount) || headcount == null
-        ? array
-        : [...array, headcount]
-    }, [])
-    .sort((a, b) => {
-      return (
-        parseInt(a.match(/\d+,?/gi).pop()) - parseInt(b.match(/\d+,?/gi).pop())
-      )
-    })
-    .map(result => ({
-      value: result,
-      label: result,
-    }))
+  const formatted = _.
+    chain(organizations).
+    map("headcount").
+    uniq().
+    compact().
+    sortBy(extractNumeric).
+    map(makeOption).
+    value()
 
-  formatted.unshift({ value: null, label: "Any" })
+  return [AnyOption, ...formatted]
+}
 
-  return formatted
+const formatCapitalCheckSizes = organizations => {
+  const formatted = _.
+    chain(organizations).
+    map("capitalProfile").
+    compact().
+    flatMap("checkSize").
+    compact().
+    uniq().
+    sortBy(extractNumeric).
+    map(makeOption).
+    value()
+
+  return [AnyOption, ...formatted]
 }
 
 const formatOrgTypes = organizations => {
-  let formatted = organizations
-    .reduce((array, organization) => {
-      let { orgType } = organization
-      return array.includes(orgType) || orgType == null
-        ? array
-        : [...array, orgType]
-    }, [])
-    .map(result => ({
-      value: result,
-      label: result,
-    }))
+  const formatted = _.chain(organizations).map("orgType").uniq().compact().sort().map(makeOption).value()
 
-  formatted.unshift({ value: null, label: "Any" })
+  return [AnyOption, ...formatted]
+}
 
-  return formatted
+const FilterSelect = ({ value, onChangeFilter, options, ...props }) => {
+  const selectValue = value !== null ? options.find(
+    ({ value: optionValue }) => optionValue === value
+  ) : null
+
+  const onChange = (o) => onChangeFilter(o ? o.value : null)
+
+  return (
+    <Select
+      {...props}
+      options={options}
+      onChange={onChange}
+      styles={STYLES}
+      isSearchable={false}
+      value={selectValue}
+    />
+  )
 }
 
 const OrganizationFilter = ({
   currentFilter,
-  categories,
-  pageContext,
   onApplyFilter,
   organizations,
+  showFilters,
 }) => {
-  const { byCategory, byHeadcount, byOrgType } = currentFilter
+  const { byCategory, byHeadcount, byOrgType, byCapitalCheckSize, byCapitalStrategic, byCapitalImpactSpecific } = currentFilter
 
-  const formattedSubcategories = pageContext
-    ? formatSubcategoryOptions(categories, pageContext)
-    : null
+  const filters = {
+    category: () => (
+      <FilterSelect
+        key="category"
+        options={formatCategories(organizations)}
+        onChangeFilter={onApplyFilter.byCategory}
+        placeholder="Category"
+        value={byCategory}
+      />
+    ),
+    headcount: () => (
+      <FilterSelect
+        key="headcount"
+        options={formatHeadcounts(organizations)}
+        onChangeFilter={onApplyFilter.byHeadcount}
+        placeholder="Headcount"
+        value={byHeadcount}
+      />
+    ),
+    orgType: () => (
+      <FilterSelect
+        key="orgType"
+        options={formatOrgTypes(organizations)}
+        onChangeFilter={onApplyFilter.byOrgType}
+        placeholder="Org Type"
+        value={byOrgType}
+      />
+    ),
+    capitalCheckSize: () => (
+      <FilterSelect
+        key="capitalCheckSize"
+        options={formatCapitalCheckSizes(organizations)}
+        onChangeFilter={onApplyFilter.byCapitalCheckSize}
+        placeholder="Check Size"
+        value={byCapitalCheckSize}
+      />
+    ),
+    capitalImpactSpecific: () => (
+      <FilterSelect
+        key="capitalImpactSpecific"
+        options={CapitalImpactSpecificOptions}
+        onChangeFilter={onApplyFilter.byCapitalImpactSpecific}
+        placeholder="Impact-specific?"
+        value={byCapitalImpactSpecific}
+      />
+    ),
+    capitalStrategic: () => (
+      <FilterSelect
+        key="capitalStrategic"
+        options={CapitalStrategicOptions}
+        onChangeFilter={onApplyFilter.byCapitalStrategic}
+        placeholder="Corporate/Strategic?"
+        value={byCapitalStrategic}
+      />
+    ),
+  }
 
-  const formattedHeadCounts = pageContext
-    ? formatHeadcounts(organizations)
-    : null
-  const formattedOrgTypes = pageContext ? formatOrgTypes(organizations) : null
-
-  // <Select
-  //   options={formattedSubcategories}
-  //   onChange={category => onApplyFilter.byCategory(category?.value)}
-  //   styles={styles}
-  //   isSearchable={false}
-  //   placeholder={byCategory?.name ?? "Sub category"}
-  //   value={byCategory?.name ?? null}
-  // />
   return (
     <>
-      {
-        <div className="text-gray-700  text-sm max-w-6xl mt-3">
-          <span className="mr-2 inline-block h-6 min-h-full">
-            <span>{organizations?.length} Companies | </span>
-            Filter by
-          </span>
+      <div className="text-gray-700 text-sm max-w-6xl mt-3">
+        <span className="mr-2 inline-block h-6 min-h-full">
+          Filters
+        </span>
 
-          <Select
-            options={formattedHeadCounts}
-            onChange={headcount => onApplyFilter.byHeadcount(headcount?.value)}
-            styles={styles}
-            isSearchable={false}
-            placeholder={byHeadcount || "Headcount"}
-            value={byHeadcount}
-          />
-          <Select
-            options={formattedOrgTypes}
-            onChange={orgType => onApplyFilter.byOrgType(orgType?.value)}
-            styles={styles}
-            isSearchable={false}
-            placeholder={byOrgType || "Org Type"}
-            value={byOrgType}
-          />
-        </div>
-      }
+        {showFilters.map(f => filters[f]())}
+      </div>
     </>
   )
 }

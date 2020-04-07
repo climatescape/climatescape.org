@@ -20,12 +20,7 @@ function Category({ category, categories, selected }) {
   )
 }
 
-export default function({
-  categories,
-  onApplyFilter,
-  currentFilter,
-  pageContext,
-}) {
+export default function({ categories, pageContext }) {
   const selected = categories.find(
     category => category.id === pageContext.categoryId
   )

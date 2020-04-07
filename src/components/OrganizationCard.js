@@ -28,8 +28,6 @@ function truncateDescription(description) {
 export default function OrganizationCard({
   pageContext,
   organization,
-  currentFilter,
-  onApplyFilter,
 }) {
   const {
     title,
@@ -60,62 +58,37 @@ export default function OrganizationCard({
           {capitalProfile?.type?.map(type => (
             <OrganizationCapitalType
               key={type}
-              onClick={() => onApplyFilter.byCapitalType(type)}
-              active={type === currentFilter.byCapitalType}
               text={type}
             />
           ))}
           {capitalProfile?.strategic && (
             <OrganizationCapitalStrategic
               key="capitalstrategic"
-              onClick={
-                () => onApplyFilter.byCapitalStrategic(capitalProfile.strategic)
-                // eslint-disable-next-line react/jsx-curly-newline
-              }
-              active={
-                capitalProfile.strategic === currentFilter.byCapitalStrategic
-              }
             />
           )}
           {capitalProfile?.stage?.map(stage => (
             <OrganizationCapitalStage
               key={stage}
-              onClick={() => onApplyFilter.byCapitalStage(stage)}
-              active={stage === currentFilter.byCapitalStage}
               text={stage}
             />
           ))}
           {capitalProfile?.checkSize?.map(checkSize => (
             <OrganizationCapitalCheckSize
               key={checkSize}
-              onClick={() => onApplyFilter.byCapitalCheckSize(checkSize)}
-              active={checkSize === currentFilter.byCapitalCheckSize}
               text={checkSize}
             />
           ))}
           {subCategories?.map(category => (
             <OrganizationCategory
               key={category.name}
-              onClick={() => onApplyFilter.byCategory(category)}
-              active={category.id === currentFilter.byCategory?.id}
               text={category.name}
             />
           ))}
-          {location && (
-            <OrganizationLocation text={location} />
-          )}
+          {location && <OrganizationLocation text={location} />}
           {headcount && (
-            <OrganizationHeadcount
-              key="headcount"
-              text={headcount}
-            />
+            <OrganizationHeadcount key="headcount" text={headcount} />
           )}
-          {orgType && (
-            <OrganizationOrgType
-              key="orgtype"
-              text={orgType}
-            />
-          )}
+          {orgType && <OrganizationOrgType key="orgtype" text={orgType} />}
         </div>
       </div>
       <div className="w-24 flex-shrink-0 hidden sm:block">
@@ -134,15 +107,8 @@ export default function OrganizationCard({
   )
 }
 
-OrganizationCard.defaultProps = {
-  currentFilter: {},
-  onApplyFilter: {},
-}
-
 OrganizationCard.propTypes = {
   organization: PropTypes.object,
-  currentFilter: PropTypes.object,
-  onApplyFilter: PropTypes.object,
 }
 
 // Includes all the expected attributes for rendering an OrganizationCard. To
@@ -229,6 +195,7 @@ export const query = graphql`
         data {
           Type
           Strategic
+          ImpactSpecific: Impact_Specific
           Stage
           CheckSize: Check_Size
         }

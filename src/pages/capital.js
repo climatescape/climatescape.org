@@ -19,6 +19,8 @@ const CapitalTemplate = ({
 }) => {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
 
+  console.log(filter)
+
   let organizations = transformOrganizations(nodes)
   organizations = applyFilter(organizations)
 
@@ -43,14 +45,16 @@ const CapitalTemplate = ({
             buttonUrl={capitalAddFormUrl}
             filter={filter}
             onClearFilter={() => setFilter.none()}
+            onApplyFilter={setFilter}
+            organizations={organizations}
+            showFilters={["capitalCheckSize", "capitalImpactSpecific", "capitalStrategic", "category", "orgType"]}
           />
+
           <div>
             {organizations.map(organization => (
               <OrganizationCard
                 key={organization.title}
                 organization={organization}
-                currentFilter={filter}
-                onApplyFilter={setFilter}
               />
             ))}
           </div>
