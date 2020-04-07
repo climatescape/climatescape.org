@@ -2,6 +2,80 @@ import React, { useState } from "react"
 
 import Select from "react-select"
 
+// We prefer to use Tailwind when possible, but this is the preferred way to
+// achieve custom styles with react-select. See https://react-select.com/styles
+const styles = {
+  container: styles => ({
+    ...styles,
+    display: "inline-block",
+    marginRight: "8px",
+    maxWidth: "30%",
+    height: "28px",
+    verticalAlign: "middle",
+  }),
+  control: provided => ({
+    ...provided,
+    minHeight: "28px",
+    maxHeight: "28px",
+    borderRadius: "9999px",
+    maxWidth: "100%",
+    backgroundColor: "#f7fafc",
+  }),
+  indicatorsContainer: provided => ({
+    ...provided,
+    height: "24px",
+  }),
+  indicatorSeparator: provided => ({
+    ...provided,
+    display: "none",
+  }),
+  clearIndicator: provided => ({
+    ...provided,
+    padding: "5px",
+  }),
+  dropdownIndicator: provided => ({
+    ...provided,
+    padding: "0px",
+    paddingRight: "5px",
+  }),
+  placeholder: provided => ({
+    ...provided,
+    position: "static",
+    top: "auto",
+    transform: "none",
+    maxWidth: "100%",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  }),
+  menu: provided => ({
+    ...provided,
+    width: "max-content",
+    minWidth: "100%",
+  }),
+
+  option: (provided, { isFocused }) => {
+    return {
+      ...provided,
+      backgroundColor: isFocused ? "#e2e8f0" : null,
+    }
+  },
+  singleValue: provided => ({
+    ...provided,
+    maxWidth: "none",
+    position: "static",
+    top: "auto",
+    transform: "none",
+  }),
+  valueContainer: provided => ({
+    ...provided,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    maxWidth: "100%",
+  }),
+}
+
+
 export const useOrganizationFilterState = () => {
   const [byCategory, setCategoryFilter] = useState(null)
   const [byLocation, setLocationFilter] = useState(null)
@@ -98,7 +172,7 @@ const formatSubcategoryOptions = (categories, pageContext) => {
       label: result.name,
     }))
 
-  return [{ value: null, label: "None" }, ...subCategories]
+  return [{ value: null, label: "Any" }, ...subCategories]
 }
 
 const formatHeadcounts = organizations => {
@@ -119,7 +193,7 @@ const formatHeadcounts = organizations => {
       label: result,
     }))
 
-  formatted.unshift({ value: null, label: "None" })
+  formatted.unshift({ value: null, label: "Any" })
 
   return formatted
 }
@@ -137,7 +211,7 @@ const formatOrgTypes = organizations => {
       label: result,
     }))
 
-  formatted.unshift({ value: null, label: "None" })
+  formatted.unshift({ value: null, label: "Any" })
 
   return formatted
 }
@@ -160,77 +234,6 @@ const OrganizationFilter = ({
     : null
   const formattedOrgTypes = pageContext ? formatOrgTypes(organizations) : null
 
-  const styles = {
-    container: styles => ({
-      ...styles,
-      display: "inline-block",
-      marginRight: "8px",
-      maxWidth: "30%",
-      maxHeight: "24px",
-      verticalAlign: "middle",
-    }),
-    control: provided => ({
-      ...provided,
-      minHeight: "24px",
-      maxHeight: "24px",
-      borderRadius: "9999px",
-      maxWidth: "100%",
-      backgroundColor: "#f7fafc",
-    }),
-    indicatorsContainer: provided => ({
-      ...provided,
-      height: "24px",
-    }),
-    indicatorSeparator: provided => ({
-      ...provided,
-      display: "none",
-    }),
-    clearIndicator: provided => ({
-      ...provided,
-      padding: "5px",
-    }),
-    dropdownIndicator: provided => ({
-      ...provided,
-      padding: "0px",
-      paddingRight: "5px",
-    }),
-    placeholder: provided => ({
-      ...provided,
-      position: "static",
-      top: "auto",
-      transform: "none",
-      maxWidth: "100%",
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-      whiteSpace: "nowrap",
-    }),
-    menu: provided => ({
-      ...provided,
-      width: "max-content",
-      minWidth: "100%",
-    }),
-
-    option: (provided, { isFocused }) => {
-      return {
-        ...provided,
-        backgroundColor: isFocused ? "#e2e8f0" : null,
-      }
-    },
-    singleValue: provided => ({
-      ...provided,
-      maxWidth: "none",
-      position: "static",
-      top: "auto",
-      transform: "none",
-    }),
-    valueContainer: provided => ({
-      ...provided,
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-      maxWidth: "100%",
-    }),
-  }
-
   return (
     <>
       {
@@ -250,10 +253,10 @@ const OrganizationFilter = ({
 
           <Select
             options={formattedHeadCounts}
-            onChange={size => onApplyFilter.byHeadcount(size?.value)}
+            onChange={headcount => onApplyFilter.byHeadcount(headcount?.value)}
             styles={styles}
             isSearchable={false}
-            placeholder={byHeadcount || "Size"}
+            placeholder={byHeadcount || "Headcount"}
             value={byHeadcount}
           />
           <Select

@@ -102,12 +102,7 @@ export default function OrganizationCard({
             />
           ))}
           {location && (
-            <OrganizationLocation
-              onClick={() => onApplyFilter.byLocation(location)}
-              key="location"
-              active={location === currentFilter.byLocation}
-              text={location}
-            />
+            <OrganizationLocation text={location} />
           )}
           {headcount && (
             <OrganizationHeadcount
