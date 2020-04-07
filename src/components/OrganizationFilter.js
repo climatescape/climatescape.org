@@ -56,7 +56,7 @@ const STYLES = {
       ...provided,
       backgroundColor: isFocused ? "#e2e8f0" : null,
       fontWeight: isSelected ? "bold" : "normal",
-      color: "#111"
+      color: "#111",
     }
   },
   singleValue: provided => ({
@@ -83,7 +83,9 @@ export const useOrganizationFilterState = () => {
   const [byCapitalStrategic, setCapitalStrategicFilter] = useState(null)
   const [byCapitalStage, setCapitalStageFilter] = useState(null)
   const [byCapitalCheckSize, setCapitalCheckSizeFilter] = useState(null)
-  const [byCapitalImpactSpecific, setCapitalImpactSpecificFilter] = useState(null)
+  const [byCapitalImpactSpecific, setCapitalImpactSpecificFilter] = useState(
+    null
+  )
 
   const setFilter = {
     byCategory: setCategoryFilter,
@@ -180,66 +182,76 @@ const CapitalStrategicOptions = [
   { value: false, label: "Not corporate/strategic" },
 ]
 const makeOption = value => ({ value, label: value })
-const extractNumeric = str => (
-  parseInt(str.replace('k', '000').replace('M', '000000').match(/\d+,?/gi).pop(), 10)
-)
+const extractNumeric = str =>
+  parseInt(
+    str
+      .replace("k", "000")
+      .replace("M", "000000")
+      .match(/\d+,?/gi)
+      .pop(),
+    10
+  )
 
 const formatCategories = organizations => {
-  const formatted = _.
-    chain(organizations).
-    flatMap("categories").
-    compact().
-    uniqBy(category => category.id).
-    sortBy(category => category.name).
-    map(category => ({
+  const formatted = _.chain(organizations)
+    .flatMap("categories")
+    .compact()
+    .uniqBy(category => category.id)
+    .sortBy(category => category.name)
+    .map(category => ({
       value: category,
       label: category.name,
-    })).
-    value()
+    }))
+    .value()
 
   return [AnyOption, ...formatted]
 }
 
 const formatHeadcounts = organizations => {
-  const formatted = _.
-    chain(organizations).
-    map("headcount").
-    uniq().
-    compact().
-    sortBy(extractNumeric).
-    map(makeOption).
-    value()
+  const formatted = _.chain(organizations)
+    .map("headcount")
+    .uniq()
+    .compact()
+    .sortBy(extractNumeric)
+    .map(makeOption)
+    .value()
 
   return [AnyOption, ...formatted]
 }
 
 const formatCapitalCheckSizes = organizations => {
-  const formatted = _.
-    chain(organizations).
-    map("capitalProfile").
-    compact().
-    flatMap("checkSize").
-    compact().
-    uniq().
-    sortBy(extractNumeric).
-    map(makeOption).
-    value()
+  const formatted = _.chain(organizations)
+    .map("capitalProfile")
+    .compact()
+    .flatMap("checkSize")
+    .compact()
+    .uniq()
+    .sortBy(extractNumeric)
+    .map(makeOption)
+    .value()
 
   return [AnyOption, ...formatted]
 }
 
 const formatOrgTypes = organizations => {
-  const formatted = _.chain(organizations).map("orgType").uniq().compact().sort().map(makeOption).value()
+  const formatted = _.chain(organizations)
+    .map("orgType")
+    .uniq()
+    .compact()
+    .sort()
+    .map(makeOption)
+    .value()
 
   return [AnyOption, ...formatted]
 }
 
 const FilterSelect = ({ value, onChangeFilter, options, ...props }) => {
-  const selectValue = value !== null ? options.find(
-    ({ value: optionValue }) => optionValue === value
-  ) : null
+  const selectValue =
+    value !== null
+      ? options.find(({ value: optionValue }) => optionValue === value)
+      : null
 
-  const onChange = (o) => onChangeFilter(o ? o.value : null)
+  const onChange = o => onChangeFilter(o ? o.value : null)
 
   return (
     <Select
@@ -259,7 +271,14 @@ const OrganizationFilter = ({
   organizations,
   showFilters,
 }) => {
-  const { byCategory, byHeadcount, byOrgType, byCapitalCheckSize, byCapitalStrategic, byCapitalImpactSpecific } = currentFilter
+  const {
+    byCategory,
+    byHeadcount,
+    byOrgType,
+    byCapitalCheckSize,
+    byCapitalStrategic,
+    byCapitalImpactSpecific,
+  } = currentFilter
 
   const filters = {
     category: () => (
@@ -321,9 +340,7 @@ const OrganizationFilter = ({
   return (
     <>
       <div className="text-gray-700 text-sm max-w-6xl mt-3">
-        <span className="mr-2 inline-block h-6 min-h-full">
-          Filters
-        </span>
+        <span className="mr-2 inline-block h-6 min-h-full">Filters</span>
 
         {showFilters.map(f => filters[f]())}
       </div>

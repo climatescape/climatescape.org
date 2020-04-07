@@ -17,7 +17,8 @@ function CapitalType({ type, pageContext }) {
 
 function CapitalStage({ stage, currentFilter, onApplyFilter }) {
   const selected = stage === currentFilter.byCapitalStage
-  const handleClick = () => onApplyFilter.byCapitalStage(selected ? null : stage)
+  const handleClick = () =>
+    onApplyFilter.byCapitalStage(selected ? null : stage)
 
   return (
     <li className={`font-sans my-1 `}>

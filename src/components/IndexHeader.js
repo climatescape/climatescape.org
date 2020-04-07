@@ -17,11 +17,11 @@ const IndexHeader = ({
 }) => (
   <div className="border-b border-gray-400 py-3">
     <div className="flex items-center md:mt-4 ">
-      <h2 className="text-2xl tracking-wide font-title flex-grow">
-        {title}
-      </h2>
+      <h2 className="text-2xl tracking-wide font-title flex-grow">{title}</h2>
 
-      <span className="text-gray-800 mr-2">{organizations?.length} organizations</span>
+      <span className="text-gray-800 mr-2">
+        {organizations?.length} organizations
+      </span>
 
       {buttonText && buttonUrl && (
         <a

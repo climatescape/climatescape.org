@@ -19,8 +19,6 @@ const CapitalTemplate = ({
 }) => {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
 
-  console.log(filter)
-
   const allOrganizations = transformOrganizations(nodes)
   const organizations = applyFilter(allOrganizations)
 
@@ -48,7 +46,13 @@ const CapitalTemplate = ({
             onApplyFilter={setFilter}
             organizations={organizations}
             allOrganizations={allOrganizations}
-            showFilters={["capitalCheckSize", "capitalImpactSpecific", "capitalStrategic", "category", "orgType"]}
+            showFilters={[
+              "capitalCheckSize",
+              "capitalImpactSpecific",
+              "capitalStrategic",
+              "category",
+              "orgType",
+            ]}
           />
 
           <div>

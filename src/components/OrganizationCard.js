@@ -25,10 +25,7 @@ function truncateDescription(description) {
   return index === -1 ? description : description.substr(0, index + offset + 1)
 }
 
-export default function OrganizationCard({
-  pageContext,
-  organization,
-}) {
+export default function OrganizationCard({ pageContext, organization }) {
   const {
     title,
     description,
@@ -56,33 +53,19 @@ export default function OrganizationCard({
         </p>
         <div className="mt-1">
           {capitalProfile?.type?.map(type => (
-            <OrganizationCapitalType
-              key={type}
-              text={type}
-            />
+            <OrganizationCapitalType key={type} text={type} />
           ))}
           {capitalProfile?.strategic && (
-            <OrganizationCapitalStrategic
-              key="capitalstrategic"
-            />
+            <OrganizationCapitalStrategic key="capitalstrategic" />
           )}
           {capitalProfile?.stage?.map(stage => (
-            <OrganizationCapitalStage
-              key={stage}
-              text={stage}
-            />
+            <OrganizationCapitalStage key={stage} text={stage} />
           ))}
           {capitalProfile?.checkSize?.map(checkSize => (
-            <OrganizationCapitalCheckSize
-              key={checkSize}
-              text={checkSize}
-            />
+            <OrganizationCapitalCheckSize key={checkSize} text={checkSize} />
           ))}
           {subCategories?.map(category => (
-            <OrganizationCategory
-              key={category.name}
-              text={category.name}
-            />
+            <OrganizationCategory key={category.name} text={category.name} />
           ))}
           {location && <OrganizationLocation text={location} />}
           {headcount && (
