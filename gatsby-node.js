@@ -35,9 +35,7 @@ exports.createPages = async ({ graphql, actions }) => {
     }
   `)
 
-  // const categories = transformCategories(data)
   data.categories.nodes
-    .filter(category => !category.data.Parent)
     .forEach(category => {
       createPage({
         path: `/categories/${makeSlug(category.data.Name)}`,

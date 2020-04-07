@@ -106,17 +106,13 @@ export default function OrganizationCard({
           )}
           {headcount && (
             <OrganizationHeadcount
-              onClick={() => onApplyFilter.byHeadcount(headcount)}
               key="headcount"
-              active={headcount === currentFilter.byHeadcount}
               text={headcount}
             />
           )}
           {orgType && (
             <OrganizationOrgType
-              onClick={() => onApplyFilter.byOrgType(orgType)}
               key="orgtype"
-              active={orgType === currentFilter.byOrgType}
               text={orgType}
             />
           )}

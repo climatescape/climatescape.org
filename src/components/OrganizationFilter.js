@@ -234,6 +234,14 @@ const OrganizationFilter = ({
     : null
   const formattedOrgTypes = pageContext ? formatOrgTypes(organizations) : null
 
+  // <Select
+  //   options={formattedSubcategories}
+  //   onChange={category => onApplyFilter.byCategory(category?.value)}
+  //   styles={styles}
+  //   isSearchable={false}
+  //   placeholder={byCategory?.name ?? "Sub category"}
+  //   value={byCategory?.name ?? null}
+  // />
   return (
     <>
       {
@@ -242,14 +250,6 @@ const OrganizationFilter = ({
             <span>{organizations?.length} Companies | </span>
             Filter by
           </span>
-          <Select
-            options={formattedSubcategories}
-            onChange={category => onApplyFilter.byCategory(category?.value)}
-            styles={styles}
-            isSearchable={false}
-            placeholder={byCategory?.name ?? "Sub category"}
-            value={byCategory?.name ?? null}
-          />
 
           <Select
             options={formattedHeadCounts}
