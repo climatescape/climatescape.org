@@ -373,7 +373,7 @@ const OrganizationFilter = ({
   return (
     <>
       <div className="hidden sm:flex items-center text-gray-700 text-sm max-w-6xl mt-3">
-        <span className="mr-2 inline-block h-6 min-h-full">Filter:</span>
+        <span className="mr-2 inline-block h-6 min-h-full">Filter</span>
 
         {showFilters.map(f => filters[f]())}
       </div>
