@@ -140,7 +140,7 @@ export default function OrganizationTemplate({ data }) {
 
   const org = transformOrganization(data.organization, (raw, out) => ({
     ...out,
-    fullPhotos: raw.data.fullPhotos?.localFiles || [],
+    fullPhotos: raw.data.fullPhotos?.localFiles || []
   }))
 
   const img = getLogoImage(org)
@@ -153,7 +153,7 @@ export default function OrganizationTemplate({ data }) {
         <div className="mb-10 md:mt-6 flex flex-col lg:flex-row">
           <div className="w-5/5 lg:w-3/5">
             <div className="flex">
-              <div className={`${ !img ? `hidden`: `block` } mr-5 w-16 flex-shrink-0`}>
+              <div className={`mr-5 w-16 flex-shrink-0 ${ !img ? `hidden`: `block` }`}>
                 {img && (
                   <Img
                     fixed={img}

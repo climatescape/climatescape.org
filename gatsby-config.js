@@ -43,7 +43,7 @@ const config = {
               `Categories`,
               `Capital_Profile`,
               "Crunchbase_ODM",
-              `Source`,
+              `Source`
             ],
           },
           {
@@ -80,7 +80,7 @@ const config = {
             baseId: `appNYMWxGF1jMaf5V`,
             tableName: "Sources",
             tableLinks: [`Organizations`],
-          },
+          }
         ],
       },
     },
