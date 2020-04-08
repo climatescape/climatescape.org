@@ -19,12 +19,6 @@ function getLogoImage({ logo, photos, categories }) {
   return logo || photos[0] || cat?.cover || cat?.parent.cover
 }
 
-function truncateDescription(description) {
-  const offset = 30
-  const index = description?.slice(offset).search(/\./) ?? -1
-  return index === -1 ? description : description.substr(0, index + offset + 1)
-}
-
 export default function OrganizationCard({ pageContext, organization }) {
   const {
     title,
@@ -49,7 +43,7 @@ export default function OrganizationCard({ pageContext, organization }) {
           <Link to={slug} className="font-bold hover:text-teal-500 mr-2">
             {title}
           </Link>
-          {truncateDescription(description)}
+          {description}
         </p>
         <div className="mt-1">
           {capitalProfile?.type?.map(type => (

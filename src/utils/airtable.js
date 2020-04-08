@@ -54,6 +54,23 @@ function transformThumbnails(Photos) {
     : []
 }
 
+const DescriptionThreshold = 180
+const DescriptionSentence = /(.+)+(?:\.\s)/
+
+function truncateDescription(string) {
+  if (!string) return null
+
+  // If the string is below the threshold, use it
+  if (string.length <= DescriptionThreshold) return string
+
+  // If the first sentences is below the threshold, use it
+  const firstSentence = string.match(DescriptionSentence)[1]
+  if (firstSentence?.length <= DescriptionThreshold) return firstSentence
+
+  // Otherwise truncate the full string and add an ellipsis
+  return `${string.substring(0, DescriptionThreshold)}…`
+}
+
 // Accepts a `raw` organization from GraphQL, cleans up the key formatting and
 // simplifies data structures.
 // Optionally accepts a `userTransform` function to further modify the `out`
@@ -87,7 +104,7 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
   return userTransform(raw, {
     id,
     title: Name,
-    description: Tagline || About,
+    description: truncateDescription(Tagline || About),
     tagline: Tagline,
     about: About || "",
     location: HQLocation,
