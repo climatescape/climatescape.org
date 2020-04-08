@@ -21,10 +21,10 @@ function OrganizationsTemplate({ data, pageContext }) {
     org => org.data.Name
   )
 
-  let organizations = transformOrganizations(orgs)
-  const categories = transformCategories(data)
+  const allOrganizations = transformOrganizations(orgs)
+  const organizations = applyFilter(allOrganizations)
 
-  organizations = applyFilter(organizations)
+  const categories = transformCategories(data)
 
   const organizationsTitle = pageContext.categoryName || "All Organizations"
   const { organizationAddFormUrl } = data.site.siteMetadata
@@ -34,12 +34,7 @@ function OrganizationsTemplate({ data, pageContext }) {
       <SEO title={`${organizationsTitle} organizations on Climatescape`} />
 
       <div className="flex flex-col mx-auto container lg:flex-row font-sans ">
-        <CategoryList
-          categories={categories}
-          onApplyFilter={setFilter}
-          currentFilter={filter}
-          pageContext={pageContext}
-        />
+        <CategoryList categories={categories} pageContext={pageContext} />
         <div className="lg:w-3/5">
           <IndexHeader
             title={organizationsTitle}
@@ -47,16 +42,18 @@ function OrganizationsTemplate({ data, pageContext }) {
             buttonUrl={organizationAddFormUrl}
             filter={filter}
             onClearFilter={() => setFilter.none()}
+            onApplyFilter={setFilter}
+            organizations={organizations}
+            allOrganizations={allOrganizations}
+            showFilters={["role", "headcount", "orgType"]}
           />
 
-          <div className="">
+          <div>
             {organizations.map(org => (
               <OrganizationCard
                 organization={org}
                 pageContext={pageContext}
                 key={org.title}
-                currentFilter={filter}
-                onApplyFilter={setFilter}
               />
             ))}
           </div>

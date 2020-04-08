@@ -2,8 +2,8 @@ import React from "react"
 import { Link } from "gatsby"
 import Pill from "./Pill"
 
-function TopCategory({ category, categories, pageContext }) {
-  const selected = category.id === pageContext.categoryId
+function Category({ category, categories, selected }) {
+  const isSelected = category.id === selected?.id
   const subCategories = categories.filter(sub => category.id === sub.parent?.id)
 
   const count = subCategories.reduce(
@@ -14,42 +14,20 @@ function TopCategory({ category, categories, pageContext }) {
   return (
     <li className={`font-sans my-1 `}>
       <Link to={category.slug}>
-        <Pill name={category.name} count={count} selected={selected} />
+        <Pill name={category.name} count={count} selected={isSelected} />
       </Link>
     </li>
   )
 }
 
-function SubCategory({ category, currentFilter, onApplyFilter }) {
-  const selected = category.id === currentFilter.byCategory?.id
-
-  return (
-    <li className="font-sans my-1">
-      {/*  eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a
-        href="#"
-        role="button"
-        onClick={() => onApplyFilter.byCategory(category)}
-      >
-        <Pill name={category.name} count={category.count} selected={selected} />
-      </a>
-    </li>
-  )
-}
-
-export default function({
-  categories,
-  onApplyFilter,
-  currentFilter,
-  pageContext,
-}) {
-  const selectedCategory = categories.find(
+export default function({ categories, pageContext }) {
+  const selected = categories.find(
     category => category.id === pageContext.categoryId
   )
+  const parent = selected?.parent || selected
   const topCategories = categories.filter(category => !category.parent)
   const subCategories = categories.filter(
-    category =>
-      pageContext.categoryId === category.parent?.id && category.count > 0
+    category => category.count && category.parent?.id === parent?.id
   )
 
   return (
@@ -59,30 +37,29 @@ export default function({
       </h3>
       <ul>
         {topCategories.map(category => (
-          <TopCategory
+          <Category
             key={category.id}
             category={category}
             categories={categories}
-            pageContext={pageContext}
+            selected={parent}
           />
         ))}
       </ul>
-      {selectedCategory && subCategories.length > 0 && (
+      {selected && subCategories.length > 0 && (
         <>
           <h3
             style={{ maxWidth: "90%" }}
             className="text-sm font-title tracking-wide mt-8 mb-4 uppercase text-gray-700 leading-snug"
           >
-            {selectedCategory.name} Categories
+            {parent.name} Subcategories
           </h3>
           <ul>
             {subCategories.map(category => (
-              <SubCategory
+              <Category
                 key={category.id}
-                onApplyFilter={onApplyFilter}
                 category={category}
-                currentFilter={currentFilter}
-                pageContext={pageContext}
+                categories={categories}
+                selected={selected}
               />
             ))}
           </ul>

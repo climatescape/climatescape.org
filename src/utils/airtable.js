@@ -111,6 +111,7 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
       strategic: data.Strategic,
       stage: data.Stage,
       checkSize: data.CheckSize,
+      impactSpecific: data.ImpactSpecific,
     }))?.[0],
     photos:
       Photos?.localFiles
