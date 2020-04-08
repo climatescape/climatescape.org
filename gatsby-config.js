@@ -108,7 +108,11 @@ const config = {
     {
       resolve: `gatsby-plugin-nprogress`,
       options: {
-        showSpinner: false, // Disable the loading spinner
+        // The default spinner shows up in the top-right corner of the page,
+        // just on top of our nav bar. Setting this to false still gives us the
+        // loading bar at the top of the page, which is good enough to indicate
+        // something is happening when visiting a slow page.
+        showSpinner: false,
       },
     },
   ],
