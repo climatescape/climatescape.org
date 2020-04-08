@@ -41,9 +41,8 @@ function getEditUrl({ data, org }) {
   return `${url}?prefill_Organization=${encodeURI(org.title)}`
 }
 
-const hasMeta = ({ headcount, orgType, location }) => (
+const hasMeta = ({ headcount, orgType, location }) =>
   headcount || orgType || location
-)
 
 function AttributesSection({ org, className }) {
   const topCategories = org.categories.filter(cat => !cat.parent)
@@ -103,7 +102,7 @@ function SocialLinksSection({ org, className }) {
         icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
       />
       <SidebarSectionList.Link
-        text={"LinkedIn"}
+        text="LinkedIn"
         href={org.linkedIn}
         icon={<FontAwesomeIcon icon={faLinkedin} />}
       />
