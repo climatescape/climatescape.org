@@ -121,8 +121,8 @@ export const useOrganizationFilterState = () => {
       )
 
     if (byRole)
-      organizations = organizations.filter(
-        org => org.role?.find(role => role === byRole)
+      organizations = organizations.filter(org =>
+        org.role?.find(role => role === byRole)
       )
 
     if (byLocation)
@@ -212,7 +212,7 @@ const formatRoles = organizations => {
     .map(makeOption)
     .value()
 
-  return [ AnyOption, ...formatted ]
+  return [AnyOption, ...formatted]
 }
 
 const formatCategories = organizations => {
