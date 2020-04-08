@@ -1,5 +1,8 @@
 import React from "react"
 import classnames from "classnames"
+import Img from "gatsby-image"
+import { Link as A } from "gatsby"
+import { stringShorten } from "../utils/string"
 
 function Li({ children }) {
   return (
@@ -41,6 +44,27 @@ function Item({ icon, text, hidden }) {
   )
 }
 
+function Card({ org, img }) {
+  return (
+    <A to={org.slug}>
+      <Li>
+        <div className="mr-12">
+          <p className="text-black font-medium">{org.title}</p>
+          <p className="text-gray-700">{stringShorten(org.tagline)}</p>
+        </div>
+        {img && (
+          <div>
+            <Img
+              fixed={img}
+              className="OrganizationCard-logo border blend-multiply w-16 h-16"
+            />
+          </div>
+        )}
+      </Li>
+    </A>
+  )
+}
+
 /**
  * Defines a section on the sidebar that is displayed as a list and have Item as children.
  */
@@ -55,5 +79,6 @@ function SidebarSectionList({ title, children, className }) {
 
 SidebarSectionList.Item = Item
 SidebarSectionList.Link = Link
+SidebarSectionList.Card = Card
 
 export default SidebarSectionList

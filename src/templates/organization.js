@@ -135,6 +135,14 @@ function ContributionSection({ data, org, className }) {
   )
 }
 
+function SimilarOrgsSection({ org, img }) {
+  return (
+    <SidebarSectionList title="Similar Organizations">
+      <SidebarSectionList.Card org={org} img={img} />
+    </SidebarSectionList>
+  )
+}
+
 export default function OrganizationTemplate({ data }) {
   const siteTitle = data.site.siteMetadata.title
 
@@ -195,6 +203,7 @@ export default function OrganizationTemplate({ data }) {
                 className="flex flex-col mb-8"
                 data={data}
               />
+              <SimilarOrgsSection org={org} img={img} />
             </div>
           </div>
         </div>
