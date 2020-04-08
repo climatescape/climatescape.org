@@ -168,7 +168,7 @@ export default function OrganizationTemplate({ data }) {
               </div>
               <div>
                 <h1 className="flex-grow text-xl font-semibold">{org.title}</h1>
-                <p>{org.description}</p>
+                <p>{org.tagline}</p>
               </div>
             </div>
 
