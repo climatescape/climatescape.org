@@ -310,7 +310,7 @@ const OrganizationFilter = ({
         key="category"
         options={formatCategories(organizations)}
         onChangeFilter={onApplyFilter.byCategory}
-        placeholder="Category"
+        placeholder="Focus Area"
         value={byCategory}
       />
     ),
@@ -355,7 +355,7 @@ const OrganizationFilter = ({
         key="capitalImpactSpecific"
         options={CapitalImpactSpecificOptions}
         onChangeFilter={onApplyFilter.byCapitalImpactSpecific}
-        placeholder="Impact-specific?"
+        placeholder="Impact"
         value={byCapitalImpactSpecific}
       />
     ),
