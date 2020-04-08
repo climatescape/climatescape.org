@@ -5,7 +5,7 @@ const FooterLink = ({ href, title, divider }) => {
     <>
       <a
         href={href}
-        className="underline text-gray-800 hover:text-gray-900"
+        className="underline text-gray-800 hover:text-gray-600"
         target="_blank"
         rel="noopener noreferrer"
       >
