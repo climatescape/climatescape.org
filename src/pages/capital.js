@@ -48,10 +48,10 @@ const CapitalTemplate = ({
             allOrganizations={allOrganizations}
             showFilters={[
               "capitalCheckSize",
-              "capitalImpactSpecific",
-              "capitalStrategic",
               "category",
               "orgType",
+              "capitalImpactSpecific",
+              "capitalStrategic",
             ]}
           />
 

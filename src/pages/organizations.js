@@ -45,7 +45,7 @@ function OrganizationsTemplate({ data, pageContext }) {
             onApplyFilter={setFilter}
             organizations={organizations}
             allOrganizations={allOrganizations}
-            showFilters={["headcount", "orgType"]}
+            showFilters={["role", "headcount", "orgType"]}
           />
 
           <div>

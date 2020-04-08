@@ -8,11 +8,12 @@ import Select from "react-select"
 const STYLES = {
   container: styles => ({
     ...styles,
-    display: "inline-block",
-    marginRight: "8px",
-    maxWidth: "30%",
+    display: "block",
+    marginRight: "4px",
+    maxWidth: "25%",
     height: "28px",
     verticalAlign: "middle",
+    flexGrow: 1,
   }),
   control: provided => ({
     ...provided,
@@ -76,6 +77,7 @@ const STYLES = {
 
 export const useOrganizationFilterState = () => {
   const [byCategory, setCategoryFilter] = useState(null)
+  const [byRole, setRoleFilter] = useState(null)
   const [byLocation, setLocationFilter] = useState(null)
   const [byHeadcount, setHeadcountFilter] = useState(null)
   const [byOrgType, setOrgTypeFilter] = useState(null)
@@ -89,6 +91,7 @@ export const useOrganizationFilterState = () => {
 
   const setFilter = {
     byCategory: setCategoryFilter,
+    byRole: setRoleFilter,
     byLocation: setLocationFilter,
     byHeadcount: setHeadcountFilter,
     byOrgType: setOrgTypeFilter,
@@ -99,6 +102,7 @@ export const useOrganizationFilterState = () => {
     byCapitalImpactSpecific: setCapitalImpactSpecificFilter,
     none: () => {
       setCategoryFilter(null)
+      setRoleFilter(null)
       setLocationFilter(null)
       setHeadcountFilter(null)
       setOrgTypeFilter(null)
@@ -114,6 +118,11 @@ export const useOrganizationFilterState = () => {
     if (byCategory)
       organizations = organizations.filter(org =>
         org.categories.find(cat => cat.id === byCategory?.id)
+      )
+
+    if (byRole)
+      organizations = organizations.filter(
+        org => org.role?.find(role => role === byRole)
       )
 
     if (byLocation)
@@ -156,6 +165,7 @@ export const useOrganizationFilterState = () => {
   return [
     {
       byCategory,
+      byRole,
       byLocation,
       byHeadcount,
       byOrgType,
@@ -178,8 +188,8 @@ const CapitalImpactSpecificOptions = [
 ]
 const CapitalStrategicOptions = [
   AnyOption,
-  { value: true, label: "Only corporate/strategic" },
-  { value: false, label: "Not corporate/strategic" },
+  { value: true, label: "Only strategic" },
+  { value: false, label: "Not strategic" },
 ]
 const makeOption = value => ({ value, label: value })
 const extractNumeric = str =>
@@ -191,6 +201,19 @@ const extractNumeric = str =>
       .pop(),
     10
   )
+
+const formatRoles = organizations => {
+  const formatted = _.chain(organizations)
+    .flatMap("role")
+    .compact()
+    .uniq()
+    .filter(role => role !== "Capital") // Capital orgs have their own page
+    .sort()
+    .map(makeOption)
+    .value()
+
+  return [ AnyOption, ...formatted ]
+}
 
 const formatCategories = organizations => {
   const formatted = _.chain(organizations)
@@ -273,6 +296,7 @@ const OrganizationFilter = ({
 }) => {
   const {
     byCategory,
+    byRole,
     byHeadcount,
     byOrgType,
     byCapitalCheckSize,
@@ -288,6 +312,15 @@ const OrganizationFilter = ({
         onChangeFilter={onApplyFilter.byCategory}
         placeholder="Category"
         value={byCategory}
+      />
+    ),
+    role: () => (
+      <FilterSelect
+        key="role"
+        options={formatRoles(organizations)}
+        onChangeFilter={onApplyFilter.byRole}
+        placeholder="Role"
+        value={byRole}
       />
     ),
     headcount: () => (
@@ -331,7 +364,7 @@ const OrganizationFilter = ({
         key="capitalStrategic"
         options={CapitalStrategicOptions}
         onChangeFilter={onApplyFilter.byCapitalStrategic}
-        placeholder="Corporate/Strategic?"
+        placeholder="Strategic"
         value={byCapitalStrategic}
       />
     ),
@@ -339,8 +372,8 @@ const OrganizationFilter = ({
 
   return (
     <>
-      <div className="text-gray-700 text-sm max-w-6xl mt-3">
-        <span className="mr-2 inline-block h-6 min-h-full">Filters</span>
+      <div className="hidden sm:flex items-center text-gray-700 text-sm max-w-6xl mt-3">
+        <span className="mr-2 inline-block h-6 min-h-full">Filter:</span>
 
         {showFilters.map(f => filters[f]())}
       </div>

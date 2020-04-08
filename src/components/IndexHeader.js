@@ -19,7 +19,7 @@ const IndexHeader = ({
     <div className="flex items-center md:mt-4 ">
       <h2 className="text-2xl tracking-wide font-title flex-grow">{title}</h2>
 
-      <span className="text-gray-800 mr-2">
+      <span className="text-gray-800 mr-2 hidden sm:block">
         {organizations?.length} organizations
       </span>
 
