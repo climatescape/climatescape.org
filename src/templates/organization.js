@@ -23,7 +23,7 @@ import SEO from "../components/seo"
 import Carousel from "../components/carousel"
 import SidebarSectionList from "../components/SidebarSectionList"
 import { transformOrganization } from "../utils/airtable"
-import { parseTwitterPath, buildUrl } from "../utils/url"
+import { parseTwitterHandle } from "../utils/url"
 
 function isCapital(org) {
   return org.role?.includes("Capital")
@@ -41,6 +41,9 @@ function getEditUrl({ data, org }) {
   return `${url}?prefill_Organization=${encodeURI(org.title)}`
 }
 
+const hasMeta = ({ headcount, orgType, location }) =>
+  headcount || orgType || location
+
 function AttributesSection({ org, className }) {
   const topCategories = org.categories.filter(cat => !cat.parent)
   const subCategories = org.categories.filter(cat => cat.parent)
@@ -52,7 +55,9 @@ function AttributesSection({ org, className }) {
       category => !subCategories.map(cat => cat.parent.id).includes(category.id)
     )
     .concat(subCategories)
-  if (!categoryList.length) return null
+
+  if (!categoryList.length && !hasMeta(org)) return null
+
   return (
     <SidebarSectionList title="In a snapshot" className={className}>
       {categoryList.map(category => (
@@ -97,13 +102,13 @@ function SocialLinksSection({ org, className }) {
         icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
       />
       <SidebarSectionList.Link
-        text={org.title}
+        text="LinkedIn"
         href={org.linkedIn}
         icon={<FontAwesomeIcon icon={faLinkedin} />}
       />
       <SidebarSectionList.Link
-        text={parseTwitterPath(org.twitter)}
-        href={buildUrl(org.twitter, "Twitter")}
+        text={parseTwitterHandle(org.twitter) || "Twitter"}
+        href={org.twitter}
         icon={<FontAwesomeIcon icon={faTwitter} />}
       />
       <SidebarSectionList.Link
