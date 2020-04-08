@@ -64,6 +64,7 @@ function AttributesSection({ org, className }) {
         <SidebarSectionList.Item
           key={category.name}
           text={category.name}
+          slug={category.slug}
           icon={<FontAwesomeIcon icon={faBox} />}
         />
       ))}
@@ -149,7 +150,6 @@ export default function OrganizationTemplate({ data }) {
   }))
 
   const img = getLogoImage(org)
-
   return (
     <Layout contentClassName="bg-gray-100 font-sans">
       <SEO title={`${org.title} on ${siteTitle}`} description={org.tagline} />

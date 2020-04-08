@@ -1,6 +1,8 @@
 import React from "react"
 import classnames from "classnames"
 
+import { Link as A } from "gatsby"
+
 function Li({ children }) {
   return (
     <li className="flex flex-row mt-3 font-medium text-sm text-gray-800">
@@ -29,14 +31,20 @@ function Link({ icon, text, href, className }) {
   )
 }
 
-function Item({ icon, text, hidden }) {
+function Item({ icon, text, hidden, slug }) {
   if (hidden) {
     return null
   }
   return (
     <Li>
       <div className="mr-3 w-3">{icon}</div>
-      <span>{text}</span>
+      {slug ? (
+        <A className="hover:text-gray-600" to={slug}>
+          {text}
+        </A>
+      ) : (
+        <span>{text}</span>
+      )}
     </Li>
   )
 }
