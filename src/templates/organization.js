@@ -153,7 +153,11 @@ export default function OrganizationTemplate({ data }) {
         <div className="mb-10 md:mt-6 flex flex-col lg:flex-row">
           <div className="w-5/5 lg:w-3/5">
             <div className="flex">
-              <div className={ `mr-5 w-16 flex-shrink-0 ${  !img ? `hidden`: `block`   }` }>
+              <div
+                className={`mr-5 w-16 flex-shrink-0 ${
+                  !img ? `hidden` : `block`
+                }`}
+              >
                 {img && (
                   <Img
                     fixed={img}
