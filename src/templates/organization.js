@@ -92,30 +92,35 @@ function AttributesSection({ org, className }) {
 function SocialLinksSection({ org, className }) {
   return (
     <SidebarSectionList title="Links" className={className}>
-      <SidebarSectionList.Link
+      <SidebarSectionList.Item
         text="Homepage"
         href={org.homepage}
         icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
+        hidden={!org.homepage}
       />
-      <SidebarSectionList.Link
+      <SidebarSectionList.Item
         text="Crunchbase"
         href={org.crunchbase}
         icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
+        hidden={!org.crunchbase}
       />
-      <SidebarSectionList.Link
+      <SidebarSectionList.Item
         text="LinkedIn"
         href={org.linkedIn}
         icon={<FontAwesomeIcon icon={faLinkedin} />}
+        hidden={!org.linkedIn}
       />
-      <SidebarSectionList.Link
+      <SidebarSectionList.Item
         text={parseTwitterHandle(org.twitter) || "Twitter"}
         href={org.twitter}
         icon={<FontAwesomeIcon icon={faTwitter} />}
+        hidden={!org.twitter}
       />
-      <SidebarSectionList.Link
+      <SidebarSectionList.Item
         text="Facebook"
         href={org.facebook}
         icon={<FontAwesomeIcon icon={faFacebook} />}
+        hidden={!org.facebook}
       />
     </SidebarSectionList>
   )
@@ -124,14 +129,14 @@ function SocialLinksSection({ org, className }) {
 function ContributionSection({ data, org, className }) {
   return (
     <SidebarSectionList title="Edit History" className={className}>
-      <SidebarSectionList.Link
+      <SidebarSectionList.Item
         href={getEditUrl({ data, org })}
         text="Suggest an Edit"
         icon={<FontAwesomeIcon icon={faEdit} />}
       />
 
       {org.source && (
-        <SidebarSectionList.Link
+        <SidebarSectionList.Item
           text={`Source - ${org.source.name}`}
           href={org.source.url}
           icon={<FontAwesomeIcon icon={faFileAlt} />}

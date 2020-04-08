@@ -1,51 +1,31 @@
-import React from "react"
+import React, { Fragment } from "react"
 import classnames from "classnames"
+import { Link } from "gatsby"
 
-import { Link as A } from "gatsby"
-
-function Li({ children }) {
-  return (
-    <li className="flex flex-row mt-3 font-medium text-sm text-gray-800">
-      {children}
-    </li>
-  )
-}
-
-function Link({ icon, text, href, className }) {
-  if (!href) {
-    return null
-  }
-
-  return (
-    <Li>
-      <a
-        className={className ? classnames(className) : "flex underline"}
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <div className="mr-3 w-3">{icon}</div>
-        <span className="hover:text-gray-600">{text}</span>
-      </a>
-    </Li>
-  )
-}
-
-function Item({ icon, text, hidden, slug }) {
+function Item({ icon, text, href, className, hidden, slug }) {
   if (hidden) {
     return null
   }
+
+  let props
+  if (slug) props = { to: slug, className: "flex flex-row underline" }
+  if (href)
+    props = {
+      className: className ? classnames(className) : "flex underline",
+      href,
+      target: "_blank",
+      rel: "noopener noreferrer",
+    }
+
+  const Component = slug ? Link : href ? "a" : Fragment
+
   return (
-    <Li>
-      <div className="mr-3 w-3">{icon}</div>
-      {slug ? (
-        <A className="hover:text-gray-600" to={slug}>
-          {text}
-        </A>
-      ) : (
+    <li className="flex flex-row mt-3 font-medium text-sm text-gray-800 hover:text-gray-600">
+      <Component {...props}>
+        <div className="mr-3 w-3">{icon}</div>
         <span>{text}</span>
-      )}
-    </Li>
+      </Component>
+    </li>
   )
 }
 
@@ -62,6 +42,5 @@ function SidebarSectionList({ title, children, className }) {
 }
 
 SidebarSectionList.Item = Item
-SidebarSectionList.Link = Link
 
 export default SidebarSectionList
