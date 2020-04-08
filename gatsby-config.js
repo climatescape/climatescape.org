@@ -105,6 +105,12 @@ const config = {
         ],
       },
     },
+    {
+      resolve: `gatsby-plugin-nprogress`,
+      options: {
+        showSpinner: false, // Disable the loading spinner
+      },
+    },
   ],
 }
 
