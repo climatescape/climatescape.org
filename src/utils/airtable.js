@@ -54,7 +54,7 @@ function transformThumbnails(Photos) {
     : []
 }
 
-const DescriptionRegexp = /([^\.]{2}\.)(?:\s|$)/
+const DescriptionRegexp = /([^.]{2}\.)(?:\s|$)/
 const DescriptionThreshold = 180
 
 function truncateDescription(string) {
