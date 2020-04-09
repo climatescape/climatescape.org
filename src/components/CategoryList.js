@@ -31,17 +31,17 @@ export default function({ categories, activeCategoryId, categoryCounts }) {
             key={category.id}
             category={category}
             count={categoryCounts[category.id]}
-            selected={category.id === parent.id}
+            selected={category.id === parent?.id}
           />
         ))}
       </ul>
-      {subCategories.length && (
+      {parent && subCategories.length && (
         <>
           <h3
             style={{ maxWidth: "90%" }}
             className="text-sm font-title tracking-wide mt-8 mb-4 uppercase text-gray-700 leading-snug"
           >
-            {parent.name} Subcategories
+            {parent?.name} Subcategories
           </h3>
           <ul>
             {subCategories.map(category => (

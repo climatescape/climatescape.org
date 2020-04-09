@@ -48,7 +48,7 @@ exports.createPages = async ({ graphql, actions }) => {
     .forEach(category => {
       createPage({
         path: `/categories/${makeSlug(category.data.Name)}`,
-        component: path.resolve(`./src/pages/organizations.js`),
+        component: path.resolve(`./src/templates/organizations.js`),
         context: {
           categoryName: category.data.Name,
           categoryId: category.id,
@@ -56,6 +56,12 @@ exports.createPages = async ({ graphql, actions }) => {
         },
       })
     })
+
+  createPage({
+    path: `/organizations`,
+    component: path.resolve(`./src/templates/organizations.js`),
+    context: { categoryCounts },
+  })
 
   const capitalTypes = [
     "Venture Capital",
