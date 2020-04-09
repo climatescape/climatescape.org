@@ -153,18 +153,14 @@ export default function OrganizationTemplate({ data }) {
         <div className="mb-10 md:mt-6 flex flex-col lg:flex-row">
           <div className="w-5/5 lg:w-3/5">
             <div className="flex">
-              <div
-                className={`mr-5 w-16 flex-shrink-0 ${
-                  !img ? `hidden` : `block`
-                }`}
-              >
-                {img && (
+              {img && (
+                <div className="mr-5 w-16 flex-shrink-0">
                   <Img
                     fixed={img}
                     className="OrganizationCard-logo blend-multiply rounded-lg w-16 h-16"
                   />
-                )}
-              </div>
+                </div>
+              )}
               <div>
                 <h1 className="flex-grow text-xl font-semibold">{org.title}</h1>
                 <p>{org.description}</p>
