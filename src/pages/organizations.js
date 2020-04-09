@@ -11,7 +11,10 @@ import { useOrganizationFilterState } from "../components/OrganizationFilter"
 import SEO from "../components/seo"
 import CategoryList from "../components/CategoryList"
 
-function OrganizationsTemplate({ data, pageContext }) {
+function OrganizationsTemplate({
+  data,
+  pageContext: { categoryId, categoryName, categoryCounts },
+}) {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
 
   // We need to combine organizations from the query for sub-categories
@@ -23,21 +26,23 @@ function OrganizationsTemplate({ data, pageContext }) {
 
   const allOrganizations = transformOrganizations(orgs)
   const organizations = applyFilter(allOrganizations)
+  const categories = transformCategories(data.categories.nodes)
 
-  const categories = transformCategories(data)
-
-  const organizationsTitle = pageContext.categoryName || "All Organizations"
   const { organizationAddFormUrl } = data.site.siteMetadata
 
   return (
     <Layout contentClassName="bg-gray-100 px-3 sm:px-6">
-      <SEO title={`${organizationsTitle} organizations on Climatescape`} />
+      <SEO title={`${categoryName || "All"} organizations on Climatescape`} />
 
       <div className="flex flex-col mx-auto container lg:flex-row font-sans ">
-        <CategoryList categories={categories} pageContext={pageContext} />
+        <CategoryList
+          categories={categories}
+          activeCategoryId={categoryId}
+          categoryCounts={categoryCounts}
+        />
         <div className="lg:w-3/5">
           <IndexHeader
-            title={organizationsTitle}
+            title={categoryName || "All Organizations"}
             buttonText="Add"
             buttonUrl={organizationAddFormUrl}
             filter={filter}
@@ -52,7 +57,7 @@ function OrganizationsTemplate({ data, pageContext }) {
             {organizations.map(org => (
               <OrganizationCard
                 organization={org}
-                pageContext={pageContext}
+                categoryId={categoryId}
                 key={org.title}
               />
             ))}
@@ -75,7 +80,6 @@ export const query = graphql`
         id
         data {
           Name
-          Count
           Parent {
             id
             data {

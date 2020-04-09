@@ -6,6 +6,7 @@
 
 const path = require(`path`)
 const { makeSlug } = require("./src/utils/slug")
+const { countCategoriesOrganizations } = require("./src/utils/gatsby")
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
@@ -17,6 +18,12 @@ exports.createPages = async ({ graphql, actions }) => {
           id
           data {
             Name
+            Organizations {
+              id
+              data {
+                Role
+              }
+            }
             Parent {
               id
             }
@@ -35,6 +42,8 @@ exports.createPages = async ({ graphql, actions }) => {
     }
   `)
 
+  const categoryCounts = countCategoriesOrganizations(data.categories.nodes)
+
   data.categories.nodes
     .forEach(category => {
       createPage({
@@ -43,6 +52,7 @@ exports.createPages = async ({ graphql, actions }) => {
         context: {
           categoryName: category.data.Name,
           categoryId: category.id,
+          categoryCounts,
         },
       })
     })

@@ -63,7 +63,7 @@ const config = {
             tableName: "Categories",
             mapping: { Cover: `fileNode` },
             tableView: "All Categories",
-            tableLinks: [`Parent`],
+            tableLinks: [`Parent`, `Organizations`],
           },
           {
             baseId: `appNYMWxGF1jMaf5V`,
