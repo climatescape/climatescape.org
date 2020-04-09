@@ -133,3 +133,22 @@ query CapitalPageQuery {
   }
 }
 ```
+
+### Capital Types
+
+```graphql
+query CapitalPageQuery {
+  capitalTypes: allAirtable(filter: { table: { eq: "Capital Types" } }) {
+    nodes {
+      id
+      data {
+        Name
+        Slug
+        Cover {
+          id
+        }
+      }
+    }
+  }
+}
+```

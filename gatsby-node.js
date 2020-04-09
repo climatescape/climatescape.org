@@ -44,18 +44,17 @@ exports.createPages = async ({ graphql, actions }) => {
 
   const categoryCounts = countCategoriesOrganizations(data.categories.nodes)
 
-  data.categories.nodes
-    .forEach(category => {
-      createPage({
-        path: `/categories/${makeSlug(category.data.Name)}`,
-        component: path.resolve(`./src/templates/organizations.js`),
-        context: {
-          categoryName: category.data.Name,
-          categoryId: category.id,
-          categoryCounts,
-        },
-      })
+  data.categories.nodes.forEach(category => {
+    createPage({
+      path: `/categories/${makeSlug(category.data.Name)}`,
+      component: path.resolve(`./src/templates/organizations.js`),
+      context: {
+        categoryName: category.data.Name,
+        categoryId: category.id,
+        categoryCounts,
+      },
     })
+  })
 
   createPage({
     path: `/organizations`,
