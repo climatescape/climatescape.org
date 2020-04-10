@@ -1,7 +1,6 @@
 import React from "react"
 import "./organization.css"
 import { graphql } from "gatsby"
-import Img from "gatsby-image"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faExternalLinkAlt,
@@ -18,6 +17,7 @@ import {
   faFacebook,
 } from "@fortawesome/free-brands-svg-icons"
 
+import "../components/OrganizationCard"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import Carousel from "../components/carousel"
@@ -27,12 +27,6 @@ import { parseTwitterHandle } from "../utils/url"
 
 function isCapital(org) {
   return org.role?.includes("Capital")
-}
-
-function getLogoImage({ logo, photos, categories }) {
-  const cat =
-    categories.find(c => c.cover) || categories.find(c => c?.parent?.cover)
-  return logo || photos[0] || cat?.cover || cat?.parent.cover
 }
 
 function getEditUrl({ data, org }) {
@@ -160,20 +154,24 @@ export default function OrganizationTemplate({ data }) {
     fullPhotos: raw.data.fullPhotos?.localFiles || [],
   }))
 
-  const img = getLogoImage(org)
   return (
     <Layout contentClassName="bg-gray-100 font-sans">
-      <SEO title={`${org.title} on ${siteTitle}`} description={org.tagline} />
+      <SEO
+        title={`${org.title} on ${siteTitle}`}
+        description={org.tagline}
+        imageUrl={org.logo?.src}
+      />
 
       <div className="max-w-4xl mx-auto lg:pt-8 pb-4 p-4 xs:p-8 lg:p-0">
         <div className="mb-10 md:mt-6 flex flex-col lg:flex-row">
           <div className="w-5/5 lg:w-3/5">
             <div className="flex">
-              {img && (
-                <div className="mr-5 w-16 flex-shrink-0">
-                  <Img
-                    fixed={img}
-                    className="OrganizationCard-logo blend-multiply rounded-lg w-16 h-16"
+              {org.logo && (
+                <div className="mr-5 w-24 flex-shrink-0">
+                  <img
+                    src={org.logo.src}
+                    className="OrganizationCard-logo blend-multiply rounded-lg w-24 h-24"
+                    alt={`${org.title} logo`}
                   />
                 </div>
               )}
@@ -253,16 +251,7 @@ export const query = graphql`
           }
         }
         Logo {
-          localFiles {
-            childImageSharp {
-              fixed(width: 64, height: 64, fit: CONTAIN, background: "white") {
-                ...GatsbyImageSharpFixed
-              }
-            }
-          }
-        }
-        Photos {
-          ...OrganizationCardPhoto
+          ...OrganizationCardLogo
         }
         fullPhotos: Photos {
           localFiles {
@@ -272,18 +261,14 @@ export const query = graphql`
         LinkedIn_Profiles {
           data {
             Logo {
-              localFiles {
-                childImageSharp {
-                  fixed(
-                    width: 64
-                    height: 64
-                    fit: CONTAIN
-                    background: "white"
-                  ) {
-                    ...GatsbyImageSharpFixed
-                  }
-                }
-              }
+              ...OrganizationCardLogo
+            }
+          }
+        }
+        Crunchbase_ODM {
+          data {
+            Logo {
+              ...OrganizationCardLogo
             }
           }
         }
@@ -291,16 +276,10 @@ export const query = graphql`
           id
           data {
             Name
-            Cover {
-              ...OrganizationCardPhoto
-            }
             Parent {
               id
               data {
                 Name
-                Cover {
-                  ...OrganizationCardPhoto
-                }
               }
             }
           }
