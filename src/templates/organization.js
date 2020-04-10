@@ -156,7 +156,11 @@ export default function OrganizationTemplate({ data }) {
 
   return (
     <Layout contentClassName="bg-gray-100 font-sans">
-      <SEO title={`${org.title} on ${siteTitle}`} description={org.tagline} imageUrl={org.logo?.url} />
+      <SEO
+        title={`${org.title} on ${siteTitle}`}
+        description={org.tagline}
+        imageUrl={org.logo?.url}
+      />
 
       <div className="max-w-4xl mx-auto lg:pt-8 pb-4 p-4 xs:p-8 lg:p-0">
         <div className="mb-10 md:mt-6 flex flex-col lg:flex-row">

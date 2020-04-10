@@ -50,7 +50,9 @@ function SEO({ description, lang, meta, title, imageUrl }) {
 
   const metaTitle = title || site.siteMetadata.title
   const metaDescription = description || site.siteMetadata.description
-  const image = imageUrl ? [ { property: "og:image", value: imageUrl } ] : DefaultImage
+  const image = imageUrl
+    ? [{ property: "og:image", value: imageUrl }]
+    : DefaultImage
 
   return (
     <Helmet
