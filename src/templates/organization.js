@@ -64,26 +64,28 @@ function AttributesSection({ org, className }) {
         <SidebarSectionList.Item
           key={category.name}
           text={category.name}
+          to={category.slug}
           icon={<FontAwesomeIcon icon={faBox} />}
         />
       ))}
-      {
+      {org.location && (
         <SidebarSectionList.Item
           text={org.location}
           icon={<FontAwesomeIcon icon={faMapMarkerAlt} />}
-          hidden={!org.location}
         />
-      }
-      <SidebarSectionList.Item
-        text={org.orgType}
-        icon={<FontAwesomeIcon icon={faBuilding} />}
-        hidden={!org.orgType}
-      />
-      <SidebarSectionList.Item
-        text={`${org.headcount} employees`}
-        icon={<FontAwesomeIcon icon={faUsers} />}
-        hidden={!org.headcount}
-      />
+      )}
+      {org.orgType && (
+        <SidebarSectionList.Item
+          text={org.orgType}
+          icon={<FontAwesomeIcon icon={faBuilding} />}
+        />
+      )}
+      {org.headcount && (
+        <SidebarSectionList.Item
+          text={`${org.headcount} employees`}
+          icon={<FontAwesomeIcon icon={faUsers} />}
+        />
+      )}
     </SidebarSectionList>
   )
 }
@@ -91,31 +93,41 @@ function AttributesSection({ org, className }) {
 function SocialLinksSection({ org, className }) {
   return (
     <SidebarSectionList title="Links" className={className}>
-      <SidebarSectionList.Link
-        text="Homepage"
-        href={org.homepage}
-        icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
-      />
-      <SidebarSectionList.Link
-        text="Crunchbase"
-        href={org.crunchbase}
-        icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
-      />
-      <SidebarSectionList.Link
-        text="LinkedIn"
-        href={org.linkedIn}
-        icon={<FontAwesomeIcon icon={faLinkedin} />}
-      />
-      <SidebarSectionList.Link
-        text={parseTwitterHandle(org.twitter) || "Twitter"}
-        href={org.twitter}
-        icon={<FontAwesomeIcon icon={faTwitter} />}
-      />
-      <SidebarSectionList.Link
-        text="Facebook"
-        href={org.facebook}
-        icon={<FontAwesomeIcon icon={faFacebook} />}
-      />
+      {org.homepage && (
+        <SidebarSectionList.Item
+          text="Homepage"
+          href={org.homepage}
+          icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
+        />
+      )}
+      {org.crunchbase && (
+        <SidebarSectionList.Item
+          text="Crunchbase"
+          href={org.crunchbase}
+          icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
+        />
+      )}
+      {org.linkedIn && (
+        <SidebarSectionList.Item
+          text="LinkedIn"
+          href={org.linkedIn}
+          icon={<FontAwesomeIcon icon={faLinkedin} />}
+        />
+      )}
+      {org.twitter && (
+        <SidebarSectionList.Item
+          text={parseTwitterHandle(org.twitter) || "Twitter"}
+          href={org.twitter}
+          icon={<FontAwesomeIcon icon={faTwitter} />}
+        />
+      )}
+      {org.facebook && (
+        <SidebarSectionList.Item
+          text="Facebook"
+          href={org.facebook}
+          icon={<FontAwesomeIcon icon={faFacebook} />}
+        />
+      )}
     </SidebarSectionList>
   )
 }
@@ -123,14 +135,14 @@ function SocialLinksSection({ org, className }) {
 function ContributionSection({ data, org, className }) {
   return (
     <SidebarSectionList title="Edit History" className={className}>
-      <SidebarSectionList.Link
+      <SidebarSectionList.Item
         href={getEditUrl({ data, org })}
         text="Suggest an Edit"
         icon={<FontAwesomeIcon icon={faEdit} />}
       />
 
       {org.source && (
-        <SidebarSectionList.Link
+        <SidebarSectionList.Item
           text={`Source - ${org.source.name}`}
           href={org.source.url}
           icon={<FontAwesomeIcon icon={faFileAlt} />}
@@ -149,7 +161,6 @@ export default function OrganizationTemplate({ data }) {
   }))
 
   const img = getLogoImage(org)
-
   return (
     <Layout contentClassName="bg-gray-100 font-sans">
       <SEO title={`${org.title} on ${siteTitle}`} description={org.tagline} />
