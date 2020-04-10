@@ -37,7 +37,10 @@ export default function OrganizationCard({ categoryId, organization }) {
   const img = getLogoImage(organization)
 
   return (
-    <Link to={slug} className="OrganizationCard border-gray-400 border-b flex py-4 text-gray-900 hover:bg-gray-200 px-2">
+    <Link
+      to={slug}
+      className="OrganizationCard border-gray-400 border-b flex py-4 text-gray-900 hover:bg-gray-200 px-2"
+    >
       <div className="flex-grow flex flex-col justify-between pr-8">
         <p>
           <span className="font-bold mr-2">{title}</span>
