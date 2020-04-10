@@ -39,6 +39,15 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
       }
+      capitalTypes: allAirtable(filter: { table: { eq: "Capital Types" } }) {
+        nodes {
+          id
+          data {
+            Name
+            Slug
+          }
+        }
+      }
     }
   `)
 
@@ -62,22 +71,20 @@ exports.createPages = async ({ graphql, actions }) => {
     context: { categoryCounts },
   })
 
-  const capitalTypes = [
-    "Venture Capital",
-    "Project Finance",
-    "Private Equity",
-    "Incubator",
-    "Accelerator",
-    "Grant",
-    "Prize",
-    "Angel",
-  ]
-  capitalTypes.forEach(type => {
+  const capitalTypes = data.capitalTypes.nodes.map(
+    ({ data: { Name, Slug } }) => ({
+      name: Name,
+      slug: Slug,
+    })
+  )
+
+  capitalTypes.forEach(capitalType => {
     createPage({
-      path: `/capital/${makeSlug(type)}`,
+      path: capitalType.slug,
       component: path.resolve(`./src/pages/capital.js`),
       context: {
-        capitalType: type,
+        capitalType: capitalType.name,
+        capitalTypes,
       },
     })
   })

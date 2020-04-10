@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "gatsby"
-import { capitalTypes, capitalStages } from "../../utils/capital"
+import { capitalStages } from "../../utils/capital"
 import Pill from "../Pill"
 
 function CapitalType({ type, pageContext }) {
@@ -59,6 +59,7 @@ export default function CapitalFilters({
   currentFilter,
   onApplyFilter,
 }) {
+  const { capitalTypes } = pageContext
   return (
     <div className="CategoryList leading-9 hidden w-1/5  mb-8 lg:block">
       <h3 className="text-sm font-title  tracking-wide mt-8 uppercase text-gray-700">
