@@ -159,7 +159,7 @@ export default function OrganizationTemplate({ data }) {
       <SEO
         title={`${org.title} on ${siteTitle}`}
         description={org.tagline}
-        imageUrl={org.logo?.url}
+        imageUrl={org.logo?.src}
       />
 
       <div className="max-w-4xl mx-auto lg:pt-8 pb-4 p-4 xs:p-8 lg:p-0">
