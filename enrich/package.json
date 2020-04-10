@@ -1,10 +1,14 @@
 {
-  "name": "org-enricher",
+  "name": "climatescrape",
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "geo-enricher": "node geo/index.js"
+    "test": "jest",
+    "lint": "eslint .",
+    "lintfix": "eslint . --fix",
+    "enrich-geo": "node geo/script.js",
+    "enrich-crunchbase": "node crunchbase/script.js"
   },
   "author": "Climatescape",
   "license": "MIT",
@@ -14,5 +18,14 @@
     "dotenv": "^8.2.0",
     "geocoder-geonames": "^0.1.2",
     "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "jest": "^25.2.7",
+    "eslint": "^5.16.0",
+    "eslint-plugin-jest": "^23.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "1.19.1"
   }
 }
