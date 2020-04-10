@@ -37,12 +37,10 @@ export default function OrganizationCard({ categoryId, organization }) {
   const img = getLogoImage(organization)
 
   return (
-    <div className="OrganizationCard border-gray-400 border-b flex items-center py-4 text-gray-900">
-      <div className="flex-grow self-center pr-8">
+    <Link to={slug} className="OrganizationCard border-gray-400 border-b flex py-4 text-gray-900 hover:bg-gray-200 px-2">
+      <div className="flex-grow flex flex-col justify-between pr-8">
         <p>
-          <Link to={slug} className="font-bold hover:text-teal-500 mr-2">
-            {title}
-          </Link>
+          <span className="font-bold mr-2">{title}</span>
           {description}
         </p>
         <div className="mt-1">
@@ -68,19 +66,17 @@ export default function OrganizationCard({ categoryId, organization }) {
           {orgType && <OrganizationOrgType key="orgtype" text={orgType} />}
         </div>
       </div>
-      <div className="w-24 flex-shrink-0 hidden sm:block">
-        {img && (
-          <Link to={slug} className="">
-            <img
-              src={img.src}
-              alt={`${title} logo`}
-              className="OrganizationCard-logo blend-multiply rounded-lg w-24 h-24"
-              loading="lazy"
-            />
-          </Link>
-        )}
-      </div>
-    </div>
+      {img && (
+        <div className="w-24 flex-shrink-0 hidden sm:block">
+          <img
+            src={img.src}
+            alt={`${title} logo`}
+            className="OrganizationCard-logo blend-multiply rounded-sm w-24 h-24"
+            loading="lazy"
+          />
+        </div>
+      )}
+    </Link>
   )
 }
 
