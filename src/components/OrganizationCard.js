@@ -19,7 +19,7 @@ function getLogoImage({ logo, photos, categories }) {
   return logo || photos[0] || cat?.cover || cat?.parent.cover
 }
 
-export default function OrganizationCard({ pageContext, organization }) {
+export default function OrganizationCard({ categoryId, organization }) {
   const {
     title,
     description,
@@ -31,8 +31,8 @@ export default function OrganizationCard({ pageContext, organization }) {
     categories,
   } = organization
 
-  const subCategories = pageContext
-    ? categories.filter(cat => cat.parent?.id === pageContext.categoryId)
+  const subCategories = categoryId
+    ? categories.filter(cat => cat.parent?.id === categoryId)
     : categories
   const img = getLogoImage(organization)
 

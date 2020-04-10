@@ -2,33 +2,23 @@ import React from "react"
 import { Link } from "gatsby"
 import Pill from "./Pill"
 
-function Category({ category, categories, selected }) {
-  const isSelected = category.id === selected?.id
-  const subCategories = categories.filter(sub => category.id === sub.parent?.id)
-
-  const count = subCategories.reduce(
-    (sum, cat) => sum + cat.count,
-    category.count
-  )
+function Category({ category, count, selected }) {
+  if (!count) return null // Don't show categories without organizations
 
   return (
-    <li className={`font-sans my-1 `}>
+    <li className="font-sans my-1">
       <Link to={category.slug}>
-        <Pill name={category.name} count={count} selected={isSelected} />
+        <Pill name={category.name} count={count} selected={selected} />
       </Link>
     </li>
   )
 }
 
-export default function({ categories, pageContext }) {
-  const selected = categories.find(
-    category => category.id === pageContext.categoryId
-  )
+export default function({ categories, activeCategoryId, categoryCounts }) {
+  const selected = categories.find(category => category.id === activeCategoryId)
   const parent = selected?.parent || selected
-  const topCategories = categories.filter(category => !category.parent)
-  const subCategories = categories.filter(
-    category => category.count && category.parent?.id === parent?.id
-  )
+  const topCategories = categories.filter(cat => !cat.parent)
+  const subCategories = categories.filter(cat => cat.parent?.id === parent?.id)
 
   return (
     <div className="CategoryList leading-9 hidden w-1/5  mb-8 lg:block">
@@ -40,26 +30,26 @@ export default function({ categories, pageContext }) {
           <Category
             key={category.id}
             category={category}
-            categories={categories}
-            selected={parent}
+            count={categoryCounts[category.id]}
+            selected={category.id === parent?.id}
           />
         ))}
       </ul>
-      {selected && subCategories.length > 0 && (
+      {parent && subCategories.length && (
         <>
           <h3
             style={{ maxWidth: "90%" }}
             className="text-sm font-title tracking-wide mt-8 mb-4 uppercase text-gray-700 leading-snug"
           >
-            {parent.name} Subcategories
+            {parent?.name} Subcategories
           </h3>
           <ul>
             {subCategories.map(category => (
               <Category
                 key={category.id}
                 category={category}
-                categories={categories}
-                selected={selected}
+                count={categoryCounts[category.id]}
+                selected={category.id === selected.id}
               />
             ))}
           </ul>

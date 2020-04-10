@@ -19,7 +19,7 @@ function ViewAll({ name, href }) {
 }
 
 export default function IndexPage({ data }) {
-  const categories = transformCategories(data)
+  const categories = transformCategories(data.categories.nodes)
 
   const topCategories = categories.filter(cat => !cat.parent)
 

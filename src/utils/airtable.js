@@ -31,8 +31,8 @@ function transformCategory(data) {
   }
 }
 
-export function transformCategories(data) {
-  const categories = (data.categories?.nodes || [])
+export function transformCategories(rawCategories) {
+  const categories = rawCategories
     .map(transformCategory)
     .sort((a, b) => stringCompare(a.name, b.name))
 
