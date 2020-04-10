@@ -64,27 +64,28 @@ function AttributesSection({ org, className }) {
         <SidebarSectionList.Item
           key={category.name}
           text={category.name}
-          slug={category.slug}
+          to={category.slug}
           icon={<FontAwesomeIcon icon={faBox} />}
         />
       ))}
-      {
+      {org.location && (
         <SidebarSectionList.Item
           text={org.location}
           icon={<FontAwesomeIcon icon={faMapMarkerAlt} />}
-          hidden={!org.location}
         />
-      }
-      <SidebarSectionList.Item
-        text={org.orgType}
-        icon={<FontAwesomeIcon icon={faBuilding} />}
-        hidden={!org.orgType}
-      />
-      <SidebarSectionList.Item
-        text={`${org.headcount} employees`}
-        icon={<FontAwesomeIcon icon={faUsers} />}
-        hidden={!org.headcount}
-      />
+      )}
+      {org.orgType && (
+        <SidebarSectionList.Item
+          text={org.orgType}
+          icon={<FontAwesomeIcon icon={faBuilding} />}
+        />
+      )}
+      {org.headcount && (
+        <SidebarSectionList.Item
+          text={`${org.headcount} employees`}
+          icon={<FontAwesomeIcon icon={faUsers} />}
+        />
+      )}
     </SidebarSectionList>
   )
 }
@@ -92,36 +93,41 @@ function AttributesSection({ org, className }) {
 function SocialLinksSection({ org, className }) {
   return (
     <SidebarSectionList title="Links" className={className}>
-      <SidebarSectionList.Item
-        text="Homepage"
-        href={org.homepage}
-        icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
-        hidden={!org.homepage}
-      />
-      <SidebarSectionList.Item
-        text="Crunchbase"
-        href={org.crunchbase}
-        icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
-        hidden={!org.crunchbase}
-      />
-      <SidebarSectionList.Item
-        text="LinkedIn"
-        href={org.linkedIn}
-        icon={<FontAwesomeIcon icon={faLinkedin} />}
-        hidden={!org.linkedIn}
-      />
-      <SidebarSectionList.Item
-        text={parseTwitterHandle(org.twitter) || "Twitter"}
-        href={org.twitter}
-        icon={<FontAwesomeIcon icon={faTwitter} />}
-        hidden={!org.twitter}
-      />
-      <SidebarSectionList.Item
-        text="Facebook"
-        href={org.facebook}
-        icon={<FontAwesomeIcon icon={faFacebook} />}
-        hidden={!org.facebook}
-      />
+      {org.homepage && (
+        <SidebarSectionList.Item
+          text="Homepage"
+          href={org.homepage}
+          icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
+        />
+      )}
+      {org.crunchbase && (
+        <SidebarSectionList.Item
+          text="Crunchbase"
+          href={org.crunchbase}
+          icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
+        />
+      )}
+      {org.linkedIn && (
+        <SidebarSectionList.Item
+          text="LinkedIn"
+          href={org.linkedIn}
+          icon={<FontAwesomeIcon icon={faLinkedin} />}
+        />
+      )}
+      {org.twitter && (
+        <SidebarSectionList.Item
+          text={parseTwitterHandle(org.twitter) || "Twitter"}
+          href={org.twitter}
+          icon={<FontAwesomeIcon icon={faTwitter} />}
+        />
+      )}
+      {org.facebook && (
+        <SidebarSectionList.Item
+          text="Facebook"
+          href={org.facebook}
+          icon={<FontAwesomeIcon icon={faFacebook} />}
+        />
+      )}
     </SidebarSectionList>
   )
 }
