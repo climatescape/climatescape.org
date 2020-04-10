@@ -10,7 +10,30 @@ import PropTypes from "prop-types"
 import Helmet from "react-helmet"
 import { useStaticQuery, graphql } from "gatsby"
 
-function SEO({ description, lang, meta, title }) {
+const DefaultImage = [
+  {
+    property: "og:image",
+    content: "https://climatescape.org/logo-large.png",
+  },
+  {
+    property: "og:image:type",
+    content: "image/png",
+  },
+  {
+    property: "og:image:width",
+    content: "512",
+  },
+  {
+    property: "og:image:height",
+    content: "512",
+  },
+  {
+    property: "og:image:alt",
+    content: "Climatescape logo (network overlayed on globe)",
+  },
+]
+
+function SEO({ description, lang, meta, title, imageUrl }) {
   const { site } = useStaticQuery(
     graphql`
       query {
@@ -27,6 +50,7 @@ function SEO({ description, lang, meta, title }) {
 
   const metaTitle = title || site.siteMetadata.title
   const metaDescription = description || site.siteMetadata.description
+  const image = imageUrl ? [ { property: "og:image", value: imageUrl } ] : DefaultImage
 
   return (
     <Helmet
@@ -52,26 +76,6 @@ function SEO({ description, lang, meta, title }) {
           content: "website",
         },
         {
-          property: "og:image",
-          content: "https://climatescape.org/logo-large.png",
-        },
-        {
-          property: "og:image:type",
-          content: "image/png",
-        },
-        {
-          property: "og:image:width",
-          content: "512",
-        },
-        {
-          property: "og:image:height",
-          content: "512",
-        },
-        {
-          property: "og:image:alt",
-          content: "Climatescape logo (network overlayed on globe)",
-        },
-        {
           name: "twitter:card",
           content: "summary",
         },
@@ -87,7 +91,7 @@ function SEO({ description, lang, meta, title }) {
           name: "twitter:description",
           content: metaDescription,
         },
-      ].concat(meta)}
+      ].concat(meta, image)}
       link={[
         {
           rel: "apple-touch-icon",
