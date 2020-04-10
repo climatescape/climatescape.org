@@ -127,6 +127,25 @@ async function crunchbaseEnrich(organization, options = { method: "domain" }) {
   }
 }
 
+const ValidLogoExtensions = ["jpg", "jpeg", "png"]
+
+// Returns the given `url` if it's valid, otherwise returns `null`
+function validatedLogoUrl(url) {
+  if (!url) return null
+
+  const filename = url.split("/").pop()
+
+  // We can't validate a URL with no extension. It's common enough in Crunchbase
+  // that we're better off assuming it's valid
+  if (filename.indexOf(".") === -1) return url
+
+  const extension = filename.split(".").pop()
+
+  if (ValidLogoExtensions.indexOf(extension) >= 0) return url
+
+  return null
+}
+
 // Accepts an OrganizationSummary from Crunchbase and returns a populated
 // Airtable Organization object
 function mapCrunchbase({
@@ -147,11 +166,13 @@ function mapCrunchbase({
   domain,
   homepageUrl,
 }) {
+  const logoUrl = validatedLogoUrl(profileImageUrl)
+
   return {
     Name: name,
     UUID: uuid,
     "Short Description": shortDescription,
-    Logo: profileImageUrl && [{ url: profileImageUrl }],
+    Logo: logoUrl && [{ url: logoUrl }],
     "Web Path": webPath,
     "Primary Role": primaryRole,
     Domain: domain,
