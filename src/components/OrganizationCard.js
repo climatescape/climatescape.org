@@ -23,7 +23,7 @@ export default function OrganizationCard({ categoryId, organization }) {
   const {
     title,
     description,
-    location,
+    hqLocation,
     slug,
     headcount,
     orgType,
@@ -52,16 +52,16 @@ export default function OrganizationCard({ categoryId, organization }) {
           {capitalProfile?.strategic && (
             <OrganizationCapitalStrategic key="capitalstrategic" />
           )}
-          {capitalProfile?.stage?.map(stage => (
-            <OrganizationCapitalStage key={stage} text={stage} />
-          ))}
-          {capitalProfile?.checkSize?.map(checkSize => (
-            <OrganizationCapitalCheckSize key={checkSize} text={checkSize} />
-          ))}
+          {capitalProfile?.stage && (
+            <OrganizationCapitalStage key="stage" stages={capitalProfile?.stage} />
+          )}
+          {capitalProfile?.checkSize && (
+            <OrganizationCapitalCheckSize key="checkSize" checkSizes={capitalProfile?.checkSize} />
+          )}
           {subCategories?.map(category => (
             <OrganizationCategory key={category.name} text={category.name} />
           ))}
-          {location && <OrganizationLocation text={location} />}
+          {hqLocation && <OrganizationLocation location={hqLocation} />}
           {headcount && (
             <OrganizationHeadcount key="headcount" text={headcount} />
           )}
@@ -70,7 +70,7 @@ export default function OrganizationCard({ categoryId, organization }) {
       </div>
       <div className="w-24 flex-shrink-0 hidden sm:block">
         {img && (
-          <Link to={slug} className="">
+          <Link to={slug}>
             <img
               src={img.src}
               alt={`${title} logo`}
@@ -121,6 +121,9 @@ export const query = graphql`
       About
       Tagline
       HQ_Location
+      HQ_Country
+      HQ_Region
+      HQ_Locality
       Organization_Type
       Headcount
       Role

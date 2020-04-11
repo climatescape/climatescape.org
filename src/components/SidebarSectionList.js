@@ -1,6 +1,7 @@
 import React from "react"
 import classnames from "classnames"
 import { Link } from "gatsby"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const LinkClassName = "underline hover:text-gray-600"
 
@@ -25,7 +26,7 @@ function Item({ icon, text, href, to }) {
   return (
     <li className="mt-3 font-medium text-sm text-gray-800">
       <Wrapper {...props}>
-        <div className="mr-3 w-3">{icon}</div>
+        { icon && <div className="mr-3 w-3"><FontAwesomeIcon icon={icon} /></div> }
         <span>{text}</span>
       </Wrapper>
     </li>

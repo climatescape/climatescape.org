@@ -1,3 +1,7 @@
+import { sortBy, compact } from "lodash"
+
+import { extractNumeric } from "./number"
+
 export const capitalStages = [
   "Pre-Seed",
   "Seed",
@@ -43,3 +47,25 @@ export const capitalTypes = [
     image: "prize",
   },
 ]
+
+export function summarizeCapitalStages(stages) {
+  if (!stages) return
+  if (stages.length === 1) return stages[0]
+
+  const ordered = sortBy(stages, s => capitalStages.indexOf(s))
+  const start = stages[0]
+  const end = stages[stages.length - 1]
+
+  return `${start} – ${end}`
+}
+
+export function summarizeCapitalCheckSizes(checkSizes) {
+  if (!checkSizes) return
+  if (checkSizes.length === 1) return checkSizes[0]
+
+  const ordered = sortBy(checkSizes, s => extractNumeric(s))
+  const start = ordered[0].split('-').shift()
+  const end = ordered[ordered.length - 1].split('-').pop()
+
+  return `${start}–${end}`
+}

@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import _ from "lodash"
-
 import Select from "react-select"
+
+import { extractNumeric } from "../utils/number"
 
 // We prefer to use Tailwind when possible, but this is the preferred way to
 // achieve custom styles with react-select. See https://react-select.com/styles
@@ -192,15 +193,6 @@ const CapitalStrategicOptions = [
   { value: false, label: "Not strategic" },
 ]
 const makeOption = value => ({ value, label: value })
-const extractNumeric = str =>
-  parseInt(
-    str
-      .replace("k", "000")
-      .replace("M", "000000")
-      .match(/\d+,?/gi)
-      .pop(),
-    10
-  )
 
 const formatRoles = organizations => {
   const formatted = _.chain(organizations)
