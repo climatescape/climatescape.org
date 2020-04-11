@@ -196,7 +196,7 @@ export default function OrganizationTemplate({ data }) {
             )}
 
             {org.about && org.about !== org.tagline && (
-              <div className="my-6">{org.about}</div>
+              <div className="my-6 text-justify">{org.about}</div>
             )}
           </div>
 
