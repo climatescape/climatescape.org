@@ -153,3 +153,14 @@ export function transformOrganizations(orgs) {
   }
   return organizations
 }
+
+export function transformCapitalTypes(data) {
+  return (data.capitalTypes?.nodes ?? []).map(
+    ({ id, data: { Name, Cover, Slug } }) => ({
+      id,
+      name: Name,
+      cover: Cover?.localFiles?.[0]?.childImageSharp?.fluid,
+      slug: `capital/${Slug}`,
+    })
+  )
+}

@@ -1,8 +1,7 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
 
-import { transformCategories } from "../utils/airtable"
-import { capitalTypes } from "../utils/capital"
+import { transformCategories, transformCapitalTypes } from "../utils/airtable"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -20,6 +19,7 @@ function ViewAll({ name, href }) {
 
 export default function IndexPage({ data }) {
   const categories = transformCategories(data.categories.nodes)
+  const capitalTypes = transformCapitalTypes(data)
 
   const topCategories = categories.filter(cat => !cat.parent)
 
@@ -47,12 +47,12 @@ export default function IndexPage({ data }) {
             Capital &amp; Startup Programs
           </h2>
           <div className="p-3 flex flex-wrap max-w-6xl mx-auto">
-            {capitalTypes.map(({ name, slug, image }) => (
+            {capitalTypes.map(({ name, slug, cover }) => (
               <TopicCard
                 key={slug}
                 category={{
-                  slug: `/capital/${slug}`,
-                  cover: data[image]?.childImageSharp.fluid,
+                  slug,
+                  cover,
                   name,
                 }}
               />
@@ -144,57 +144,24 @@ export const query = graphql`
       }
     }
 
-    ventureCapital: file(relativePath: { eq: "capital/venture capital.jpg" }) {
-      childImageSharp {
-        fluid(maxWidth: 500) {
-          ...GatsbyImageSharpFluid
+    capitalTypes: allAirtable(filter: { table: { eq: "Capital Types" } }) {
+      nodes {
+        id
+        data {
+          Name
+          Slug
+          Cover {
+            localFiles {
+              childImageSharp {
+                fluid(maxWidth: 500) {
+                  ...GatsbyImageSharpFluid
+                }
+              }
+            }
+          }
         }
       }
     }
-
-    incubator: file(relativePath: { eq: "capital/incubator.jpg" }) {
-      childImageSharp {
-        fluid(maxWidth: 500) {
-          ...GatsbyImageSharpFluid
-        }
-      }
-    }
-    grant: file(relativePath: { eq: "capital/grant.jpg" }) {
-      childImageSharp {
-        fluid(maxWidth: 500) {
-          ...GatsbyImageSharpFluid
-        }
-      }
-    }
-    prize: file(relativePath: { eq: "capital/prize.jpg" }) {
-      childImageSharp {
-        fluid(maxWidth: 500) {
-          ...GatsbyImageSharpFluid
-        }
-      }
-    }
-    accelerator: file(relativePath: { eq: "capital/accelerator.jpg" }) {
-      childImageSharp {
-        fluid(maxWidth: 500) {
-          ...GatsbyImageSharpFluid
-        }
-      }
-    }
-    projectFinance: file(relativePath: { eq: "capital/project finance.jpg" }) {
-      childImageSharp {
-        fluid(maxWidth: 500) {
-          ...GatsbyImageSharpFluid
-        }
-      }
-    }
-    angel: file(relativePath: { eq: "capital/angel.jpg" }) {
-      childImageSharp {
-        fluid(maxWidth: 500) {
-          ...GatsbyImageSharpFluid
-        }
-      }
-    }
-
     categories: allAirtable(filter: { table: { eq: "Categories" } }) {
       nodes {
         id
