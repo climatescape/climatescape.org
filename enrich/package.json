@@ -1,12 +1,14 @@
 {
-  "name": "crunchbase-enricher",
+  "name": "climatescrape",
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "scripts": {
     "test": "jest",
     "lint": "eslint .",
     "lintfix": "eslint . --fix",
-    "crunchbase-enricher": "node script.js"
+    "enrich-geo": "node geo/script.js",
+    "enrich-crunchbase": "node crunchbase/script.js"
   },
   "author": "Climatescape",
   "license": "MIT",
@@ -14,6 +16,7 @@
     "airtable": "^0.8.1",
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
+    "geocoder-geonames": "^0.1.2",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
