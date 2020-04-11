@@ -13,6 +13,7 @@ import {
   faSearchDollar,
   faHandshake,
   faMoneyCheck,
+  faHeart,
 } from "@fortawesome/free-solid-svg-icons"
 import {
   faLinkedin,
@@ -27,7 +28,10 @@ import Carousel from "../components/carousel"
 import SidebarSectionList from "../components/SidebarSectionList"
 import { transformOrganization } from "../utils/airtable"
 import { parseTwitterHandle } from "../utils/url"
-import { summarizeCapitalStages, summarizeCapitalCheckSizes } from "../utils/capital"
+import {
+  summarizeCapitalStages,
+  summarizeCapitalCheckSizes,
+} from "../utils/capital"
 
 function isCapital(org) {
   return org.role?.includes("Capital")
@@ -67,16 +71,10 @@ function AttributesSection({ org, className }) {
         />
       ))}
       {org.location && (
-        <SidebarSectionList.Item
-          text={org.location}
-          icon={faMapMarkerAlt}
-        />
+        <SidebarSectionList.Item text={org.location} icon={faMapMarkerAlt} />
       )}
       {org.orgType && (
-        <SidebarSectionList.Item
-          text={org.orgType}
-          icon={faBuilding}
-        />
+        <SidebarSectionList.Item text={org.orgType} icon={faBuilding} />
       )}
       {org.headcount && (
         <SidebarSectionList.Item
@@ -150,13 +148,13 @@ function ContributionSection({ data, org, className }) {
   )
 }
 
-const CapitalSection = ({ capitalProfile: { type, stage, checkSize, strategic, impactSpecific }, className }) => (
+const CapitalSection = ({
+  capitalProfile: { type, stage, checkSize, strategic, impactSpecific },
+  className,
+}) => (
   <SidebarSectionList title="Capital" className={className}>
     {type && (
-      <SidebarSectionList.Item
-        icon={faHandHoldingUsd}
-        text={type.join(", ")}
-      />
+      <SidebarSectionList.Item icon={faHandHoldingUsd} text={type.join(", ")} />
     )}
     {stage && (
       <SidebarSectionList.Item
@@ -171,10 +169,10 @@ const CapitalSection = ({ capitalProfile: { type, stage, checkSize, strategic, i
       />
     )}
     {strategic && (
-      <SidebarSectionList.Item
-        icon={faHandshake}
-        text="Strategic"
-      />
+      <SidebarSectionList.Item icon={faHandshake} text="Strategic" />
+    )}
+    {impactSpecific && (
+      <SidebarSectionList.Item icon={faHeart} text="Impact-specific" />
     )}
   </SidebarSectionList>
 )
@@ -235,7 +233,12 @@ export default function OrganizationTemplate({ data }) {
 
           <div className="flex flex-col w-5/5 lg:w-2/5 lg:pl-16 items-center mt-3 lg:mt-0">
             <div className="sidebar-sections-container w-full flex flex-col sm:flex-row lg:flex-col justify-start justify-around lg:justify-start">
-              { org.capitalProfile && <CapitalSection capitalProfile={org.capitalProfile} className="flex flex-col mb-8" /> }
+              {org.capitalProfile && (
+                <CapitalSection
+                  capitalProfile={org.capitalProfile}
+                  className="flex flex-col mb-8"
+                />
+              )}
               <AttributesSection org={org} className="flex flex-col mb-8" />
               <SocialLinksSection org={org} className="flex flex-col mb-8" />
               <ContributionSection
@@ -278,7 +281,7 @@ export const query = graphql`
         Capital_Profile {
           data {
             Type
-            Impact_Specific
+            ImpactSpecific: Impact_Specific
             Strategic
             Stage
             CheckSize: Check_Size

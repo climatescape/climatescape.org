@@ -1,4 +1,4 @@
-import { sortBy, compact } from "lodash"
+import { sortBy } from "lodash"
 
 import { extractNumeric } from "./number"
 
@@ -49,23 +49,23 @@ export const capitalTypes = [
 ]
 
 export function summarizeCapitalStages(stages) {
-  if (!stages) return
+  if (!stages) return null
   if (stages.length === 1) return stages[0]
 
-  const ordered = sortBy(stages, s => capitalStages.indexOf(s))
-  const start = stages[0]
-  const end = stages[stages.length - 1]
+  const ordered = sortBy(stages, stage => capitalStages.indexOf(stage))
+  const start = ordered[0]
+  const end = ordered[stages.length - 1]
 
   return `${start} – ${end}`
 }
 
 export function summarizeCapitalCheckSizes(checkSizes) {
-  if (!checkSizes) return
+  if (!checkSizes) return null
   if (checkSizes.length === 1) return checkSizes[0]
 
-  const ordered = sortBy(checkSizes, s => extractNumeric(s))
-  const start = ordered[0].split('-').shift()
-  const end = ordered[ordered.length - 1].split('-').pop()
+  const ordered = sortBy(checkSizes, size => extractNumeric(size))
+  const start = ordered[0].split("-").shift()
+  const end = ordered[ordered.length - 1].split("-").pop()
 
   return `${start}–${end}`
 }

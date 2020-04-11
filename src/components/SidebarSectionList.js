@@ -26,7 +26,11 @@ function Item({ icon, text, href, to }) {
   return (
     <li className="mt-3 font-medium text-sm text-gray-800">
       <Wrapper {...props}>
-        { icon && <div className="mr-3 w-3"><FontAwesomeIcon icon={icon} /></div> }
+        {icon && (
+          <div className="mr-3 w-3">
+            <FontAwesomeIcon icon={icon} />
+          </div>
+        )}
         <span>{text}</span>
       </Wrapper>
     </li>

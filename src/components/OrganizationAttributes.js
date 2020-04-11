@@ -12,7 +12,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 
 import Tag from "./Tag"
-import { summarizeCapitalStages, summarizeCapitalCheckSizes } from "../utils/capital"
+import {
+  summarizeCapitalStages,
+  summarizeCapitalCheckSizes,
+} from "../utils/capital"
 
 export const OrganizationCategory = ({ text, ...props }) => (
   <Tag {...props}>
@@ -21,13 +24,18 @@ export const OrganizationCategory = ({ text, ...props }) => (
   </Tag>
 )
 
-export const OrganizationLocation = ({ location: { country, region, locality }, ...props }) => {
+export const OrganizationLocation = ({
+  location: { country, region, locality },
+  ...props
+}) => {
   const text = locality || region || country
 
-  return <Tag {...props}>
-    <FontAwesomeIcon icon={faLocationArrow} className="mr-2" />
-    {text}
-  </Tag>
+  return (
+    <Tag {...props}>
+      <FontAwesomeIcon icon={faLocationArrow} className="mr-2" />
+      {text}
+    </Tag>
+  )
 }
 
 export const OrganizationHeadcount = ({ text, compact, ...props }) => (
@@ -59,19 +67,23 @@ export const OrganizationCapitalStrategic = ({ text, ...props }) => (
 )
 
 export const OrganizationCapitalStage = ({ stages, ...props }) => {
-  let text = summarizeCapitalStages(stages)
+  const text = summarizeCapitalStages(stages)
 
-  return <Tag {...props}>
-    <FontAwesomeIcon icon={faSearchDollar} className="mr-1" />
-    {text}
-  </Tag>
+  return (
+    <Tag {...props}>
+      <FontAwesomeIcon icon={faSearchDollar} className="mr-1" />
+      {text}
+    </Tag>
+  )
 }
 
 export const OrganizationCapitalCheckSize = ({ checkSizes, ...props }) => {
-  let text = summarizeCapitalCheckSizes(checkSizes)
+  const text = summarizeCapitalCheckSizes(checkSizes)
 
-  return <Tag {...props}>
-    <FontAwesomeIcon icon={faMoneyCheck} className="mr-1" />
-    {text}
-  </Tag>
+  return (
+    <Tag {...props}>
+      <FontAwesomeIcon icon={faMoneyCheck} className="mr-1" />
+      {text}
+    </Tag>
+  )
 }

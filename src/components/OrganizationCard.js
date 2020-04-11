@@ -53,10 +53,16 @@ export default function OrganizationCard({ categoryId, organization }) {
             <OrganizationCapitalStrategic key="capitalstrategic" />
           )}
           {capitalProfile?.stage && (
-            <OrganizationCapitalStage key="stage" stages={capitalProfile?.stage} />
+            <OrganizationCapitalStage
+              key="stage"
+              stages={capitalProfile?.stage}
+            />
           )}
           {capitalProfile?.checkSize && (
-            <OrganizationCapitalCheckSize key="checkSize" checkSizes={capitalProfile?.checkSize} />
+            <OrganizationCapitalCheckSize
+              key="checkSize"
+              checkSizes={capitalProfile?.checkSize}
+            />
           )}
           {subCategories?.map(category => (
             <OrganizationCategory key={category.name} text={category.name} />
