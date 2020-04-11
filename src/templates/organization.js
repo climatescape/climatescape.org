@@ -1,7 +1,6 @@
 import React from "react"
 import "./organization.css"
 import { graphql } from "gatsby"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faExternalLinkAlt,
   faEdit,
@@ -10,6 +9,11 @@ import {
   faUsers,
   faBuilding,
   faFileAlt,
+  faHandHoldingUsd,
+  faSearchDollar,
+  faHandshake,
+  faMoneyCheck,
+  faHeart,
 } from "@fortawesome/free-solid-svg-icons"
 import {
   faLinkedin,
@@ -24,6 +28,10 @@ import Carousel from "../components/carousel"
 import SidebarSectionList from "../components/SidebarSectionList"
 import { transformOrganization } from "../utils/airtable"
 import { parseTwitterHandle } from "../utils/url"
+import {
+  summarizeCapitalStages,
+  summarizeCapitalCheckSizes,
+} from "../utils/capital"
 
 function isCapital(org) {
   return org.role?.includes("Capital")
@@ -59,25 +67,19 @@ function AttributesSection({ org, className }) {
           key={category.name}
           text={category.name}
           to={category.slug}
-          icon={<FontAwesomeIcon icon={faBox} />}
+          icon={faBox}
         />
       ))}
       {org.location && (
-        <SidebarSectionList.Item
-          text={org.location}
-          icon={<FontAwesomeIcon icon={faMapMarkerAlt} />}
-        />
+        <SidebarSectionList.Item text={org.location} icon={faMapMarkerAlt} />
       )}
       {org.orgType && (
-        <SidebarSectionList.Item
-          text={org.orgType}
-          icon={<FontAwesomeIcon icon={faBuilding} />}
-        />
+        <SidebarSectionList.Item text={org.orgType} icon={faBuilding} />
       )}
       {org.headcount && (
         <SidebarSectionList.Item
           text={`${org.headcount} employees`}
-          icon={<FontAwesomeIcon icon={faUsers} />}
+          icon={faUsers}
         />
       )}
     </SidebarSectionList>
@@ -91,35 +93,35 @@ function SocialLinksSection({ org, className }) {
         <SidebarSectionList.Item
           text="Homepage"
           href={org.homepage}
-          icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
+          icon={faExternalLinkAlt}
         />
       )}
       {org.crunchbase && (
         <SidebarSectionList.Item
           text="Crunchbase"
           href={org.crunchbase}
-          icon={<FontAwesomeIcon icon={faExternalLinkAlt} />}
+          icon={faExternalLinkAlt}
         />
       )}
       {org.linkedIn && (
         <SidebarSectionList.Item
           text="LinkedIn"
           href={org.linkedIn}
-          icon={<FontAwesomeIcon icon={faLinkedin} />}
+          icon={faLinkedin}
         />
       )}
       {org.twitter && (
         <SidebarSectionList.Item
           text={parseTwitterHandle(org.twitter) || "Twitter"}
           href={org.twitter}
-          icon={<FontAwesomeIcon icon={faTwitter} />}
+          icon={faTwitter}
         />
       )}
       {org.facebook && (
         <SidebarSectionList.Item
           text="Facebook"
           href={org.facebook}
-          icon={<FontAwesomeIcon icon={faFacebook} />}
+          icon={faFacebook}
         />
       )}
     </SidebarSectionList>
@@ -132,19 +134,48 @@ function ContributionSection({ data, org, className }) {
       <SidebarSectionList.Item
         href={getEditUrl({ data, org })}
         text="Suggest an Edit"
-        icon={<FontAwesomeIcon icon={faEdit} />}
+        icon={faEdit}
       />
 
       {org.source && (
         <SidebarSectionList.Item
           text={`Source - ${org.source.name}`}
           href={org.source.url}
-          icon={<FontAwesomeIcon icon={faFileAlt} />}
+          icon={faFileAlt}
         />
       )}
     </SidebarSectionList>
   )
 }
+
+const CapitalSection = ({
+  capitalProfile: { type, stage, checkSize, strategic, impactSpecific },
+  className,
+}) => (
+  <SidebarSectionList title="Capital" className={className}>
+    {type && (
+      <SidebarSectionList.Item icon={faHandHoldingUsd} text={type.join(", ")} />
+    )}
+    {stage && (
+      <SidebarSectionList.Item
+        icon={faSearchDollar}
+        text={summarizeCapitalStages(stage)}
+      />
+    )}
+    {checkSize && (
+      <SidebarSectionList.Item
+        icon={faMoneyCheck}
+        text={summarizeCapitalCheckSizes(checkSize)}
+      />
+    )}
+    {strategic && (
+      <SidebarSectionList.Item icon={faHandshake} text="Strategic" />
+    )}
+    {impactSpecific && (
+      <SidebarSectionList.Item icon={faHeart} text="Impact-specific" />
+    )}
+  </SidebarSectionList>
+)
 
 export default function OrganizationTemplate({ data }) {
   const siteTitle = data.site.siteMetadata.title
@@ -202,6 +233,12 @@ export default function OrganizationTemplate({ data }) {
 
           <div className="flex flex-col w-5/5 lg:w-2/5 lg:pl-16 items-center mt-3 lg:mt-0">
             <div className="sidebar-sections-container w-full flex flex-col sm:flex-row lg:flex-col justify-start justify-around lg:justify-start">
+              {org.capitalProfile && (
+                <CapitalSection
+                  capitalProfile={org.capitalProfile}
+                  className="flex flex-col mb-8"
+                />
+              )}
               <AttributesSection org={org} className="flex flex-col mb-8" />
               <SocialLinksSection org={org} className="flex flex-col mb-8" />
               <ContributionSection
@@ -244,7 +281,7 @@ export const query = graphql`
         Capital_Profile {
           data {
             Type
-            Impact_Specific
+            ImpactSpecific: Impact_Specific
             Strategic
             Stage
             CheckSize: Check_Size
