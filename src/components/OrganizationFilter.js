@@ -127,7 +127,9 @@ export const useOrganizationFilterState = () => {
       )
 
     if (byLocation)
-      organizations = organizations.filter(org => org.location === byLocation)
+      organizations = organizations.filter(
+        org => org.hqLocation?.country === byLocation
+      )
 
     if (byHeadcount)
       organizations = organizations.filter(org => org.headcount === byHeadcount)
@@ -193,6 +195,18 @@ const CapitalStrategicOptions = [
   { value: false, label: "Not strategic" },
 ]
 const makeOption = value => ({ value, label: value })
+
+const formatLocations = organizations => {
+  const formatted = _.chain(organizations)
+    .map("hqLocation.country")
+    .compact()
+    .uniq()
+    .sort()
+    .map(makeOption)
+    .value()
+
+  return [AnyOption, ...formatted]
+}
 
 const formatRoles = organizations => {
   const formatted = _.chain(organizations)
@@ -291,6 +305,7 @@ const OrganizationFilter = ({
     byRole,
     byHeadcount,
     byOrgType,
+    byLocation,
     byCapitalCheckSize,
     byCapitalStrategic,
     byCapitalImpactSpecific,
@@ -331,6 +346,15 @@ const OrganizationFilter = ({
         onChangeFilter={onApplyFilter.byOrgType}
         placeholder="Org Type"
         value={byOrgType}
+      />
+    ),
+    location: () => (
+      <FilterSelect
+        key="location"
+        options={formatLocations(organizations)}
+        onChangeFilter={onApplyFilter.byLocation}
+        placeholder="HQ Location"
+        value={byLocation}
       />
     ),
     capitalCheckSize: () => (

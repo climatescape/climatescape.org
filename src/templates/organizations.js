@@ -50,7 +50,7 @@ function OrganizationsTemplate({
             onApplyFilter={setFilter}
             organizations={organizations}
             allOrganizations={allOrganizations}
-            showFilters={["role", "headcount", "orgType"]}
+            showFilters={["location", "role", "headcount", "orgType"]}
           />
 
           <div>
