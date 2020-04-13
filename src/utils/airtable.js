@@ -86,7 +86,6 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
       Name,
       About,
       Homepage,
-      HQ_Location: HQLocation,
       HQ_Country: hqCountry,
       HQ_Region: hqRegion,
       HQ_Locality: hqLocality,
