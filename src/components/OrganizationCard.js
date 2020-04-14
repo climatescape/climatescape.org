@@ -125,7 +125,6 @@ export const query = graphql`
       Homepage
       About
       Tagline
-      HQ_Location
       HQ_Country
       HQ_Region
       HQ_Locality
