@@ -154,7 +154,13 @@ export const query = graphql`
       }
     }
 
-    capitalTypes: allAirtable(filter: { table: { eq: "Capital Types" } }) {
+    capitalTypes: allAirtable(
+      filter: {
+        table: { eq: "Capital Types" }
+        data: { Count: { gte: 3 } }
+      }
+      sort: { fields: [data___Count], order: DESC }
+    ) {
       nodes {
         id
         data {
