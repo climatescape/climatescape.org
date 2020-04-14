@@ -1,8 +1,11 @@
 import React from "react"
 import { graphql } from "gatsby"
-import flatMap from "lodash/flatmap"
+import flatMap from "lodash/flatMap"
 
-import { transformOrganizations, transformCapitalTypes } from "../utils/airtable"
+import {
+  transformOrganizations,
+  transformCapitalTypes,
+} from "../utils/airtable"
 
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
@@ -18,12 +21,12 @@ const CapitalTemplate = ({
     activeType: activeTypeData,
     site,
   },
-  pageContext: { activeTypeId }
+  pageContext: { activeTypeId },
 }) => {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
 
   const capitalTypes = transformCapitalTypes(capitalTypeNodes)
-  const activeType = capitalTypes.find(({id}) => id === activeTypeId)
+  const activeType = capitalTypes.find(({ id }) => id === activeTypeId)
 
   let organizationNodes
 
@@ -94,10 +97,7 @@ export const query = graphql`
     # $activeTypeId and query through the associated Capital Profiles to fetch
     # the appropriate organizations
     activeType: allAirtable(
-      filter: {
-        table: { eq: "Capital Types" }
-        id: { eq: $activeTypeId}
-      }
+      filter: { table: { eq: "Capital Types" }, id: { eq: $activeTypeId } }
     ) @include(if: $active) {
       nodes {
         data {
@@ -116,9 +116,7 @@ export const query = graphql`
     allOrganizations: allAirtable(
       filter: {
         table: { eq: "Organizations" }
-        data: {
-          Role: { eq: "Capital" }
-        }
+        data: { Role: { eq: "Capital" } }
       }
     ) @skip(if: $active) {
       nodes {

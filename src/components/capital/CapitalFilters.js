@@ -5,7 +5,7 @@ import Pill from "../Pill"
 
 function CapitalType({ type, selected }) {
   return (
-    <li className={`font-sans my-1`}>
+    <li className="font-sans my-1">
       <Link to={type.slug}>
         <Pill name={type.name} selected={selected} />
       </Link>
@@ -28,7 +28,7 @@ function CapitalStage({ stage, currentFilter, onApplyFilter }) {
   )
 }
 
-function Stages({ activeType, currentFilter, onApplyFilter }) {
+function Stages({ currentFilter, onApplyFilter }) {
   return (
     <>
       <h3 className="text-sm font-title  tracking-wide mt-8 uppercase text-gray-700">
@@ -70,10 +70,9 @@ export default function CapitalFilters({
           />
         ))}
       </ul>
-      { showStages && <Stages
-        currentFilter={currentFilter}
-        onApplyFilter={onApplyFilter}
-      /> }
+      {showStages && (
+        <Stages currentFilter={currentFilter} onApplyFilter={onApplyFilter} />
+      )}
     </div>
   )
 }
