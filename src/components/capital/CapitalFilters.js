@@ -3,12 +3,10 @@ import { Link } from "gatsby"
 import { capitalStages } from "../../utils/capital"
 import Pill from "../Pill"
 
-function CapitalType({ type, pageContext }) {
-  const selected = type.name === pageContext.capitalType
-
+function CapitalType({ type, selected }) {
   return (
-    <li className={`font-sans my-1 `}>
-      <Link to={`/capital/${type.slug}`}>
+    <li className={`font-sans my-1`}>
+      <Link to={type.slug}>
         <Pill name={type.name} selected={selected} />
       </Link>
     </li>
@@ -30,11 +28,7 @@ function CapitalStage({ stage, currentFilter, onApplyFilter }) {
   )
 }
 
-function Stages({ pageContext, currentFilter, onApplyFilter }) {
-  if (pageContext.capitalType !== "Venture Capital") {
-    return null
-  }
-
+function Stages({ activeType, currentFilter, onApplyFilter }) {
   return (
     <>
       <h3 className="text-sm font-title  tracking-wide mt-8 uppercase text-gray-700">
@@ -55,11 +49,13 @@ function Stages({ pageContext, currentFilter, onApplyFilter }) {
 }
 
 export default function CapitalFilters({
-  pageContext,
+  capitalTypes,
+  activeType,
   currentFilter,
   onApplyFilter,
 }) {
-  const { capitalTypes } = pageContext
+  const showStages = activeType?.name === "Venture Capital"
+
   return (
     <div className="CategoryList leading-9 hidden w-1/5  mb-8 lg:block">
       <h3 className="text-sm font-title  tracking-wide mt-8 uppercase text-gray-700">
@@ -70,16 +66,14 @@ export default function CapitalFilters({
           <CapitalType
             key={type.slug}
             type={type}
-            categories={capitalTypes}
-            pageContext={pageContext}
+            selected={type.id === activeType?.id}
           />
         ))}
       </ul>
-      <Stages
-        pageContext={pageContext}
+      { showStages && <Stages
         currentFilter={currentFilter}
         onApplyFilter={onApplyFilter}
-      />
+      /> }
     </div>
   )
 }

@@ -43,7 +43,6 @@ exports.createPages = async ({ graphql, actions }) => {
         nodes {
           id
           data {
-            Name
             Slug
           }
         }
@@ -71,20 +70,13 @@ exports.createPages = async ({ graphql, actions }) => {
     context: { categoryCounts },
   })
 
-  const capitalTypes = data.capitalTypes.nodes.map(
-    ({ data: { Name, Slug } }) => ({
-      name: Name,
-      slug: Slug,
-    })
-  )
-
-  capitalTypes.forEach(capitalType => {
+  data.capitalTypes.nodes.forEach(({ id, data: { Slug: slug }}) => {
     createPage({
-      path: capitalType.slug,
+      path: `/capital/${slug}`,
       component: path.resolve(`./src/pages/capital.js`),
       context: {
-        capitalType: capitalType.name,
-        capitalTypes,
+        activeTypeId: id,
+        active: true
       },
     })
   })

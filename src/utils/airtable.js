@@ -1,3 +1,5 @@
+import compact from "lodash"
+
 import { stringCompare } from "./string"
 import { makeSlug } from "./slug"
 
@@ -8,22 +10,20 @@ function getLogo(Logo, LinkedinProfile, Crunchbase) {
   return logoSharp?.resize || logoSharp?.fuild || logoSharp?.fixed
 }
 
-function transformCategory(data) {
-  if (!data || !data.data) {
-    return undefined
-  }
+function transformCategory(category) {
+  if (!category?.data) return undefined
 
   const {
     id,
     data: { Name, Count, Cover, Parent },
-  } = data
+  } = category
   const parent = transformCategory(Parent?.[0])
   const cover = Cover?.localFiles?.[0]?.childImageSharp
 
   return {
     id,
     name: Name,
-    fullName: parent ? [parent.name, Name].join(" > ") : Name,
+    fullName: compact([parent?.name, Name]).join(" > "),
     count: Count,
     cover: cover?.fluid || cover?.resize,
     slug: `/categories/${makeSlug(Name)}`,
@@ -162,13 +162,11 @@ export function transformOrganizations(orgs) {
   return organizations
 }
 
-export function transformCapitalTypes(data) {
-  return (data.capitalTypes?.nodes ?? []).map(
-    ({ id, data: { Name, Cover, Slug } }) => ({
-      id,
-      name: Name,
-      cover: Cover?.localFiles?.[0]?.childImageSharp?.fluid,
-      slug: `capital/${Slug}`,
-    })
-  )
-}
+export const transformCapitalTypes = capitalTypes => (
+  capitalTypes.map(({ id, data: { Name, Cover, Slug } }) => ({
+    id,
+    name: Name,
+    cover: Cover?.localFiles?.[0]?.childImageSharp?.fluid,
+    slug: `/capital/${Slug}`,
+  }))
+)
