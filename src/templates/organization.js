@@ -269,7 +269,9 @@ export const query = graphql`
         Name
         Tagline
         About
-        HQ_Location
+        HQ_Locality
+        HQ_Region
+        HQ_Country
         Headcount
         Organization_Type
         Homepage

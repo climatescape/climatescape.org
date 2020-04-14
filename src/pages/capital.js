@@ -69,6 +69,7 @@ const CapitalTemplate = ({
             organizations={organizations}
             allOrganizations={allOrganizations}
             showFilters={[
+              "location",
               "capitalCheckSize",
               "category",
               "orgType",

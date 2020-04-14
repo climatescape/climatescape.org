@@ -1,4 +1,4 @@
-import compact from "lodash"
+import compact from "lodash/compact"
 
 import { stringCompare } from "./string"
 import { makeSlug } from "./slug"
@@ -84,7 +84,6 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
       Name,
       About,
       Homepage,
-      HQ_Location: HQLocation,
       HQ_Country: hqCountry,
       HQ_Region: hqRegion,
       HQ_Locality: hqLocality,
@@ -112,7 +111,7 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
     description: truncateDescription(Tagline || About),
     tagline: Tagline,
     about: About || "",
-    location: HQLocation,
+    location: compact([hqLocality, hqRegion, hqCountry]).join(", "),
     hqLocation: (hqLocality || hqRegion || hqCountry) && {
       locality: hqLocality,
       region: hqRegion,
