@@ -5,3 +5,12 @@ export const stringCompare = (a, b) => {
 
   return a < b ? -1 : a > b ? 1 : 0
 }
+
+export const stringShorten = str => {
+  const toArr = str.split(" ")
+  if (toArr.length < 5) return toArr.join(" ")
+  toArr.length = 5
+  toArr[4] = toArr[4].replace(/[,.!]/, "")
+  toArr.push("...")
+  return toArr.join(" ")
+}

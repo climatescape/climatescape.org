@@ -1,14 +1,24 @@
 import React from "react"
 import classnames from "classnames"
+import Img from "gatsby-image"
 import { Link } from "gatsby"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { stringShorten } from "../utils/string"
 
 const LinkClassName = "underline hover:text-gray-600"
 
-function Item({ icon, text, href, to }) {
+function Item({ icon, title, text, href, to, img }) {
   let props = { className: "inline-flex" }
+  let imgProps
   let Wrapper
-  if (to) {
+  if (img) {
+    Wrapper = Link
+    props = { to, className: props.className }
+    imgProps = {
+      fixed: img,
+      className: "OrganizationCard-logo border blend-multiply w-16 h-16",
+    }
+  } else if (to) {
     Wrapper = Link
     props = { to, className: classnames(LinkClassName, props.className) }
   } else if (href) {
@@ -31,7 +41,15 @@ function Item({ icon, text, href, to }) {
             <FontAwesomeIcon icon={icon} />
           </div>
         )}
-        <span>{text}</span>
+        {title ? (
+          <div className="flex flex-col mr-4">
+            <span className="text-black font-medium">{title}</span>
+            {text && <span>{stringShorten(text)}</span>}
+          </div>
+        ) : (
+          <span>{text}</span>
+        )}
+        {img && <Img {...imgProps} />}
       </Wrapper>
     </li>
   )

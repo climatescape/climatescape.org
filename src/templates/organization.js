@@ -177,6 +177,21 @@ const CapitalSection = ({
   </SidebarSectionList>
 )
 
+function SimilarOrgsSection({ orgs, img }) {
+  return (
+    <SidebarSectionList title="Similar Organizations">
+      {orgs.map(org => (
+        <SidebarSectionList.Item
+          title={org.title}
+          text={org.tagline}
+          img={img}
+          to={org.slug}
+        />
+      ))}
+    </SidebarSectionList>
+  )
+}
+
 export default function OrganizationTemplate({ data }) {
   const siteTitle = data.site.siteMetadata.title
 
@@ -246,6 +261,7 @@ export default function OrganizationTemplate({ data }) {
                 className="flex flex-col mb-8"
                 data={data}
               />
+              <SimilarOrgsSection orgs={[org, org]} img={org.logo} />
             </div>
           </div>
         </div>
