@@ -82,7 +82,6 @@ export const useOrganizationFilterState = () => {
   const [byLocation, setLocationFilter] = useState(null)
   const [byHeadcount, setHeadcountFilter] = useState(null)
   const [byOrgType, setOrgTypeFilter] = useState(null)
-  const [byCapitalType, setCapitalTypeFilter] = useState(null)
   const [byCapitalStrategic, setCapitalStrategicFilter] = useState(null)
   const [byCapitalStage, setCapitalStageFilter] = useState(null)
   const [byCapitalCheckSize, setCapitalCheckSizeFilter] = useState(null)
@@ -96,7 +95,6 @@ export const useOrganizationFilterState = () => {
     byLocation: setLocationFilter,
     byHeadcount: setHeadcountFilter,
     byOrgType: setOrgTypeFilter,
-    byCapitalType: setCapitalTypeFilter,
     byCapitalStrategic: setCapitalStrategicFilter,
     byCapitalStage: setCapitalStageFilter,
     byCapitalCheckSize: setCapitalCheckSizeFilter,
@@ -107,7 +105,6 @@ export const useOrganizationFilterState = () => {
       setLocationFilter(null)
       setHeadcountFilter(null)
       setOrgTypeFilter(null)
-      setCapitalTypeFilter(null)
       setCapitalStrategicFilter(null)
       setCapitalStageFilter(null)
       setCapitalCheckSizeFilter(null)
@@ -134,11 +131,6 @@ export const useOrganizationFilterState = () => {
 
     if (byOrgType)
       organizations = organizations.filter(org => org.orgType === byOrgType)
-
-    if (byCapitalType)
-      organizations = organizations.filter(
-        org => org.capitalProfile?.type?.indexOf(byCapitalType) >= 0
-      )
 
     if (byCapitalStrategic !== null)
       organizations = organizations.filter(
@@ -170,7 +162,6 @@ export const useOrganizationFilterState = () => {
       byLocation,
       byHeadcount,
       byOrgType,
-      byCapitalType,
       byCapitalStrategic,
       byCapitalStage,
       byCapitalCheckSize,
