@@ -122,12 +122,11 @@ query OrganizationPageQuery {
 
 ```graphql
 query CapitalPageQuery {
-  capitalTypes: allAirtable(filter: { table: { eq: "Capital Profiles" } }) {
+  capitalProfiles: allAirtable(filter: { table: { eq: "Capital Profiles" } }) {
     nodes {
       id
       data {
-        Name
-        Type
+        Check_Size
       }
     }
   }

@@ -68,7 +68,7 @@ const config = {
           {
             baseId: `appNYMWxGF1jMaf5V`,
             tableName: "Capital Profiles",
-            tableLinks: [`Organization`],
+            tableLinks: [`Organization`, `Capital_Type`],
           },
           {
             baseId: `appNYMWxGF1jMaf5V`,
@@ -84,7 +84,7 @@ const config = {
           {
             baseId: `appNYMWxGF1jMaf5V`,
             tableName: "Capital Types",
-            tableLinks: [`Capital Profiles`],
+            tableLinks: [`Capital_Profiles`],
             mapping: { Cover: `fileNode` },
           },
         ],

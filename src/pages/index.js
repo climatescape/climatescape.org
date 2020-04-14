@@ -19,7 +19,7 @@ function ViewAll({ name, href }) {
 
 export default function IndexPage({ data }) {
   const categories = transformCategories(data.categories.nodes)
-  const capitalTypes = transformCapitalTypes(data)
+  const capitalTypes = transformCapitalTypes(data.capitalTypes.nodes)
 
   const topCategories = categories.filter(cat => !cat.parent)
 
@@ -137,6 +137,16 @@ export default function IndexPage({ data }) {
 }
 
 export const query = graphql`
+  fragment HomepageCover on AirtableField {
+    localFiles {
+      childImageSharp {
+        fluid(maxWidth: 500) {
+          ...GatsbyImageSharpFluid
+        }
+      }
+    }
+  }
+
   query HomeQuery {
     site {
       siteMetadata {
@@ -144,20 +154,17 @@ export const query = graphql`
       }
     }
 
-    capitalTypes: allAirtable(filter: { table: { eq: "Capital Types" } }) {
+    capitalTypes: allAirtable(
+      filter: { table: { eq: "Capital Types" }, data: { Count: { gte: 3 } } }
+      sort: { fields: [data___Count], order: DESC }
+    ) {
       nodes {
         id
         data {
           Name
           Slug
           Cover {
-            localFiles {
-              childImageSharp {
-                fluid(maxWidth: 500) {
-                  ...GatsbyImageSharpFluid
-                }
-              }
-            }
+            ...HomepageCover
           }
         }
       }
@@ -174,13 +181,7 @@ export const query = graphql`
             }
           }
           Cover {
-            localFiles {
-              childImageSharp {
-                fluid(maxWidth: 500) {
-                  ...GatsbyImageSharpFluid
-                }
-              }
-            }
+            ...HomepageCover
           }
         }
       }
