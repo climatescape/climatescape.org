@@ -1,4 +1,4 @@
-import crypto from "crypto"
+const crypto = require("crypto")
 
 const { makeSlug } = require("./slug")
 
