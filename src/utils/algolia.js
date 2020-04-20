@@ -1,6 +1,5 @@
 import crypto from "crypto"
 
-
 const { makeSlug } = require("./slug")
 
 const pageQuery = `query PagesQuery {
@@ -67,13 +66,15 @@ function transformData(data) {
 // Given an Object `data`, return a copy with an added `digest` key, where the
 // value is an MD5 digest of `data`
 function addDigest(data) {
-  const hash = crypto.createHash('md5')
+  const hash = crypto.createHash("md5")
 
-  Object.keys(data).sort().forEach(key => hash.update(`${key}-${data[key]}`))
+  Object.keys(data)
+    .sort()
+    .forEach(key => hash.update(`${key}-${data[key]}`))
 
   return {
     ...data,
-    digest: hash.digest('hex')
+    digest: hash.digest("hex"),
   }
 }
 
