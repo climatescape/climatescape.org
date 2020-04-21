@@ -7,11 +7,10 @@ require("dotenv").config({
 // since AIRTABLE_BASE_ID was recently introduced, we add an error message to ask to update the
 // project configuration.
 if (!process.env.AIRTABLE_BASE_ID) {
-  console.log(
+  throw new Error(
     `AIRTABLE_BASE_ID property is missing from your env (.env.development file).
     See .env.sample as example.`
   )
-  process.exit(1)
 }
 
 const config = {
