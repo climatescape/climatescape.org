@@ -6,7 +6,7 @@ dot.config({ path: `../../.env.development` })
 const { crunchbaseEnrich, mapCrunchbase } = require("./crunchbase")
 const { camelizeKeys } = require("../../backend/src/utils")
 
-const BASE = "appNYMWxGF1jMaf5V"
+const BASE = process.env.AIRTABLE_BASE_ID
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(BASE)
 
 async function asyncForEach(array, callback) {
