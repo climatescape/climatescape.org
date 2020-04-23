@@ -7,7 +7,7 @@ function CapitalType({ type, selected }) {
   return (
     <li className="font-sans my-1">
       <Link to={type.slug}>
-        <Pill name={type.name} selected={selected} />
+        <Pill name={type.name} selected={selected} count={type.count} />
       </Link>
     </li>
   )

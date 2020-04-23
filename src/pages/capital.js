@@ -134,6 +134,7 @@ export const query = graphql`
         data {
           Name
           Slug
+          Count
         }
       }
     }

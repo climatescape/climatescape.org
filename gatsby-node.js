@@ -70,13 +70,13 @@ exports.createPages = async ({ graphql, actions }) => {
     context: { categoryCounts },
   })
 
-  data.capitalTypes.nodes.forEach(({ id, data: { Slug: slug }}) => {
+  data.capitalTypes.nodes.forEach(({ id, data: { Slug: slug } }) => {
     createPage({
       path: `/capital/${slug}`,
       component: path.resolve(`./src/pages/capital.js`),
       context: {
         activeTypeId: id,
-        active: true
+        active: true,
       },
     })
   })

@@ -162,9 +162,10 @@ export function transformOrganizations(orgs) {
 }
 
 export const transformCapitalTypes = capitalTypes =>
-  capitalTypes.map(({ id, data: { Name, Cover, Slug } }) => ({
+  capitalTypes.map(({ id, data: { Name, Cover, Slug, Count } }) => ({
     id,
     name: Name,
     cover: Cover?.localFiles?.[0]?.childImageSharp?.fluid,
     slug: `/capital/${Slug}`,
+    count: Count,
   }))
