@@ -177,11 +177,15 @@ export const query = graphql`
     data {
       Capital_Profile {
         data {
-          Type
           Strategic
           ImpactSpecific: Impact_Specific
           Stage
           CheckSize: Check_Size
+          CapitalType: Capital_Type {
+            data {
+              Name
+            }
+          }
         }
       }
     }

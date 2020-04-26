@@ -133,7 +133,7 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
     }))?.[0],
     categories: Categories?.map(transformCategory) ?? [],
     capitalProfile: CapitalProfile?.map(({ data }) => ({
-      type: data.Type,
+      type: data.CapitalType?.map(t => t.data?.Name),
       strategic: data.Strategic,
       stage: data.Stage,
       checkSize: data.CheckSize,
