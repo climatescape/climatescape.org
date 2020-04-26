@@ -14,7 +14,7 @@ helping out. Simply fill out the [Climatescape Contributor Application][contribu
 1. Follow these steps to get the project installed on your local dev machine.
    ```bash
    $ git clone https://github.com/climatescape/climatescape.org.git
-   $ cd climatescape.org
+   $ cd climatescape.org/site
    $ npm install
    ```
 2. Copy your Airtable API key from this page: [Airtable account][airtable-account]
@@ -68,7 +68,7 @@ To build the project locally:
 
 ## Architecture
 
-Our site is built with [Gatsby][gatsby], a static site generator that uses
+Our `site` is built with [Gatsby][gatsby], a static site generator that uses
 [React][react] and [GraphQL][graphql] under the hood. Static site generators are
 used to create static websites (i.e. plain HTML/CSS/JS) from dynamic data at
 **build time**. Compare this to a traditional dynamic website that uses a
