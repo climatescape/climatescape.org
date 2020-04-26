@@ -282,11 +282,15 @@ export const query = graphql`
         Role
         Capital_Profile {
           data {
-            Type
             ImpactSpecific: Impact_Specific
             Strategic
             Stage
             CheckSize: Check_Size
+            CapitalType: Capital_Type {
+              data {
+                Name
+              }
+            }
           }
         }
         Logo {
