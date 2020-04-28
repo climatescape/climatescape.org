@@ -4,10 +4,11 @@ This package contains scripts which query external data sources in order to
 enrich our core community-generated content. In order to run the scripts, the
 following environment variables must be set:
 
-All: `AIRTABLE_API_KEY`, `AIRTABLE_BASE_ID`
-Crunchbase: `CRUNCHBASE_API_KEY`
+* All: `AIRTABLE_API_KEY`, `AIRTABLE_BASE_ID`
+* Crunchbase: `CRUNCHBASE_API_KEY`
+* Geo: *no additional variables needed*
 
-See [`.env.sample`](.env.sample) for more information
+See [`.env.sample`](../.env.sample) for more information
 
 ## Running
 
@@ -17,7 +18,7 @@ First, make sure you are in the `enrich` folder (not the repo root).
 $ cd enrich
 ```
 
-Make sure all dependencies are installed.
+Install the necessary dependencies.
 
 ```bash
 $ npm install
