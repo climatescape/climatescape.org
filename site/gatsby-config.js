@@ -1,7 +1,7 @@
 const algolia = require("./src/utils/algolia")
 
 require("dotenv").config({
-  path: `.env.${process.env.NODE_ENV}`,
+  path: `../.env.${process.env.NODE_ENV}`,
 })
 
 // since AIRTABLE_BASE_ID was recently introduced, we add an error message to ask to update the
