@@ -7,6 +7,7 @@
     "test": "jest",
     "lint": "eslint .",
     "lintfix": "eslint . --fix",
+    "enrich": "npm run enrich-crunchbase && npm run enrich-geo",
     "enrich-geo": "node geo/script.js",
     "enrich-crunchbase": "node crunchbase/script.js"
   },
