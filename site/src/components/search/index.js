@@ -127,7 +127,7 @@ function SearchContent({
     else if (e.keyCode === ENTER_KEY) {
       // Edge case: Break when there are no search results to avoid going to
       // Algolia's website
-      if (nbHits <= 0) return;
+      if (nbHits <= 0) return
       // When the keyboard has not been used to select an item (using up/down arrow) and we use
       // enter we select the first item of the list.
       if (selectedIndex === NO_LINE_SELECTED) {
