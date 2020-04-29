@@ -24,6 +24,10 @@ const config = {
     organizationAddFormUrl: `https://airtable.com/shrquIaKs7TQDqFFY`,
     organizationEditFormUrl: `https://airtable.com/shrgoaO5ppAxlqt31`,
     contributorFormUrl: `https://airtable.com/shr4WZDPBs7mk1doW`,
+    auth0: {
+      domain: process.env.AUTH0_DOMAIN,
+      clientId: process.env.AUTH0_CLIENT_ID,
+    },
   },
   plugins: [
     {
