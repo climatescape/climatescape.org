@@ -1,7 +1,10 @@
 const dot = require("dotenv")
+const path = require("path")
 const Airtable = require("airtable")
 
-dot.config({ path: `../../.env.development` })
+dot.config({
+  path: path.resolve(path.join(__dirname, "../../.env.development")),
+})
 
 const { crunchbaseEnrich, mapCrunchbase } = require("./crunchbase")
 const { camelizeKeys } = require("../../backend/src/utils")
