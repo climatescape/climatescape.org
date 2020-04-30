@@ -1,0 +1,32 @@
+- table:
+    schema: public
+    name: list_organizations
+  object_relationships:
+  - name: list
+    using:
+      foreign_key_constraint_on: list_id
+  - name: organization
+    using:
+      foreign_key_constraint_on: organization_id
+- table:
+    schema: public
+    name: lists
+  array_relationships:
+  - name: list_organizations
+    using:
+      foreign_key_constraint_on:
+        column: list_id
+        table:
+          schema: public
+          name: list_organizations
+- table:
+    schema: public
+    name: organizations
+  array_relationships:
+  - name: list_organizations
+    using:
+      foreign_key_constraint_on:
+        column: organization_id
+        table:
+          schema: public
+          name: list_organizations
