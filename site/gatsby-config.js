@@ -8,7 +8,7 @@ require("dotenv").config({
 // project configuration.
 if (!process.env.AIRTABLE_BASE_ID) {
   throw new Error(
-    `AIRTABLE_BASE_ID property is missing from your env (.env.development file).
+    `AIRTABLE_BASE_ID property is missing from .env.${process.env.NODE_ENV}
     See .env.sample as example.`
   )
 }
@@ -24,6 +24,10 @@ const config = {
     organizationAddFormUrl: `https://airtable.com/shrquIaKs7TQDqFFY`,
     organizationEditFormUrl: `https://airtable.com/shrgoaO5ppAxlqt31`,
     contributorFormUrl: `https://airtable.com/shr4WZDPBs7mk1doW`,
+    auth0: {
+      domain: process.env.AUTH0_DOMAIN,
+      clientId: process.env.AUTH0_CLIENT_ID,
+    },
   },
   plugins: [
     {

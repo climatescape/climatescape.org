@@ -4,4 +4,17 @@
  * See: https://www.gatsbyjs.org/docs/browser-apis/
  */
 
-// You can delete this file if you're not using it
+const React = require("react")
+const { navigate } = require("gatsby")
+
+const { Auth0Provider } = require("./src/components/Auth0Provider")
+
+exports.wrapRootElement = ({ element }) => (
+  <Auth0Provider
+    cacheLocation="localstorage"
+    redirect_uri={location.origin + "/authback"}
+    onRedirectCallback={() => navigate("/")}
+  >
+    {element}
+  </Auth0Provider>
+)
