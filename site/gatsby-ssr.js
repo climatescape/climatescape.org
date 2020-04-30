@@ -4,4 +4,15 @@
  * See: https://www.gatsbyjs.org/docs/ssr-apis/
  */
 
-// You can delete this file if you're not using it
+ const React = require("react")
+
+ const { Auth0Provider } = require("./src/components/Auth0Provider")
+
+ exports.wrapRootElement = ({ element }) => (
+   <Auth0Provider
+     redirect_uri={"noop"}
+     onRedirectCallback={() => {}}
+   >
+     {element}
+   </Auth0Provider>
+ )
