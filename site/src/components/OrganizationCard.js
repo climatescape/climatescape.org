@@ -40,7 +40,10 @@ export default function OrganizationCard({ categoryId, organization }) {
 
   return (
     <div className="border-gray-400 border-b flex text-gray-900 relative">
-      <Link to={slug} className="flex flex-grow py-4 pl-2 pr-16 hover:bg-gray-200">
+      <Link
+        to={slug}
+        className="flex flex-grow py-4 pl-2 pr-16 hover:bg-gray-200"
+      >
         <div className="w-24 flex-shrink-0 hidden sm:block">
           {img && (
             <img
@@ -86,7 +89,10 @@ export default function OrganizationCard({ categoryId, organization }) {
           </div>
         </div>
       </Link>
-      <FavoriteButton organizationId={organization.id} className="mr-2 absolute inset-y-0 right-0" />
+      <FavoriteButton
+        organizationId={organization.id}
+        className="mr-2 absolute inset-y-0 right-0"
+      />
     </div>
   )
 }

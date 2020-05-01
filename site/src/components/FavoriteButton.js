@@ -6,10 +6,10 @@ import { faHeart as heartFilled } from "@fortawesome/free-solid-svg-icons"
 import { faHeart as heartOutline } from "@fortawesome/free-regular-svg-icons"
 
 export default function FavoriteButton({ organizationId, className }) {
-  const [ favorited, setFavorited ] = useState(false)
-  const [ count, setCount ] = useState(Math.round(147 * Math.random()))
+  const [favorited, setFavorited] = useState(false)
+  const [count, setCount] = useState(Math.round(147 * Math.random()))
 
-  const handleClick = (event) => {
+  const handleClick = event => {
     event.preventDefault()
 
     setFavorited(!favorited)
@@ -25,7 +25,7 @@ export default function FavoriteButton({ organizationId, className }) {
       onClick={handleClick}
     >
       <FontAwesomeIcon
-        icon={favorited ? heartFilled : heartOutline }
+        icon={favorited ? heartFilled : heartOutline}
         className={classnames(
           favorited ? "text-red-500" : "",
           "fill-curent text-lg"
