@@ -8,6 +8,7 @@ const DEFAULT_REDIRECT_CALLBACK = () => navigate("/")
 export const Auth0Context = React.createContext()
 export const useAuth0 = () => useContext(Auth0Context)
 export const Auth0Provider = ({
+  audience,
   children,
   onRedirectCallback = DEFAULT_REDIRECT_CALLBACK,
   ...initOptions
@@ -59,6 +60,8 @@ export const Auth0Provider = ({
 
       if (localIsAuthenticated) {
         setUser(await auth0FromHook.getUser())
+        const idToken = await auth0FromHook.getIdTokenClaims()
+        localStorage.setItem("idToken", idToken.__raw)
       }
 
       setLoading(false)

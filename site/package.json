@@ -9,6 +9,7 @@
     "yarn": "1.x"
   },
   "dependencies": {
+    "@apollo/react-hooks": "^3.1.5",
     "@auth0/auth0-spa-js": "1.6.5",
     "@babel/core": "^7.9.0",
     "@babel/register": "^7.9.0",
@@ -18,6 +19,9 @@
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
     "algoliasearch": "^4.1.0",
+    "apollo-boost": "^0.4.7",
+    "apollo-cache-persist": "^0.1.1",
+    "apollo-link-context": "^1.0.20",
     "classnames": "^2.2.6",
     "dotenv": "^8.2.0",
     "gatsby": "^2.20.10",
@@ -36,6 +40,7 @@
     "lodash": "^4.17.15",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
+    "react-apollo": "^3.1.5",
     "react-dom": "^16.13.1",
     "react-helmet": "^5.2.1",
     "react-instantsearch-dom": "^6.4.0",

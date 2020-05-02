@@ -8,6 +8,9 @@ const React = require("react")
 const { navigate } = require("gatsby")
 
 const { Auth0Provider } = require("./src/components/Auth0Provider")
+const {
+  AuthorizedApolloProvider,
+} = require("./src/components/AuthorizedApolloProvider")
 
 exports.wrapRootElement = ({ element }) => (
   <Auth0Provider
@@ -15,6 +18,6 @@ exports.wrapRootElement = ({ element }) => (
     redirect_uri={location.origin + "/authback"}
     onRedirectCallback={() => navigate("/")}
   >
-    {element}
+    <AuthorizedApolloProvider>{element}</AuthorizedApolloProvider>
   </Auth0Provider>
 )
