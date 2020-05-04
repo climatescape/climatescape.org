@@ -18,7 +18,7 @@ export const AuthorizedApolloProvider = ({ children }) => {
 
   const tokenLink = setContext(async () => {
     if (token) return { auth0Token: token }
-    if (loading) return console.log("can't load token, still loading")
+    if (loading) return new Promise(() => {})
     token = await getTokenSilently()
     return { auth0Token: token }
   })
