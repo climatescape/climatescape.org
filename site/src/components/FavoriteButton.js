@@ -5,14 +5,52 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faHeart as heartFilled } from "@fortawesome/free-solid-svg-icons"
 import { faHeart as heartOutline } from "@fortawesome/free-regular-svg-icons"
 
-export default function FavoriteButton({ organizationId, className }) {
-  const [favorited, setFavorited] = useState(false)
+import gql from "graphql-tag"
+import { useMutation } from "@apollo/react-hooks"
+
+const AddFavorite = gql`
+  mutation AddFavorite($recordId: String!) {
+    insert_favorites(objects: [{ record_id: $recordId }]) {
+      returning {
+        id
+      }
+    }
+  }
+`
+
+const DeleteFavorite = gql`
+  mutation DeleteFavorite($id: uuid!) {
+    update_favorites(
+      where: { id: { _eq: $id } }
+      _set: { deleted_at: "NOW()" }
+    ) {
+      affected_rows
+    }
+  }
+`
+export default function FavoriteButton({ recordId, className, favoriteId: existingFavoriteId }) {
+  const [favoriteId, setFavoriteId] = useState(existingFavoriteId)
   const [count, setCount] = useState(Math.round(147 * Math.random()))
+  const [addFavorite, { loading: addLoading }] = useMutation(AddFavorite, {
+    variables: { recordId },
+    onCompleted: data => setFavoriteId(data.insert_favorites.returning[0].id),
+  })
+  const [deleteFavorite, { loading: deleteLoading }] = useMutation(DeleteFavorite, {
+    variables: { id: favoriteId },
+    onCompleted: data => setFavoriteId(undefined),
+  })
+
+  const favorited = !!favoriteId
+  const loading = addLoading || deleteLoading
 
   const handleClick = event => {
     event.preventDefault()
 
-    setFavorited(!favorited)
+    if (loading) return
+
+    if (!favorited) addFavorite()
+    else deleteFavorite()
+
     setCount(count + (favorited ? -1 : 1))
   }
 

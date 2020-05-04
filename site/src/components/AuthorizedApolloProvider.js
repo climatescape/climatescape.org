@@ -4,7 +4,6 @@ import {
   ApolloLink,
   InMemoryCache,
   HttpLink,
-  gql,
 } from "apollo-boost"
 import { ApolloProvider } from "react-apollo"
 import { setContext } from "apollo-link-context"

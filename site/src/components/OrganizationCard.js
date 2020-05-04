@@ -90,7 +90,7 @@ export default function OrganizationCard({ categoryId, organization }) {
         </div>
       </Link>
       <FavoriteButton
-        organizationId={organization.id}
+        recordId={organization.recordId}
         className="mr-2 absolute inset-y-0 right-0"
       />
     </div>
@@ -128,6 +128,7 @@ export const query = graphql`
   }
 
   fragment OrganizationCard on Airtable {
+    recordId
     data {
       Name
       Homepage

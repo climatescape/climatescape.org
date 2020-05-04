@@ -37,6 +37,7 @@
     "gatsby-source-airtable": "^2.1.0",
     "gatsby-source-filesystem": "^2.2.2",
     "gatsby-transformer-sharp": "^2.4.3",
+    "graphql-tag": "^2.10.3",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.15",
     "prop-types": "^15.7.2",
