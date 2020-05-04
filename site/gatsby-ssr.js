@@ -4,15 +4,15 @@
  * See: https://www.gatsbyjs.org/docs/ssr-apis/
  */
 
- const React = require("react")
+const React = require("react")
 
- const { Auth0Provider } = require("./src/components/Auth0Provider")
+const { Auth0Provider } = require("./src/components/Auth0Provider")
+const {
+  AuthorizedApolloProvider,
+} = require("./src/components/AuthorizedApolloProvider")
 
- exports.wrapRootElement = ({ element }) => (
-   <Auth0Provider
-     redirect_uri={"noop"}
-     onRedirectCallback={() => {}}
-   >
-     {element}
-   </Auth0Provider>
- )
+exports.wrapRootElement = ({ element }) => (
+  <Auth0Provider redirect_uri={"noop"} onRedirectCallback={() => {}}>
+    <AuthorizedApolloProvider>{element}</AuthorizedApolloProvider>
+  </Auth0Provider>
+)

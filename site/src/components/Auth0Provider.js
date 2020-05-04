@@ -39,7 +39,12 @@ export const Auth0Provider = ({
       },
     },
   } = data
-  initOptions = { client_id: clientId, domain, ...initOptions }
+  initOptions = {
+    client_id: clientId,
+    domain,
+    audience: "hasura-api",
+    ...initOptions,
+  }
 
   useEffect(() => {
     const initAuth0 = async () => {
@@ -60,8 +65,6 @@ export const Auth0Provider = ({
 
       if (localIsAuthenticated) {
         setUser(await auth0FromHook.getUser())
-        const idToken = await auth0FromHook.getIdTokenClaims()
-        localStorage.setItem("idToken", idToken.__raw)
       }
 
       setLoading(false)
