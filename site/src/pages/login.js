@@ -5,12 +5,19 @@ import Layout from "../components/layout"
 
 // TODO: This page is only necessary until we add login to the Navbar
 const LoginPage = () => {
-  const { loading, isAuthenticated, loginWithRedirect, logout, user, getTokenSilently } = useAuth0()
+  const {
+    loading,
+    isAuthenticated,
+    loginWithRedirect,
+    logout,
+    user,
+    getTokenSilently,
+  } = useAuth0()
   const [token, setToken] = useState()
 
   useEffect(() => {
-    if (loading) return console.log("Still loading")
-    getTokenSilently().then(setToken)
+    if (loading) console.log("Still loading")
+    else getTokenSilently().then(setToken)
   }, [loading])
 
   return (
