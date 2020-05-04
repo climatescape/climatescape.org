@@ -1,9 +1,14 @@
 import React from "react"
-import { ApolloClient, ApolloLink, InMemoryCache, HttpLink } from "apollo-boost"
+import {
+  ApolloClient,
+  ApolloLink,
+  InMemoryCache,
+  HttpLink,
+  gql,
+} from "apollo-boost"
 import { ApolloProvider } from "react-apollo"
 import { setContext } from "apollo-link-context"
 import fetch from "isomorphic-fetch"
-import { gql } from "apollo-boost"
 import { useAuth0 } from "./Auth0Provider"
 
 export const AuthorizedApolloProvider = ({ children }) => {
