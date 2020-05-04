@@ -28,17 +28,24 @@ const DeleteFavorite = gql`
     }
   }
 `
-export default function FavoriteButton({ recordId, className, favoriteId: existingFavoriteId }) {
+export default function FavoriteButton({
+  recordId,
+  className,
+  favoriteId: existingFavoriteId,
+}) {
   const [favoriteId, setFavoriteId] = useState(existingFavoriteId)
   const [count, setCount] = useState(Math.round(147 * Math.random()))
   const [addFavorite, { loading: addLoading }] = useMutation(AddFavorite, {
     variables: { recordId },
     onCompleted: data => setFavoriteId(data.insert_favorites.returning[0].id),
   })
-  const [deleteFavorite, { loading: deleteLoading }] = useMutation(DeleteFavorite, {
-    variables: { id: favoriteId },
-    onCompleted: data => setFavoriteId(undefined),
-  })
+  const [deleteFavorite, { loading: deleteLoading }] = useMutation(
+    DeleteFavorite,
+    {
+      variables: { id: favoriteId },
+      onCompleted: () => setFavoriteId(undefined),
+    }
+  )
 
   const favorited = !!favoriteId
   const loading = addLoading || deleteLoading

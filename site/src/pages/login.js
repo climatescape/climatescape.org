@@ -16,8 +16,8 @@ const LoginPage = () => {
   const [token, setToken] = useState()
 
   useEffect(() => {
-    if (loading) console.log("Still loading")
-    else getTokenSilently().then(setToken)
+    if (loading) return
+    getTokenSilently().then(setToken)
   }, [loading])
 
   return (
