@@ -44,19 +44,5 @@ export const AuthorizedApolloProvider = ({ children }) => {
     cache,
   })
 
-  // Test query
-  apolloClient
-    .query({
-      query: gql`
-        {
-          users {
-            id
-          }
-        }
-      `,
-    })
-    .then(result => console.log(result.data.users))
-    .catch(e => console.log(e))
-
   return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
 }
