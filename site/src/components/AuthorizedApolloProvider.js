@@ -12,12 +12,13 @@ import fetch from "isomorphic-fetch"
 import { useAuth0 } from "./Auth0Provider"
 
 export const AuthorizedApolloProvider = ({ children }) => {
-  const { getTokenSilently } = useAuth0()
+  const { getTokenSilently, loading } = useAuth0()
 
   let token
 
   const tokenLink = setContext(async () => {
     if (token) return { auth0Token: token }
+    if (loading) return console.log("can't load token, still loading")
     token = await getTokenSilently()
     return { auth0Token: token }
   })
@@ -44,18 +45,18 @@ export const AuthorizedApolloProvider = ({ children }) => {
   })
 
   // Test query
-  // apolloClient
-  //   .query({
-  //     query: gql`
-  //       {
-  //         users {
-  //           id
-  //         }
-  //       }
-  //     `,
-  //   })
-  //   .then(result => console.log(result.data.users))
-  //   .catch(e => console.log(e))
+  apolloClient
+    .query({
+      query: gql`
+        {
+          users {
+            id
+          }
+        }
+      `,
+    })
+    .then(result => console.log(result.data.users))
+    .catch(e => console.log(e))
 
   return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
 }
