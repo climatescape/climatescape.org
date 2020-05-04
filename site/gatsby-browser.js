@@ -15,8 +15,9 @@ const {
 exports.wrapRootElement = ({ element }) => (
   <Auth0Provider
     cacheLocation="localstorage"
+    useRefreshTokens={true}
     redirect_uri={location.origin + "/authback"}
-    onRedirectCallback={() => navigate("/")}
+    onRedirectCallback={() => navigate("/login")}
   >
     <AuthorizedApolloProvider>{element}</AuthorizedApolloProvider>
   </Auth0Provider>

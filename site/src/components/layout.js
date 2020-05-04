@@ -7,7 +7,7 @@
 
 import React from "react"
 import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
+import { useStaticQuery, graphql, Link } from "gatsby"
 
 import Navbar from "./Navbar"
 
@@ -73,6 +73,7 @@ const Layout = ({ children, contentClassName }) => {
               divider={i !== footerLinks.length - 1}
             />
           ))}
+          <Link to="login">Login</Link>
         </div>
         <div className="pt-3 sm:pt-0 flex justify-center">
           <a href="https://www.netlify.com">
