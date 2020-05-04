@@ -8,6 +8,7 @@ const DEFAULT_REDIRECT_CALLBACK = () => navigate("/")
 export const Auth0Context = React.createContext()
 export const useAuth0 = () => useContext(Auth0Context)
 export const Auth0Provider = ({
+  audience,
   children,
   onRedirectCallback = DEFAULT_REDIRECT_CALLBACK,
   ...initOptions
@@ -38,7 +39,12 @@ export const Auth0Provider = ({
       },
     },
   } = data
-  initOptions = { client_id: clientId, domain, ...initOptions }
+  initOptions = {
+    client_id: clientId,
+    domain,
+    audience: "hasura-api",
+    ...initOptions,
+  }
 
   useEffect(() => {
     const initAuth0 = async () => {

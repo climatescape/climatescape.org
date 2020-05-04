@@ -8,13 +8,17 @@ const React = require("react")
 const { navigate } = require("gatsby")
 
 const { Auth0Provider } = require("./src/components/Auth0Provider")
+const {
+  AuthorizedApolloProvider,
+} = require("./src/components/AuthorizedApolloProvider")
 
 exports.wrapRootElement = ({ element }) => (
   <Auth0Provider
     cacheLocation="localstorage"
+    useRefreshTokens={true}
     redirect_uri={location.origin + "/authback"}
-    onRedirectCallback={() => navigate("/")}
+    onRedirectCallback={() => navigate("/login")}
   >
-    {element}
+    <AuthorizedApolloProvider>{element}</AuthorizedApolloProvider>
   </Auth0Provider>
 )
