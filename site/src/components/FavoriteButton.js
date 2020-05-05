@@ -1,12 +1,13 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import classnames from "classnames"
+import { useMutation, useQuery } from "@apollo/react-hooks"
+import gql from "graphql-tag"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faHeart as heartFilled } from "@fortawesome/free-solid-svg-icons"
 import { faHeart as heartOutline } from "@fortawesome/free-regular-svg-icons"
 
-import gql from "graphql-tag"
-import { useMutation } from "@apollo/react-hooks"
+import { useAuth0 } from "./Auth0Provider"
 
 const AddFavorite = gql`
   mutation AddFavorite($recordId: String!) {
@@ -28,17 +29,60 @@ const DeleteFavorite = gql`
     }
   }
 `
+
+const GetFavoriteId = gql`
+  query favoriteIdQuery($userId: String, $recordId: String!) {
+    favorites(
+      where: { user_id: { _eq: $userId }, record_id: { _eq: $recordId } }
+    ) {
+      id
+    }
+  }
+`
+
+const GetCount = gql`
+  query countQuery($recordId: String!) {
+    favorites_aggregate(where: { record_id: { _eq: $recordId } }) {
+      aggregate {
+        count
+      }
+    }
+  }
+`
+
 export default function FavoriteButton({
   recordId,
   className,
   favoriteId: existingFavoriteId,
 }) {
   const [favoriteId, setFavoriteId] = useState(existingFavoriteId)
-  const [count, setCount] = useState(Math.round(147 * Math.random()))
+  const [count, setCount] = useState(0)
+  const [userId, setUserId] = useState()
+  const { loading: authenticationLoading, user } = useAuth0()
+
+  useEffect(() => {
+    if (authenticationLoading) return
+    setUserId(user.sub)
+  }, [authenticationLoading])
+
+  useQuery(GetFavoriteId, {
+    onCompleted: data => setFavoriteId(data.favorites[0]?.id),
+    variables: {
+      userId,
+      recordId,
+    },
+  })
+
+  useQuery(GetCount, {
+    onCompleted: data => setCount(data.favorites_aggregate.aggregate.count),
+    variables: { recordId },
+  })
+
   const [addFavorite, { loading: addLoading }] = useMutation(AddFavorite, {
     variables: { recordId },
     onCompleted: data => setFavoriteId(data.insert_favorites.returning[0].id),
   })
+
   const [deleteFavorite, { loading: deleteLoading }] = useMutation(
     DeleteFavorite,
     {
