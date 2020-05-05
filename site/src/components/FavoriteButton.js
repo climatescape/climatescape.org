@@ -10,15 +10,13 @@ import { faHeart as heartOutline } from "@fortawesome/free-regular-svg-icons"
 
 export const GetFavorites = gql`
   query GetFavorites($loggedIn: Boolean!, $userId: String) {
-    favorites (
-      where: { user_id: { _eq: $userId } }
-    ) @include(if: $loggedIn) {
+    favorites(where: { user_id: { _eq: $userId } }) @include(if: $loggedIn) {
       id
-      record_id
+      recordId: record_id
     }
 
-    favorites_count {
-      record_id
+    favoritesCount: favorites_count {
+      recordId: record_id
       count
     }
   }
@@ -29,12 +27,12 @@ export const GetFavorites = gql`
 export function indexFavoritesData(data) {
   if (!data) return {}
 
-  const counts = keyBy(data.favorites_count, "record_id")
-  const favorites = keyBy(data.favorites, "record_id")
+  const counts = keyBy(data.favoritesCount, "recordId")
+  const favorites = keyBy(data.favorites, "recordId")
 
-  return mapValues(counts, ({ record_id, count }) => ({
+  return mapValues(counts, ({ recordId, count }) => ({
     count, // The total count of favorites
-    id: favorites[record_id]?.id, // The user's favorite
+    id: favorites[recordId]?.id, // The user's favorite
   }))
 }
 
@@ -114,10 +112,9 @@ export default function FavoriteButton({
     >
       <FontAwesomeIcon
         icon={favorited ? heartFilled : heartOutline}
-        className={classnames(
-          "fill-curent text-lg",
-          { "text-red-500": favorited },
-        )}
+        className={classnames("fill-curent text-lg", {
+          "text-red-500": favorited,
+        })}
       />
       <div className="text-sm">{count}</div>
     </button>

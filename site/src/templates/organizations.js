@@ -2,7 +2,6 @@ import React, { useEffect } from "react"
 import { graphql } from "gatsby"
 import { uniqBy } from "lodash"
 import { useLazyQuery } from "@apollo/react-hooks"
-import gql from "graphql-tag"
 
 import { transformCategories, transformOrganizations } from "../utils/airtable"
 import { useAuth0 } from "../components/Auth0Provider"
@@ -23,7 +22,10 @@ function OrganizationsTemplate({
 
   const { loading: authLoading, user } = useAuth0()
 
-  const [getFavorites, { data: favoritesData, error: favoritesError }] = useLazyQuery(GetFavorites, {
+  const [
+    getFavorites,
+    { data: favoritesData, error: favoritesError },
+  ] = useLazyQuery(GetFavorites, {
     variables: {
       loggedIn: !!user,
       userId: user?.sub,
@@ -46,7 +48,7 @@ function OrganizationsTemplate({
   const favorites = indexFavoritesData(favoritesData)
   const allOrganizations = transformOrganizations(orgs, (raw, org) => ({
     ...org,
-    favorite: favorites[org.recordId]
+    favorite: favorites[org.recordId],
   }))
   const organizations = applyFilter(allOrganizations)
   const categories = transformCategories(data.categories.nodes)
