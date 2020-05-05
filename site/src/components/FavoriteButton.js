@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react"
 import classnames from "classnames"
-import { useAuth0 } from "./Auth0Provider"
+import { useMutation, useQuery } from "@apollo/react-hooks"
+import gql from "graphql-tag"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faHeart as heartFilled } from "@fortawesome/free-solid-svg-icons"
 import { faHeart as heartOutline } from "@fortawesome/free-regular-svg-icons"
 
-import gql from "graphql-tag"
-import { useMutation, useQuery } from "@apollo/react-hooks"
+import { useAuth0 } from "./Auth0Provider"
 
 const AddFavorite = gql`
   mutation AddFavorite($recordId: String!) {
