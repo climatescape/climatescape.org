@@ -1,8 +1,11 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { graphql } from "gatsby"
 import { uniqBy } from "lodash"
+import { useLazyQuery } from "@apollo/react-hooks"
+import gql from "graphql-tag"
 
 import { transformCategories, transformOrganizations } from "../utils/airtable"
+import { useAuth0 } from "../components/Auth0Provider"
 
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
@@ -10,6 +13,7 @@ import IndexHeader from "../components/IndexHeader"
 import { useOrganizationFilterState } from "../components/OrganizationFilter"
 import SEO from "../components/seo"
 import CategoryList from "../components/CategoryList"
+import { GetFavorites, indexFavoritesData } from "../components/FavoriteButton"
 
 function OrganizationsTemplate({
   data,
@@ -17,14 +21,33 @@ function OrganizationsTemplate({
 }) {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
 
+  const { loading: authLoading, user } = useAuth0()
+
+  const [getFavorites, { data: favoritesData, error: favoritesError }] = useLazyQuery(GetFavorites, {
+    variables: {
+      loggedIn: !!user,
+      userId: user?.sub,
+    },
+  })
+
+  if (favoritesError) console.error(favoritesError)
+
+  useEffect(() => {
+    if (!authLoading) getFavorites()
+  }, [authLoading])
+
   // We need to combine organizations from the query for sub-categories
   // and top-categories which might include duplicate orgs.
   const orgs = uniqBy(
     [...data.subOrganizations?.nodes, ...data.topOrganizations?.nodes],
-    org => org.data.Name
+    org => org.recordId
   )
 
-  const allOrganizations = transformOrganizations(orgs)
+  const favorites = indexFavoritesData(favoritesData)
+  const allOrganizations = transformOrganizations(orgs, (raw, org) => ({
+    ...org,
+    favorite: favorites[org.recordId]
+  }))
   const organizations = applyFilter(allOrganizations)
   const categories = transformCategories(data.categories.nodes)
 
@@ -58,7 +81,7 @@ function OrganizationsTemplate({
               <OrganizationCard
                 organization={org}
                 categoryId={categoryId}
-                key={org.title}
+                key={org.recordId}
               />
             ))}
           </div>

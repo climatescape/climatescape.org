@@ -149,9 +149,9 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
   })
 }
 
-export function transformOrganizations(orgs) {
+export function transformOrganizations(orgs, userTransform) {
   const organizations = orgs
-    .map(org => transformOrganization(org))
+    .map(org => transformOrganization(org, userTransform))
     .sort((a, b) => stringCompare(a.title, b.title))
 
   if (typeof window === "object") {

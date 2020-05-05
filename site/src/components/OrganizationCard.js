@@ -91,6 +91,8 @@ export default function OrganizationCard({ categoryId, organization }) {
       </Link>
       <FavoriteButton
         recordId={organization.recordId}
+        favoriteId={organization.favorite?.id}
+        count={organization.favorite?.count}
         className="mr-2 absolute right-0 top-1/2 -mt-8"
       />
     </div>
