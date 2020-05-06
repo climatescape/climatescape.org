@@ -1,10 +1,8 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { graphql } from "gatsby"
 import { uniqBy } from "lodash"
-import { useLazyQuery } from "@apollo/react-hooks"
 
 import { transformCategories, transformOrganizations } from "../utils/airtable"
-import { useAuth0 } from "../components/Auth0Provider"
 
 import Layout from "../components/layout"
 import OrganizationCard from "../components/OrganizationCard"
@@ -12,35 +10,14 @@ import IndexHeader from "../components/IndexHeader"
 import { useOrganizationFilterState } from "../components/OrganizationFilter"
 import SEO from "../components/seo"
 import CategoryList from "../components/CategoryList"
-import { GetFavorites, indexFavoritesData } from "../components/FavoriteButton"
-
-export function getFavoritesLazy(user) {
-  return useLazyQuery(GetFavorites, {
-    variables: {
-      loggedIn: !!user,
-      userId: user?.sub,
-    },
-  })
-}
+import { useFavorites } from "../utils/favorites"
 
 function OrganizationsTemplate({
   data,
   pageContext: { categoryId, categoryName, categoryCounts },
 }) {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
-
-  const { loading: authLoading, user } = useAuth0()
-
-  const [
-    getFavorites,
-    { data: favoritesData, error: favoritesError },
-  ] = getFavoritesLazy(user)
-
-  if (favoritesError) console.error(favoritesError)
-
-  useEffect(() => {
-    if (!authLoading) getFavorites()
-  }, [authLoading])
+  const favorites = useFavorites()
 
   // We need to combine organizations from the query for sub-categories
   // and top-categories which might include duplicate orgs.
@@ -49,7 +26,6 @@ function OrganizationsTemplate({
     org => org.recordId
   )
 
-  const favorites = indexFavoritesData(favoritesData)
   const allOrganizations = transformOrganizations(orgs, (raw, org) => ({
     ...org,
     favorite: favorites[org.recordId],

@@ -1,4 +1,3 @@
-import { keyBy, mapValues } from "lodash"
 import React, { useState, useEffect } from "react"
 import classnames from "classnames"
 import { useMutation } from "@apollo/react-hooks"
@@ -7,34 +6,6 @@ import gql from "graphql-tag"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faHeart as heartFilled } from "@fortawesome/free-solid-svg-icons"
 import { faHeart as heartOutline } from "@fortawesome/free-regular-svg-icons"
-
-export const GetFavorites = gql`
-  query GetFavorites($loggedIn: Boolean!, $userId: String) {
-    favorites(where: { user_id: { _eq: $userId } }) @include(if: $loggedIn) {
-      id
-      recordId: record_id
-    }
-
-    favoritesCount: favorites_count {
-      recordId: record_id
-      count
-    }
-  }
-`
-
-// Accepts raw data from the GetFavorites query and returns an object indexed
-// by record_id that has both count and the user's favorite ID
-export function indexFavoritesData(data) {
-  if (!data) return {}
-
-  const counts = keyBy(data.favoritesCount, "recordId")
-  const favorites = keyBy(data.favorites, "recordId")
-
-  return mapValues(counts, ({ recordId, count }) => ({
-    count, // The total count of favorites
-    id: favorites[recordId]?.id, // The user's favorite
-  }))
-}
 
 const AddFavorite = gql`
   mutation AddFavorite($recordId: String!) {
