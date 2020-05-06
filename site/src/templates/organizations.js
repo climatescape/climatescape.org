@@ -14,6 +14,15 @@ import SEO from "../components/seo"
 import CategoryList from "../components/CategoryList"
 import { GetFavorites, indexFavoritesData } from "../components/FavoriteButton"
 
+export function getFavoritesLazy(user) {
+  return useLazyQuery(GetFavorites, {
+    variables: {
+      loggedIn: !!user,
+      userId: user?.sub,
+    },
+  })
+}
+
 function OrganizationsTemplate({
   data,
   pageContext: { categoryId, categoryName, categoryCounts },
@@ -25,12 +34,7 @@ function OrganizationsTemplate({
   const [
     getFavorites,
     { data: favoritesData, error: favoritesError },
-  ] = useLazyQuery(GetFavorites, {
-    variables: {
-      loggedIn: !!user,
-      userId: user?.sub,
-    },
-  })
+  ] = getFavoritesLazy(user)
 
   if (favoritesError) console.error(favoritesError)
 
