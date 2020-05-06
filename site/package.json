@@ -22,6 +22,7 @@
     "apollo-boost": "^0.4.7",
     "apollo-cache-persist": "^0.1.1",
     "apollo-link-context": "^1.0.20",
+    "apollo-link-error": "^1.1.13",
     "classnames": "^2.2.6",
     "dotenv": "^8.2.0",
     "gatsby": "^2.20.10",

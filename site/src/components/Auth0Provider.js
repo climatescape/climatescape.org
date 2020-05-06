@@ -1,7 +1,6 @@
 // Adapted from https://auth0.com/docs/quickstart/spa/react/01-login
 import React, { useState, useEffect, useContext } from "react"
 import { navigate, useStaticQuery, graphql } from "gatsby"
-import compact from "lodash/compact"
 import createAuth0Client from "@auth0/auth0-spa-js"
 
 const DefaultRedirectCallback = ({ returnTo }) => {
@@ -76,8 +75,8 @@ export const Auth0Provider = ({
 
   const loginWithRedirect = (args = {}) => {
     return auth0Client.loginWithRedirect({
-      appState: { returnTo: location.pathname },
-      ...args
+      appState: { returnTo: window.location.pathname },
+      ...args,
     })
   }
 

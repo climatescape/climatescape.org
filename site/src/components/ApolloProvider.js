@@ -17,7 +17,7 @@ export const ApolloProvider = ({ children }) => {
     if (!token) return {}
 
     return {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     }
   })
 
@@ -35,5 +35,9 @@ export const ApolloProvider = ({ children }) => {
     cache: new InMemoryCache(),
   })
 
-  return <VanillaApolloProvider client={apolloClient}>{children}</VanillaApolloProvider>
+  return (
+    <VanillaApolloProvider client={apolloClient}>
+      {children}
+    </VanillaApolloProvider>
+  )
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import noop from "lodash/noop"
 import classnames from "classnames"
 import { useMutation } from "@apollo/react-hooks"
 import gql from "graphql-tag"
@@ -69,10 +70,9 @@ export default function FavoriteButton({
   const handleClick = event => {
     event.preventDefault()
 
-    if (!isAuthenticated) return loginWithRedirect()
-    if (addLoading || deleteLoading) return
-
-    if (!favorited) addFavorite()
+    if (!isAuthenticated) loginWithRedirect()
+    else if (addLoading || deleteLoading) noop()
+    else if (!favorited) addFavorite()
     else deleteFavorite()
   }
 
