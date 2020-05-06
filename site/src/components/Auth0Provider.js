@@ -17,7 +17,6 @@ export const Auth0Provider = ({
   const [user, setUser] = useState()
   const [auth0Client, setAuth0] = useState()
   const [loading, setLoading] = useState(true)
-  const [popupOpen, setPopupOpen] = useState(false)
 
   const data = useStaticQuery(graphql`
     query Auth0ProviderQuery {
@@ -72,39 +71,15 @@ export const Auth0Provider = ({
     initAuth0()
   }, [])
 
-  const loginWithPopup = async (params = {}) => {
-    setPopupOpen(true)
-    try {
-      await auth0Client.loginWithPopup(params)
-    } catch (error) {
-      console.error(error) // eslint-disable-line no-console
-    } finally {
-      setPopupOpen(false)
-    }
-    setUser(await auth0Client.getUser())
-    setIsAuthenticated(true)
-  }
-
-  const handleRedirectCallback = async () => {
-    setLoading(true)
-    await auth0Client.handleRedirectCallback()
-    setUser(await auth0Client.getUser())
-    setLoading(false)
-    setIsAuthenticated(true)
-  }
   return (
     <Auth0Context.Provider
       value={{
         isAuthenticated,
         user,
         loading,
-        popupOpen,
-        loginWithPopup,
-        handleRedirectCallback,
         getIdTokenClaims: (...p) => auth0Client.getIdTokenClaims(...p),
         loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
         getTokenSilently: (...p) => auth0Client.getTokenSilently(...p),
-        getTokenWithPopup: (...p) => auth0Client.getTokenWithPopup(...p),
         logout: (...p) => auth0Client.logout(...p),
       }}
     >

@@ -24,7 +24,7 @@ const LoginPage = () => {
     <Layout contentClassName="text-center pt-16">
       <p className="lg:text-xl">
         {!isAuthenticated && (
-          <button onClick={() => loginWithRedirect({})}>Log in</button>
+          <button onClick={() => loginWithRedirect()}>Log in</button>
         )}
         {isAuthenticated && <button onClick={() => logout()}>Log out</button>}
       </p>
