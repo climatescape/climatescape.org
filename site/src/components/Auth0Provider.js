@@ -1,16 +1,19 @@
 // Adapted from https://auth0.com/docs/quickstart/spa/react/01-login
 import React, { useState, useEffect, useContext } from "react"
 import { navigate, useStaticQuery, graphql } from "gatsby"
+import compact from "lodash/compact"
 import createAuth0Client from "@auth0/auth0-spa-js"
 
-const DEFAULT_REDIRECT_CALLBACK = () => navigate("/")
+const DefaultRedirectCallback = ({ returnTo }) => {
+  navigate(returnTo || "/")
+}
 
 export const Auth0Context = React.createContext()
 export const useAuth0 = () => useContext(Auth0Context)
 export const Auth0Provider = ({
   audience,
   children,
-  onRedirectCallback = DEFAULT_REDIRECT_CALLBACK,
+  onRedirectCallback = DefaultRedirectCallback,
   ...initOptions
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState()
@@ -71,14 +74,21 @@ export const Auth0Provider = ({
     initAuth0()
   }, [])
 
+  const loginWithRedirect = (args = {}) => {
+    return auth0Client.loginWithRedirect({
+      appState: { returnTo: location.pathname },
+      ...args
+    })
+  }
+
   return (
     <Auth0Context.Provider
       value={{
         isAuthenticated,
         user,
         loading,
+        loginWithRedirect,
         getIdTokenClaims: (...p) => auth0Client.getIdTokenClaims(...p),
-        loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
         getTokenSilently: (...p) => auth0Client.getTokenSilently(...p),
         logout: (...p) => auth0Client.logout(...p),
       }}

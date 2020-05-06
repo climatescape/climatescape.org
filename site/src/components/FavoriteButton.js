@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react"
 import classnames from "classnames"
 import { useMutation } from "@apollo/react-hooks"
 import gql from "graphql-tag"
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faHeart as heartFilled } from "@fortawesome/free-solid-svg-icons"
 import { faHeart as heartOutline } from "@fortawesome/free-regular-svg-icons"
+
+import { useAuth0 } from "./Auth0Provider"
 
 const AddFavorite = gql`
   mutation AddFavorite($recordId: String!) {
@@ -34,6 +35,7 @@ export default function FavoriteButton({
   count: propCount,
   favoriteId: propFavoriteId,
 }) {
+  const { isAuthenticated, loginWithRedirect } = useAuth0()
   const [favoriteId, setFavoriteId] = useState()
   const [count, setCount] = useState()
   const favorited = !!favoriteId
@@ -67,6 +69,7 @@ export default function FavoriteButton({
   const handleClick = event => {
     event.preventDefault()
 
+    if (!isAuthenticated) return loginWithRedirect()
     if (addLoading || deleteLoading) return
 
     if (!favorited) addFavorite()

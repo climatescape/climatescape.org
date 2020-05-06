@@ -43,14 +43,12 @@ export function useFavorites() {
   const { loading: authLoading, user } = useAuth0()
   const [favorites, setFavorites] = useState({})
 
-  const [getFavorites, { data, error }] = useLazyQuery(GetFavorites, {
+  const [getFavorites, { data }] = useLazyQuery(GetFavorites, {
     variables: {
       loggedIn: !!user,
       userId: user?.sub,
     },
   })
-
-  if (error) console.error(error) // eslint-disable-line no-console
 
   useEffect(() => {
     if (!authLoading) getFavorites()
