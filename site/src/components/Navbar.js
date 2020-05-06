@@ -1,10 +1,13 @@
 import React from "react"
 import { useStaticQuery, graphql, Link } from "gatsby"
+import { useAuth0 } from "./Auth0Provider"
 
 import Search from "./search/index"
 import { SearchInput } from "./search/input"
 
 const Navbar = () => {
+  const { isAuthenticated, loginWithRedirect, logout } = useAuth0()
+
   const isSSR = typeof window === "undefined"
 
   const data = useStaticQuery(graphql`
@@ -54,10 +57,25 @@ const Navbar = () => {
 
             <Link
               to="/contribute"
-              className="inline-block text-sm px-4 py-2 leading-none border rounded  border-gray-600 hover:border-gray-700 sm:mt-0"
+              className="block mt-4 sm:inline-block sm:mt-0 mr-4"
             >
               Contribute
             </Link>
+            {isAuthenticated ? (
+              <button
+                className="inline-block text-sm px-4 py-2 leading-none border rounded  border-gray-600 hover:border-gray-700 sm:mt-0"
+                onClick={() => logout()}
+              >
+                Log out
+              </button>
+            ) : (
+              <button
+                className="inline-block text-sm px-4 py-2 leading-none border rounded  border-gray-600 hover:border-gray-700 sm:mt-0"
+                onClick={() => loginWithRedirect()}
+              >
+                Log in
+              </button>
+            )}
           </div>
         </div>
 

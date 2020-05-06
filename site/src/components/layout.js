@@ -73,7 +73,6 @@ const Layout = ({ children, contentClassName }) => {
               divider={i !== footerLinks.length - 1}
             />
           ))}
-          <Link to="/login">Login</Link>
         </div>
         <div className="pt-3 sm:pt-0 flex justify-center">
           <a href="https://www.netlify.com">
