@@ -1,6 +1,6 @@
 import React from "react"
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink } from "apollo-boost"
-import { ApolloProvider } from "react-apollo"
+import { ApolloProvider as VanillaApolloProvider } from "react-apollo"
 import { setContext } from "apollo-link-context"
 import { onError } from "apollo-link-error"
 import fetch from "isomorphic-fetch"
@@ -35,5 +35,5 @@ export const ApolloProvider = ({ children }) => {
     cache: new InMemoryCache(),
   })
 
-  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
+  return <VanillaApolloProvider client={apolloClient}>{children}</VanillaApolloProvider>
 }

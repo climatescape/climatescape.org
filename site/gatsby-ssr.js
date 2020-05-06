@@ -7,9 +7,7 @@
 const React = require("react")
 
 const { Auth0Provider } = require("./src/components/Auth0Provider")
-const {
-  ApolloProvider,
-} = require("./src/components/ApolloProvider")
+const { ApolloProvider } = require("./src/components/ApolloProvider")
 
 exports.wrapRootElement = ({ element }) => (
   <Auth0Provider redirect_uri={"noop"} onRedirectCallback={() => {}}>
