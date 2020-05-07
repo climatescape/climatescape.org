@@ -41,31 +41,19 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex text-sm w-3/5 items-center justify-end">
-            <Link
-              to="/categories/atmosphere"
-              className="mr-4"
-            >
+            <Link to="/categories/atmosphere" className="mr-4">
               Organizations
             </Link>
 
-            <Link
-              to="/capital"
-              className="mr-4"
-            >
+            <Link to="/capital" className="mr-4">
               Capital
             </Link>
 
-            <Link
-              to="/contribute"
-              className="mr-4"
-            >
+            <Link to="/contribute" className="mr-4">
               Contribute
             </Link>
             {isAuthenticated ? (
-              <button
-                className="mr-4"
-                onClick={() => logout()}
-              >
+              <button className="mr-4" onClick={() => logout()}>
                 Sign out
               </button>
             ) : (
