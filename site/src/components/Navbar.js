@@ -30,7 +30,7 @@ const Navbar = () => {
             alt="Logo: Earth Network"
             className="h-6 w-6 fill-current mr-3 self-center"
           /> */}
-          <span className="self-center text-l py-2 font-title">
+          <span className="self-center text-l py-2">
             {data.site.siteMetadata.title}
           </span>
         </Link>
@@ -40,40 +40,40 @@ const Navbar = () => {
             {isSSR ? <SearchInput /> : <Search />}
           </div>
 
-          <div className="md:w-3/5 flex items-center text-sm sm:text-right hidden md:block">
+          <div className="hidden md:flex text-sm w-3/5 items-center justify-end">
             <Link
               to="/categories/atmosphere"
-              className="block mt-4 sm:inline-block sm:mt-0 mr-4"
+              className="mr-4"
             >
               Organizations
             </Link>
 
             <Link
               to="/capital"
-              className="block mt-4 sm:inline-block sm:mt-0 mr-4"
+              className="mr-4"
             >
               Capital
             </Link>
 
             <Link
               to="/contribute"
-              className="block mt-4 sm:inline-block sm:mt-0 mr-4"
+              className="mr-4"
             >
               Contribute
             </Link>
             {isAuthenticated ? (
               <button
-                className="inline-block text-sm px-4 py-2 leading-none border rounded  border-gray-600 hover:border-gray-700 sm:mt-0"
+                className="mr-4"
                 onClick={() => logout()}
               >
-                Log out
+                Sign out
               </button>
             ) : (
               <button
-                className="inline-block text-sm px-4 py-2 leading-none border rounded  border-gray-600 hover:border-gray-700 sm:mt-0"
+                className="px-4 py-1 border rounded border-gray-600 hover:border-gray-700"
                 onClick={() => loginWithRedirect()}
               >
-                Log in
+                Sign in
               </button>
             )}
           </div>
