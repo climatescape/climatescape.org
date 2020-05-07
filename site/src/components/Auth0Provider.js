@@ -80,6 +80,13 @@ export const Auth0Provider = ({
     })
   }
 
+  const logout = (args = {}) => {
+    return auth0Client.logout({
+      returnTo: window.location.origin,
+      ...args
+    })
+  }
+
   return (
     <Auth0Context.Provider
       value={{
@@ -87,9 +94,9 @@ export const Auth0Provider = ({
         user,
         loading,
         loginWithRedirect,
+        logout,
         getIdTokenClaims: (...p) => auth0Client.getIdTokenClaims(...p),
         getTokenSilently: (...p) => auth0Client.getTokenSilently(...p),
-        logout: (...p) => auth0Client.logout(...p),
       }}
     >
       {children}
