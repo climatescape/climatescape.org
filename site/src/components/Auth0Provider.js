@@ -83,7 +83,7 @@ export const Auth0Provider = ({
   const logout = (args = {}) => {
     return auth0Client.logout({
       returnTo: window.location.origin,
-      ...args
+      ...args,
     })
   }
 
