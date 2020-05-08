@@ -32,6 +32,7 @@ function indexFavoritesData(data) {
   }))
 }
 
+const APP_CLAIM = "https://climatescape.org/app"
 // Fetches all favorites data from the GraphQL API, waiting until Auth0 is done
 // loading so that the current user's favorites may be fetched. Returns a hooked
 // object that will eventually take the following shape:
@@ -42,11 +43,12 @@ function indexFavoritesData(data) {
 export function useFavorites() {
   const { loading: authLoading, user } = useAuth0()
   const [favorites, setFavorites] = useState({})
+  const uuid = user?.[APP_CLAIM]?.uuid
 
   const [getFavorites, { data }] = useLazyQuery(GetFavorites, {
     variables: {
       loggedIn: !!user,
-      userId: user?.appMetadata?.uuid,
+      userId: uuid,
     },
   })
 
