@@ -1,32 +1,81 @@
 - table:
     schema: public
-    name: list_organizations
+    name: favorites
   object_relationships:
-  - name: list
+  - name: user
     using:
-      foreign_key_constraint_on: list_id
-  - name: organization
-    using:
-      foreign_key_constraint_on: organization_id
+      foreign_key_constraint_on: user_id
+  insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      set:
+        user_id: x-hasura-User-Id
+      columns:
+      - record_id
+      backend_only: false
+  select_permissions:
+  - role: public
+    permission:
+      columns:
+      - created_at
+      - id
+      - record_id
+      - user_id
+      filter:
+        deleted_at:
+          _is_null: false
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+      - created_at
+      - id
+      - record_id
+      - user_id
+      filter:
+        deleted_at:
+          _is_null: true
+  update_permissions:
+  - role: user
+    permission:
+      columns:
+      - deleted_at
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      check: null
 - table:
     schema: public
-    name: lists
-  array_relationships:
-  - name: list_organizations
-    using:
-      foreign_key_constraint_on:
-        column: list_id
-        table:
-          schema: public
-          name: list_organizations
+    name: favorites_count
+  select_permissions:
+  - role: public
+    permission:
+      columns:
+      - record_id
+      - count
+      filter: {}
+  - role: user
+    permission:
+      columns:
+      - count
+      - record_id
+      filter: {}
 - table:
     schema: public
-    name: organizations
+    name: users
   array_relationships:
-  - name: list_organizations
+  - name: favorites
     using:
       foreign_key_constraint_on:
-        column: organization_id
+        column: user_id
         table:
           schema: public
-          name: list_organizations
+          name: favorites
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - created_at
+      - id
+      filter: {}

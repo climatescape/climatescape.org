@@ -16,7 +16,7 @@ Hasura is built on top of [Postgres][pg], a most excellent database.
 > reliability, feature robustness, and performance.
 
 The end result is that we're able to maintain a very flexible [GraphQL][graphql]
-API with minimal developmand and operational overhead.
+API with minimal development and operational overhead.
 
 ## Setup
 
