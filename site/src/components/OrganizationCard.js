@@ -42,7 +42,7 @@ export default function OrganizationCard({ categoryId, organization }) {
     <div className="border-gray-400 border-b flex text-gray-900 relative">
       <Link
         to={slug}
-        className="flex flex-grow py-4 pl-2 pr-16 hover:bg-gray-200"
+        className="flex flex-grow py-2 sm:py-4 sm:pl-2 sm:pr-16 hover:bg-gray-200"
       >
         <div className="w-24 flex-shrink-0 hidden sm:block">
           {img && (
@@ -54,7 +54,7 @@ export default function OrganizationCard({ categoryId, organization }) {
             />
           )}
         </div>
-        <div className="flex-grow flex flex-col justify-center pl-4">
+        <div className="flex-grow flex flex-col justify-center sm:pl-4">
           <p>
             <span className="font-bold mr-2">{title}</span>
             {description}
@@ -93,7 +93,7 @@ export default function OrganizationCard({ categoryId, organization }) {
         recordId={organization.recordId}
         favoriteId={organization.favorite?.id}
         count={organization.favorite?.count}
-        className="mr-2 absolute right-0 top-1/2 -mt-8"
+        className="mr-2 absolute right-0 top-1/2 -mt-8 hidden sm:block"
       />
     </div>
   )

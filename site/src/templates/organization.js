@@ -219,7 +219,7 @@ export default function OrganizationTemplate({ data }) {
                 recordId={org.recordId}
                 favoriteId={org.favorite?.id}
                 count={org.favorite?.count}
-                className="ml-auto"
+                className="ml-auto hidden sm:block"
               />
             </div>
 
