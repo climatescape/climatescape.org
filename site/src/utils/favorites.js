@@ -5,14 +5,14 @@ import gql from "graphql-tag"
 import { useAuth0 } from "../components/Auth0Provider"
 
 export const GetFavorites = gql`
-  query GetFavorites($loggedIn: Boolean!, $userId: String) {
-    favorites(where: { user_id: { _eq: $userId } }) @include(if: $loggedIn) {
+  query GetFavorites($loggedIn: Boolean!, $userId: uuid) {
+    favorites(where: { userId: { _eq: $userId } }) @include(if: $loggedIn) {
       id
-      recordId: record_id
+      recordId
     }
 
-    favoritesCount: favorites_count {
-      recordId: record_id
+    favoritesCount {
+      recordId
       count
     }
   }
@@ -46,7 +46,7 @@ export function useFavorites() {
   const [getFavorites, { data }] = useLazyQuery(GetFavorites, {
     variables: {
       loggedIn: !!user,
-      userId: user?.sub,
+      userId: user?.appMetadata?.uuid,
     },
   })
 

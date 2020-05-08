@@ -11,7 +11,7 @@ import { useAuth0 } from "./Auth0Provider"
 
 const AddFavorite = gql`
   mutation AddFavorite($recordId: String!) {
-    insert_favorites(objects: [{ record_id: $recordId }]) {
+    insertFavorites(objects: [{ recordId: $recordId }]) {
       returning {
         id
       }
@@ -21,9 +21,9 @@ const AddFavorite = gql`
 
 const DeleteFavorite = gql`
   mutation DeleteFavorite($id: uuid!) {
-    update_favorites(
+    updateFavorites(
       where: { id: { _eq: $id } }
-      _set: { deleted_at: "NOW()" }
+      _set: { deletedAt: "NOW()" }
     ) {
       affected_rows
     }
@@ -50,7 +50,7 @@ export default function FavoriteButton({
     variables: { recordId },
     refetchQueries: ["GetFavorites"],
     onCompleted: data => {
-      setFavoriteId(data.insert_favorites.returning[0].id)
+      setFavoriteId(data.insertFavorites.returning[0].id)
       setCount(count + 1)
     },
   })
