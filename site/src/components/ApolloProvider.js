@@ -9,7 +9,9 @@ import { useAuth0 } from "./Auth0Provider"
 
 export const ApolloProvider = ({ children }) => {
   const { getTokenSilently, isAuthenticated } = useAuth0()
-  const { site: { siteMetadata }} = useStaticQuery(graphql`
+  const {
+    site: { siteMetadata },
+  } = useStaticQuery(graphql`
     query ApolloProviderQuery {
       site {
         siteMetadata {

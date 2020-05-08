@@ -1,7 +1,6 @@
 import React from "react"
 import { graphql } from "gatsby"
-import uniqBy from "lodash/uniqby"
-import sortBy from "lodash/sortby"
+import uniqBy from "lodash/uniqBy"
 
 import { transformCategories, transformOrganizations } from "../utils/airtable"
 
