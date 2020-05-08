@@ -1,10 +1,13 @@
 import React from "react"
 import { useStaticQuery, graphql, Link } from "gatsby"
+import { useAuth0 } from "./Auth0Provider"
 
 import Search from "./search/index"
 import { SearchInput } from "./search/input"
 
 const Navbar = () => {
+  const { isAuthenticated, loginWithRedirect, logout } = useAuth0()
+
   const isSSR = typeof window === "undefined"
 
   const data = useStaticQuery(graphql`
@@ -27,7 +30,7 @@ const Navbar = () => {
             alt="Logo: Earth Network"
             className="h-6 w-6 fill-current mr-3 self-center"
           /> */}
-          <span className="self-center text-l py-2 font-title">
+          <span className="self-center text-l py-2">
             {data.site.siteMetadata.title}
           </span>
         </Link>
@@ -37,27 +40,30 @@ const Navbar = () => {
             {isSSR ? <SearchInput /> : <Search />}
           </div>
 
-          <div className="md:w-3/5 flex items-center text-sm sm:text-right hidden md:block">
-            <Link
-              to="/categories/atmosphere"
-              className="block mt-4 sm:inline-block sm:mt-0 mr-4"
-            >
+          <div className="hidden md:flex text-sm w-3/5 items-center justify-end">
+            <Link to="/categories/atmosphere" className="mr-4">
               Organizations
             </Link>
 
-            <Link
-              to="/capital"
-              className="block mt-4 sm:inline-block sm:mt-0 mr-4"
-            >
+            <Link to="/capital" className="mr-4">
               Capital
             </Link>
 
-            <Link
-              to="/contribute"
-              className="inline-block text-sm px-4 py-2 leading-none border rounded  border-gray-600 hover:border-gray-700 sm:mt-0"
-            >
+            <Link to="/contribute" className="mr-4">
               Contribute
             </Link>
+            {isAuthenticated ? (
+              <button className="mr-4" onClick={() => logout()}>
+                Sign out
+              </button>
+            ) : (
+              <button
+                className="px-4 py-1 border rounded border-gray-600 hover:border-gray-700"
+                onClick={() => loginWithRedirect()}
+              >
+                Sign in
+              </button>
+            )}
           </div>
         </div>
 

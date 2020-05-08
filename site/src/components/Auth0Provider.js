@@ -3,20 +3,22 @@ import React, { useState, useEffect, useContext } from "react"
 import { navigate, useStaticQuery, graphql } from "gatsby"
 import createAuth0Client from "@auth0/auth0-spa-js"
 
-const DEFAULT_REDIRECT_CALLBACK = () => navigate("/")
+const DefaultRedirectCallback = ({ returnTo }) => {
+  navigate(returnTo || "/")
+}
 
 export const Auth0Context = React.createContext()
 export const useAuth0 = () => useContext(Auth0Context)
 export const Auth0Provider = ({
+  audience,
   children,
-  onRedirectCallback = DEFAULT_REDIRECT_CALLBACK,
+  onRedirectCallback = DefaultRedirectCallback,
   ...initOptions
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState()
   const [user, setUser] = useState()
   const [auth0Client, setAuth0] = useState()
   const [loading, setLoading] = useState(true)
-  const [popupOpen, setPopupOpen] = useState(false)
 
   const data = useStaticQuery(graphql`
     query Auth0ProviderQuery {
@@ -38,7 +40,12 @@ export const Auth0Provider = ({
       },
     },
   } = data
-  initOptions = { client_id: clientId, domain, ...initOptions }
+  initOptions = {
+    client_id: clientId,
+    domain,
+    audience: "hasura-api",
+    ...initOptions,
+  }
 
   useEffect(() => {
     const initAuth0 = async () => {
@@ -66,40 +73,30 @@ export const Auth0Provider = ({
     initAuth0()
   }, [])
 
-  const loginWithPopup = async (params = {}) => {
-    setPopupOpen(true)
-    try {
-      await auth0Client.loginWithPopup(params)
-    } catch (error) {
-      console.error(error) // eslint-disable-line no-console
-    } finally {
-      setPopupOpen(false)
-    }
-    setUser(await auth0Client.getUser())
-    setIsAuthenticated(true)
+  const loginWithRedirect = (args = {}) => {
+    return auth0Client.loginWithRedirect({
+      appState: { returnTo: window.location.pathname },
+      ...args,
+    })
   }
 
-  const handleRedirectCallback = async () => {
-    setLoading(true)
-    await auth0Client.handleRedirectCallback()
-    setUser(await auth0Client.getUser())
-    setLoading(false)
-    setIsAuthenticated(true)
+  const logout = (args = {}) => {
+    return auth0Client.logout({
+      returnTo: window.location.origin,
+      ...args,
+    })
   }
+
   return (
     <Auth0Context.Provider
       value={{
         isAuthenticated,
         user,
         loading,
-        popupOpen,
-        loginWithPopup,
-        handleRedirectCallback,
+        loginWithRedirect,
+        logout,
         getIdTokenClaims: (...p) => auth0Client.getIdTokenClaims(...p),
-        loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
         getTokenSilently: (...p) => auth0Client.getTokenSilently(...p),
-        getTokenWithPopup: (...p) => auth0Client.getTokenWithPopup(...p),
-        logout: (...p) => auth0Client.logout(...p),
       }}
     >
       {children}

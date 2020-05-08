@@ -80,6 +80,7 @@ function truncateDescription(string) {
 export function transformOrganization(raw, userTransform = (_, out) => out) {
   const {
     id,
+    recordId,
     data: {
       Name,
       About,
@@ -107,6 +108,7 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
 
   return userTransform(raw, {
     id,
+    recordId,
     title: Name,
     description: truncateDescription(Tagline || About),
     tagline: Tagline,
@@ -147,9 +149,9 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
   })
 }
 
-export function transformOrganizations(orgs) {
+export function transformOrganizations(orgs, userTransform) {
   const organizations = orgs
-    .map(org => transformOrganization(org))
+    .map(org => transformOrganization(org, userTransform))
     .sort((a, b) => stringCompare(a.title, b.title))
 
   if (typeof window === "object") {

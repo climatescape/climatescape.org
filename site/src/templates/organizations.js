@@ -10,21 +10,26 @@ import IndexHeader from "../components/IndexHeader"
 import { useOrganizationFilterState } from "../components/OrganizationFilter"
 import SEO from "../components/seo"
 import CategoryList from "../components/CategoryList"
+import { useFavorites } from "../utils/favorites"
 
 function OrganizationsTemplate({
   data,
   pageContext: { categoryId, categoryName, categoryCounts },
 }) {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
+  const favorites = useFavorites()
 
   // We need to combine organizations from the query for sub-categories
   // and top-categories which might include duplicate orgs.
   const orgs = uniqBy(
     [...data.subOrganizations?.nodes, ...data.topOrganizations?.nodes],
-    org => org.data.Name
+    org => org.recordId
   )
 
-  const allOrganizations = transformOrganizations(orgs)
+  const allOrganizations = transformOrganizations(orgs, (raw, org) => ({
+    ...org,
+    favorite: favorites[org.recordId],
+  }))
   const organizations = applyFilter(allOrganizations)
   const categories = transformCategories(data.categories.nodes)
 
@@ -58,7 +63,7 @@ function OrganizationsTemplate({
               <OrganizationCard
                 organization={org}
                 categoryId={categoryId}
-                key={org.title}
+                key={org.recordId}
               />
             ))}
           </div>

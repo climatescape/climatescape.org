@@ -1,6 +1,7 @@
 import React from "react"
 import { graphql } from "gatsby"
 import flatMap from "lodash/flatMap"
+import { useFavorites } from "../utils/favorites"
 
 import {
   transformOrganizations,
@@ -24,6 +25,7 @@ const CapitalTemplate = ({
   pageContext: { activeTypeId },
 }) => {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
+  const favorites = useFavorites()
 
   const capitalTypes = transformCapitalTypes(capitalTypeNodes)
   const activeType = capitalTypes.find(({ id }) => id === activeTypeId)
@@ -40,7 +42,13 @@ const CapitalTemplate = ({
     organizationNodes = []
   }
 
-  const allOrganizations = transformOrganizations(organizationNodes)
+  const allOrganizations = transformOrganizations(
+    organizationNodes,
+    (raw, org) => ({
+      ...org,
+      favorite: favorites[org.recordId],
+    })
+  )
   const organizations = applyFilter(allOrganizations)
 
   const { capitalAddFormUrl } = site.siteMetadata
