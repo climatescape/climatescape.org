@@ -21,10 +21,7 @@ const AddFavorite = gql`
 
 const DeleteFavorite = gql`
   mutation DeleteFavorite($id: uuid!) {
-    updateFavorites(
-      where: { id: { _eq: $id } }
-      _set: { deletedAt: "NOW()" }
-    ) {
+    updateFavorites(where: { id: { _eq: $id } }, _set: { deletedAt: "NOW()" }) {
       affected_rows
     }
   }
