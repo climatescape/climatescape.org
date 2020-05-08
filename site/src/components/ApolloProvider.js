@@ -1,4 +1,5 @@
 import React from "react"
+import { useStaticQuery, graphql } from "gatsby"
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink } from "apollo-boost"
 import { ApolloProvider as VanillaApolloProvider } from "react-apollo"
 import { setContext } from "apollo-link-context"
@@ -8,6 +9,15 @@ import { useAuth0 } from "./Auth0Provider"
 
 export const ApolloProvider = ({ children }) => {
   const { getTokenSilently, isAuthenticated } = useAuth0()
+  const { site: { siteMetadata }} = useStaticQuery(graphql`
+    query ApolloProviderQuery {
+      site {
+        siteMetadata {
+          graphqlUri
+        }
+      }
+    }
+  `)
 
   const tokenLink = setContext(async () => {
     if (!isAuthenticated) return {}
@@ -26,7 +36,7 @@ export const ApolloProvider = ({ children }) => {
   })
 
   const httpLink = new HttpLink({
-    uri: "https://climatescape-hasura.herokuapp.com/v1/graphql",
+    uri: siteMetadata.graphqlUri,
     fetch,
   })
 

@@ -1,4 +1,5 @@
 import compact from "lodash/compact"
+import sortBy from "lodash/sortby"
 
 import { stringCompare } from "./string"
 import { makeSlug } from "./slug"
@@ -150,9 +151,13 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
 }
 
 export function transformOrganizations(orgs, userTransform) {
-  const organizations = orgs
-    .map(org => transformOrganization(org, userTransform))
-    .sort((a, b) => stringCompare(a.title, b.title))
+  const organizations = sortBy(
+    orgs.map(org => transformOrganization(org, userTransform)),
+    [
+      org => -(org.favorite?.count || 0),
+      "title"
+    ]
+  )
 
   if (typeof window === "object") {
     // eslint-disable-next-line no-restricted-globals

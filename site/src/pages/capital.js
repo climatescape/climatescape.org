@@ -21,11 +21,12 @@ const CapitalTemplate = ({
     allOrganizations: allOrganizationData,
     activeType: activeTypeData,
     site,
+    climatescape,
   },
   pageContext: { activeTypeId },
 }) => {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
-  const favorites = useFavorites()
+  const favorites = useFavorites(climatescape)
 
   const capitalTypes = transformCapitalTypes(capitalTypeNodes)
   const activeType = capitalTypes.find(({ id }) => id === activeTypeId)
@@ -145,6 +146,8 @@ export const query = graphql`
         }
       }
     }
+
+    ...StaticFavorites
 
     site {
       siteMetadata {

@@ -182,7 +182,7 @@ const CapitalSection = ({
 
 export default function OrganizationTemplate({ data }) {
   const siteTitle = data.site.siteMetadata.title
-  const favorites = useFavorites()
+  const favorites = useFavorites(data.climatescape)
 
   const org = transformOrganization(data.organization, (raw, out) => ({
     ...out,
@@ -274,7 +274,7 @@ export const query = graphql`
         title
       }
     }
-
+    ...StaticFavorites
     organization: airtable(table: { eq: "Organizations" }, id: { eq: $id }) {
       recordId
       data {

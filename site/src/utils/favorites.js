@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { useLazyQuery } from "@apollo/react-hooks"
 import gql from "graphql-tag"
 import { useAuth0 } from "../components/Auth0Provider"
+import { graphql } from "gatsby"
 
 export const GetFavorites = gql`
   query GetFavorites($loggedIn: Boolean!, $userId: uuid) {
@@ -14,6 +15,18 @@ export const GetFavorites = gql`
     favoritesCount {
       recordId
       count
+    }
+  }
+`
+
+// For Gatsby to pull favorites when building the site
+export const query = graphql`
+  fragment StaticFavorites on Query {
+    climatescape {
+      favoritesCount {
+        recordId
+        count
+      }
     }
   }
 `
@@ -40,7 +53,7 @@ const APP_CLAIM = "https://climatescape.org/app"
 //   "rec1": { count: 14, id: "uuid-of-users-favorite" },
 //   "rec2": { count: 2, id: null },
 // }
-export function useFavorites() {
+export function useFavorites(defaultData) {
   const { loading: authLoading, user } = useAuth0()
   const [favorites, setFavorites] = useState({})
   const uuid = user?.[APP_CLAIM]?.uuid
@@ -57,8 +70,10 @@ export function useFavorites() {
   }, [authLoading])
 
   useEffect(() => {
-    if (data) setFavorites(indexFavoritesData(data))
-  }, [data])
+    const favData = data || defaultData
+
+    if (favData) setFavorites(indexFavoritesData(favData))
+  }, [data, defaultData])
 
   return favorites
 }

@@ -1,6 +1,7 @@
 import React from "react"
 import { graphql } from "gatsby"
-import { uniqBy } from "lodash"
+import uniqBy from "lodash/uniqby"
+import sortBy from "lodash/sortby"
 
 import { transformCategories, transformOrganizations } from "../utils/airtable"
 
@@ -17,7 +18,7 @@ function OrganizationsTemplate({
   pageContext: { categoryId, categoryName, categoryCounts },
 }) {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
-  const favorites = useFavorites()
+  const favorites = useFavorites(data.climatescape)
 
   // We need to combine organizations from the query for sub-categories
   // and top-categories which might include duplicate orgs.
@@ -138,6 +139,7 @@ export const query = graphql`
         ...OrganizationCard
       }
     }
+    ...StaticFavorites
   }
 `
 
