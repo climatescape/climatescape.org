@@ -1,5 +1,6 @@
 import compact from "lodash/compact"
 import sortBy from "lodash/sortBy"
+import trim from "lodash/trim"
 
 import { stringCompare } from "./string"
 import { makeSlug } from "./slug"
@@ -153,7 +154,11 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
 export function transformOrganizations(orgs, userTransform) {
   const organizations = sortBy(
     orgs.map(org => transformOrganization(org, userTransform)),
-    [org => -(org.favorite?.count || 0), "title"]
+    [
+      org => -(org.favorite?.count || 0), // Number of favs DESC
+      org => !trim(org.description).length, // Missing description LAST
+      "title", // By title ASC
+    ]
   )
 
   if (typeof window === "object") {
