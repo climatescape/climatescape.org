@@ -34,6 +34,7 @@ function transformCategory(category) {
 }
 
 export function transformCategories(rawCategories) {
+  console.log("EXPENSIVE - transform categories")
   const categories = rawCategories
     .map(transformCategory)
     .sort((a, b) => stringCompare(a.name, b.name))
@@ -151,15 +152,17 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
   })
 }
 
+export const sortOrganizations = organizations => sortBy(
+  organizations,
+  [
+    org => -(org.favorite?.count || 0), // First by number of favs (DESC)
+    org => !trim(org.description).length, // Then by presence of description
+    "title", // Finally by title
+  ]
+)
+
 export function transformOrganizations(orgs, userTransform) {
-  const organizations = sortBy(
-    orgs.map(org => transformOrganization(org, userTransform)),
-    [
-      org => -(org.favorite?.count || 0), // Number of favs DESC
-      org => !trim(org.description).length, // Missing description LAST
-      "title", // By title ASC
-    ]
-  )
+  const organizations = orgs.map(org => transformOrganization(org, userTransform))
 
   if (typeof window === "object") {
     // eslint-disable-next-line no-restricted-globals
