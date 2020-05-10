@@ -1,11 +1,10 @@
 import React, { useMemo } from "react"
 import { graphql } from "gatsby"
 import uniqBy from "lodash/uniqBy"
-
+import { sortOrganizations } from "../utils/organizations"
 import {
   transformCategories,
   transformOrganizations,
-  sortOrganizations,
 } from "../utils/airtable"
 
 import Layout from "../components/layout"

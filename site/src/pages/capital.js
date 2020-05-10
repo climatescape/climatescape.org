@@ -2,11 +2,10 @@ import React, { useMemo } from "react"
 import { graphql } from "gatsby"
 import flatMap from "lodash/flatMap"
 import { useFavorites, mergeFavorites } from "../utils/favorites"
-
+import { sortOrganizations } from "../utils/organizations"
 import {
   transformOrganizations,
   transformCapitalTypes,
-  sortOrganizations,
 } from "../utils/airtable"
 
 import Layout from "../components/layout"
