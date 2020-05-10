@@ -55,8 +55,8 @@ const APP_CLAIM = "https://climatescape.org/app"
 // }
 export function useFavorites(defaultData) {
   const { loading: authLoading, user } = useAuth0()
-  const [favorites, setFavorites] = useState(
-    () => indexFavoritesData(defaultData)
+  const [favorites, setFavorites] = useState(() =>
+    indexFavoritesData(defaultData)
   )
   const uuid = user?.[APP_CLAIM]?.uuid
 
@@ -78,7 +78,8 @@ export function useFavorites(defaultData) {
   return favorites
 }
 
-export const mergeFavorites = (orgs, favs) => orgs.map(org => ({
-  ...org,
-  favorite: favs[org.recordId]
-}))
+export const mergeFavorites = (orgs, favs) =>
+  orgs.map(org => ({
+    ...org,
+    favorite: favs[org.recordId],
+  }))
