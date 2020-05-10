@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useMemo } from "react"
 import noop from "lodash/noop"
 import classnames from "classnames"
 import { useMutation } from "@apollo/react-hooks"
@@ -38,7 +38,7 @@ export default function FavoriteButton({
   const [count, setCount] = useState()
   const favorited = !!favoriteId
 
-  useEffect(() => {
+  useMemo(() => {
     setFavoriteId(propFavoriteId)
     setCount(propCount || 0)
   }, [propFavoriteId, propCount])
