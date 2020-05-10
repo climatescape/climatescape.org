@@ -4,13 +4,20 @@ require("dotenv").config({
   path: `../.env.${process.env.NODE_ENV}`,
 })
 
-// since AIRTABLE_BASE_ID was recently introduced, we add an error message to ask to update the
-// project configuration.
-if (!process.env.AIRTABLE_BASE_ID) {
-  throw new Error(
-    `AIRTABLE_BASE_ID property is missing from .env.${process.env.NODE_ENV}
-    See .env.sample as example.`
-  )
+const RequiredEnv = [
+  `GRAPHQL_URI`, `AIRTABLE_BASE_ID`, `AIRTABLE_API_KEY`, `AUTH0_DOMAIN`,
+  `AUTH0_CLIENT_ID`, `GATSBY_ALGOLIA_APP_ID`, `GATSBY_ALGOLIA_SEARCH_KEY`,
+]
+
+const missingEnv = RequiredEnv.filter(key => !process.env[key])
+
+// Fail fast if any of the required ENV variables are missing
+if (missingEnv.length) {
+  throw new Error(`
+    The following variable(s) are missing from .env.${process.env.NODE_ENV}:
+    ${missingEnv.join(`, `)}
+    Open .env.sample to learn how to fix this.
+  `)
 }
 
 const config = {
@@ -28,6 +35,7 @@ const config = {
       domain: process.env.AUTH0_DOMAIN,
       clientId: process.env.AUTH0_CLIENT_ID,
     },
+    graphqlUri: process.env.GRAPHQL_URI,
   },
   plugins: [
     {
@@ -35,6 +43,14 @@ const config = {
       options: {
         name: `images`,
         path: `${__dirname}/src/images`,
+      },
+    },
+    {
+      resolve: `gatsby-source-graphql`,
+      options: {
+        typeName: `Climatescape`,
+        fieldName: `climatescape`,
+        url: process.env.GRAPHQL_URI,
       },
     },
     {

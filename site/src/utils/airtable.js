@@ -150,9 +150,9 @@ export function transformOrganization(raw, userTransform = (_, out) => out) {
 }
 
 export function transformOrganizations(orgs, userTransform) {
-  const organizations = orgs
-    .map(org => transformOrganization(org, userTransform))
-    .sort((a, b) => stringCompare(a.title, b.title))
+  const organizations = orgs.map(org =>
+    transformOrganization(org, userTransform)
+  )
 
   if (typeof window === "object") {
     // eslint-disable-next-line no-restricted-globals
