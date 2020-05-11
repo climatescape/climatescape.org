@@ -51,6 +51,4 @@ module.exports = {
   configureEnvironment,
   executeWithFixedDelayAsync,
   getCleanPath,
-  getUrlDomain,
-  getSocialPath,
 }
