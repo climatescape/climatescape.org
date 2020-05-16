@@ -5,10 +5,6 @@ const { HttpLink } = require("apollo-boost")
 const { InMemoryCache } = require("apollo-boost")
 const { transformOrganization } = require("./helpers")
 
-require("dotenv").config({
-  path: `../../../../.env.${process.env.NODE_ENV}`,
-})
-
 // Gatsby does not support mutations because it is designed to expect
 // mutations to occur only on the client and not at build time.
 // See: https://github.com/gatsbyjs/gatsby/issues/13704
@@ -23,12 +19,12 @@ const apolloClient = new ApolloClient({
 })
 
 const mutation = gql`
-  mutation AddOrganizations($objects: [organizations_insert_input!]!) {
+  mutation MirrorOrganizations($objects: [organizations_insert_input!]!) {
     insert_organizations(
       objects: $objects
       on_conflict: {
         constraint: organizations_record_id_key
-        update_columns: [updated_at, data]
+        update_columns: [data]
       }
     ) {
       affected_rows

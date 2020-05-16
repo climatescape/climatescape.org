@@ -7,7 +7,7 @@
 const path = require(`path`)
 const { makeSlug } = require("./src/utils/slug")
 const { countCategoriesOrganizations } = require("./src/utils/gatsby")
-const { mirrorOrganizations } = require("./src/utils/mutation")
+const { mirrorOrganizations } = require("./src/utils/hasura")
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
