@@ -1,15 +1,9 @@
 const compact = require("lodash/compact")
-
-const { makeSlug } = require("../slug")
+const _ = require("lodash")
+const { makeSlug } = require("./slug")
 
 const DescriptionRegexp = /([^.]{2}\.)(?:\s|$)/
 const DescriptionThreshold = 180
-
-// Gatsby doesn't transpile with Babel, so the optional chaining syntax that
-// we use in utils/airtable.js does not work.
-// Example of optional chaining:
-//   obj?.a?.b
-// These functions are rewritten below without optional chaining.
 
 function truncateDescription(string) {
   if (!string) return null
@@ -28,66 +22,51 @@ function truncateDescription(string) {
 }
 
 function getLogo(Logo, LinkedinProfile, Crunchbase) {
-  let crunchbaseLogo
-  let linkedinLogo
-  let logoSharp
-
-  if (Crunchbase && Crunchbase[0] && Crunchbase[0].data)
-    crunchbaseLogo = Crunchbase[0].data.Logo
-
-  if (LinkedinProfile && LinkedinProfile[0] && LinkedinProfile[0].data)
-    linkedinLogo = LinkedinProfile[0].data.Logo
-
-  const logo = Logo || linkedinLogo || crunchbaseLogo
-
-  if (
-    logo &&
-    logo.localFiles &&
-    logo.localFiles[0] &&
-    logo.localFiles[0].childImageSharp
+  const logo =
+    Logo ||
+    _.get(LinkedinProfile, "[0]data.Logo") ||
+    _.get(Crunchbase, "[0]data.Logo")
+  const logoSharp = _.get(logo, "localFiles[0].childImageSharp")
+  return (
+    _.get(logoSharp, "resize") ||
+    _.get(logoSharp, "fuild") ||
+    _.get(logoSharp, "fixed")
   )
-    logoSharp = logo.localFiles[0].childImageSharp
-
-  if (logoSharp) return logoSharp.resize || logoSharp.fuild || logoSharp.fixed
-  return null
 }
 
 function transformThumbnails(Photos) {
-  if (Photos && Photos.internal) {
-    return JSON.parse(Photos.internal.content).map(internal => {
-      if (internal && internal.thumbnails) {
-        return internal.thumbnails.large
-      }
-      return null
-    })
-  }
-
-  return []
+  return _.get(Photos, "internal")
+    ? JSON.parse(Photos.internal.content).map(internal =>
+        _.get(internal, "thumbnails.large")
+      )
+    : []
 }
 
 function transformCategory(category) {
-  if (!category || (category && !category.data)) return undefined
+  if (!_.get(category, "data")) return undefined
 
   const {
     id,
     data: { Name, Count, Cover, Parent },
   } = category
-  const parent = transformCategory(Parent ? Parent[0] : null)
-  let cover
-  if (Cover && Cover.localFiles && Cover.localFiles[0])
-    cover = Cover.localFiles[0].childImageSharp
+  const parent = transformCategory(_.get(Parent, "[0]"))
+  const cover = _.get(Cover, "localFiles[0].childImageSharp")
 
   return {
     id,
     name: Name,
-    fullName: compact([parent ? parent.name : null, Name]).join(" > "),
+    fullName: compact([_.get(parent, "name"), Name]).join(" > "),
     count: Count,
-    cover: cover ? cover.fluid || cover.resize : null,
+    cover: _.get(cover, "fluid") || _.get(cover, "resize"),
     slug: `/categories/${makeSlug(Name)}`,
     parent,
   }
 }
 
+// Accepts a `raw` organization from GraphQL, cleans up the key formatting and
+// simplifies data structures.
+// Optionally accepts a `userTransform` function to further modify the `out`
+// value with `raw` data before returning
 function transformOrganization(raw, userTransform = (_, out) => out) {
   const {
     id,
@@ -172,5 +151,8 @@ function transformOrganization(raw, userTransform = (_, out) => out) {
 }
 
 module.exports = {
+  truncateDescription,
+  getLogo,
+  transformThumbnails,
   transformOrganization,
 }

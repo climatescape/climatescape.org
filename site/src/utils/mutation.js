@@ -3,7 +3,7 @@ const { ApolloClient } = require("apollo-boost")
 const { fetch } = require("isomorphic-fetch")
 const { HttpLink } = require("apollo-boost")
 const { InMemoryCache } = require("apollo-boost")
-const { transformOrganization } = require("./transformHelpers")
+const { transformOrganization } = require("./helpers")
 
 require("dotenv").config({
   path: `../../../../.env.${process.env.NODE_ENV}`,
