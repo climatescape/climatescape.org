@@ -90,6 +90,25 @@ exports.createPages = async ({ graphql, actions }) => {
       }
     }
 
+    fragment CapitalOrganizationCard on Airtable {
+      ...OrganizationCard
+      data {
+        Capital_Profile {
+          data {
+            Strategic
+            ImpactSpecific: Impact_Specific
+            Stage
+            CheckSize: Check_Size
+            CapitalType: Capital_Type {
+              data {
+                Name
+              }
+            }
+          }
+        }
+      }
+    }
+
     query PagesQuery {
       categories: allAirtable(filter: { table: { eq: "Categories" } }) {
         nodes {
@@ -111,7 +130,7 @@ exports.createPages = async ({ graphql, actions }) => {
       organizations: allAirtable(filter: { table: { eq: "Organizations" } }) {
         nodes {
           id
-          ...OrganizationCard
+          ...CapitalOrganizationCard
         }
       }
       capitalTypes: allAirtable(filter: { table: { eq: "Capital Types" } }) {
