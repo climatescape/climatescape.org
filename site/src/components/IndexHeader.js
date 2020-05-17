@@ -17,9 +17,7 @@ const IndexHeader = ({
 }) => (
   <div className="border-b border-gray-400 py-3">
     <div className="flex items-center md:mt-4 ">
-      <h2 className="text-xl sm:text-2xl tracking-wide flex-grow">
-        {title}
-      </h2>
+      <h2 className="text-xl sm:text-2xl tracking-wide flex-grow">{title}</h2>
 
       <span className="text-gray-800 hidden sm:block">
         {organizations?.length} organizations

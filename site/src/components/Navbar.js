@@ -1,10 +1,10 @@
 import React, { useState } from "react"
-import { useStaticQuery, graphql, Link } from "gatsby"
-import { useAuth0 } from "./Auth0Provider"
+import { Link } from "gatsby"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons"
 import classnames from "classnames"
 
+import { useAuth0 } from "./Auth0Provider"
 import Search from "./search"
 import ClimatescapeLogo from "../images/climatescape.svg"
 import ClimatescapeMark from "../images/climatescape-mark.svg"
@@ -17,19 +17,9 @@ const NavLink = ({ children, ...props }) => (
 
 const Navbar = () => {
   const { isAuthenticated, loginWithRedirect, logout } = useAuth0()
-  const [ showMenu, setShowMenu ] = useState(false)
+  const [showMenu, setShowMenu] = useState(false)
 
   const toggleMenu = () => setShowMenu(!showMenu)
-
-  const data = useStaticQuery(graphql`
-    query NavbarQuery {
-      site {
-        siteMetadata {
-          newsletterUrl
-        }
-      }
-    }
-  `)
 
   return (
     <nav className="border-b border-gray-300 fixed top-0 inset-x-0 z-10 bg-white">
@@ -52,22 +42,35 @@ const Navbar = () => {
             <Search />
           </div>
 
-          <button onClick={toggleMenu} className="flex-shrink-0 px-2 sm:px-3 lg:hidden">
-            <FontAwesomeIcon fixedWidth size="lg" icon={showMenu ? faTimes : faBars} className="text-gray-700" />
+          <button
+            onClick={toggleMenu}
+            className="flex-shrink-0 px-2 sm:px-3 lg:hidden"
+          >
+            <FontAwesomeIcon
+              fixedWidth
+              size="lg"
+              icon={showMenu ? faTimes : faBars}
+              className="text-gray-700"
+            />
           </button>
         </div>
 
-        <div className={classnames(
-          "text-md flex-none text-gray-600 flex text-left flex-shrink-0 flex-col mb-2",
-          { "hidden": !showMenu },
-          "lg:flex lg:flex-row lg:items-center lg:mb-0"
-        )}>
+        <div
+          className={classnames(
+            "text-md flex-none text-gray-600 flex text-left flex-shrink-0 flex-col mb-2",
+            { hidden: !showMenu },
+            "lg:flex lg:flex-row lg:items-center lg:mb-0"
+          )}
+        >
           <NavLink to="/organizations">Organizations</NavLink>
           <NavLink to="/capital">Capital</NavLink>
           <NavLink to="/contribute">Contribute</NavLink>
 
           {isAuthenticated ? (
-            <button className="p-2 hover:text-gray-900 text-left" onClick={() => logout()}>
+            <button
+              className="p-2 hover:text-gray-900 text-left"
+              onClick={() => logout()}
+            >
               Sign out
             </button>
           ) : (
