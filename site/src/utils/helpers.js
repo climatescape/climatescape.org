@@ -67,7 +67,7 @@ function transformCategory(category) {
 // simplifies data structures.
 // Optionally accepts a `userTransform` function to further modify the `out`
 // value with `raw` data before returning
-function transformOrganization(raw, userTransform = (_, out) => out) {
+function transformOrganization(raw, userTransform = (__, out) => out) {
   const {
     id,
     recordId,

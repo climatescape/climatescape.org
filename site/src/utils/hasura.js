@@ -1,3 +1,4 @@
+const _ = require("lodash")
 const gql = require("graphql-tag")
 const { ApolloClient } = require("apollo-boost")
 const { fetch } = require("isomorphic-fetch")
@@ -39,8 +40,13 @@ const mutation = gql`
   }
 `
 
-// This helper runs the upsert mutation.
-function mirrorOrganizations(orgs) {
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array) // eslint-disable-line no-await-in-loop
+  }
+}
+
+async function mirrorOrganizations(orgs) {
   const transformedOrganizations = orgs.map(org => {
     const { recordId } = org
     return {
@@ -49,18 +55,20 @@ function mirrorOrganizations(orgs) {
     }
   })
 
-  // Create a batch mutation of all organizations.
-  apolloClient
-    .mutate({
-      mutation,
-      variables: {
-        objects: transformedOrganizations,
-      },
-    })
-    .then(result => {
-      console.log("Hasura upsert result: ", result.data)
-    })
-    .catch(e => console.log(e))
+  const batches = _.chunk(transformedOrganizations, 100)
+  await asyncForEach(batches, organizations => {
+    apolloClient
+      .mutate({
+        mutation,
+        variables: {
+          objects: organizations,
+        },
+      })
+      .then(result => {
+        console.log("Hasura upsert result: ", result.data)
+      })
+      .catch(e => console.log(e))
+  })
 }
 
 module.exports = {
