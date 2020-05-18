@@ -112,6 +112,10 @@ function SEO({ description, lang, meta, title, imageUrl }) {
           sizes: "16x16",
           href: "/favicon-16x16.png",
         },
+        {
+          rel: "manifest",
+          href: "/site.webmanifest",
+        },
       ]}
     />
   )
