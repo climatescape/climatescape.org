@@ -31,7 +31,7 @@ function CapitalStage({ stage, currentFilter, onApplyFilter }) {
 function Stages({ currentFilter, onApplyFilter }) {
   return (
     <>
-      <h3 className="text-sm font-title  tracking-wide mt-8 uppercase text-gray-700">
+      <h3 className="text-sm font-mono tracking-wide mt-8 uppercase text-gray-700">
         Stages
       </h3>
       <ul>
@@ -58,7 +58,7 @@ export default function CapitalFilters({
 
   return (
     <div className="CategoryList leading-9 hidden w-1/5  mb-8 lg:block">
-      <h3 className="text-sm font-title  tracking-wide mt-8 uppercase text-gray-700">
+      <h3 className="text-sm font-mono tracking-wide mt-8 uppercase text-gray-700">
         Capital
       </h3>
       <ul>

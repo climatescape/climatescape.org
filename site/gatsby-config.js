@@ -129,18 +129,6 @@ const config = {
     `gatsby-plugin-sharp`,
     `gatsby-plugin-postcss`,
     {
-      resolve: `gatsby-plugin-prefetch-google-fonts`,
-      options: {
-        fonts: [
-          {
-            family: `Roboto`,
-            variants: [`400`, `700`],
-          },
-          { family: "Roboto Mono" },
-        ],
-      },
-    },
-    {
       resolve: `gatsby-plugin-nprogress`,
       options: {
         // The default spinner shows up in the top-right corner of the page,
