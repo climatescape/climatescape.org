@@ -8,7 +8,7 @@ Airtable.configure({
   endpointUrl: "https://api.airtable.com",
   apiKey: process.env.AIRTABLE_API_KEY,
 })
-const airtableBase = Airtable.base("appNYMWxGF1jMaf5V")
+const airtableBase = Airtable.base(process.env.AIRTABLE_BASE_ID)
 
 /**
  * The rate limit is 5 rps, but we don't try to be even close to that because several different parallel operations

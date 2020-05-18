@@ -1,10 +1,11 @@
 {
   "engines": {
-    "node": "12.15.0",
+    "node": "12.x",
     "yarn": "1.x"
   },
   "dependencies": {
     "airtable": "^0.8.1",
+    "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "fastify": "^2.12.0",
     "global": "^4.4.0",
@@ -22,6 +23,7 @@
     "twitter-lite": "^0.9.4",
     "url": "^0.11.0"
   },
+  "license": "MIT",
   "devDependenciesComment": "Have to use eslint 5.x until https://youtrack.jetbrains.com/issue/WEB-43692 is fixed",
   "devDependencies": {
     "eslint": "^5.16.0",

@@ -1,0 +1,6 @@
+/* Need to ignore purgecss since we don't reference these classes explicity */
+/* purgecss start ignore */
+.ais-Highlight-highlighted {
+  @apply not-italic font-semibold;
+}
+/* purgecss end ignore */

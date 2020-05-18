@@ -1,0 +1,122 @@
+- table:
+    schema: public
+    name: favorites
+  configuration:
+    custom_root_fields:
+      insert: insertFavorites
+      select_aggregate: favoritesAggregate
+      insert_one: insertOneFavorite
+      select_by_pk: favoriteByPk
+      delete: deleteFavorites
+      update: updateFavorites
+      delete_by_pk: deleteFavoriteByPk
+      update_by_pk: updateFavoriteByPk
+    custom_column_names:
+      record_id: recordId
+      deleted_at: deletedAt
+      created_at: createdAt
+      user_id: userId
+  object_relationships:
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+  insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      set:
+        user_id: x-hasura-User-Id
+      columns:
+      - record_id
+      backend_only: false
+  select_permissions:
+  - role: public
+    permission:
+      columns:
+      - created_at
+      - id
+      - record_id
+      - user_id
+      filter:
+        deleted_at:
+          _is_null: true
+  - role: user
+    permission:
+      columns:
+      - created_at
+      - id
+      - record_id
+      - user_id
+      filter:
+        deleted_at:
+          _is_null: true
+  update_permissions:
+  - role: user
+    permission:
+      columns:
+      - deleted_at
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      check: null
+- table:
+    schema: public
+    name: favorites_count
+  configuration:
+    custom_root_fields:
+      select_aggregate: favoritesCountAggregate
+      select_by_pk: favoritesCountByPk
+      select: favoritesCount
+    custom_column_names:
+      record_id: recordId
+  select_permissions:
+  - role: public
+    permission:
+      columns:
+      - count
+      - record_id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+      - count
+      - record_id
+      filter: {}
+- table:
+    schema: public
+    name: users
+  configuration:
+    custom_root_fields:
+      insert: insertUsers
+      select_aggregate: usersAggregate
+      insert_one: insertOneUser
+      select_by_pk: userByPk
+      delete: deleteUsers
+      update: updateUsers
+      delete_by_pk: deleteUserByPk
+      update_by_pk: updateUserByPk
+    custom_column_names:
+      auth_id: authId
+      updated_at: updatedAt
+      created_at: createdAt
+  array_relationships:
+  - name: favorites
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          schema: public
+          name: favorites
+  select_permissions:
+  - role: public
+    permission:
+      columns:
+      - created_at
+      - id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+      - created_at
+      - id
+      filter: {}
