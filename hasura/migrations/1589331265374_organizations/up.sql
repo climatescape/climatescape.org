@@ -1,9 +1,9 @@
 CREATE TABLE public.organizations (	
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    record_id text NOT NULL UNIQUE
+    record_id text NOT NULL UNIQUE,
     data jsonb NOT NULL,	
     created_at timestamp with time zone DEFAULT now() NOT NULL,	
-    updated_at timestamp with time zone DEFAULT now() NOT NULL.
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
 
 ALTER TABLE ONLY public.organizations	

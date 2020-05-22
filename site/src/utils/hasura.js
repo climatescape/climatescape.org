@@ -30,13 +30,6 @@ const mutation = gql`
       }
     ) {
       affected_rows
-      returning {
-        created_at
-        data
-        id
-        record_id
-        updated_at
-      }
     }
   }
 `
