@@ -15,6 +15,9 @@ const { asyncForEach } = require("../../../enrich/utils")
 const apolloClient = new ApolloClient({
   link: new HttpLink({
     uri: process.env.GRAPHQL_URI,
+    headers: {
+      "X-Hasura-Admin-Secret": process.env.GRAPHQL_ADMIN_SECRET,
+    },
     fetch,
   }),
   cache: new InMemoryCache(),
