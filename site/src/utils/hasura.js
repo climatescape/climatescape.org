@@ -1,11 +1,10 @@
-const _ = require("lodash")
+const chunk = require("lodash/chunk")
 const gql = require("graphql-tag")
 const { ApolloClient } = require("apollo-boost")
 const { fetch } = require("isomorphic-fetch")
 const { HttpLink } = require("apollo-boost")
 const { InMemoryCache } = require("apollo-boost")
 const { transformOrganization } = require("./helpers")
-const { asyncForEach } = require("../../../enrich/utils")
 
 // Gatsby does not support mutations because it is designed to expect
 // mutations to occur only on the client and not at build time.
@@ -37,6 +36,12 @@ const mutation = gql`
   }
 `
 
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array) // eslint-disable-line no-await-in-loop
+  }
+}
+
 async function mirrorOrganizations(orgs) {
   const transformedOrganizations = orgs.map(org => {
     const { recordId } = org
@@ -46,7 +51,7 @@ async function mirrorOrganizations(orgs) {
     }
   })
 
-  const batches = _.chunk(transformedOrganizations, 100)
+  const batches = chunk(transformedOrganizations, 100)
   await asyncForEach(batches, organizations => {
     apolloClient
       .mutate({

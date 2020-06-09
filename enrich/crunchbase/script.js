@@ -7,10 +7,16 @@ dot.config({
 })
 
 const { crunchbaseEnrich, mapCrunchbase } = require("./crunchbase")
-const { camelizeKeys, asyncForEach } = require("../utils")
+const { camelizeKeys } = require("../utils")
 
 const BASE = process.env.AIRTABLE_BASE_ID
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(BASE)
+
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array) // eslint-disable-line no-await-in-loop
+  }
+}
 
 async function main() {
   const organizations = await base("Organizations")

@@ -30,10 +30,4 @@ function getSocialPath(string) {
   }
 }
 
-async function asyncForEach(array, callback) {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array) // eslint-disable-line no-await-in-loop
-  }
-}
-
-module.exports = { camelizeKeys, getUrlDomain, getSocialPath, asyncForEach }
+module.exports = { camelizeKeys, getUrlDomain, getSocialPath }
