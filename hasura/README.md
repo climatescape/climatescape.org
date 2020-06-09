@@ -84,11 +84,16 @@ $ hasura console --envfile production.env
 **Beware: This will open a new window with a Hasura console running against our
 production database**
 
+Now you can run migrations and apply metadata on production:
+
+```bash
+$ hasura migrate apply --envfile production.env
+$ hasura metadata apply --envfile production.env
+```
+
 [hasura]: https://hasura.io/
 [pg]: https://www.postgresql.org/
 [graphql]: https://graphql.org/
 [docker]: https://www.docker.com/
 [hasura_cli]: https://hasura.io/docs/1.0/graphql/manual/hasura-cli/install-hasura-cli.html
 
-
-npm install
