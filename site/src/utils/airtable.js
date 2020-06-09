@@ -10,7 +10,7 @@ function transformCategory(category) {
 
   const {
     id,
-    data: { Name, Count, Cover, Parent },
+    data: { Name, Definition, Count, Cover, Parent },
   } = category
   const parent = transformCategory(Parent?.[0])
   const cover = Cover?.localFiles?.[0]?.childImageSharp
@@ -19,6 +19,7 @@ function transformCategory(category) {
     id,
     name: Name,
     fullName: compact([parent?.name, Name]).join(" > "),
+    definition: Definition,
     count: Count,
     cover: cover?.fluid || cover?.resize,
     slug: `/categories/${makeSlug(Name)}`,

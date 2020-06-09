@@ -6,6 +6,7 @@ import OrganizationFilter from "./OrganizationFilter"
 
 const IndexHeader = ({
   title,
+  definition,
   buttonText,
   buttonUrl,
   filter,
@@ -35,6 +36,7 @@ const IndexHeader = ({
         </a>
       )}
     </div>
+    {definition && <p className="mt-3 mb-4 text-sm">{definition}</p>}
 
     <OrganizationFilter
       currentFilter={filter}
