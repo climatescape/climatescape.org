@@ -145,7 +145,7 @@ exports.createPages = async ({ graphql, actions }) => {
   `)
 
   // Mirror the organizations from Airtable to Hasura.
-  mirrorOrganizations(data.organizations.nodes)
+  if (process.env.MIRROR_ORGS) mirrorOrganizations(data.organizations.nodes)
 
   const categoryCounts = countCategoriesOrganizations(data.categories.nodes)
 
