@@ -14,7 +14,7 @@ import { useFavorites, mergeFavorites } from "../utils/favorites"
 
 function OrganizationsTemplate({
   data,
-  pageContext: { categoryId, categoryName, categoryCounts },
+  pageContext: { categoryId, categoryName, categoryDefinition, categoryCounts },
 }) {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
   const favorites = useFavorites(data.climatescape)
@@ -55,6 +55,7 @@ function OrganizationsTemplate({
         <div className="lg:w-3/5">
           <IndexHeader
             title={categoryName || "All Organizations"}
+            definition={categoryDefinition}
             buttonText="Add"
             buttonUrl={organizationAddFormUrl}
             filter={filter}
@@ -92,6 +93,7 @@ export const query = graphql`
         id
         data {
           Name
+          Definition
           Parent {
             id
             data {

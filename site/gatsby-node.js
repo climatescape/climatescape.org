@@ -115,6 +115,7 @@ exports.createPages = async ({ graphql, actions }) => {
           id
           data {
             Name
+            Definition
             Organizations {
               id
               data {
@@ -155,6 +156,7 @@ exports.createPages = async ({ graphql, actions }) => {
       component: path.resolve(`./src/templates/organizations.js`),
       context: {
         categoryName: category.data.Name,
+        categoryDefinition: category.data.Definition,
         categoryId: category.id,
         categoryCounts,
       },
