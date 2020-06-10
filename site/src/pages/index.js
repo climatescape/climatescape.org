@@ -62,7 +62,10 @@ export default function IndexPage({ data }) {
         </div>
       </div>
 
-      <div id="about" className="max-w-6xl mx-auto lg:flex items-start py-4">
+      <div
+        id="about"
+        className="max-w-lg mx-auto lg:flex flex-col items-center py-4"
+      >
         <div className="text-lg px-6 py-6 flex-1">
           <h2 className="text-2xl md:text-3xl font-light">
             What is Climatescape?
@@ -93,10 +96,10 @@ export default function IndexPage({ data }) {
             </a>
             .
           </p>
-          <p className="mt-8 text-center">
+          <p className="mt-8 self-start text-start">
             <Link
               to="/contribute/"
-              className="inline-block text-2xl px-4 py-2 border-2 rounded text-white bg-blue-500 border-blue-500 hover:text-blue-500 hover:border-blue-500 hover:bg-transparent"
+              className="inline-block text-2xl px-4 border-2 rounded-md font-semibold border-gray-700 hover:text-gray-600 hover:border-gray-500 hover:bg-transparent"
             >
               Become a Contributor
             </Link>
@@ -120,17 +123,17 @@ export default function IndexPage({ data }) {
             </a>
             ) and subscribe to our newsletter to help shape our future.
           </p>
-          <p className="mt-8 text-center">
-            <a
-              href={data.site.siteMetadata.newsletterUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block text-2xl px-4 py-2 border-2 rounded text-white bg-blue-500 border-blue-500 hover:text-blue-500 hover:border-blue-500 hover:bg-transparent"
-            >
-              Subscribe Here
-            </a>
-          </p>
         </div>
+
+        <iframe
+          title="Climatescape Newsletter"
+          src="https://climatescape.substack.com/embed"
+          width="480"
+          height="320"
+          style={{ border: "1px solid #EEE", background: "white" }}
+          frameBorder="0"
+          scrolling="no"
+        />
       </div>
     </Layout>
   )
