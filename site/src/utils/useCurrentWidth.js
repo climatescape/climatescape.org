@@ -10,7 +10,7 @@ const getWidth = () =>
  *
  * Source: https://dev.to/vitaliemaldur/resize-event-listener-using-react-hooks-1k0c
  */
-export default function useCurrentWitdh() {
+export default function useCurrentWidth() {
   // save current window width in the state object
   const [width, setWidth] = useState(getWidth())
 

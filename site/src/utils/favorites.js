@@ -70,7 +70,7 @@ export function useFavorites(defaultData) {
   // Only fetch favorites from the server once we know if a user is logged in
   useEffect(() => {
     if (!authLoading) getFavorites()
-  }, [authLoading])
+  }, [authLoading, getFavorites])
 
   // Index and set favorites any time data changes
   useMemo(() => data && setFavorites(indexFavoritesData(data)), [data])

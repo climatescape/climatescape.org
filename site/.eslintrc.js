@@ -20,7 +20,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module",
   },
-  plugins: ["react", "prettier"],
+  plugins: ["react", "prettier", "react-hooks"],
   rules: {
     "react/prop-types": 0,
     "react/require-default-props": 0,
@@ -33,5 +33,7 @@ module.exports = {
     "react/button-has-type": 0,
     "no-nested-ternary": 0,
     "no-restricted-syntax": 0,
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
   },
 }

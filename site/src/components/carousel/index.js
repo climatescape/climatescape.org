@@ -2,7 +2,7 @@ import React from "react"
 
 import classnames from "classnames"
 import withWindow from "../../utils/withWindow"
-import useCurrentWitdh from "../../utils/useCurrentWitdh"
+import useCurrentWidth from "../../utils/useCurrentWidth"
 
 import "./styles.css"
 
@@ -17,46 +17,46 @@ function Carousel({ images = [], height, onClickRoot }) {
   const [isHoverMode, setIsHoverMode] = React.useState(false)
   const [currentIndex, setCurrentIndex] = React.useState(0)
 
-  const windowWidth = useCurrentWitdh()
+  const windowWidth = useCurrentWidth()
 
   const nbImages = images.length
 
   const rootRef = React.useRef(null)
 
   // set isHoverMode to true and hide it after some time
-  let timeoutId = null
-  const activateHoverMode = () => {
+  const timeoutId = React.useRef(null)
+  const activateHoverMode = React.useCallback(() => {
     setIsHoverMode(true)
-    clearTimeout(timeoutId)
-    timeoutId = setTimeout(() => {
+    clearTimeout(timeoutId.current)
+    timeoutId.current = setTimeout(() => {
       setIsHoverMode(false)
     }, 600)
-  }
+  }, [])
 
   // currentIndex utilities
 
-  const previous = () => {
+  const previous = React.useCallback(() => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1)
     } else {
       setCurrentIndex(nbImages - 1)
     }
-  }
+  }, [currentIndex, nbImages])
 
-  const next = () => {
+  const next = React.useCallback(() => {
     if (currentIndex + 1 === nbImages) {
       setCurrentIndex(0)
     } else {
       setCurrentIndex(currentIndex + 1)
     }
-  }
+  }, [currentIndex, nbImages])
 
   // window resize handling: retrieve our carousel width
   // we use the windowWidth to recalculate our element width when the window width changed
   // (is resized).
   React.useEffect(() => {
     setWidth(rootRef.current?.offsetWidth || 0)
-  }, [rootRef.current, setWidth, windowWidth])
+  }, [setWidth, windowWidth])
 
   // keyboard shortcuts handling
   const handleKeyDown = React.useCallback(
@@ -71,7 +71,7 @@ function Carousel({ images = [], height, onClickRoot }) {
 
       activateHoverMode()
     },
-    [setIsHoverMode, setCurrentIndex, currentIndex]
+    [activateHoverMode, next, previous]
   )
 
   React.useEffect(() => {

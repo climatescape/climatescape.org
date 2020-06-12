@@ -62,8 +62,10 @@ async function mirrorOrganizations(orgs) {
         },
       })
       .then(result => {
+        // eslint-disable-next-line no-console
         console.log("Hasura upsert result: ", result.data)
       })
+      // eslint-disable-next-line no-console
       .catch(e => console.log(e))
   })
 }

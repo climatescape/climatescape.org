@@ -17,13 +17,15 @@ export default function Search() {
   const ref = useRef(null)
   useClickOutside(ref, () => setFocused(false))
 
-  const searchClient = useMemo(() =>
-    client(
-      algoliasearch(
-        process.env.GATSBY_ALGOLIA_APP_ID,
-        process.env.GATSBY_ALGOLIA_SEARCH_KEY
-      )
-    )
+  const searchClient = useMemo(
+    () =>
+      client(
+        algoliasearch(
+          process.env.GATSBY_ALGOLIA_APP_ID,
+          process.env.GATSBY_ALGOLIA_SEARCH_KEY
+        )
+      ),
+    []
   )
 
   const handleNavigateResults = direction => {

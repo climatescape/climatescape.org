@@ -46,7 +46,7 @@ const CapitalTemplate = ({
     const transformedOrgs = transformOrganizations(rawOrgs)
     const favoritedOrgs = mergeFavorites(transformedOrgs, favorites)
     return sortOrganizations(favoritedOrgs)
-  }, [activeTypeData, allOrganizationData])
+  }, [activeTypeData, allOrganizationData, favorites])
 
   const favoritedOrgs = mergeFavorites(allOrgs, favorites)
   const filteredOrgs = applyFilter(favoritedOrgs)
