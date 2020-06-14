@@ -117,7 +117,7 @@ function SEO({ description, lang, meta, title, imageUrl }) {
           href: "/site.webmanifest",
         },
       ]}
-    />
+    ></Helmet>
   )
 }
 
