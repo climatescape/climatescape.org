@@ -58,6 +58,7 @@ const Layout = ({ children, contentClassName }) => {
   `)
 
   const footerLinks = getFooterLinks(data)
+
   return (
     <div className="flex flex-col min-h-screen antialiased">
       <Navbar />
@@ -90,7 +91,9 @@ const Layout = ({ children, contentClassName }) => {
           </a>
         </div>
       </footer>
-      <script async defer src="https://sapi.climatescape.org/app.js" />
+      {process.env.NODE_ENV === "production" && (
+        <script async defer src="https://sapi.climatescape.org/app.js" />
+      )}
       <noscript>
         <img src="https://sapi.climatescape.org/image.gif" alt="hi" />
       </noscript>
