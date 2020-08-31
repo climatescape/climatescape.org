@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "author": "Brendan Loudermilk <brendan@sinceresoftware.co>",
   "engines": {
-    "node": "12.15.x",
+    "node": "12.16.3",
     "yarn": "1.x"
   },
   "dependencies": {
