@@ -37,8 +37,12 @@ export const ApolloProvider = ({ children }) => {
     console.error("Apollo error", error) // eslint-disable-line no-console
   })
 
+  // TODO: This total hack can be removed once we fix site builds with https
+  // for now, the ENV var is insecure by default but we need to secure it
+  // for the client in order to prevent "mixed content" errors
+  const uri = siteMetadata.graphqlUri.replace("http://", "https://")
   const httpLink = new HttpLink({
-    uri: siteMetadata.graphqlUri,
+    uri,
     fetch,
   })
 
