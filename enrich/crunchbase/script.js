@@ -20,7 +20,7 @@ async function asyncForEach(array, callback) {
 
 async function main() {
   const organizations = await base("Organizations")
-    .select()
+    .select({ view: "Missing Crunchbase" })
     .all()
   const outcomes = {}
   const updateBuffer = [] // Array of up to 10 updates to be sent as a batch to Airtable
