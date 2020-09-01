@@ -76,7 +76,7 @@ export default function FavoriteButton({
   return (
     <button
       className={classnames(
-        "text-gray-600 h-16 ml-4 px-4 py-2 flex-shrink-0 self-center text-center rounded hover:bg-gray-200",
+        "text-gray-600 h-16 ml-4 px-4 py-2 flex-shrink-0 sm:self-center text-center rounded hover:bg-gray-200",
         className
       )}
       onClick={handleClick}
