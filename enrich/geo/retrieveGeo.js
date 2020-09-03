@@ -16,13 +16,13 @@ async function retrieveGeoForHqLocation(hqLocation) {
         q: hqLocation,
       })
       .then(response => {
-        // console.log(response.geonames)
-        resolve(response.geonames)
+        // Errors look like { value: Number, message: String }
+        if (response.value) reject(response.message)
+
+        // Successful responses look like { geonames: Array }
+        else resolve(response.geonames)
       })
-      .catch(error => {
-        console.log(error)
-        reject(error)
-      })
+      .catch(reject)
   })
 }
 
@@ -34,7 +34,7 @@ async function retrieveGeoForOrg(hqLocation) {
 
   const data = await retrieveGeoForHqLocation(hqLocation)
   if (!isArray(data)) {
-    return null
+    throw new Error("Unexpected response")
   }
   return isEmpty(data) ? null : data[0]
 }

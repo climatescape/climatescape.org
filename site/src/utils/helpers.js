@@ -143,8 +143,8 @@ function transformOrganization(raw, userTransform = (__, out) => out) {
     photos:
       Photos && Photos.localFiles
         ? Photos.localFiles
-            .map(i => i.childImageSharp)
-            .map(i => i.resize || i.fixed || i.fluid)
+            .map(i => i && i.childImageSharp)
+            .map(i => i && (i.resize || i.fixed || i.fluid))
         : [],
     thumbnails: transformThumbnails(Photos),
   })
