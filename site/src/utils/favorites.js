@@ -1,7 +1,6 @@
 import { keyBy, mapValues } from "lodash"
 import { useState, useEffect, useMemo } from "react"
-import { useLazyQuery } from "@apollo/react-hooks"
-import gql from "graphql-tag"
+import { useLazyQuery, gql } from "@apollo/client"
 import { graphql } from "gatsby"
 import { useAuth0 } from "../components/Auth0Provider"
 

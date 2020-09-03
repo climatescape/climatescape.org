@@ -1,4 +1,6 @@
 const algolia = require("./src/utils/algolia")
+const { from, HttpLink } = require("@apollo/client")
+const { RetryLink } = require("@apollo/client/link/retry")
 
 require("dotenv").config({
   path: `../.env.${process.env.NODE_ENV}`,
@@ -25,6 +27,8 @@ if (missingEnv.length) {
   `)
 }
 
+const graphqlUri = process.env.GRAPHQL_URI
+
 const config = {
   siteMetadata: {
     title: `Climatescape`,
@@ -40,7 +44,7 @@ const config = {
       domain: process.env.AUTH0_DOMAIN,
       clientId: process.env.AUTH0_CLIENT_ID,
     },
-    graphqlUri: process.env.GRAPHQL_URI,
+    graphqlUri,
   },
   plugins: [
     {
@@ -55,7 +59,14 @@ const config = {
       options: {
         typeName: `Climatescape`,
         fieldName: `climatescape`,
-        url: process.env.GRAPHQL_URI,
+        createLink: () => from([
+          new RetryLink(),
+          new HttpLink({ uri: graphqlUri }),
+        ]),
+        batch: true,
+        dataLoaderOptions: {
+          maxBatchSize: 10,
+        },
       },
     },
     {

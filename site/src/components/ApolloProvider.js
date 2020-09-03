@@ -1,9 +1,14 @@
 import React from "react"
 import { useStaticQuery, graphql } from "gatsby"
-import { ApolloClient, ApolloLink, InMemoryCache, HttpLink } from "apollo-boost"
-import { ApolloProvider as VanillaApolloProvider } from "react-apollo"
-import { setContext } from "apollo-link-context"
-import { onError } from "apollo-link-error"
+import {
+  ApolloClient,
+  ApolloLink,
+  InMemoryCache,
+  HttpLink,
+  ApolloProvider as VanillaApolloProvider,
+} from "@apollo/client"
+import { setContext } from "@apollo/client/link/context"
+import { onError } from "@apollo/client/link/error"
 import fetch from "isomorphic-fetch"
 import { useAuth0 } from "./Auth0Provider"
 
