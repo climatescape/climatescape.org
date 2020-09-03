@@ -113,6 +113,8 @@ export const query = graphql`
           src
         }
       }
+      extension
+      publicURL
     }
   }
 

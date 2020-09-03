@@ -5,8 +5,13 @@ require("dotenv").config({
 })
 
 const RequiredEnv = [
-  `GRAPHQL_URI`, `AIRTABLE_BASE_ID`, `AIRTABLE_API_KEY`, `AUTH0_DOMAIN`,
-  `AUTH0_CLIENT_ID`, `GATSBY_ALGOLIA_APP_ID`, `GATSBY_ALGOLIA_SEARCH_KEY`,
+  `GRAPHQL_URI`,
+  `AIRTABLE_BASE_ID`,
+  `AIRTABLE_API_KEY`,
+  `AUTH0_DOMAIN`,
+  `AUTH0_CLIENT_ID`,
+  `GATSBY_ALGOLIA_APP_ID`,
+  `GATSBY_ALGOLIA_SEARCH_KEY`,
 ]
 
 const missingEnv = RequiredEnv.filter(key => !process.env[key])
@@ -123,7 +128,8 @@ const config = {
     {
       resolve: `gatsby-transformer-sharp`,
       options: {
-        defautQuality: 75,
+        defaultQuality: 75,
+        checkSupportedExtensions: false,
       },
     },
     `gatsby-plugin-sharp`,

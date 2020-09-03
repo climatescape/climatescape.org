@@ -26,10 +26,13 @@ function getLogo(Logo, LinkedinProfile, Crunchbase) {
     Logo ||
     _.get(LinkedinProfile, "[0]data.Logo") ||
     _.get(Crunchbase, "[0]data.Logo")
+  const extension = _.get(logo, "localFiles[0].extension")
+  if (extension === "svg" || extension === "gif")
+    return { src: _.get(logo, "localFiles[0].publicURL") }
   const logoSharp = _.get(logo, "localFiles[0].childImageSharp")
   return (
     _.get(logoSharp, "resize") ||
-    _.get(logoSharp, "fuild") ||
+    _.get(logoSharp, "fluid") ||
     _.get(logoSharp, "fixed")
   )
 }
