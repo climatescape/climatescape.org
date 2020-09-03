@@ -128,7 +128,7 @@ const config = {
     {
       resolve: `gatsby-transformer-sharp`,
       options: {
-        defautQuality: 75,
+        defaultQuality: 75,
         checkSupportedExtensions: false,
       },
     },
