@@ -3,13 +3,10 @@ const TwitterRegexp = /twitter\.com\/@?(\w+)/i
 export function parseTwitterHandle(url) {
   if (!url) return null
 
-  let handle
-
   try {
-    handle = url.match(TwitterRegexp)[1]
+    const [, handle] = url.match(TwitterRegexp)
+    return handle && `@${handle}`
   } catch (e) {
-    return
+    return null
   }
-
-  return handle && `@${handle}`
 }
