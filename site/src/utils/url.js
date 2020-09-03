@@ -6,9 +6,10 @@ export function parseTwitterHandle(url) {
   let handle
 
   try {
-    handle = url.match(TwitterRegexp)[1]
+    const [match] = url.match(TwitterRegexp)[1]
+    handle = match
   } catch (e) {
-    return
+    return null
   }
 
   return handle && `@${handle}`
