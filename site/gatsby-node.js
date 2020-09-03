@@ -20,6 +20,8 @@ exports.createPages = async ({ graphql, actions }) => {
             src
           }
         }
+        extension
+        publicURL
       }
     }
 
