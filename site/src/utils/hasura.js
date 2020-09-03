@@ -5,7 +5,7 @@
  */
 const chunk = require("lodash/chunk")
 const { ApolloClient, HttpLink, InMemoryCache, gql } = require("@apollo/client")
-// const { fetch } = require("isomorphic-fetch")
+const { fetch } = require("isomorphic-fetch")
 const { transformOrganization } = require("./helpers")
 
 // Gatsby does not support mutations because it is designed to expect
@@ -19,7 +19,7 @@ const apolloClient = new ApolloClient({
     headers: {
       "X-Hasura-Admin-Secret": process.env.GRAPHQL_ADMIN_SECRET,
     },
-    // fetch,
+    fetch,
   }),
   cache: new InMemoryCache(),
 })

@@ -9,7 +9,7 @@ import {
 } from "@apollo/client"
 import { setContext } from "@apollo/client/link/context"
 import { onError } from "@apollo/client/link/error"
-// import fetch from "isomorphic-fetch"
+import fetch from "isomorphic-fetch"
 import { useAuth0 } from "./Auth0Provider"
 
 export const ApolloProvider = ({ children }) => {
@@ -48,7 +48,7 @@ export const ApolloProvider = ({ children }) => {
   const uri = siteMetadata.graphqlUri.replace("http://", "https://")
   const httpLink = new HttpLink({
     uri,
-    // fetch,
+    fetch,
   })
 
   const apolloClient = new ApolloClient({
