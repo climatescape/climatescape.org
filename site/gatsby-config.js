@@ -1,12 +1,19 @@
 const algolia = require("./src/utils/algolia")
+const { from, HttpLink } = require("@apollo/client")
+const { RetryLink } = require("@apollo/client/link/retry")
 
 require("dotenv").config({
   path: `../.env.${process.env.NODE_ENV}`,
 })
 
 const RequiredEnv = [
-  `GRAPHQL_URI`, `AIRTABLE_BASE_ID`, `AIRTABLE_API_KEY`, `AUTH0_DOMAIN`,
-  `AUTH0_CLIENT_ID`, `GATSBY_ALGOLIA_APP_ID`, `GATSBY_ALGOLIA_SEARCH_KEY`,
+  `GRAPHQL_URI`,
+  `AIRTABLE_BASE_ID`,
+  `AIRTABLE_API_KEY`,
+  `AUTH0_DOMAIN`,
+  `AUTH0_CLIENT_ID`,
+  `GATSBY_ALGOLIA_APP_ID`,
+  `GATSBY_ALGOLIA_SEARCH_KEY`,
 ]
 
 const missingEnv = RequiredEnv.filter(key => !process.env[key])
@@ -19,6 +26,8 @@ if (missingEnv.length) {
     Open .env.sample to learn how to fix this.
   `)
 }
+
+const graphqlUri = process.env.GRAPHQL_URI
 
 const config = {
   siteMetadata: {
@@ -35,7 +44,7 @@ const config = {
       domain: process.env.AUTH0_DOMAIN,
       clientId: process.env.AUTH0_CLIENT_ID,
     },
-    graphqlUri: process.env.GRAPHQL_URI,
+    graphqlUri,
   },
   plugins: [
     {
@@ -50,7 +59,14 @@ const config = {
       options: {
         typeName: `Climatescape`,
         fieldName: `climatescape`,
-        url: process.env.GRAPHQL_URI,
+        createLink: () => from([
+          new RetryLink(),
+          new HttpLink({ uri: graphqlUri }),
+        ]),
+        batch: true,
+        dataLoaderOptions: {
+          maxBatchSize: 10,
+        },
       },
     },
     {
@@ -123,7 +139,8 @@ const config = {
     {
       resolve: `gatsby-transformer-sharp`,
       options: {
-        defautQuality: 75,
+        defaultQuality: 75,
+        checkSupportedExtensions: false,
       },
     },
     `gatsby-plugin-sharp`,

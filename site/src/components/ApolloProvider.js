@@ -1,9 +1,14 @@
 import React from "react"
 import { useStaticQuery, graphql } from "gatsby"
-import { ApolloClient, ApolloLink, InMemoryCache, HttpLink } from "apollo-boost"
-import { ApolloProvider as VanillaApolloProvider } from "react-apollo"
-import { setContext } from "apollo-link-context"
-import { onError } from "apollo-link-error"
+import {
+  ApolloClient,
+  ApolloLink,
+  InMemoryCache,
+  HttpLink,
+  ApolloProvider as VanillaApolloProvider,
+} from "@apollo/client"
+import { setContext } from "@apollo/client/link/context"
+import { onError } from "@apollo/client/link/error"
 import fetch from "isomorphic-fetch"
 import { useAuth0 } from "./Auth0Provider"
 
@@ -37,8 +42,12 @@ export const ApolloProvider = ({ children }) => {
     console.error("Apollo error", error) // eslint-disable-line no-console
   })
 
+  // TODO: This total hack can be removed once we fix site builds with https
+  // for now, the ENV var is insecure by default but we need to secure it
+  // for the client in order to prevent "mixed content" errors
+  const uri = siteMetadata.graphqlUri.replace("http://", "https://")
   const httpLink = new HttpLink({
-    uri: siteMetadata.graphqlUri,
+    uri,
     fetch,
   })
 
