@@ -1,9 +1,11 @@
+/*
+ * !!!IMPORTANT!!!
+ * Do not import this file into any client-side scripts, otherwise we may leak
+ * the Hasura admin secret
+ */
 const chunk = require("lodash/chunk")
-const gql = require("graphql-tag")
-const { ApolloClient } = require("apollo-boost")
+const { ApolloClient, HttpLink, InMemoryCache, gql } = require("@apollo/client")
 const { fetch } = require("isomorphic-fetch")
-const { HttpLink } = require("apollo-boost")
-const { InMemoryCache } = require("apollo-boost")
 const { transformOrganization } = require("./helpers")
 
 // Gatsby does not support mutations because it is designed to expect
@@ -62,9 +64,11 @@ async function mirrorOrganizations(orgs) {
         },
       })
       .then(result => {
+        // eslint-disable-next-line no-console
         console.log("Hasura upsert result: ", result.data)
       })
-      .catch(e => console.log(e))
+      // eslint-disable-next-line no-console
+      .catch(e => console.error(e))
   })
 }
 

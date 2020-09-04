@@ -189,7 +189,6 @@ export default function OrganizationTemplate({ data }) {
     fullPhotos: raw.data.fullPhotos?.localFiles || [],
     favorite: favorites[out.recordId],
   }))
-
   return (
     <Layout contentClassName="bg-gray-100 font-sans">
       <SEO
@@ -206,7 +205,7 @@ export default function OrganizationTemplate({ data }) {
                 <div className="mr-5 w-24 flex-shrink-0">
                   <img
                     src={org.logo.src}
-                    className="OrganizationCard-logo blend-multiply rounded-lg w-24 h-24"
+                    className="OrganizationCard-logo blend-multiply rounded-lg w-24 h-24 bg-gray-600"
                     alt={`${org.title} logo`}
                   />
                 </div>
@@ -219,7 +218,7 @@ export default function OrganizationTemplate({ data }) {
                 recordId={org.recordId}
                 favoriteId={org.favorite?.id}
                 count={org.favorite?.count}
-                className="ml-auto hidden sm:block"
+                className="ml-auto sm:block"
               />
             </div>
 
