@@ -1,4 +1,7 @@
 module.exports = {
+  future: {
+    removeDeprecatedGapUtilities: true,
+  },
   theme: {
     maxHeight: {
       "12": "3em",

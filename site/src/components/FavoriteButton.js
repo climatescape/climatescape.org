@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from "react"
 import noop from "lodash/noop"
 import classnames from "classnames"
-import { useMutation } from "@apollo/react-hooks"
-import gql from "graphql-tag"
+import { useMutation, gql } from "@apollo/client"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faHeart as heartFilled } from "@fortawesome/free-solid-svg-icons"
 import { faHeart as heartOutline } from "@fortawesome/free-regular-svg-icons"
@@ -76,7 +75,7 @@ export default function FavoriteButton({
   return (
     <button
       className={classnames(
-        "text-gray-600 h-16 ml-4 px-4 py-2 flex-shrink-0 self-center text-center rounded hover:bg-gray-200",
+        "text-gray-600 h-16 ml-4 px-4 py-2 flex-shrink-0 sm:self-center text-center rounded hover:bg-gray-200",
         className
       )}
       onClick={handleClick}

@@ -22,7 +22,7 @@ async function main() {
   const table = base("Organizations")
 
   table
-    .select({ pageSize: 10 })
+    .select({ pageSize: 10, view: "Geocode" })
     .eachPage(async (organizations, fetchNextPage) => {
       console.log(`Fetched ${organizations.length} organizations`)
 
@@ -36,13 +36,12 @@ async function main() {
 
             fields = computeGeo(geoData)
           } catch (e) {
-            console.error("geo error:", e)
+            console.log("geo error:", e)
           } finally {
-            // If geo failed, we want to empty any old values
-            if (!fields) fields = computeGeo()
+            // If geo failed, we don't want to empty any old values
+            if (!fields) fields = {}
           }
 
-          // console.log(updatedOrg)
           return {
             id: organization.id,
             fields,
