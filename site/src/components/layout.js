@@ -45,6 +45,19 @@ const getFooterLinks = data => [
   },
 ]
 
+const Analytics = ({ host }) => {
+  if (!host) return null
+
+  return (
+    <>
+      <script async defer src={`${host}/app.js`} />
+      <noscript>
+        <img src={`${host}/image.gif`} alt="hi" />
+      </noscript>
+    </>
+  )
+}
+
 const Layout = ({ children, contentClassName }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
@@ -52,6 +65,7 @@ const Layout = ({ children, contentClassName }) => {
         siteMetadata {
           title
           newsletterUrl
+          analyticsHost
         }
       }
     }
@@ -91,12 +105,7 @@ const Layout = ({ children, contentClassName }) => {
           </a>
         </div>
       </footer>
-      {process.env.NODE_ENV === "production" && (
-        <script async defer src="https://sapi.climatescape.org/app.js" />
-      )}
-      <noscript>
-        <img src="https://sapi.climatescape.org/image.gif" alt="hi" />
-      </noscript>
+      <Analytics host={data.site.siteMetadata.analyticsHost} />
     </div>
   )
 }
