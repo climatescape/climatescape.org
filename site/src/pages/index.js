@@ -66,12 +66,13 @@ export default function IndexPage({ data }) {
           What is Climatescape?
         </h2>
         <p className="mt-3">
-          Out mission is to organize the global ecosystem of organizations fighting climate change. Our website
-          includes a directory of thouseands of companies, investors, NGOs, and other organizations that support climate solutions.
+          Out mission is to organize the global ecosystem of organizations
+          fighting climate change. Our website includes a directory of
+          thouseands of companies, investors, NGOs, and other organizations that
+          support climate solutions.
         </p>
         <p className="mt-3">
-          Our content is community-moderated and published under the
-          permissive{" "}
+          Our content is community-moderated and published under the permissive{" "}
           <a
             href="http://creativecommons.org/licenses/by-sa/4.0/"
             target="_blank"
@@ -80,7 +81,7 @@ export default function IndexPage({ data }) {
           >
             Creative Commons BY-SA
           </a>{" "}
-          license. This website is open source {" "}
+          license. This website is open source{" "}
           <a
             href="https://github.com/climatescape/climatescape.org"
             target="_blank"
@@ -99,7 +100,9 @@ export default function IndexPage({ data }) {
             Become a Contributor
           </Link>
         </p>
-        <h2 className="mt-12 text-2xl md:text-3xl font-light">More is Coming</h2>
+        <h2 className="mt-12 text-2xl md:text-3xl font-light">
+          More is Coming
+        </h2>
         <p className="mt-4">
           The website you see today is only the beginning. Our team is already
           designing the next iteration of Climatescape and we want your help.
