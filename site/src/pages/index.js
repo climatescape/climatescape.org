@@ -27,110 +27,116 @@ export default function IndexPage({ data }) {
     <Layout contentClassName="text-gray-900">
       <SEO />
 
-      <h2 className="font-bold text-2xl md:text-4xl text-center font-light tracking-wide text-gray-800 px-2 sm:px-6 pt-8 pb-4 md:pt-16 md:pb-8">
+      <h2 className="font-bold text-2xl md:text-4xl text-center tracking-wide text-gray-800 px-2 sm:px-6 pt-8 pb-4 md:pt-16 md:pb-8">
         Discover&nbsp;the&nbsp;organizations <br />{" "}
         solving&nbsp;climate&nbsp;change
       </h2>
 
-      <div id="organizations" className="md:py-6">
+      <div className="pt-4 pb-8 md:pt-8 md:pb-12">
         <div className="p-3 flex flex-wrap max-w-6xl mx-auto">
           {topCategories.map(cat => (
-            <TopicCard category={cat} key={cat.name} />
+            <TopicCard category={cat} key={cat.name} className="md:w-1/4" />
           ))}
         </div>
         <ViewAll href="/organizations" name="Organizations" />
       </div>
 
-      <div className="bg-gray-200 pb-12 my-12">
-        <div id="organizations" className="py-6">
-          <h2 className="font-bold text-2xl md:text-4xl text-center font-light tracking-wide text-gray-800 mt-6 mb-3">
-            Capital &amp; Startup Programs
-          </h2>
-          <div className="p-3 flex flex-wrap max-w-6xl mx-auto">
-            {capitalTypes.map(({ name, slug, cover }) => (
-              <TopicCard
-                key={slug}
-                category={{
-                  slug,
-                  cover,
-                  name,
-                }}
-              />
-            ))}
-          </div>
-          <ViewAll href="/capital" name="Capital" />
+      <div className="bg-gray-200 pt-4 pb-8 md:pt-8 md:pb-12">
+        <h2 className="font-bold text-2xl md:text-4xl text-center tracking-wide text-gray-800 my-6">
+          Capital &amp; Startup Programs
+        </h2>
+        <div className="p-3 flex flex-wrap max-w-6xl mx-auto">
+          {capitalTypes.map(({ name, slug, cover }) => (
+            <TopicCard
+              key={slug}
+              className="md:w-1/3"
+              category={{
+                slug,
+                cover,
+                name,
+              }}
+            />
+          ))}
         </div>
+        <ViewAll href="/capital" name="Capital" />
       </div>
 
-      <div id="about" className="max-w-6xl mx-auto lg:flex items-start py-4">
-        <div className="text-lg px-6 py-6 flex-1">
-          <h2 className="text-2xl md:text-3xl font-light">
-            What is Climatescape?
-          </h2>
-          <p className="mt-4">
-            Climatescape is an open database of organizations leading the fight
-            against climate change.
-          </p>
-          <p className="mt-4">
-            Our content is community-moderated and published under the
-            permissive{" "}
-            <a
-              href="http://creativecommons.org/licenses/by-sa/4.0/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:no-underline"
-            >
-              Creative Commons BY-SA
-            </a>{" "}
-            license. This website is open source and available{" "}
-            <a
-              href="https://github.com/climatescape/climatescape.org"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:no-underline"
-            >
-              on GitHub
-            </a>
-            .
-          </p>
-          <p className="mt-8 text-center">
-            <Link
-              to="/contribute/"
-              className="inline-block text-2xl px-4 py-2 border-2 rounded text-white bg-blue-500 border-blue-500 hover:text-blue-500 hover:border-blue-500 hover:bg-transparent"
-            >
-              Become a Contributor
-            </Link>
-          </p>
-        </div>
-        <div className="text-lg px-6 py-6 flex-1">
-          <h2 className="text-2xl md:text-3xl font-light">More is Coming</h2>
-          <p className="mt-4">
-            The website you see today is only the beginning. Our team is already
-            designing the next iteration of Climatescape and we want your help.
-          </p>
-          <p className="mt-4">
-            Follow us on Twitter (
-            <a
-              href="https://twitter.com/climatescape"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:no-underline"
-            >
-              @climatescape
-            </a>
-            ) and subscribe to our newsletter to help shape our future.
-          </p>
-          <p className="mt-8 text-center">
-            <a
-              href={data.site.siteMetadata.newsletterUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block text-2xl px-4 py-2 border-2 rounded text-white bg-blue-500 border-blue-500 hover:text-blue-500 hover:border-blue-500 hover:bg-transparent"
-            >
-              Subscribe Here
-            </a>
-          </p>
-        </div>
+      <div className="max-w-xl mx-auto px-3 text-lg pt-12 pb-6">
+        <h2 className="text-2xl md:text-3xl font-light">
+          What is Climatescape?
+        </h2>
+        <p className="mt-3">
+          Out mission is to organize the global ecosystem of organizations
+          fighting climate change. Our website includes a directory of
+          thouseands of companies, investors, NGOs, and other organizations that
+          support climate solutions.
+        </p>
+        <p className="mt-3">
+          Our content is community-moderated and published under the permissive{" "}
+          <a
+            href="http://creativecommons.org/licenses/by-sa/4.0/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:no-underline"
+          >
+            Creative Commons BY-SA
+          </a>{" "}
+          license. This website is open source{" "}
+          <a
+            href="https://github.com/climatescape/climatescape.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:no-underline"
+          >
+            on GitHub
+          </a>
+          .
+        </p>
+        <p className="mt-4 text-center">
+          <Link
+            to="/contribute/"
+            className="text-xl px-4 py-2 inline-block mx-auto leading-none border rounded text-teal-500 border-teal-500 hover:text-white hover:bg-teal-500"
+          >
+            Become a Contributor
+          </Link>
+        </p>
+        <h2 className="mt-12 text-2xl md:text-3xl font-light">
+          More is Coming
+        </h2>
+        <p className="mt-4">
+          The website you see today is only the beginning. Our team is already
+          designing the next iteration of Climatescape and we want your help.
+        </p>
+        <p className="mt-4">
+          Follow{" "}
+          <a
+            href="https://twitter.com/climatescape"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:no-underline"
+          >
+            @climatescape
+          </a>{" "}
+          on Twitter and subscribe to{" "}
+          <a
+            href="https://climatescape.substack.com/embed"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:no-underline"
+          >
+            our newsletter
+          </a>{" "}
+          to help shape our future.
+        </p>
+
+        <iframe
+          title="Climatescape Newsletter"
+          src="https://climatescape.substack.com/embed"
+          width="100%"
+          height="320"
+          frameBorder="0"
+          scrolling="no"
+        />
       </div>
     </Layout>
   )
