@@ -1,10 +1,11 @@
 import React from "react"
 import { Link } from "gatsby"
 import Img from "gatsby-image"
+import classnames from "classnames"
 
-export default function TopicCard({ category }) {
+export default function TopicCard({ category, className }) {
   return (
-    <div className="w-full sm:w-1/2 md:w-1/4 p-3">
+    <div className={classnames("w-full sm:w-1/2 p-3", className)}>
       <Link
         to={category.slug}
         className="block rounded overflow-hidden shadow-md relative"
