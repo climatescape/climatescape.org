@@ -45,6 +45,19 @@ const getFooterLinks = data => [
   },
 ]
 
+const Analytics = ({ host }) => {
+  if (!host) return null
+
+  return (
+    <>
+      <script async defer src={`${host}/app.js`} />
+      <noscript>
+        <img src={`${host}/image.gif`} alt="hi" />
+      </noscript>
+    </>
+  )
+}
+
 const Layout = ({ children, contentClassName }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
@@ -52,16 +65,18 @@ const Layout = ({ children, contentClassName }) => {
         siteMetadata {
           title
           newsletterUrl
+          analyticsHost
         }
       }
     }
   `)
 
   const footerLinks = getFooterLinks(data)
+
   return (
     <div className="flex flex-col min-h-screen antialiased">
       <Navbar />
-      <main className={`flex-grow ${contentClassName}`}>{children}</main>
+      <main className={`flex-grow pt-16 ${contentClassName}`}>{children}</main>
       <footer className="text-gray-800 bg-gray-200 text-center md:text-left py-3 md:px-6 md:flex items-center justify-between">
         <div className="">
           ©{data.site.siteMetadata.title}&nbsp;
@@ -90,10 +105,7 @@ const Layout = ({ children, contentClassName }) => {
           </a>
         </div>
       </footer>
-      <script async defer src="https://sapi.climatescape.org/app.js" />
-      <noscript>
-        <img src="https://sapi.climatescape.org/image.gif" alt="hi" />
-      </noscript>
+      <Analytics host={data.site.siteMetadata.analyticsHost} />
     </div>
   )
 }

@@ -22,7 +22,7 @@ export default function({ categories, activeCategoryId, categoryCounts }) {
 
   return (
     <div className="CategoryList leading-9 hidden w-1/5  mb-8 lg:block">
-      <h3 className="text-sm font-title  tracking-wide mt-8 uppercase text-gray-700">
+      <h3 className="text-sm font-mono tracking-wide mt-8 uppercase text-gray-700">
         Categories
       </h3>
       <ul>
@@ -39,7 +39,7 @@ export default function({ categories, activeCategoryId, categoryCounts }) {
         <>
           <h3
             style={{ maxWidth: "90%" }}
-            className="text-sm font-title tracking-wide mt-8 mb-4 uppercase text-gray-700 leading-snug"
+            className="text-sm font-mono tracking-wide mt-8 mb-4 uppercase text-gray-700 leading-snug"
           >
             {parent?.name} Subcategories
           </h3>

@@ -1,7 +1,7 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { graphql } from "gatsby"
-import { uniqBy } from "lodash"
-
+import uniqBy from "lodash/uniqBy"
+import { sortOrganizations } from "../utils/organizations"
 import { transformCategories, transformOrganizations } from "../utils/airtable"
 
 import Layout from "../components/layout"
@@ -10,25 +10,37 @@ import IndexHeader from "../components/IndexHeader"
 import { useOrganizationFilterState } from "../components/OrganizationFilter"
 import SEO from "../components/seo"
 import CategoryList from "../components/CategoryList"
+import { useFavorites, mergeFavorites } from "../utils/favorites"
 
 function OrganizationsTemplate({
   data,
-  pageContext: { categoryId, categoryName, categoryCounts },
+  pageContext: { categoryId, categoryName, categoryDefinition, categoryCounts },
 }) {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
-
-  // We need to combine organizations from the query for sub-categories
-  // and top-categories which might include duplicate orgs.
-  const orgs = uniqBy(
-    [...data.subOrganizations?.nodes, ...data.topOrganizations?.nodes],
-    org => org.data.Name
-  )
-
-  const allOrganizations = transformOrganizations(orgs)
-  const organizations = applyFilter(allOrganizations)
+  const favorites = useFavorites(data.climatescape)
+  const { organizationAddFormUrl } = data.site.siteMetadata
   const categories = transformCategories(data.categories.nodes)
 
-  const { organizationAddFormUrl } = data.site.siteMetadata
+  // On first render, perform some data transformations on the raw Gatsby query
+  const allOrgs = useMemo(() => {
+    // Merge results from the primary/secondary queries into one array
+    const rawOrgs = uniqBy(
+      [...data.subOrganizations?.nodes, ...data.topOrganizations?.nodes],
+      org => org.recordId
+    )
+
+    // Turn raw Airtable data into something we can work with
+    const transformedOrgs = transformOrganizations(rawOrgs)
+
+    // Add initial favorite counts from Hasura via Gatsby
+    const favoritedOrgs = mergeFavorites(transformedOrgs, favorites)
+
+    // Sort once using this data
+    return sortOrganizations(favoritedOrgs)
+  }, [data, favorites])
+
+  const favoritedOrgs = mergeFavorites(allOrgs, favorites)
+  const filteredOrgs = applyFilter(favoritedOrgs)
 
   return (
     <Layout contentClassName="bg-gray-100 px-3 sm:px-6">
@@ -43,22 +55,23 @@ function OrganizationsTemplate({
         <div className="lg:w-3/5">
           <IndexHeader
             title={categoryName || "All Organizations"}
+            definition={categoryDefinition}
             buttonText="Add"
             buttonUrl={organizationAddFormUrl}
             filter={filter}
             onClearFilter={() => setFilter.none()}
             onApplyFilter={setFilter}
-            organizations={organizations}
-            allOrganizations={allOrganizations}
+            organizations={filteredOrgs}
+            allOrganizations={allOrgs}
             showFilters={["location", "role", "headcount", "orgType"]}
           />
 
           <div>
-            {organizations.map(org => (
+            {filteredOrgs.map(org => (
               <OrganizationCard
                 organization={org}
                 categoryId={categoryId}
-                key={org.title}
+                key={org.recordId}
               />
             ))}
           </div>
@@ -80,6 +93,7 @@ export const query = graphql`
         id
         data {
           Name
+          Definition
           Parent {
             id
             data {
@@ -133,6 +147,7 @@ export const query = graphql`
         ...OrganizationCard
       }
     }
+    ...StaticFavorites
   }
 `
 

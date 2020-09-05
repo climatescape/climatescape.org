@@ -1,7 +1,8 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { graphql } from "gatsby"
 import flatMap from "lodash/flatMap"
-
+import { useFavorites, mergeFavorites } from "../utils/favorites"
+import { sortOrganizations } from "../utils/organizations"
 import {
   transformOrganizations,
   transformCapitalTypes,
@@ -20,30 +21,35 @@ const CapitalTemplate = ({
     allOrganizations: allOrganizationData,
     activeType: activeTypeData,
     site,
+    climatescape,
   },
   pageContext: { activeTypeId },
 }) => {
   const [filter, setFilter, applyFilter] = useOrganizationFilterState()
-
+  const favorites = useFavorites(climatescape)
   const capitalTypes = transformCapitalTypes(capitalTypeNodes)
   const activeType = capitalTypes.find(({ id }) => id === activeTypeId)
-
-  let organizationNodes
-
-  if (activeTypeData) {
-    const profiles = flatMap(activeTypeData.nodes, "data.Capital_Profiles")
-    organizationNodes = flatMap(profiles, "data.Organization")
-  } else if (allOrganizationData) {
-    organizationNodes = allOrganizationData.nodes
-  } else {
-    // This should never really happen
-    organizationNodes = []
-  }
-
-  const allOrganizations = transformOrganizations(organizationNodes)
-  const organizations = applyFilter(allOrganizations)
-
   const { capitalAddFormUrl } = site.siteMetadata
+
+  const allOrgs = useMemo(() => {
+    let rawOrgs
+
+    if (activeTypeData) {
+      const profiles = flatMap(activeTypeData.nodes, "data.Capital_Profiles")
+      rawOrgs = flatMap(profiles, "data.Organization")
+    } else if (allOrganizationData) {
+      rawOrgs = allOrganizationData.nodes
+    } else {
+      rawOrgs = [] // This should never really happen
+    }
+
+    const transformedOrgs = transformOrganizations(rawOrgs)
+    const favoritedOrgs = mergeFavorites(transformedOrgs, favorites)
+    return sortOrganizations(favoritedOrgs)
+  }, [activeTypeData, allOrganizationData, favorites])
+
+  const favoritedOrgs = mergeFavorites(allOrgs, favorites)
+  const filteredOrgs = applyFilter(favoritedOrgs)
 
   return (
     <Layout contentClassName="bg-gray-100 px-3 sm:px-6">
@@ -66,8 +72,8 @@ const CapitalTemplate = ({
             filter={filter}
             onClearFilter={() => setFilter.none()}
             onApplyFilter={setFilter}
-            organizations={organizations}
-            allOrganizations={allOrganizations}
+            organizations={filteredOrgs}
+            allOrganizations={allOrgs}
             showFilters={[
               "location",
               "capitalCheckSize",
@@ -79,7 +85,7 @@ const CapitalTemplate = ({
           />
 
           <div>
-            {organizations.map(organization => (
+            {filteredOrgs.map(organization => (
               <OrganizationCard
                 key={organization.title}
                 organization={organization}
@@ -137,6 +143,8 @@ export const query = graphql`
         }
       }
     }
+
+    ...StaticFavorites
 
     site {
       siteMetadata {

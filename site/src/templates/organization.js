@@ -33,6 +33,9 @@ import {
   summarizeCapitalCheckSizes,
 } from "../utils/capital"
 
+import FavoriteButton from "../components/FavoriteButton"
+import { useFavorites } from "../utils/favorites"
+
 function isCapital(org) {
   return org.role?.includes("Capital")
 }
@@ -179,12 +182,13 @@ const CapitalSection = ({
 
 export default function OrganizationTemplate({ data }) {
   const siteTitle = data.site.siteMetadata.title
+  const favorites = useFavorites(data.climatescape)
 
   const org = transformOrganization(data.organization, (raw, out) => ({
     ...out,
     fullPhotos: raw.data.fullPhotos?.localFiles || [],
+    favorite: favorites[out.recordId],
   }))
-
   return (
     <Layout contentClassName="bg-gray-100 font-sans">
       <SEO
@@ -201,15 +205,21 @@ export default function OrganizationTemplate({ data }) {
                 <div className="mr-5 w-24 flex-shrink-0">
                   <img
                     src={org.logo.src}
-                    className="OrganizationCard-logo blend-multiply rounded-lg w-24 h-24"
+                    className="OrganizationCard-logo blend-multiply rounded-lg w-24 h-24 bg-gray-600"
                     alt={`${org.title} logo`}
                   />
                 </div>
               )}
-              <div>
+              <div className="mr-2">
                 <h1 className="flex-grow text-xl font-semibold">{org.title}</h1>
                 <p>{org.tagline}</p>
               </div>
+              <FavoriteButton
+                recordId={org.recordId}
+                favoriteId={org.favorite?.id}
+                count={org.favorite?.count}
+                className="ml-auto sm:block"
+              />
             </div>
 
             {org.fullPhotos[0] && (
@@ -263,8 +273,9 @@ export const query = graphql`
         title
       }
     }
-
+    ...StaticFavorites
     organization: airtable(table: { eq: "Organizations" }, id: { eq: $id }) {
+      recordId
       data {
         Name
         Tagline

@@ -1,72 +1,87 @@
-import React from "react"
-import { useStaticQuery, graphql, Link } from "gatsby"
+import React, { useState } from "react"
+import { Link } from "gatsby"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons"
+import classnames from "classnames"
 
-import Search from "./search/index"
-import { SearchInput } from "./search/input"
+import { useAuth0 } from "./Auth0Provider"
+import Search from "./search"
+import ClimatescapeLogo from "../images/climatescape.svg"
+import ClimatescapeMark from "../images/climatescape-mark.svg"
+
+const NavLink = ({ children, ...props }) => (
+  <Link className="mr-1 p-2 hover:text-gray-900" {...props}>
+    {children}
+  </Link>
+)
 
 const Navbar = () => {
-  const isSSR = typeof window === "undefined"
+  const { isAuthenticated, loginWithRedirect, logout } = useAuth0()
+  const [showMenu, setShowMenu] = useState(false)
 
-  const data = useStaticQuery(graphql`
-    query NavbarQuery {
-      site {
-        siteMetadata {
-          title
-          newsletterUrl
-        }
-      }
-    }
-  `)
+  const toggleMenu = () => setShowMenu(!showMenu)
 
   return (
-    <nav className="border-b border-gray-500 px-2 md:px-6">
-      <div className="container flex mx-auto justify-between flex-wrap">
-        <Link className="flex lg:w-1/5 flex-shrink-0" to="/">
-          {/* <img
-            src={SiteLogo}
-            alt="Logo: Earth Network"
-            className="h-6 w-6 fill-current mr-3 self-center"
-          /> */}
-          <span className="self-center text-l py-2 font-title">
-            {data.site.siteMetadata.title}
-          </span>
-        </Link>
+    <nav className="border-b border-gray-300 fixed top-0 inset-x-0 z-10 bg-white">
+      <div className="max-w-screen-xl mx-auto px-2 flex flex-col lg:flex-row">
+        <div className="flex flex-grow">
+          <Link className="px-2 sm:px-3 flex flex-none" to="/">
+            <img
+              src={ClimatescapeLogo}
+              alt="Climatescape Logo"
+              className="self-center w-56 h-auto hidden sm:inline"
+            />
+            <img
+              src={ClimatescapeMark}
+              alt="Climatescape Logo"
+              className="self-center h-8 w-8 sm:hidden"
+            />
+          </Link>
 
-        <div className="w-2/5 sm:w-4/5 flex lg:justify-between border-l border-gray-500 md:py-2 pl-2 sm:pl-8">
-          <div className="w-full md:w-2/5 flex">
-            {isSSR ? <SearchInput /> : <Search />}
+          <div className="flex flex-grow m-2 sm:mx-8 md:mx-12 xl:mx-16">
+            <Search />
           </div>
 
-          <div className="md:w-3/5 flex items-center text-sm sm:text-right hidden md:block">
-            <Link
-              to="/categories/atmosphere"
-              className="block mt-4 sm:inline-block sm:mt-0 mr-4"
-            >
-              Organizations
-            </Link>
-
-            <Link
-              to="/capital"
-              className="block mt-4 sm:inline-block sm:mt-0 mr-4"
-            >
-              Capital
-            </Link>
-
-            <Link
-              to="/contribute"
-              className="inline-block text-sm px-4 py-2 leading-none border rounded  border-gray-600 hover:border-gray-700 sm:mt-0"
-            >
-              Contribute
-            </Link>
-          </div>
+          <button
+            onClick={toggleMenu}
+            className="flex-shrink-0 px-2 sm:px-3 lg:hidden"
+          >
+            <FontAwesomeIcon
+              fixedWidth
+              size="lg"
+              icon={showMenu ? faTimes : faBars}
+              className="text-gray-700"
+            />
+          </button>
         </div>
 
-        {/* <div
-          className={`${
-            open ? "block" : "hidden"
-          } flex-grow sm:flex sm:items-center sm:w-auto pt-6 sm:pt-0`}
-        > */}
-        {/* </div> */}
+        <div
+          className={classnames(
+            "text-md flex-none text-gray-600 flex text-left flex-shrink-0 flex-col mb-2",
+            { hidden: !showMenu },
+            "lg:flex lg:flex-row lg:items-center lg:mb-0"
+          )}
+        >
+          <NavLink to="/organizations">Organizations</NavLink>
+          <NavLink to="/capital">Capital</NavLink>
+          <NavLink to="/contribute">Contribute</NavLink>
+
+          {isAuthenticated ? (
+            <button
+              className="p-2 hover:text-gray-900 text-left"
+              onClick={() => logout()}
+            >
+              Sign out
+            </button>
+          ) : (
+            <button
+              className="mx-3 px-4 my-2 py-1 border rounded border-gray-600 hover:text-gray-900 hover:border-gray-800"
+              onClick={() => loginWithRedirect()}
+            >
+              Sign in
+            </button>
+          )}
+        </div>
       </div>
     </nav>
   )

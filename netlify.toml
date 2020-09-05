@@ -1,4 +1,9 @@
+[[plugins]]
+package = "netlify-plugin-gatsby-cache"
+
 [build]
   base    = "site"
   publish = "public"
   command = "npm run build"
+  # Always build the site, regardless of code updates: https://bit.ly/3fxbQO6
+  ignore = "sh this-always-fails"

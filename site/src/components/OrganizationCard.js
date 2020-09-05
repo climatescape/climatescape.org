@@ -13,6 +13,8 @@ import {
   OrganizationCapitalCheckSize,
 } from "./OrganizationAttributes"
 
+import FavoriteButton from "./FavoriteButton"
+
 function getLogoImage({ logo, photos, categories }) {
   const cat =
     categories.find(c => c.cover) || categories.find(c => c?.parent?.cover)
@@ -37,55 +39,63 @@ export default function OrganizationCard({ categoryId, organization }) {
   const img = getLogoImage(organization)
 
   return (
-    <Link
-      to={slug}
-      className="OrganizationCard border-gray-400 border-b flex py-4 text-gray-900 hover:bg-gray-200 px-2"
-    >
-      <div className="flex-grow flex flex-col justify-between pr-8">
-        <p>
-          <span className="font-bold mr-2">{title}</span>
-          {description}
-        </p>
-        <div className="mt-1">
-          {capitalProfile?.type?.map(type => (
-            <OrganizationCapitalType key={type} text={type} />
-          ))}
-          {capitalProfile?.strategic && (
-            <OrganizationCapitalStrategic key="capitalstrategic" />
-          )}
-          {capitalProfile?.stage && (
-            <OrganizationCapitalStage
-              key="stage"
-              stages={capitalProfile?.stage}
-            />
-          )}
-          {capitalProfile?.checkSize && (
-            <OrganizationCapitalCheckSize
-              key="checkSize"
-              checkSizes={capitalProfile?.checkSize}
-            />
-          )}
-          {subCategories?.map(category => (
-            <OrganizationCategory key={category.name} text={category.name} />
-          ))}
-          {hqLocation && <OrganizationLocation location={hqLocation} />}
-          {headcount && (
-            <OrganizationHeadcount key="headcount" text={headcount} />
-          )}
-          {orgType && <OrganizationOrgType key="orgtype" text={orgType} />}
-        </div>
-      </div>
-      {img && (
+    <div className="border-gray-400 border-b flex text-gray-900 relative">
+      <Link
+        to={slug}
+        className="flex flex-grow py-2 sm:py-4 sm:pl-2 sm:pr-16 hover:bg-gray-200"
+      >
         <div className="w-24 flex-shrink-0 hidden sm:block">
-          <img
-            src={img.src}
-            alt={`${title} logo`}
-            className="OrganizationCard-logo blend-multiply rounded-sm w-24 h-24"
-            loading="lazy"
-          />
+          {img && (
+            <img
+              src={img.src}
+              alt={`${title} logo`}
+              className="blend-multiply rounded-sm w-20 h-20"
+              loading="lazy"
+            />
+          )}
         </div>
-      )}
-    </Link>
+        <div className="flex-grow flex flex-col justify-center sm:pl-4">
+          <p>
+            <span className="font-bold mr-2">{title}</span>
+            {description}
+          </p>
+          <div className="mt-1">
+            {capitalProfile?.type?.map(type => (
+              <OrganizationCapitalType key={type} text={type} />
+            ))}
+            {capitalProfile?.strategic && (
+              <OrganizationCapitalStrategic key="capitalstrategic" />
+            )}
+            {capitalProfile?.stage && (
+              <OrganizationCapitalStage
+                key="stage"
+                stages={capitalProfile?.stage}
+              />
+            )}
+            {capitalProfile?.checkSize && (
+              <OrganizationCapitalCheckSize
+                key="checkSize"
+                checkSizes={capitalProfile?.checkSize}
+              />
+            )}
+            {subCategories?.map(category => (
+              <OrganizationCategory key={category.name} text={category.name} />
+            ))}
+            {hqLocation && <OrganizationLocation location={hqLocation} />}
+            {headcount && (
+              <OrganizationHeadcount key="headcount" text={headcount} />
+            )}
+            {orgType && <OrganizationOrgType key="orgtype" text={orgType} />}
+          </div>
+        </div>
+      </Link>
+      <FavoriteButton
+        recordId={organization.recordId}
+        favoriteId={organization.favorite?.id}
+        count={organization.favorite?.count}
+        className="mr-2 absolute right-0 top-1/2 -mt-8 hidden sm:block"
+      />
+    </div>
   )
 }
 
@@ -103,6 +113,8 @@ export const query = graphql`
           src
         }
       }
+      extension
+      publicURL
     }
   }
 
@@ -120,6 +132,7 @@ export const query = graphql`
   }
 
   fragment OrganizationCard on Airtable {
+    recordId
     data {
       Name
       Homepage

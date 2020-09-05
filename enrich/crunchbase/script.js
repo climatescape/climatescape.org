@@ -7,7 +7,7 @@ dot.config({
 })
 
 const { crunchbaseEnrich, mapCrunchbase } = require("./crunchbase")
-const { camelizeKeys } = require("../../backend/src/utils")
+const { camelizeKeys } = require("../utils")
 
 const BASE = process.env.AIRTABLE_BASE_ID
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(BASE)
@@ -20,7 +20,7 @@ async function asyncForEach(array, callback) {
 
 async function main() {
   const organizations = await base("Organizations")
-    .select()
+    .select({ view: "Missing Crunchbase" })
     .all()
   const outcomes = {}
   const updateBuffer = [] // Array of up to 10 updates to be sent as a batch to Airtable

@@ -1,17 +1,33 @@
 const algolia = require("./src/utils/algolia")
+const { from, HttpLink } = require("@apollo/client")
+const { RetryLink } = require("@apollo/client/link/retry")
 
 require("dotenv").config({
   path: `../.env.${process.env.NODE_ENV}`,
 })
 
-// since AIRTABLE_BASE_ID was recently introduced, we add an error message to ask to update the
-// project configuration.
-if (!process.env.AIRTABLE_BASE_ID) {
-  throw new Error(
-    `AIRTABLE_BASE_ID property is missing from .env.${process.env.NODE_ENV}
-    See .env.sample as example.`
-  )
+const RequiredEnv = [
+  `GRAPHQL_URI`,
+  `AIRTABLE_BASE_ID`,
+  `AIRTABLE_API_KEY`,
+  `AUTH0_DOMAIN`,
+  `AUTH0_CLIENT_ID`,
+  `GATSBY_ALGOLIA_APP_ID`,
+  `GATSBY_ALGOLIA_SEARCH_KEY`,
+]
+
+const missingEnv = RequiredEnv.filter(key => !process.env[key])
+
+// Fail fast if any of the required ENV variables are missing
+if (missingEnv.length) {
+  throw new Error(`
+    The following variable(s) are missing from .env.${process.env.NODE_ENV}:
+    ${missingEnv.join(`, `)}
+    Open .env.sample to learn how to fix this.
+  `)
 }
+
+const graphqlUri = process.env.GRAPHQL_URI
 
 const config = {
   siteMetadata: {
@@ -24,10 +40,12 @@ const config = {
     organizationAddFormUrl: `https://airtable.com/shrquIaKs7TQDqFFY`,
     organizationEditFormUrl: `https://airtable.com/shrgoaO5ppAxlqt31`,
     contributorFormUrl: `https://airtable.com/shr4WZDPBs7mk1doW`,
+    analyticsHost: process.env.ANALYTICS_HOST,
     auth0: {
       domain: process.env.AUTH0_DOMAIN,
       clientId: process.env.AUTH0_CLIENT_ID,
     },
+    graphqlUri,
   },
   plugins: [
     {
@@ -35,6 +53,21 @@ const config = {
       options: {
         name: `images`,
         path: `${__dirname}/src/images`,
+      },
+    },
+    {
+      resolve: `gatsby-source-graphql`,
+      options: {
+        typeName: `Climatescape`,
+        fieldName: `climatescape`,
+        createLink: () => from([
+          new RetryLink(),
+          new HttpLink({ uri: graphqlUri }),
+        ]),
+        batch: true,
+        dataLoaderOptions: {
+          maxBatchSize: 10,
+        },
       },
     },
     {
@@ -107,23 +140,12 @@ const config = {
     {
       resolve: `gatsby-transformer-sharp`,
       options: {
-        defautQuality: 75,
+        defaultQuality: 75,
+        checkSupportedExtensions: false,
       },
     },
     `gatsby-plugin-sharp`,
     `gatsby-plugin-postcss`,
-    {
-      resolve: `gatsby-plugin-prefetch-google-fonts`,
-      options: {
-        fonts: [
-          {
-            family: `Roboto`,
-            variants: [`400`, `700`],
-          },
-          { family: "Roboto Mono" },
-        ],
-      },
-    },
     {
       resolve: `gatsby-plugin-nprogress`,
       options: {

@@ -51,7 +51,7 @@ function SEO({ description, lang, meta, title, imageUrl }) {
   const metaTitle = title || site.siteMetadata.title
   const metaDescription = description || site.siteMetadata.description
   const image = imageUrl
-    ? [{ property: "og:image", value: imageUrl }]
+    ? [{ property: "og:image", content: imageUrl }]
     : DefaultImage
 
   return (
@@ -111,6 +111,10 @@ function SEO({ description, lang, meta, title, imageUrl }) {
           type: "image/png",
           sizes: "16x16",
           href: "/favicon-16x16.png",
+        },
+        {
+          rel: "manifest",
+          href: "/site.webmanifest",
         },
       ]}
     />

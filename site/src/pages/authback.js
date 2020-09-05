@@ -7,8 +7,8 @@ import Layout from "../components/layout"
 // culminating in a redirect away from this page.
 const Authback = () => (
   <Layout contentClassName="text-center pt-16">
-    <h1 className="font-bold text-3xl m-2">Just a moment...</h1>
-    <p className="lg:text-xl">We&apos;re logging you in now</p>
+    <h1 className="font-bold text-3xl m-2">Logging you in...</h1>
+    <p className="lg:text-xl">Just a moment while we finish logging you in.</p>
   </Layout>
 )
 
