@@ -66,7 +66,7 @@
   ],
   "license": "MIT",
   "scriptComments": [
-    "heroku-prebuild acts as backbends build, ",
+    "heroku-prebuild acts as backend's build, ",
     "empty heroku-postbuild script prevents the main 'build' script from running when pushing changes to Heroku"
   ],
   "scripts": {
