@@ -23,7 +23,7 @@ function OrganizationsTemplate({
 
   // On first render, perform some data transformations on the raw Gatsby query
   const allOrgs = useMemo(() => {
-    // Merge results from the primary/seconary queries into one array
+    // Merge results from the primary/secondary queries into one array
     const rawOrgs = uniqBy(
       [...data.subOrganizations?.nodes, ...data.topOrganizations?.nodes],
       org => org.recordId
@@ -37,7 +37,7 @@ function OrganizationsTemplate({
 
     // Sort once using this data
     return sortOrganizations(favoritedOrgs)
-  }, [data])
+  }, [data, favorites])
 
   const favoritedOrgs = mergeFavorites(allOrgs, favorites)
   const filteredOrgs = applyFilter(favoritedOrgs)
