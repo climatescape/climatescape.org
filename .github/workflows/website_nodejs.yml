@@ -29,6 +29,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
       working-directory: site
+    - run: npm run test
+      working-directory: site
     - run: npm run lint
       working-directory: site
       env:
