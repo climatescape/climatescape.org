@@ -8,6 +8,7 @@ module.exports = {
     "plugin:react/recommended",
     "airbnb",
     "plugin:prettier/recommended",
+    "plugin:jest/recommended",
   ],
   globals: {
     Atomics: "readonly",

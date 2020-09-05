@@ -60,10 +60,8 @@ const config = {
       options: {
         typeName: `Climatescape`,
         fieldName: `climatescape`,
-        createLink: () => from([
-          new RetryLink(),
-          new HttpLink({ uri: graphqlUri }),
-        ]),
+        createLink: () =>
+          from([new RetryLink(), new HttpLink({ uri: graphqlUri })]),
         batch: true,
         dataLoaderOptions: {
           maxBatchSize: 10,
