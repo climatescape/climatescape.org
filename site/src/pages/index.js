@@ -66,7 +66,7 @@ export default function IndexPage({ data }) {
           What is Climatescape?
         </h2>
         <p className="mt-3">
-          Out mission is to organize the global ecosystem of organizations
+          Our mission is to organize the global ecosystem of organizations
           fighting climate change. Our website includes a directory of
           thouseands of companies, investors, NGOs, and other organizations that
           support climate solutions.
