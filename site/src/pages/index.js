@@ -68,7 +68,7 @@ export default function IndexPage({ data }) {
         <p className="mt-3">
           Our mission is to organize the global ecosystem of organizations
           fighting climate change. Our website includes a directory of
-          thouseands of companies, investors, NGOs, and other organizations that
+          thousands of companies, investors, NGOs, and other organizations that
           support climate solutions.
         </p>
         <p className="mt-3">
