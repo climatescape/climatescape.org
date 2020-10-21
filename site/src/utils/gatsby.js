@@ -1,5 +1,6 @@
 const intersection = require("lodash/intersection")
-const { compose, reduce, mapValues } = require("lodash/fp")
+const mapValues = require("lodash/mapValues")
+const union = require("lodash/union")
 
 const CountRoles = [
   "Products & Services",
@@ -8,8 +9,8 @@ const CountRoles = [
   "Network",
 ]
 
-const countCategoriesOrganizations = compose(
-  reduce({}, (accum, { id: catId, data }) => {
+function countCategoriesOrganizations(orgs) {
+  const ids = orgs.reduce((accum, { id: catId, data }) => {
     const parentId = data.Parent && data.Parent[0].id
     const orgIds =
       data.Organizations &&
@@ -18,14 +19,15 @@ const countCategoriesOrganizations = compose(
       ).map(o => o.id)
 
     if (orgIds) {
-      accum[catId] = (accum[catId] || []).concat(orgIds)
-      if (parentId) accum[parentId] = (accum[parentId] || []).concat(orgIds)
+      accum[catId] = union(accum[catId], orgIds)
+      if (parentId) accum[parentId] = union(accum[parentId], orgIds)
     }
 
     return accum
-  }),
-  mapValues(orgIds => new Set(orgIds).size)
-)
+  }, {})
+
+  return mapValues(ids, "length")
+}
 
 module.exports = {
   countCategoriesOrganizations,
