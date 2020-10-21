@@ -8,11 +8,11 @@ const Categories = [
         {
           id: "org1",
           data: {
-            Role: ["Network"]
-          }
-        }
+            Role: ["Network"],
+          },
+        },
       ],
-    }
+    },
   },
   {
     id: "cat2",
@@ -22,11 +22,11 @@ const Categories = [
         {
           id: "org2",
           data: {
-            Role: ["Network"]
-          }
-        }
-      ]
-    }
+            Role: ["Network"],
+          },
+        },
+      ],
+    },
   },
   {
     id: "cat3",
@@ -35,12 +35,12 @@ const Categories = [
         {
           id: "org3",
           data: {
-            Role: ["Network"]
-          }
-        }
-      ]
-    }
-  }
+            Role: ["Network"],
+          },
+        },
+      ],
+    },
+  },
 ]
 
 describe(`countCategoriesOrganizations()`, () => {
@@ -51,4 +51,4 @@ describe(`countCategoriesOrganizations()`, () => {
       cat3: 1,
     })
   })
-});
+})
