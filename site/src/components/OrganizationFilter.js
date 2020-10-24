@@ -1,15 +1,15 @@
 import React, { useState } from "react"
 import Select from "react-select"
 
-import identity from "lodash/identity"
 import {
-  compose,
+  pipe,
   compact,
   filter,
   flatMap,
   map,
   sortBy,
   uniqBy,
+  identity,
 } from "lodash/fp"
 
 import { extractNumeric } from "../utils/number"
@@ -197,7 +197,7 @@ const CapitalStrategicOptions = [
 ]
 const makeOption = value => ({ value, label: value })
 
-const formatLocations = compose(
+const formatLocations = pipe(
   map("hqLocation.country"),
   compact,
   uniqBy(identity),
@@ -205,7 +205,7 @@ const formatLocations = compose(
   map(makeOption)
 )
 
-const formatRoles = compose(
+const formatRoles = pipe(
   flatMap("role"),
   compact,
   uniqBy(identity),
@@ -214,7 +214,7 @@ const formatRoles = compose(
   map(makeOption)
 )
 
-const formatCategories = compose(
+const formatCategories = pipe(
   flatMap("categories"),
   compact,
   uniqBy("id"),
@@ -225,7 +225,7 @@ const formatCategories = compose(
   }))
 )
 
-const formatHeadcounts = compose(
+export const formatHeadcounts = pipe(
   map("headcount"),
   uniqBy(identity),
   compact,
@@ -233,7 +233,7 @@ const formatHeadcounts = compose(
   map(makeOption)
 )
 
-const formatCapitalCheckSizes = compose(
+const formatCapitalCheckSizes = pipe(
   map("capitalProfile"),
   compact,
   flatMap("checkSize"),
@@ -243,7 +243,7 @@ const formatCapitalCheckSizes = compose(
   map(makeOption)
 )
 
-const formatOrgTypes = compose(
+const formatOrgTypes = pipe(
   map("orgType"),
   uniqBy(identity),
   compact,
