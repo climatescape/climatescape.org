@@ -1,6 +1,16 @@
 import React, { useState } from "react"
-import _ from "lodash"
 import Select from "react-select"
+
+import {
+  pipe,
+  compact,
+  filter,
+  flatMap,
+  map,
+  sortBy,
+  uniqBy,
+  identity,
+} from "lodash/fp"
 
 import { extractNumeric } from "../utils/number"
 
@@ -187,83 +197,59 @@ const CapitalStrategicOptions = [
 ]
 const makeOption = value => ({ value, label: value })
 
-const formatLocations = organizations => {
-  const formatted = _.chain(organizations)
-    .map("hqLocation.country")
-    .compact()
-    .uniq()
-    .sort()
-    .map(makeOption)
-    .value()
+const formatLocations = pipe(
+  map("hqLocation.country"),
+  compact,
+  uniqBy(identity),
+  sortBy(identity),
+  map(makeOption)
+)
 
-  return [AnyOption, ...formatted]
-}
+const formatRoles = pipe(
+  flatMap("role"),
+  compact,
+  uniqBy(identity),
+  filter(role => role !== "Capital"), // Capital orgs have their own page
+  sortBy(identity),
+  map(makeOption)
+)
 
-const formatRoles = organizations => {
-  const formatted = _.chain(organizations)
-    .flatMap("role")
-    .compact()
-    .uniq()
-    .filter(role => role !== "Capital") // Capital orgs have their own page
-    .sort()
-    .map(makeOption)
-    .value()
+const formatCategories = pipe(
+  flatMap("categories"),
+  compact,
+  uniqBy("id"),
+  sortBy("name"),
+  map(category => ({
+    value: category,
+    label: category.name,
+  }))
+)
 
-  return [AnyOption, ...formatted]
-}
+export const formatHeadcounts = pipe(
+  map("headcount"),
+  uniqBy(identity),
+  compact,
+  sortBy(extractNumeric),
+  map(makeOption)
+)
 
-const formatCategories = organizations => {
-  const formatted = _.chain(organizations)
-    .flatMap("categories")
-    .compact()
-    .uniqBy(category => category.id)
-    .sortBy(category => category.name)
-    .map(category => ({
-      value: category,
-      label: category.name,
-    }))
-    .value()
+const formatCapitalCheckSizes = pipe(
+  map("capitalProfile"),
+  compact,
+  flatMap("checkSize"),
+  compact,
+  uniqBy(identity),
+  sortBy(extractNumeric),
+  map(makeOption)
+)
 
-  return [AnyOption, ...formatted]
-}
-
-const formatHeadcounts = organizations => {
-  const formatted = _.chain(organizations)
-    .map("headcount")
-    .uniq()
-    .compact()
-    .sortBy(extractNumeric)
-    .map(makeOption)
-    .value()
-
-  return [AnyOption, ...formatted]
-}
-
-const formatCapitalCheckSizes = organizations => {
-  const formatted = _.chain(organizations)
-    .map("capitalProfile")
-    .compact()
-    .flatMap("checkSize")
-    .compact()
-    .uniq()
-    .sortBy(extractNumeric)
-    .map(makeOption)
-    .value()
-
-  return [AnyOption, ...formatted]
-}
-
-const formatOrgTypes = organizations => {
-  const formatted = _.chain(organizations)
-    .map("orgType")
-    .uniq()
-    .compact()
-    .sort()
-    .map(makeOption)
-    .value()
-
-  return [AnyOption, ...formatted]
-}
+const formatOrgTypes = pipe(
+  map("orgType"),
+  uniqBy(identity),
+  compact,
+  sortBy(identity),
+  map(makeOption)
+)
 
 const FilterSelect = ({ value, onChangeFilter, options, ...props }) => {
   const selectValue =
@@ -306,7 +292,7 @@ const OrganizationFilter = ({
     category: () => (
       <FilterSelect
         key="category"
-        options={formatCategories(organizations)}
+        options={[AnyOption, ...formatCategories(organizations)]}
         onChangeFilter={onApplyFilter.byCategory}
         placeholder="Focus Area"
         value={byCategory}
@@ -315,7 +301,7 @@ const OrganizationFilter = ({
     role: () => (
       <FilterSelect
         key="role"
-        options={formatRoles(organizations)}
+        options={[AnyOption, ...formatRoles(organizations)]}
         onChangeFilter={onApplyFilter.byRole}
         placeholder="Role"
         value={byRole}
@@ -324,7 +310,7 @@ const OrganizationFilter = ({
     headcount: () => (
       <FilterSelect
         key="headcount"
-        options={formatHeadcounts(organizations)}
+        options={[AnyOption, ...formatHeadcounts(organizations)]}
         onChangeFilter={onApplyFilter.byHeadcount}
         placeholder="Headcount"
         value={byHeadcount}
@@ -333,7 +319,7 @@ const OrganizationFilter = ({
     orgType: () => (
       <FilterSelect
         key="orgType"
-        options={formatOrgTypes(organizations)}
+        options={[AnyOption, ...formatOrgTypes(organizations)]}
         onChangeFilter={onApplyFilter.byOrgType}
         placeholder="Org Type"
         value={byOrgType}
@@ -342,7 +328,7 @@ const OrganizationFilter = ({
     location: () => (
       <FilterSelect
         key="location"
-        options={formatLocations(organizations)}
+        options={[AnyOption, ...formatLocations(organizations)]}
         onChangeFilter={onApplyFilter.byLocation}
         placeholder="HQ Location"
         value={byLocation}
@@ -351,7 +337,7 @@ const OrganizationFilter = ({
     capitalCheckSize: () => (
       <FilterSelect
         key="capitalCheckSize"
-        options={formatCapitalCheckSizes(organizations)}
+        options={[AnyOption, ...formatCapitalCheckSizes(organizations)]}
         onChangeFilter={onApplyFilter.byCapitalCheckSize}
         placeholder="Check Size"
         value={byCapitalCheckSize}

@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react"
-import noop from "lodash/noop"
 import classnames from "classnames"
 import { useMutation, gql } from "@apollo/client"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -7,6 +6,8 @@ import { faHeart as heartFilled } from "@fortawesome/free-solid-svg-icons"
 import { faHeart as heartOutline } from "@fortawesome/free-regular-svg-icons"
 
 import { useAuth0 } from "./Auth0Provider"
+
+const noop = () => {}
 
 const AddFavorite = gql`
   mutation AddFavorite($recordId: String!) {
