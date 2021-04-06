@@ -76,7 +76,7 @@ const Layout = ({ children, contentClassName }) => {
   return (
     <div className="flex flex-col min-h-screen antialiased">
       <Navbar />
-      <main className={`flex-grow pt-16 ${contentClassName}`}>{children}</main>
+      <main className={`flex-grow pt-24 ${contentClassName}`}>{children}</main>
       <footer className="text-gray-800 bg-gray-200 text-center md:text-left py-3 md:px-6 md:flex items-center justify-between">
         <div className="">
           ©{data.site.siteMetadata.title}&nbsp;

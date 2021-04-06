@@ -63,70 +63,11 @@ export default function IndexPage({ data }) {
 
       <div className="max-w-xl mx-auto px-3 text-lg pt-12 pb-6">
         <h2 className="text-2xl md:text-3xl font-light">
-          What is Climatescape?
+          Follow Climate Tech
         </h2>
-        <p className="mt-3">
-          Our mission is to organize the global ecosystem of organizations
-          fighting climate change. Our website includes a directory of thousands
-          of companies, investors, NGOs, and other organizations that support
-          climate solutions.
-        </p>
-        <p className="mt-3">
-          Our content is community-moderated and published under the permissive{" "}
-          <a
-            href="http://creativecommons.org/licenses/by-sa/4.0/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:no-underline"
-          >
-            Creative Commons BY-SA
-          </a>{" "}
-          license. This website is open source{" "}
-          <a
-            href="https://github.com/climatescape/climatescape.org"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:no-underline"
-          >
-            on GitHub
-          </a>
-          .
-        </p>
-        <p className="mt-4 text-center">
-          <Link
-            to="/contribute/"
-            className="text-xl px-4 py-2 inline-block mx-auto leading-none border rounded text-teal-500 border-teal-500 hover:text-white hover:bg-teal-500"
-          >
-            Become a Contributor
-          </Link>
-        </p>
-        <h2 className="mt-12 text-2xl md:text-3xl font-light">
-          More is Coming
-        </h2>
-        <p className="mt-4">
-          The website you see today is only the beginning. Our team is already
-          designing the next iteration of Climatescape and we want your help.
-        </p>
-        <p className="mt-4">
-          Follow{" "}
-          <a
-            href="https://twitter.com/climatescape"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:no-underline"
-          >
-            @climatescape
-          </a>{" "}
-          on Twitter and subscribe to{" "}
-          <a
-            href="https://climatescape.substack.com/embed"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:no-underline"
-          >
-            our newsletter
-          </a>{" "}
-          to help shape our future.
+
+        <p className="my-2">
+          Subscribe to our newsletter to get access to startup profiles, market deep-dives, and the most important headlines in climate tech.
         </p>
 
         <iframe

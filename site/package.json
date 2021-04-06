@@ -4,10 +4,6 @@
   "description": "An open source project mapping the sustainability landscape",
   "version": "0.1.0",
   "author": "Brendan Loudermilk <brendan@sinceresoftware.co>",
-  "engines": {
-    "node": "12.18.3",
-    "yarn": "1.x"
-  },
   "dependencies": {
     "@apollo/client": "^3.2.0",
     "@auth0/auth0-spa-js": "^1.12.1",
@@ -42,6 +38,7 @@
     "react-helmet": "^5.2.1",
     "react-instantsearch-dom": "^6.7.0",
     "react-select": "^3.1.0",
+    "sharp": "^0.25.4",
     "tailwindcss": "^1.8.10"
   },
   "devDependencies": {
