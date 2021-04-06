@@ -62,12 +62,11 @@ export default function IndexPage({ data }) {
       </div>
 
       <div className="max-w-xl mx-auto px-3 text-lg pt-12 pb-6">
-        <h2 className="text-2xl md:text-3xl font-light">
-          Follow Climate Tech
-        </h2>
+        <h2 className="text-2xl md:text-3xl font-light">Follow Climate Tech</h2>
 
         <p className="my-2">
-          Subscribe to our newsletter to get access to startup profiles, market deep-dives, and the most important headlines in climate tech.
+          Subscribe to our newsletter to get access to startup profiles, market
+          deep-dives, and the most important headlines in climate tech.
         </p>
 
         <iframe

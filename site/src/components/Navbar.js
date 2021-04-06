@@ -28,8 +28,13 @@ const Navbar = () => {
         href="https://dash.climatescape.org/?ref=OrgBanner"
       >
         <p className="max-w-screen-xl mx-auto px-4 py-2 text-center text-white text-sm tracking-wide">
-          <span className="mr-2">🚀</span>Announcing <strong>Climatescape Dash</strong>
-          <span className="hidden sm:inline">, our new platform for professionals in climate tech.</span>
+          <span className="mr-2" role="img" aria-label="Rocket ship">
+            🚀
+          </span>
+          Announcing <strong>Climatescape Dash</strong>
+          <span className="hidden sm:inline">
+            , our new platform for professionals in climate tech.
+          </span>
         </p>
       </a>
       <nav className="border-b border-gray-300 bg-white">
