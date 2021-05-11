@@ -10,7 +10,7 @@
     "fastify": "^2.12.0",
     "global": "^4.4.0",
     "knex": "^0.20.10",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "log-timestamp": "^0.3.0",
     "node-gyp": "^6.1.0",
     "p-memoize": "^4.0.0",
