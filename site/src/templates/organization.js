@@ -257,7 +257,7 @@ export default function OrganizationTemplate({ data }) {
                 data={data}
               />
               {org.crunchbase && (
-                <p class="text-gray-600 italic text-sm">Powered by <a class="underline" href="https://crunchbase.com/">Crunchbase</a></p>
+                <p class="text-gray-600 italic text-sm">Powered by <a href={org.crunchbase} class="underline" target="_blank" rel="noopener noreferrer">Crunchbase</a></p>
               )}
             </div>
           </div>
