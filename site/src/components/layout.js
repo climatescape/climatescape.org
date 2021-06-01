@@ -18,30 +18,12 @@ import FooterLink from "./FooterLink"
 
 const getFooterLinks = data => [
   {
-    href: "https://creativecommons.org/licenses/by-sa/4.0/",
-    title: "CC BY-SA",
-  },
-  {
     href: "https://twitter.com/climatescape",
     title: "Twitter",
   },
   {
     href: data.site.siteMetadata.newsletterUrl,
     title: "Newsletter",
-  },
-  {
-    href:
-      "https://airtable.com/shraY1nLoEKJ8UsNH/tblPH0ZgLZYGVEhEo?blocks=hide",
-    title: "AirTable",
-  },
-  {
-    href: "https://github.com/climatescape/climatescape.org",
-    title: "Github",
-  },
-  {
-    href:
-      "https://www.notion.so/Climatescape-FAQ-ac0b381c39574ec8a8cd4ba1df4315d9",
-    title: "FAQ",
   },
 ]
 
@@ -92,16 +74,6 @@ const Layout = ({ children, contentClassName }) => {
         <div className="pt-3 sm:pt-0 flex justify-center">
           <a href="https://www.netlify.com">
             <img className="h-12" src={NetlifyLogo} alt="Deploys by Netlify" />
-          </a>
-          <a
-            href="https://simpleanalytics.com/climatescape.org"
-            className="ml-2"
-          >
-            <img
-              className="h-12"
-              src={SimpleLogo}
-              alt="Stats by Simple Analytics"
-            />
           </a>
         </div>
       </footer>

@@ -98,38 +98,6 @@ export default function ContributePage({ data }) {
               />
             ))}
           </div>
-
-          <Header>Open Data</Header>
-          <P>
-            The data and content on climatescape.org is published under the open{" "}
-            <TextLink href="http://creativecommons.org/licenses/by-sa/4.0/">
-              Creative Commons BY-SA
-            </TextLink>{" "}
-            license. This means you&apos;re free to share and adapt the content
-            on this website, providing you:
-          </P>
-
-          <ol className="list-decimal list-outside ml-5">
-            <li>
-              <P>
-                <strong>Attribute</strong> — You must give appropriate credit,
-                provide a link to the license, and indicate if changes were
-                made. You may do so in any reasonable manner, but not in any way
-                that suggests we endorse you or your use.
-              </P>
-            </li>
-            <li>
-              <P>
-                <strong>Share Alike</strong> — If you remix, transform, or build
-                upon the material, you must distribute your contributions under
-                the{" "}
-                <TextLink href="https://creativecommons.org/licenses/by-sa/4.0/" />
-                same license as the original.
-              </P>
-            </li>
-          </ol>
-        </div>
-        <div>
           <Header>Submit an Organization</Header>
           <P>
             We welcome you to add new submissions to the website using the forms
@@ -154,6 +122,39 @@ export default function ContributePage({ data }) {
               </P>
             </li>
           </ul>
+
+          <Header>Open Data</Header>
+          <P>
+            Climatescape maintains an
+            <TextLink href="https://airtable.com/shraY1nLoEKJ8UsNH/tblPH0ZgLZYGVEhEo?blocks=hide">
+              Open Data Airtable
+            </TextLink>
+            for the community, under the permissive{" "}
+            <TextLink href="http://creativecommons.org/licenses/by-sa/4.0/">
+              Creative Commons BY-SA
+            </TextLink>{" "}
+            license. This means you&apos;re free to share and adapt the data there, providing you:
+          </P>
+
+          <ol className="list-decimal list-outside ml-5">
+            <li>
+              <P>
+                <strong>Attribute</strong> — You must give appropriate credit,
+                provide a link to the license, and indicate if changes were
+                made. You may do so in any reasonable manner, but not in any way
+                that suggests we endorse you or your use.
+              </P>
+            </li>
+            <li>
+              <P>
+                <strong>Share Alike</strong> — If you remix, transform, or build
+                upon the material, you must distribute your contributions under
+                the{" "}
+                <TextLink href="https://creativecommons.org/licenses/by-sa/4.0/" />
+                same license as the original.
+              </P>
+            </li>
+          </ol>
           <Header>Community Contributors</Header>
           <P>
             Climatescape is a community-driven platform built by people from

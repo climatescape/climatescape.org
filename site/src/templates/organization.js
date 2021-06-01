@@ -256,6 +256,9 @@ export default function OrganizationTemplate({ data }) {
                 className="flex flex-col mb-8"
                 data={data}
               />
+              {org.crunchbase && (
+                <p class="text-gray-600 italic text-sm">Powered by <a class="underline" href="https://crunchbase.com/">Crunchbase</a></p>
+              )}
             </div>
           </div>
         </div>
