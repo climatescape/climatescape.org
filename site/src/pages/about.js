@@ -125,10 +125,10 @@ export default function ContributePage({ data }) {
 
           <Header>Open Data</Header>
           <P>
-            Climatescape maintains an
+            Climatescape maintains an{" "}
             <TextLink href="https://airtable.com/shraY1nLoEKJ8UsNH/tblPH0ZgLZYGVEhEo?blocks=hide">
               Open Data Airtable
-            </TextLink>
+            </TextLink>{" "}
             for the community, under the permissive{" "}
             <TextLink href="http://creativecommons.org/licenses/by-sa/4.0/">
               Creative Commons BY-SA
