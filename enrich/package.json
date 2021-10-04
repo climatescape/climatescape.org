@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "airtable": "^0.8.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "geocoder-geonames": "^0.1.2",
     "lodash": "^4.17.19"
