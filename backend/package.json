@@ -9,7 +9,7 @@
     "dotenv": "^8.2.0",
     "fastify": "^2.12.0",
     "global": "^4.4.0",
-    "knex": "^0.20.10",
+    "knex": "^2.4.0",
     "lodash": "^4.17.15",
     "log-timestamp": "^0.3.0",
     "node-gyp": "^6.1.0",
